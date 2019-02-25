@@ -36,17 +36,15 @@ impl RadioMenuItem {
         }
     }
 
-    pub fn new_with_label_from_widget<'a, P: IsA<RadioMenuItem>, Q: Into<Option<&'a str>>>(group: &P, label: Q) -> RadioMenuItem {
+    pub fn new_with_label_from_widget<P: IsA<RadioMenuItem>>(group: &P, label: Option<&str>) -> RadioMenuItem {
         skip_assert_initialized!();
-        let label = label.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_label_from_widget(group.as_ref().to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
     }
 
-    pub fn new_with_mnemonic_from_widget<'a, P: IsA<RadioMenuItem>, Q: Into<Option<&'a str>>>(group: &P, label: Q) -> RadioMenuItem {
+    pub fn new_with_mnemonic_from_widget<P: IsA<RadioMenuItem>>(group: &P, label: Option<&str>) -> RadioMenuItem {
         skip_assert_initialized!();
-        let label = label.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_mnemonic_from_widget(group.as_ref().to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
@@ -59,7 +57,7 @@ pub trait RadioMenuItemExt: 'static {
     fn get_group(&self) -> Vec<RadioMenuItem>;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn join_group<'a, P: IsA<RadioMenuItem> + 'a, Q: Into<Option<&'a P>>>(&self, group_source: Q);
+    fn join_group<P: IsA<RadioMenuItem>>(&self, group_source: Option<&P>);
 
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -72,8 +70,7 @@ impl<O: IsA<RadioMenuItem>> RadioMenuItemExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn join_group<'a, P: IsA<RadioMenuItem> + 'a, Q: Into<Option<&'a P>>>(&self, group_source: Q) {
-        let group_source = group_source.into();
+    fn join_group<P: IsA<RadioMenuItem>>(&self, group_source: Option<&P>) {
         unsafe {
             ffi::gtk_radio_menu_item_join_group(self.as_ref().to_glib_none().0, group_source.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -90,7 +87,7 @@ impl<O: IsA<RadioMenuItem>> RadioMenuItemExt for O {
 
 unsafe extern "C" fn group_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRadioMenuItem, f: glib_ffi::gpointer)
 where P: IsA<RadioMenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RadioMenuItem::from_glib_borrow(this).unsafe_cast())
 }
 

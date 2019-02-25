@@ -370,68 +370,68 @@ impl<O: IsA<Paned>> PanedExt for O {
 
 unsafe extern "C" fn accept_position_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkPaned, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn cancel_position_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkPaned, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn cycle_child_focus_trampoline<P, F: Fn(&P, bool) -> bool + 'static>(this: *mut ffi::GtkPaned, reversed: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast(), from_glib(reversed)).to_glib()
 }
 
 unsafe extern "C" fn cycle_handle_focus_trampoline<P, F: Fn(&P, bool) -> bool + 'static>(this: *mut ffi::GtkPaned, reversed: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast(), from_glib(reversed)).to_glib()
 }
 
 unsafe extern "C" fn move_handle_trampoline<P, F: Fn(&P, ScrollType) -> bool + 'static>(this: *mut ffi::GtkPaned, scroll_type: ffi::GtkScrollType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast(), from_glib(scroll_type)).to_glib()
 }
 
 unsafe extern "C" fn toggle_handle_focus_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkPaned, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn notify_max_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPaned, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_min_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPaned, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPaned, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_position_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPaned, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_wide_handle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPaned, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Paned> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Paned::from_glib_borrow(this).unsafe_cast())
 }
 

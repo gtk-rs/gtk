@@ -27,15 +27,13 @@ macro_rules! to_u16 {
 
 #[cfg_attr(feature = "cargo-clippy", allow(cast_lossless))]
 impl EntryBuffer {
-    pub fn new<'a, I: Into<Option<&'a str>>>(initial_chars: I) -> EntryBuffer {
+    pub fn new(initial_chars: Option<&str>) -> EntryBuffer {
         assert_initialized_main_thread!();
-        let initial_chars = initial_chars.into();
         unsafe { from_glib_full(ffi::gtk_entry_buffer_new(initial_chars.to_glib_none().0, -1)) }
     }
 
-    pub fn delete_text<I: Into<Option<u16>>>(&self, position: u16, n_chars: I) -> u16 {
+    pub fn delete_text(&self, position: u16, n_chars: Option<u16>) -> u16 {
         unsafe {
-            let n_chars = n_chars.into();
             to_u16!(
                 ffi::gtk_entry_buffer_delete_text(self.to_glib_none().0, position as c_uint,
                     n_chars.map(|n| n as c_int).unwrap_or(-1)))
@@ -74,9 +72,8 @@ impl EntryBuffer {
         }
     }
 
-    pub fn set_max_length<I: Into<Option<u16>>>(&self, max_length: I) {
+    pub fn set_max_length(&self, max_length: Option<u16>) {
         unsafe {
-            let max_length = max_length.into();
             assert_ne!(max_length, Some(0), "Zero maximum length not supported");
             ffi::gtk_entry_buffer_set_max_length(self.to_glib_none().0,
                 max_length.unwrap_or(0) as c_int);

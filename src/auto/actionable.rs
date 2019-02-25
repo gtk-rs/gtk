@@ -32,11 +32,11 @@ pub trait ActionableExt: 'static {
 
     fn get_action_target_value(&self) -> Option<glib::Variant>;
 
-    fn set_action_name<'a, P: Into<Option<&'a str>>>(&self, action_name: P);
+    fn set_action_name(&self, action_name: Option<&str>);
 
     //fn set_action_target(&self, format_string: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    fn set_action_target_value<'a, P: Into<Option<&'a glib::Variant>>>(&self, target_value: P);
+    fn set_action_target_value(&self, target_value: Option<&glib::Variant>);
 
     fn set_detailed_action_name(&self, detailed_action_name: &str);
 
@@ -56,8 +56,7 @@ impl<O: IsA<Actionable>> ActionableExt for O {
         }
     }
 
-    fn set_action_name<'a, P: Into<Option<&'a str>>>(&self, action_name: P) {
-        let action_name = action_name.into();
+    fn set_action_name(&self, action_name: Option<&str>) {
         unsafe {
             ffi::gtk_actionable_set_action_name(self.as_ref().to_glib_none().0, action_name.to_glib_none().0);
         }
@@ -67,8 +66,7 @@ impl<O: IsA<Actionable>> ActionableExt for O {
     //    unsafe { TODO: call ffi::gtk_actionable_set_action_target() }
     //}
 
-    fn set_action_target_value<'a, P: Into<Option<&'a glib::Variant>>>(&self, target_value: P) {
-        let target_value = target_value.into();
+    fn set_action_target_value(&self, target_value: Option<&glib::Variant>) {
         unsafe {
             ffi::gtk_actionable_set_action_target_value(self.as_ref().to_glib_none().0, target_value.to_glib_none().0);
         }
@@ -91,7 +89,7 @@ impl<O: IsA<Actionable>> ActionableExt for O {
 
 unsafe extern "C" fn notify_action_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkActionable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Actionable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Actionable::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -69,7 +69,7 @@ pub trait RecentChooserExt: 'static {
 
     fn set_current_uri(&self, uri: &str) -> Result<(), Error>;
 
-    fn set_filter<'a, P: Into<Option<&'a RecentFilter>>>(&self, filter: P);
+    fn set_filter(&self, filter: Option<&RecentFilter>);
 
     fn set_limit(&self, limit: i32);
 
@@ -237,8 +237,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    fn set_filter<'a, P: Into<Option<&'a RecentFilter>>>(&self, filter: P) {
-        let filter = filter.into();
+    fn set_filter(&self, filter: Option<&RecentFilter>) {
         unsafe {
             ffi::gtk_recent_chooser_set_filter(self.as_ref().to_glib_none().0, filter.to_glib_none().0);
         }
@@ -415,67 +414,67 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
 
 unsafe extern "C" fn item_activated_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn selection_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_limit_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_local_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_icons_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_not_found_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_private_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_tips_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_sort_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -59,9 +59,8 @@ pub fn accelerator_get_label(accelerator_key: u32, accelerator_mods: gdk::Modifi
     }
 }
 
-pub fn accelerator_get_label_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
+pub fn accelerator_get_label_with_keycode(display: Option<&gdk::Display>, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
-    let display = display.into();
     unsafe {
         from_glib_full(ffi::gtk_accelerator_get_label_with_keycode(display.to_glib_none().0, accelerator_key, keycode, accelerator_mods.to_glib()))
     }
@@ -74,9 +73,8 @@ pub fn accelerator_name(accelerator_key: u32, accelerator_mods: gdk::ModifierTyp
     }
 }
 
-pub fn accelerator_name_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
+pub fn accelerator_name_with_keycode(display: Option<&gdk::Display>, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
-    let display = display.into();
     unsafe {
         from_glib_full(ffi::gtk_accelerator_name_with_keycode(display.to_glib_none().0, accelerator_key, keycode, accelerator_mods.to_glib()))
     }
@@ -250,7 +248,7 @@ pub fn grab_get_current() -> Option<Widget> {
 //    unsafe { TODO: call ffi::gtk_init_check() }
 //}
 
-//pub fn init_with_args<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(argv: /*Unimplemented*/Vec<GString>, parameter_string: P, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Q) -> Result<(), Error> {
+//pub fn init_with_args(argv: /*Unimplemented*/Vec<GString>, parameter_string: Option<&str>, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Option<&str>) -> Result<(), Error> {
 //    unsafe { TODO: call ffi::gtk_init_with_args() }
 //}
 
@@ -293,27 +291,23 @@ pub fn main_level() -> u32 {
 //    unsafe { TODO: call ffi::gtk_parse_args() }
 //}
 
-pub fn print_run_page_setup_dialog<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>>(parent: Q, page_setup: R, settings: &PrintSettings) -> Option<PageSetup> {
+pub fn print_run_page_setup_dialog<P: IsA<Window>>(parent: Option<&P>, page_setup: Option<&PageSetup>, settings: &PrintSettings) -> Option<PageSetup> {
     skip_assert_initialized!();
-    let parent = parent.into();
-    let page_setup = page_setup.into();
     unsafe {
         from_glib_full(ffi::gtk_print_run_page_setup_dialog(parent.map(|p| p.as_ref()).to_glib_none().0, page_setup.to_glib_none().0, settings.to_glib_none().0))
     }
 }
 
-pub fn print_run_page_setup_dialog_async<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: FnOnce(&PageSetup) + Send + Sync + 'static>(parent: Q, page_setup: R, settings: &PrintSettings, done_cb: S) {
+pub fn print_run_page_setup_dialog_async<P: IsA<Window>, Q: FnOnce(&PageSetup) + Send + Sync + 'static>(parent: Option<&P>, page_setup: Option<&PageSetup>, settings: &PrintSettings, done_cb: Q) {
     skip_assert_initialized!();
-    let parent = parent.into();
-    let page_setup = page_setup.into();
-    let done_cb_data: Box_<S> = Box::new(done_cb);
-    unsafe extern "C" fn done_cb_func<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: FnOnce(&PageSetup) + Send + Sync + 'static>(page_setup: *mut ffi::GtkPageSetup, data: glib_ffi::gpointer) {
+    let done_cb_data: Box_<Q> = Box::new(done_cb);
+    unsafe extern "C" fn done_cb_func<P: IsA<Window>, Q: FnOnce(&PageSetup) + Send + Sync + 'static>(page_setup: *mut ffi::GtkPageSetup, data: glib_ffi::gpointer) {
         let page_setup = from_glib_borrow(page_setup);
-        let callback: Box_<S> = Box_::from_raw(data as *mut _);
+        let callback: Box_<Q> = Box_::from_raw(data as *mut _);
         (*callback)(&page_setup);
     }
-    let done_cb = Some(done_cb_func::<'a, 'b, P, Q, R, S> as _);
-    let super_callback0: Box_<S> = done_cb_data;
+    let done_cb = Some(done_cb_func::<P, Q> as _);
+    let super_callback0: Box_<Q> = done_cb_data;
     unsafe {
         ffi::gtk_print_run_page_setup_dialog_async(parent.map(|p| p.as_ref()).to_glib_none().0, page_setup.to_glib_none().0, settings.to_glib_none().0, done_cb, Box::into_raw(super_callback0) as *mut _);
     }
@@ -488,17 +482,15 @@ pub fn selection_convert<P: IsA<Widget>>(widget: &P, selection: &gdk::Atom, targ
     }
 }
 
-pub fn selection_owner_set<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(widget: Q, selection: &gdk::Atom, time_: u32) -> bool {
+pub fn selection_owner_set<P: IsA<Widget>>(widget: Option<&P>, selection: &gdk::Atom, time_: u32) -> bool {
     assert_initialized_main_thread!();
-    let widget = widget.into();
     unsafe {
         from_glib(ffi::gtk_selection_owner_set(widget.map(|p| p.as_ref()).to_glib_none().0, selection.to_glib_none().0, time_))
     }
 }
 
-pub fn selection_owner_set_for_display<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(display: &gdk::Display, widget: Q, selection: &gdk::Atom, time_: u32) -> bool {
+pub fn selection_owner_set_for_display<P: IsA<Widget>>(display: &gdk::Display, widget: Option<&P>, selection: &gdk::Atom, time_: u32) -> bool {
     assert_initialized_main_thread!();
-    let widget = widget.into();
     unsafe {
         from_glib(ffi::gtk_selection_owner_set_for_display(display.to_glib_none().0, widget.map(|p| p.as_ref()).to_glib_none().0, selection.to_glib_none().0, time_))
     }
@@ -518,13 +510,12 @@ pub fn set_debug_flags(flags: u32) {
     }
 }
 
-//pub fn show_about_dialog<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(parent: Q, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+//pub fn show_about_dialog<P: IsA<Window>>(parent: Option<&P>, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
 //    unsafe { TODO: call ffi::gtk_show_about_dialog() }
 //}
 
-pub fn show_uri<'a, P: Into<Option<&'a gdk::Screen>>>(screen: P, uri: &str, timestamp: u32) -> Result<(), Error> {
+pub fn show_uri(screen: Option<&gdk::Screen>, uri: &str, timestamp: u32) -> Result<(), Error> {
     assert_initialized_main_thread!();
-    let screen = screen.into();
     unsafe {
         let mut error = ptr::null_mut();
         let _ = ffi::gtk_show_uri(screen.to_glib_none().0, uri.to_glib_none().0, timestamp, &mut error);
@@ -533,9 +524,8 @@ pub fn show_uri<'a, P: Into<Option<&'a gdk::Screen>>>(screen: P, uri: &str, time
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-pub fn show_uri_on_window<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(parent: Q, uri: &str, timestamp: u32) -> Result<(), Error> {
+pub fn show_uri_on_window<P: IsA<Window>>(parent: Option<&P>, uri: &str, timestamp: u32) -> Result<(), Error> {
     assert_initialized_main_thread!();
-    let parent = parent.into();
     unsafe {
         let mut error = ptr::null_mut();
         let _ = ffi::gtk_show_uri_on_window(parent.map(|p| p.as_ref()).to_glib_none().0, uri.to_glib_none().0, timestamp, &mut error);
@@ -584,7 +574,7 @@ pub fn test_create_simple_window(window_title: &str, dialog_text: &str) -> Optio
 }
 
 //#[cfg_attr(feature = "v3_20", deprecated)]
-//pub fn test_create_widget<'a, P: Into<Option<&'a str>>>(widget_type: glib::types::Type, first_property_name: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<Widget> {
+//pub fn test_create_widget(widget_type: glib::types::Type, first_property_name: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<Widget> {
 //    unsafe { TODO: call ffi::gtk_test_create_widget() }
 //}
 

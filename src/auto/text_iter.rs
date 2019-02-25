@@ -57,16 +57,15 @@ impl TextIter {
         }
     }
 
-    pub fn backward_find_char<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(&mut self, pred: P, limit: Q) -> bool {
-        let limit = limit.into();
+    pub fn backward_find_char<P: FnMut(char) -> bool>(&mut self, pred: P, limit: Option<&TextIter>) -> bool {
         let pred_data: P = pred;
-        unsafe extern "C" fn pred_func<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(ch: u32, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+        unsafe extern "C" fn pred_func<P: FnMut(char) -> bool>(ch: u32, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
             let ch = from_glib(ch);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(ch);
             res.to_glib()
         }
-        let pred = Some(pred_func::<'a, P, Q> as _);
+        let pred = Some(pred_func::<P> as _);
         let super_callback0: &P = &pred_data;
         unsafe {
             from_glib(ffi::gtk_text_iter_backward_find_char(self.to_glib_none_mut().0, pred, super_callback0 as *const _ as usize as *mut _, limit.to_glib_none().0))
@@ -85,8 +84,7 @@ impl TextIter {
         }
     }
 
-    pub fn backward_search<'a, P: Into<Option<&'a TextIter>>>(&self, str: &str, flags: TextSearchFlags, limit: P) -> Option<(TextIter, TextIter)> {
-        let limit = limit.into();
+    pub fn backward_search(&self, str: &str, flags: TextSearchFlags, limit: Option<&TextIter>) -> Option<(TextIter, TextIter)> {
         unsafe {
             let mut match_start = TextIter::uninitialized();
             let mut match_end = TextIter::uninitialized();
@@ -107,8 +105,7 @@ impl TextIter {
         }
     }
 
-    pub fn backward_to_tag_toggle<'a, P: IsA<TextTag> + 'a, Q: Into<Option<&'a P>>>(&mut self, tag: Q) -> bool {
-        let tag = tag.into();
+    pub fn backward_to_tag_toggle<P: IsA<TextTag>>(&mut self, tag: Option<&P>) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_iter_backward_to_tag_toggle(self.to_glib_none_mut().0, tag.map(|p| p.as_ref()).to_glib_none().0))
         }
@@ -163,8 +160,7 @@ impl TextIter {
     }
 
     #[cfg_attr(feature = "v3_20", deprecated)]
-    pub fn begins_tag<'a, P: IsA<TextTag> + 'a, Q: Into<Option<&'a P>>>(&self, tag: Q) -> bool {
-        let tag = tag.into();
+    pub fn begins_tag<P: IsA<TextTag>>(&self, tag: Option<&P>) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_iter_begins_tag(self.to_glib_none().0, tag.map(|p| p.as_ref()).to_glib_none().0))
         }
@@ -200,8 +196,7 @@ impl TextIter {
         }
     }
 
-    pub fn ends_tag<'a, P: IsA<TextTag> + 'a, Q: Into<Option<&'a P>>>(&self, tag: Q) -> bool {
-        let tag = tag.into();
+    pub fn ends_tag<P: IsA<TextTag>>(&self, tag: Option<&P>) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_iter_ends_tag(self.to_glib_none().0, tag.map(|p| p.as_ref()).to_glib_none().0))
         }
@@ -243,16 +238,15 @@ impl TextIter {
         }
     }
 
-    pub fn forward_find_char<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(&mut self, pred: P, limit: Q) -> bool {
-        let limit = limit.into();
+    pub fn forward_find_char<P: FnMut(char) -> bool>(&mut self, pred: P, limit: Option<&TextIter>) -> bool {
         let pred_data: P = pred;
-        unsafe extern "C" fn pred_func<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(ch: u32, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+        unsafe extern "C" fn pred_func<P: FnMut(char) -> bool>(ch: u32, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
             let ch = from_glib(ch);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let res = (*callback)(ch);
             res.to_glib()
         }
-        let pred = Some(pred_func::<'a, P, Q> as _);
+        let pred = Some(pred_func::<P> as _);
         let super_callback0: &P = &pred_data;
         unsafe {
             from_glib(ffi::gtk_text_iter_forward_find_char(self.to_glib_none_mut().0, pred, super_callback0 as *const _ as usize as *mut _, limit.to_glib_none().0))
@@ -271,8 +265,7 @@ impl TextIter {
         }
     }
 
-    pub fn forward_search<'a, P: Into<Option<&'a TextIter>>>(&self, str: &str, flags: TextSearchFlags, limit: P) -> Option<(TextIter, TextIter)> {
-        let limit = limit.into();
+    pub fn forward_search(&self, str: &str, flags: TextSearchFlags, limit: Option<&TextIter>) -> Option<(TextIter, TextIter)> {
         unsafe {
             let mut match_start = TextIter::uninitialized();
             let mut match_end = TextIter::uninitialized();
@@ -305,8 +298,7 @@ impl TextIter {
         }
     }
 
-    pub fn forward_to_tag_toggle<'a, P: IsA<TextTag> + 'a, Q: Into<Option<&'a P>>>(&mut self, tag: Q) -> bool {
-        let tag = tag.into();
+    pub fn forward_to_tag_toggle<P: IsA<TextTag>>(&mut self, tag: Option<&P>) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_iter_forward_to_tag_toggle(self.to_glib_none_mut().0, tag.map(|p| p.as_ref()).to_glib_none().0))
         }
@@ -577,8 +569,7 @@ impl TextIter {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    pub fn starts_tag<'a, P: IsA<TextTag> + 'a, Q: Into<Option<&'a P>>>(&self, tag: Q) -> bool {
-        let tag = tag.into();
+    pub fn starts_tag<P: IsA<TextTag>>(&self, tag: Option<&P>) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_iter_starts_tag(self.to_glib_none().0, tag.map(|p| p.as_ref()).to_glib_none().0))
         }
@@ -590,8 +581,7 @@ impl TextIter {
         }
     }
 
-    pub fn toggles_tag<'a, P: IsA<TextTag> + 'a, Q: Into<Option<&'a P>>>(&self, tag: Q) -> bool {
-        let tag = tag.into();
+    pub fn toggles_tag<P: IsA<TextTag>>(&self, tag: Option<&P>) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_iter_toggles_tag(self.to_glib_none().0, tag.map(|p| p.as_ref()).to_glib_none().0))
         }

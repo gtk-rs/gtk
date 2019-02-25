@@ -186,39 +186,39 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
 
 unsafe extern "C" fn accel_cleared_trampoline<P, F: Fn(&P, TreePath) + 'static>(this: *mut ffi::GtkCellRendererAccel, path_string: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<CellRendererAccel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path_string));
     f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast(), path)
 }
 
 unsafe extern "C" fn accel_edited_trampoline<P, F: Fn(&P, TreePath, u32, gdk::ModifierType, u32) + 'static>(this: *mut ffi::GtkCellRendererAccel, path_string: *mut libc::c_char, accel_key: libc::c_uint, accel_mods: gdk_ffi::GdkModifierType, hardware_keycode: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<CellRendererAccel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path_string));
     f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast(), path, accel_key, from_glib(accel_mods), hardware_keycode)
 }
 
 unsafe extern "C" fn notify_accel_key_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererAccel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererAccel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_accel_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererAccel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererAccel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_accel_mods_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererAccel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererAccel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_keycode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererAccel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererAccel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
 }
 

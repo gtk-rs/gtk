@@ -10,7 +10,6 @@ use glib::translate::*;
 use glib_ffi::gpointer;
 use libc::c_uint;
 use std::boxed::Box as Box_;
-use std::mem::transmute;
 
 impl Clipboard {
     pub fn set_with_data<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(&self, targets: &[TargetEntry], f: F) -> bool {
@@ -41,7 +40,7 @@ impl Clipboard {
 }
 
 unsafe extern "C" fn trampoline<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(clipboard: *mut ffi::GtkClipboard, selection_data: *mut ffi::GtkSelectionData, info: c_uint, user_data: gpointer) {
-    let f: &F = transmute(user_data);
+    let f: &F = &*(user_data as *const F);
     f(&from_glib_borrow(clipboard), &from_glib_borrow(selection_data), info);
 }
 

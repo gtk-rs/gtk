@@ -130,9 +130,9 @@ pub trait ComboBoxExt: 'static {
 
     fn popup_for_device(&self, device: &gdk::Device);
 
-    fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool;
+    fn set_active_id(&self, active_id: Option<&str>) -> bool;
 
-    fn set_active_iter<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: P);
+    fn set_active_iter(&self, iter: Option<&TreeIter>);
 
     fn set_button_sensitivity(&self, sensitivity: SensitivityType);
 
@@ -146,7 +146,7 @@ pub trait ComboBoxExt: 'static {
 
     fn set_id_column(&self, id_column: i32);
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q);
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>);
 
     fn set_popup_fixed_width(&self, fixed: bool);
 
@@ -309,15 +309,13 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool {
-        let active_id = active_id.into();
+    fn set_active_id(&self, active_id: Option<&str>) -> bool {
         unsafe {
             from_glib(ffi::gtk_combo_box_set_active_id(self.as_ref().to_glib_none().0, active_id.to_glib_none().0))
         }
     }
 
-    fn set_active_iter<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: P) {
-        let iter = iter.into();
+    fn set_active_iter(&self, iter: Option<&TreeIter>) {
         unsafe {
             ffi::gtk_combo_box_set_active_iter(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0));
         }
@@ -354,8 +352,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q) {
-        let model = model.into();
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>) {
         unsafe {
             ffi::gtk_combo_box_set_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -581,103 +578,103 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
 
 unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn format_entry_text_trampoline<P, F: Fn(&P, &str) -> String + 'static>(this: *mut ffi::GtkComboBox, path: *mut libc::c_char, f: glib_ffi::gpointer) -> *mut libc::c_char
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(path)).to_glib_full()
 }
 
 unsafe extern "C" fn move_active_trampoline<P, F: Fn(&P, ScrollType) + 'static>(this: *mut ffi::GtkComboBox, scroll_type: ffi::GtkScrollType, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast(), from_glib(scroll_type))
 }
 
 unsafe extern "C" fn popdown_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkComboBox, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn popup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_active_id_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_button_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_column_span_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_entry_text_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_frame_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_id_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_popup_fixed_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_popup_shown_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_row_span_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_wrap_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 

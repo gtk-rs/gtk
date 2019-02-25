@@ -234,55 +234,55 @@ impl<O: IsA<AppChooserWidget>> AppChooserWidgetExt for O {
 
 unsafe extern "C" fn application_activated_trampoline<P, F: Fn(&P, &gio::AppInfo) + 'static>(this: *mut ffi::GtkAppChooserWidget, application: *mut gio_ffi::GAppInfo, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(application))
 }
 
 unsafe extern "C" fn application_selected_trampoline<P, F: Fn(&P, &gio::AppInfo) + 'static>(this: *mut ffi::GtkAppChooserWidget, application: *mut gio_ffi::GAppInfo, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(application))
 }
 
 unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Menu, &gio::AppInfo) + 'static>(this: *mut ffi::GtkAppChooserWidget, menu: *mut ffi::GtkMenu, application: *mut gio_ffi::GAppInfo, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(menu), &from_glib_borrow(application))
 }
 
 unsafe extern "C" fn notify_default_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_fallback_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_other_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_recommended_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 

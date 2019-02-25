@@ -13,7 +13,6 @@ use TextDirection;
 use WidgetPath;
 use ffi;
 use gdk;
-use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -138,7 +137,7 @@ pub trait StyleContextExt: 'static {
 
     fn set_junction_sides(&self, sides: JunctionSides);
 
-    fn set_parent<'a, P: IsA<StyleContext> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q);
+    fn set_parent<P: IsA<StyleContext>>(&self, parent: Option<&P>);
 
     fn set_path(&self, path: &WidgetPath);
 
@@ -157,7 +156,7 @@ pub trait StyleContextExt: 'static {
 
     fn get_property_paint_clock(&self) -> Option<gdk::FrameClock>;
 
-    fn set_property_paint_clock<P: IsA<gdk::FrameClock> + glib::value::SetValueOptional>(&self, paint_clock: Option<&P>);
+    fn set_property_paint_clock(&self, paint_clock: Option<&gdk::FrameClock>);
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -357,8 +356,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn set_parent<'a, P: IsA<StyleContext> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) {
-        let parent = parent.into();
+    fn set_parent<P: IsA<StyleContext>>(&self, parent: Option<&P>) {
         unsafe {
             ffi::gtk_style_context_set_parent(self.as_ref().to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -417,7 +415,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn set_property_paint_clock<P: IsA<gdk::FrameClock> + glib::value::SetValueOptional>(&self, paint_clock: Option<&P>) {
+    fn set_property_paint_clock(&self, paint_clock: Option<&gdk::FrameClock>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"paint-clock\0".as_ptr() as *const _, Value::from(paint_clock).to_glib_none().0);
         }
@@ -466,31 +464,31 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
 
 unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStyleContext, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StyleContext::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StyleContext::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_paint_clock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StyleContext::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StyleContext::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_screen_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StyleContext::from_glib_borrow(this).unsafe_cast())
 }
 

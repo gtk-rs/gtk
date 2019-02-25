@@ -68,7 +68,7 @@ pub trait ProgressBarExt: 'static {
 
     fn set_show_text(&self, show_text: bool);
 
-    fn set_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
+    fn set_text(&self, text: Option<&str>);
 
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -156,8 +156,7 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
         }
     }
 
-    fn set_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::gtk_progress_bar_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
         }
@@ -214,37 +213,37 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
 
 unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_fraction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_pulse_step_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
 }
 

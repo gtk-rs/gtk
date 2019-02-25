@@ -90,9 +90,9 @@ pub trait NotebookExt: 'static {
 
     fn set_action_widget<P: IsA<Widget>>(&self, widget: &P, pack_type: PackType);
 
-    fn set_group_name<'a, P: Into<Option<&'a str>>>(&self, group_name: P);
+    fn set_group_name(&self, group_name: Option<&str>);
 
-    fn set_menu_label<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, menu_label: R);
+    fn set_menu_label<P: IsA<Widget>, Q: IsA<Widget>>(&self, child: &P, menu_label: Option<&Q>);
 
     fn set_menu_label_text<P: IsA<Widget>>(&self, child: &P, menu_text: &str);
 
@@ -104,7 +104,7 @@ pub trait NotebookExt: 'static {
 
     fn set_tab_detachable<P: IsA<Widget>>(&self, child: &P, detachable: bool);
 
-    fn set_tab_label<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, tab_label: R);
+    fn set_tab_label<P: IsA<Widget>, Q: IsA<Widget>>(&self, child: &P, tab_label: Option<&Q>);
 
     fn set_tab_label_text<P: IsA<Widget>>(&self, child: &P, tab_text: &str);
 
@@ -130,7 +130,7 @@ pub trait NotebookExt: 'static {
     fn get_child_menu_label<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
     #[doc(hidden)]
-    fn set_child_menu_label<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, menu_label: P);
+    fn set_child_menu_label<T: IsA<Widget>>(&self, item: &T, menu_label: Option<&str>);
 
     #[doc(hidden)]
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32;
@@ -160,7 +160,7 @@ pub trait NotebookExt: 'static {
     fn get_child_tab_label<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
     #[doc(hidden)]
-    fn set_child_tab_label<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, tab_label: P);
+    fn set_child_tab_label<T: IsA<Widget>>(&self, item: &T, tab_label: Option<&str>);
 
     fn connect_change_current_page<F: Fn(&Self, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -317,15 +317,13 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         }
     }
 
-    fn set_group_name<'a, P: Into<Option<&'a str>>>(&self, group_name: P) {
-        let group_name = group_name.into();
+    fn set_group_name(&self, group_name: Option<&str>) {
         unsafe {
             ffi::gtk_notebook_set_group_name(self.as_ref().to_glib_none().0, group_name.to_glib_none().0);
         }
     }
 
-    fn set_menu_label<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, menu_label: R) {
-        let menu_label = menu_label.into();
+    fn set_menu_label<P: IsA<Widget>, Q: IsA<Widget>>(&self, child: &P, menu_label: Option<&Q>) {
         unsafe {
             ffi::gtk_notebook_set_menu_label(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, menu_label.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -361,8 +359,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         }
     }
 
-    fn set_tab_label<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, tab_label: R) {
-        let tab_label = tab_label.into();
+    fn set_tab_label<P: IsA<Widget>, Q: IsA<Widget>>(&self, child: &P, tab_label: Option<&Q>) {
         unsafe {
             ffi::gtk_notebook_set_tab_label(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, tab_label.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -440,8 +437,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
     }
 
     #[doc(hidden)]
-    fn set_child_menu_label<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, menu_label: P) {
-        let menu_label = menu_label.into();
+    fn set_child_menu_label<T: IsA<Widget>>(&self, item: &T, menu_label: Option<&str>) {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"menu-label\0".as_ptr() as *const _, Value::from(menu_label).to_glib_none().0);
         }
@@ -521,8 +517,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
     }
 
     #[doc(hidden)]
-    fn set_child_tab_label<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, tab_label: P) {
-        let tab_label = tab_label.into();
+    fn set_child_tab_label<T: IsA<Widget>>(&self, item: &T, tab_label: Option<&str>) {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"tab-label\0".as_ptr() as *const _, Value::from(tab_label).to_glib_none().0);
         }
@@ -691,103 +686,103 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
 unsafe extern "C" fn change_current_page_trampoline<P, F: Fn(&P, i32) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), object).to_glib()
 }
 
 unsafe extern "C" fn create_window_trampoline<P, F: Fn(&P, &Widget, i32, i32) -> Notebook + 'static>(this: *mut ffi::GtkNotebook, page: *mut ffi::GtkWidget, x: libc::c_int, y: libc::c_int, f: glib_ffi::gpointer) -> *mut ffi::GtkNotebook
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page), x, y)/*Not checked*/.to_glib_none().0
 }
 
 unsafe extern "C" fn focus_tab_trampoline<P, F: Fn(&P, NotebookTab) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: ffi::GtkNotebookTab, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object)).to_glib()
 }
 
 unsafe extern "C" fn move_focus_out_trampoline<P, F: Fn(&P, DirectionType) + 'static>(this: *mut ffi::GtkNotebook, object: ffi::GtkDirectionType, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object))
 }
 
 unsafe extern "C" fn page_added_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), page_num)
 }
 
 unsafe extern "C" fn page_removed_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), page_num)
 }
 
 unsafe extern "C" fn page_reordered_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), page_num)
 }
 
 unsafe extern "C" fn reorder_tab_trampoline<P, F: Fn(&P, DirectionType, bool) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: ffi::GtkDirectionType, p0: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object), from_glib(p0)).to_glib()
 }
 
 unsafe extern "C" fn select_page_trampoline<P, F: Fn(&P, bool) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object)).to_glib()
 }
 
 unsafe extern "C" fn switch_page_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, page: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page), page_num)
 }
 
 unsafe extern "C" fn notify_enable_popup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_group_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_page_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_scrollable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_border_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_tabs_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_tab_pos_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 

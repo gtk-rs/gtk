@@ -38,17 +38,15 @@ glib_wrapper! {
 }
 
 impl Label {
-    pub fn new<'a, P: Into<Option<&'a str>>>(str: P) -> Label {
+    pub fn new(str: Option<&str>) -> Label {
         assert_initialized_main_thread!();
-        let str = str.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_label_new(str.to_glib_none().0)).unsafe_cast()
         }
     }
 
-    pub fn new_with_mnemonic<'a, P: Into<Option<&'a str>>>(str: P) -> Label {
+    pub fn new_with_mnemonic(str: Option<&str>) -> Label {
         assert_initialized_main_thread!();
-        let str = str.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_label_new_with_mnemonic(str.to_glib_none().0)).unsafe_cast()
         }
@@ -112,7 +110,7 @@ pub trait LabelExt: 'static {
 
     fn set_angle(&self, angle: f64);
 
-    fn set_attributes<'a, P: Into<Option<&'a pango::AttrList>>>(&self, attrs: P);
+    fn set_attributes(&self, attrs: Option<&pango::AttrList>);
 
     fn set_ellipsize(&self, mode: pango::EllipsizeMode);
 
@@ -132,7 +130,7 @@ pub trait LabelExt: 'static {
 
     fn set_max_width_chars(&self, n_chars: i32);
 
-    fn set_mnemonic_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q);
+    fn set_mnemonic_widget<P: IsA<Widget>>(&self, widget: Option<&P>);
 
     fn set_pattern(&self, pattern: &str);
 
@@ -398,8 +396,7 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    fn set_attributes<'a, P: Into<Option<&'a pango::AttrList>>>(&self, attrs: P) {
-        let attrs = attrs.into();
+    fn set_attributes(&self, attrs: Option<&pango::AttrList>) {
         unsafe {
             ffi::gtk_label_set_attributes(self.as_ref().to_glib_none().0, attrs.to_glib_none().0);
         }
@@ -459,8 +456,7 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    fn set_mnemonic_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q) {
-        let widget = widget.into();
+    fn set_mnemonic_widget<P: IsA<Widget>>(&self, widget: Option<&P>) {
         unsafe {
             ffi::gtk_label_set_mnemonic_widget(self.as_ref().to_glib_none().0, widget.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -811,165 +807,165 @@ impl<O: IsA<Label>> LabelExt for O {
 
 unsafe extern "C" fn activate_current_link_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P, &str) -> Inhibit + 'static>(this: *mut ffi::GtkLabel, uri: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(uri)).to_glib()
 }
 
 unsafe extern "C" fn copy_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32, bool) + 'static>(this: *mut ffi::GtkLabel, step: ffi::GtkMovementStep, count: libc::c_int, extend_selection: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast(), from_glib(step), count, from_glib(extend_selection))
 }
 
 unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Menu) + 'static>(this: *mut ffi::GtkLabel, menu: *mut ffi::GtkMenu, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(menu))
 }
 
 unsafe extern "C" fn notify_angle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_cursor_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_justify_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_lines_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mnemonic_keyval_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mnemonic_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_pattern_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_selectable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_selection_bound_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_single_line_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_track_visited_links_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_wrap_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_wrap_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_yalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 

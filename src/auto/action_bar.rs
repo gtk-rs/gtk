@@ -47,7 +47,7 @@ pub trait ActionBarExt: 'static {
 
     fn pack_start<P: IsA<Widget>>(&self, child: &P);
 
-    fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, center_widget: Q);
+    fn set_center_widget<P: IsA<Widget>>(&self, center_widget: Option<&P>);
 
     fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType;
 
@@ -77,8 +77,7 @@ impl<O: IsA<ActionBar>> ActionBarExt for O {
         }
     }
 
-    fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, center_widget: Q) {
-        let center_widget = center_widget.into();
+    fn set_center_widget<P: IsA<Widget>>(&self, center_widget: Option<&P>) {
         unsafe {
             ffi::gtk_action_bar_set_center_widget(self.as_ref().to_glib_none().0, center_widget.map(|p| p.as_ref()).to_glib_none().0);
         }

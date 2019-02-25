@@ -24,10 +24,8 @@ glib_wrapper! {
 }
 
 impl FontChooserDialog {
-    pub fn new<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>>(title: P, parent: R) -> FontChooserDialog {
+    pub fn new<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>) -> FontChooserDialog {
         assert_initialized_main_thread!();
-        let title = title.into();
-        let parent = parent.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_font_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }

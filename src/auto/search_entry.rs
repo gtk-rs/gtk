@@ -138,27 +138,27 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn next_match_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn previous_match_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn search_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn stop_search_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
 }
 

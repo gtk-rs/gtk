@@ -115,7 +115,7 @@ pub trait AssistantExt: 'static {
 
     fn get_child_title<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
-    fn set_child_title<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, title: P);
+    fn set_child_title<T: IsA<Widget>>(&self, item: &T, title: Option<&str>);
 
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -345,8 +345,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
         }
     }
 
-    fn set_child_title<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, title: P) {
-        let title = title.into();
+    fn set_child_title<T: IsA<Widget>>(&self, item: &T, title: Option<&str>) {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, Value::from(title).to_glib_none().0);
         }
@@ -399,31 +398,31 @@ impl<O: IsA<Assistant>> AssistantExt for O {
 
 unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn escape_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn prepare_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkAssistant, page: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Assistant::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page))
 }
 

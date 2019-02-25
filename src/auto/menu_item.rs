@@ -80,13 +80,13 @@ pub trait GtkMenuItemExt: 'static {
 
     fn select(&self);
 
-    fn set_accel_path<'a, P: Into<Option<&'a str>>>(&self, accel_path: P);
+    fn set_accel_path(&self, accel_path: Option<&str>);
 
     fn set_label(&self, label: &str);
 
     fn set_reserve_indicator(&self, reserve: bool);
 
-    fn set_submenu<'a, P: IsA<Menu> + 'a, Q: Into<Option<&'a P>>>(&self, submenu: Q);
+    fn set_submenu<P: IsA<Menu>>(&self, submenu: Option<&P>);
 
     fn set_use_underline(&self, setting: bool);
 
@@ -166,8 +166,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
         }
     }
 
-    fn set_accel_path<'a, P: Into<Option<&'a str>>>(&self, accel_path: P) {
-        let accel_path = accel_path.into();
+    fn set_accel_path(&self, accel_path: Option<&str>) {
         unsafe {
             ffi::gtk_menu_item_set_accel_path(self.as_ref().to_glib_none().0, accel_path.to_glib_none().0);
         }
@@ -185,8 +184,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
         }
     }
 
-    fn set_submenu<'a, P: IsA<Menu> + 'a, Q: Into<Option<&'a P>>>(&self, submenu: Q) {
-        let submenu = submenu.into();
+    fn set_submenu<P: IsA<Menu>>(&self, submenu: Option<&P>) {
         unsafe {
             ffi::gtk_menu_item_set_submenu(self.as_ref().to_glib_none().0, submenu.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -315,61 +313,61 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
 
 unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn activate_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn deselect_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn select_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn toggle_size_allocate_trampoline<P, F: Fn(&P, i32) + 'static>(this: *mut ffi::GtkMenuItem, object: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast(), object)
 }
 
 unsafe extern "C" fn notify_accel_path_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_right_justified_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_submenu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 

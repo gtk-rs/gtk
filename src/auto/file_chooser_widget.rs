@@ -292,85 +292,85 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
 unsafe extern "C" fn desktop_folder_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn down_folder_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn home_folder_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn location_popup_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkFileChooserWidget, path: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(path))
 }
 
 unsafe extern "C" fn location_popup_on_paste_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn location_toggle_popup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn places_shortcut_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn quick_bookmark_trampoline<P, F: Fn(&P, i32) + 'static>(this: *mut ffi::GtkFileChooserWidget, bookmark_index: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast(), bookmark_index)
 }
 
 unsafe extern "C" fn recent_shortcut_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn search_shortcut_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn show_hidden_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn up_folder_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_search_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_subtitle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 

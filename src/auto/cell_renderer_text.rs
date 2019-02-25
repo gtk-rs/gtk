@@ -58,7 +58,7 @@ pub trait CellRendererTextExt: 'static {
 
     fn set_property_alignment(&self, alignment: pango::Alignment);
 
-    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P);
+    fn set_property_background(&self, background: Option<&str>);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -86,7 +86,7 @@ pub trait CellRendererTextExt: 'static {
 
     fn get_property_family(&self) -> Option<GString>;
 
-    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P);
+    fn set_property_family(&self, family: Option<&str>);
 
     fn get_property_family_set(&self) -> bool;
 
@@ -94,9 +94,9 @@ pub trait CellRendererTextExt: 'static {
 
     fn get_property_font(&self) -> Option<GString>;
 
-    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P);
+    fn set_property_font(&self, font: Option<&str>);
 
-    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P);
+    fn set_property_foreground(&self, foreground: Option<&str>);
 
     fn get_property_foreground_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -108,13 +108,13 @@ pub trait CellRendererTextExt: 'static {
 
     fn get_property_language(&self) -> Option<GString>;
 
-    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P);
+    fn set_property_language(&self, language: Option<&str>);
 
     fn get_property_language_set(&self) -> bool;
 
     fn set_property_language_set(&self, language_set: bool);
 
-    fn set_property_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P);
+    fn set_property_markup(&self, markup: Option<&str>);
 
     fn get_property_max_width_chars(&self) -> i32;
 
@@ -122,7 +122,7 @@ pub trait CellRendererTextExt: 'static {
 
     fn get_property_placeholder_text(&self) -> Option<GString>;
 
-    fn set_property_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, placeholder_text: P);
+    fn set_property_placeholder_text(&self, placeholder_text: Option<&str>);
 
     fn get_property_rise(&self) -> i32;
 
@@ -182,7 +182,7 @@ pub trait CellRendererTextExt: 'static {
 
     fn get_property_text(&self) -> Option<GString>;
 
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
+    fn set_property_text(&self, text: Option<&str>);
 
     fn get_property_underline(&self) -> pango::Underline;
 
@@ -346,8 +346,7 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
-    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P) {
-        let background = background.into();
+    fn set_property_background(&self, background: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background\0".as_ptr() as *const _, Value::from(background).to_glib_none().0);
         }
@@ -445,8 +444,7 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
-    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P) {
-        let family = family.into();
+    fn set_property_family(&self, family: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"family\0".as_ptr() as *const _, Value::from(family).to_glib_none().0);
         }
@@ -474,15 +472,13 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
-    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P) {
-        let font = font.into();
+    fn set_property_font(&self, font: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"font\0".as_ptr() as *const _, Value::from(font).to_glib_none().0);
         }
     }
 
-    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P) {
-        let foreground = foreground.into();
+    fn set_property_foreground(&self, foreground: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"foreground\0".as_ptr() as *const _, Value::from(foreground).to_glib_none().0);
         }
@@ -524,8 +520,7 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
-    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P) {
-        let language = language.into();
+    fn set_property_language(&self, language: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language\0".as_ptr() as *const _, Value::from(language).to_glib_none().0);
         }
@@ -545,8 +540,7 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
-    fn set_property_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
-        let markup = markup.into();
+    fn set_property_markup(&self, markup: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"markup\0".as_ptr() as *const _, Value::from(markup).to_glib_none().0);
         }
@@ -574,8 +568,7 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
-    fn set_property_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, placeholder_text: P) {
-        let placeholder_text = placeholder_text.into();
+    fn set_property_placeholder_text(&self, placeholder_text: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"placeholder-text\0".as_ptr() as *const _, Value::from(placeholder_text).to_glib_none().0);
         }
@@ -785,8 +778,7 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    fn set_property_text(&self, text: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
         }
@@ -1281,272 +1273,272 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
 
 unsafe extern "C" fn edited_trampoline<P, F: Fn(&P, TreePath, &str) + 'static>(this: *mut ffi::GtkCellRendererText, path: *mut libc::c_char, new_text: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path));
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast(), path, &GString::from_glib_borrow(new_text))
 }
 
 unsafe extern "C" fn notify_align_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_alignment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_background_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_background_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_background_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_editable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_editable_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_ellipsize_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_family_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_font_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_foreground_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_foreground_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_foreground_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_language_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_language_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_placeholder_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_rise_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_rise_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_scale_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_scale_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_single_paragraph_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_size_points_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_size_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_stretch_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_stretch_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_strikethrough_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_strikethrough_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_style_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_underline_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_variant_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_variant_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_weight_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_weight_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_wrap_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_wrap_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 

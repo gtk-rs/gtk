@@ -37,9 +37,8 @@ impl LinkButton {
         }
     }
 
-    pub fn new_with_label<'a, P: Into<Option<&'a str>>>(uri: &str, label: P) -> LinkButton {
+    pub fn new_with_label(uri: &str, label: Option<&str>) -> LinkButton {
         assert_initialized_main_thread!();
-        let label = label.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_link_button_new_with_label(uri.to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
@@ -116,19 +115,19 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
 
 unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P) -> Inhibit + 'static>(this: *mut ffi::GtkLinkButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<LinkButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LinkButton::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn notify_uri_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLinkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LinkButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LinkButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_visited_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLinkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LinkButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LinkButton::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -91,7 +91,7 @@ impl<O: IsA<FlowBoxChild>> FlowBoxChildExt for O {
 
 unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBoxChild, f: glib_ffi::gpointer)
 where P: IsA<FlowBoxChild> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBoxChild::from_glib_borrow(this).unsafe_cast())
 }
 

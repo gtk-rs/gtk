@@ -92,7 +92,7 @@ pub trait BuilderExt: 'static {
 
     fn set_application<P: IsA<Application>>(&self, application: &P);
 
-    fn set_translation_domain<'a, P: Into<Option<&'a str>>>(&self, domain: P);
+    fn set_translation_domain(&self, domain: Option<&str>);
 
     //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, Error>;
 
@@ -201,8 +201,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    fn set_translation_domain<'a, P: Into<Option<&'a str>>>(&self, domain: P) {
-        let domain = domain.into();
+    fn set_translation_domain(&self, domain: Option<&str>) {
         unsafe {
             ffi::gtk_builder_set_translation_domain(self.as_ref().to_glib_none().0, domain.to_glib_none().0);
         }
@@ -232,7 +231,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
 
 unsafe extern "C" fn notify_translation_domain_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkBuilder, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Builder> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Builder::from_glib_borrow(this).unsafe_cast())
 }
 

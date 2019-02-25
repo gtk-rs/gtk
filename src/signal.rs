@@ -297,7 +297,7 @@ mod overlay {
     where
         T: IsA<Overlay>,
     {
-        let f: &F = transmute(f);
+        let f: &F = &*(f as *const F);
         match f(
             &Overlay::from_glib_borrow(this).unsafe_cast(),
             &from_glib_borrow(widget),

@@ -90,7 +90,7 @@ pub trait ToolItemExt: 'static {
 
     fn set_is_important(&self, is_important: bool);
 
-    fn set_proxy_menu_item<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, menu_item_id: &str, menu_item: Q);
+    fn set_proxy_menu_item<P: IsA<Widget>>(&self, menu_item_id: &str, menu_item: Option<&P>);
 
     fn set_use_drag_window(&self, use_drag_window: bool);
 
@@ -232,8 +232,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
         }
     }
 
-    fn set_proxy_menu_item<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, menu_item_id: &str, menu_item: Q) {
-        let menu_item = menu_item.into();
+    fn set_proxy_menu_item<P: IsA<Widget>>(&self, menu_item_id: &str, menu_item: Option<&P>) {
         unsafe {
             ffi::gtk_tool_item_set_proxy_menu_item(self.as_ref().to_glib_none().0, menu_item_id.to_glib_none().0, menu_item.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -306,31 +305,31 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
 
 unsafe extern "C" fn create_menu_proxy_trampoline<P, F: Fn(&P) -> Inhibit + 'static>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<ToolItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItem::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn toolbar_reconfigured_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_is_important_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_visible_horizontal_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItem::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_visible_vertical_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItem::from_glib_borrow(this).unsafe_cast())
 }
 

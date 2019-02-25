@@ -9,12 +9,11 @@ use glib::translate::*;
 use {TreeModel, TreeModelFilter, TreePath};
 
 impl TreeModelFilter {
-    pub fn new<'a, I: Into<Option<&'a TreePath>>, T: IsA<TreeModel>>(
+    pub fn new<T: IsA<TreeModel>>(
         child_model: &T,
-        root: I,
+        root: Option<&TreePath>,
     ) -> TreeModelFilter {
         skip_assert_initialized!();
-        let root = root.into();
         unsafe {
             TreeModel::from_glib_none(ffi::gtk_tree_model_filter_new(child_model.as_ref().to_glib_none().0,
                                                                      mut_override(root.to_glib_none().0)))

@@ -32,10 +32,8 @@ glib_wrapper! {
 }
 
 impl ColorChooserDialog {
-    pub fn new<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>>(title: P, parent: R) -> ColorChooserDialog {
+    pub fn new<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>) -> ColorChooserDialog {
         assert_initialized_main_thread!();
-        let title = title.into();
-        let parent = parent.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_color_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
@@ -78,7 +76,7 @@ impl<O: IsA<ColorChooserDialog>> ColorChooserDialogExt for O {
 
 unsafe extern "C" fn notify_show_editor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkColorChooserDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorChooserDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ColorChooserDialog::from_glib_borrow(this).unsafe_cast())
 }
 

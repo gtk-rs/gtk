@@ -126,19 +126,19 @@ impl<O: IsA<GestureSingle>> GestureSingleExt for O {
 
 unsafe extern "C" fn notify_button_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureSingle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureSingle::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_exclusive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureSingle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureSingle::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_touch_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureSingle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureSingle::from_glib_borrow(this).unsafe_cast())
 }
 

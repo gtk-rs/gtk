@@ -164,8 +164,7 @@ impl WidgetPath {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    pub fn iter_set_object_name<'a, P: Into<Option<&'a str>>>(&self, pos: i32, name: P) {
-        let name = name.into();
+    pub fn iter_set_object_name(&self, pos: i32, name: Option<&str>) {
         unsafe {
             ffi::gtk_widget_path_iter_set_object_name(self.to_glib_none().0, pos, name.to_glib_none().0);
         }

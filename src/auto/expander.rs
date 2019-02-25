@@ -30,9 +30,8 @@ glib_wrapper! {
 }
 
 impl Expander {
-    pub fn new<'a, P: Into<Option<&'a str>>>(label: P) -> Expander {
+    pub fn new(label: Option<&str>) -> Expander {
         assert_initialized_main_thread!();
-        let label = label.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_expander_new(label.to_glib_none().0)).unsafe_cast()
         }
@@ -68,11 +67,11 @@ pub trait ExpanderExt: 'static {
 
     fn set_expanded(&self, expanded: bool);
 
-    fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P);
+    fn set_label(&self, label: Option<&str>);
 
     fn set_label_fill(&self, label_fill: bool);
 
-    fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q);
+    fn set_label_widget<P: IsA<Widget>>(&self, label_widget: Option<&P>);
 
     fn set_resize_toplevel(&self, resize_toplevel: bool);
 
@@ -160,8 +159,7 @@ impl<O: IsA<Expander>> ExpanderExt for O {
         }
     }
 
-    fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P) {
-        let label = label.into();
+    fn set_label(&self, label: Option<&str>) {
         unsafe {
             ffi::gtk_expander_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
@@ -173,8 +171,7 @@ impl<O: IsA<Expander>> ExpanderExt for O {
         }
     }
 
-    fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q) {
-        let label_widget = label_widget.into();
+    fn set_label_widget<P: IsA<Widget>>(&self, label_widget: Option<&P>) {
         unsafe {
             ffi::gtk_expander_set_label_widget(self.as_ref().to_glib_none().0, label_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -283,55 +280,55 @@ impl<O: IsA<Expander>> ExpanderExt for O {
 
 unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_expanded_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_fill_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_resize_toplevel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 

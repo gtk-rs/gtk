@@ -64,7 +64,7 @@ pub trait RecentManagerExt: 'static {
 
     fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error>;
 
-    fn move_item<'a, P: Into<Option<&'a str>>>(&self, uri: &str, new_uri: P) -> Result<(), Error>;
+    fn move_item(&self, uri: &str, new_uri: Option<&str>) -> Result<(), Error>;
 
     fn purge_items(&self) -> Result<i32, Error>;
 
@@ -112,8 +112,7 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
         }
     }
 
-    fn move_item<'a, P: Into<Option<&'a str>>>(&self, uri: &str, new_uri: P) -> Result<(), Error> {
-        let new_uri = new_uri.into();
+    fn move_item(&self, uri: &str, new_uri: Option<&str>) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::gtk_recent_manager_move_item(self.as_ref().to_glib_none().0, uri.to_glib_none().0, new_uri.to_glib_none().0, &mut error);
@@ -172,13 +171,13 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
 
 unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentManager, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentManager::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentManager::from_glib_borrow(this).unsafe_cast())
 }
 

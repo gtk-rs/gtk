@@ -83,7 +83,7 @@ pub trait ContainerExt: 'static {
     #[cfg_attr(feature = "v3_24", deprecated)]
     fn set_focus_chain(&self, focusable_widgets: &[Widget]);
 
-    fn set_focus_child<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, child: Q);
+    fn set_focus_child<P: IsA<Widget>>(&self, child: Option<&P>);
 
     fn set_focus_hadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
 
@@ -92,7 +92,7 @@ pub trait ContainerExt: 'static {
     #[cfg_attr(feature = "v3_24", deprecated)]
     fn unset_focus_chain(&self);
 
-    fn set_property_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, child: Option<&P>);
+    fn set_property_child(&self, child: Option<&Widget>);
 
     fn get_property_resize_mode(&self) -> ResizeMode;
 
@@ -255,8 +255,7 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    fn set_focus_child<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, child: Q) {
-        let child = child.into();
+    fn set_focus_child<P: IsA<Widget>>(&self, child: Option<&P>) {
         unsafe {
             ffi::gtk_container_set_focus_child(self.as_ref().to_glib_none().0, child.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -280,7 +279,7 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    fn set_property_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, child: Option<&P>) {
+    fn set_property_child(&self, child: Option<&Widget>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"child\0".as_ptr() as *const _, Value::from(child).to_glib_none().0);
         }
@@ -359,43 +358,43 @@ impl<O: IsA<Container>> ContainerExt for O {
 
 unsafe extern "C" fn add_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn check_resize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn remove_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn set_focus_child_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn notify_border_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_resize_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -8,13 +8,12 @@ use glib::translate::*;
 use glib::object::IsA;
 
 pub trait ComboBoxExtManual: 'static {
-    fn set_active<P: Into<Option<u32>>>(&self, index_: P);
+    fn set_active(&self, index_: Option<u32>);
     fn get_active(&self) -> Option<u32>;
 }
 
 impl<O: IsA<ComboBox>> ComboBoxExtManual for O {
-    fn set_active<P: Into<Option<u32>>>(&self, index_: P) {
-        let index_ = index_.into();
+    fn set_active(&self, index_: Option<u32>) {
         let index_ = match index_ {
             Some(i) => i as _,
             None => -1,

@@ -32,10 +32,8 @@ glib_wrapper! {
 }
 
 impl Layout {
-    pub fn new<'a, 'b, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>, R: IsA<Adjustment> + 'b, S: Into<Option<&'b R>>>(hadjustment: Q, vadjustment: S) -> Layout {
+    pub fn new<P: IsA<Adjustment>, Q: IsA<Adjustment>>(hadjustment: Option<&P>, vadjustment: Option<&Q>) -> Layout {
         assert_initialized_main_thread!();
-        let hadjustment = hadjustment.into();
-        let vadjustment = vadjustment.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_layout_new(hadjustment.map(|p| p.as_ref()).to_glib_none().0, vadjustment.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
@@ -185,13 +183,13 @@ impl<O: IsA<Layout>> LayoutExt for O {
 
 unsafe extern "C" fn notify_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLayout, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Layout> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Layout::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLayout, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Layout> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Layout::from_glib_borrow(this).unsafe_cast())
 }
 

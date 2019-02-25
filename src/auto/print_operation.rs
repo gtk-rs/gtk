@@ -82,15 +82,15 @@ pub trait PrintOperationExt: 'static {
 
     fn is_finished(&self) -> bool;
 
-    fn run<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, action: PrintOperationAction, parent: Q) -> Result<PrintOperationResult, Error>;
+    fn run<P: IsA<Window>>(&self, action: PrintOperationAction, parent: Option<&P>) -> Result<PrintOperationResult, Error>;
 
     fn set_allow_async(&self, allow_async: bool);
 
     fn set_current_page(&self, current_page: i32);
 
-    fn set_custom_tab_label<'a, P: Into<Option<&'a str>>>(&self, label: P);
+    fn set_custom_tab_label(&self, label: Option<&str>);
 
-    fn set_default_page_setup<'a, P: Into<Option<&'a PageSetup>>>(&self, default_page_setup: P);
+    fn set_default_page_setup(&self, default_page_setup: Option<&PageSetup>);
 
     fn set_defer_drawing(&self);
 
@@ -104,7 +104,7 @@ pub trait PrintOperationExt: 'static {
 
     fn set_n_pages(&self, n_pages: i32);
 
-    fn set_print_settings<'a, P: Into<Option<&'a PrintSettings>>>(&self, print_settings: P);
+    fn set_print_settings(&self, print_settings: Option<&PrintSettings>);
 
     fn set_show_progress(&self, show_progress: bool);
 
@@ -270,8 +270,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         }
     }
 
-    fn run<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, action: PrintOperationAction, parent: Q) -> Result<PrintOperationResult, Error> {
-        let parent = parent.into();
+    fn run<P: IsA<Window>>(&self, action: PrintOperationAction, parent: Option<&P>) -> Result<PrintOperationResult, Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::gtk_print_operation_run(self.as_ref().to_glib_none().0, action.to_glib(), parent.map(|p| p.as_ref()).to_glib_none().0, &mut error);
@@ -291,15 +290,13 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         }
     }
 
-    fn set_custom_tab_label<'a, P: Into<Option<&'a str>>>(&self, label: P) {
-        let label = label.into();
+    fn set_custom_tab_label(&self, label: Option<&str>) {
         unsafe {
             ffi::gtk_print_operation_set_custom_tab_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
     }
 
-    fn set_default_page_setup<'a, P: Into<Option<&'a PageSetup>>>(&self, default_page_setup: P) {
-        let default_page_setup = default_page_setup.into();
+    fn set_default_page_setup(&self, default_page_setup: Option<&PageSetup>) {
         unsafe {
             ffi::gtk_print_operation_set_default_page_setup(self.as_ref().to_glib_none().0, default_page_setup.to_glib_none().0);
         }
@@ -341,8 +338,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         }
     }
 
-    fn set_print_settings<'a, P: Into<Option<&'a PrintSettings>>>(&self, print_settings: P) {
-        let print_settings = print_settings.into();
+    fn set_print_settings(&self, print_settings: Option<&PrintSettings>) {
         unsafe {
             ffi::gtk_print_operation_set_print_settings(self.as_ref().to_glib_none().0, print_settings.to_glib_none().0);
         }
@@ -693,175 +689,175 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
 
 unsafe extern "C" fn begin_print_trampoline<P, F: Fn(&P, &PrintContext) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
 unsafe extern "C" fn create_custom_widget_trampoline<P, F: Fn(&P) -> glib::Object + 'static>(this: *mut ffi::GtkPrintOperation, f: glib_ffi::gpointer) -> *mut gobject_ffi::GObject
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())/*Not checked*/.to_glib_none().0
 }
 
 unsafe extern "C" fn custom_widget_apply_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkPrintOperation, widget: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(widget))
 }
 
 unsafe extern "C" fn done_trampoline<P, F: Fn(&P, PrintOperationResult) + 'static>(this: *mut ffi::GtkPrintOperation, result: ffi::GtkPrintOperationResult, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), from_glib(result))
 }
 
 unsafe extern "C" fn draw_page_trampoline<P, F: Fn(&P, &PrintContext, i32) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, page_nr: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), page_nr)
 }
 
 unsafe extern "C" fn end_print_trampoline<P, F: Fn(&P, &PrintContext) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
 unsafe extern "C" fn paginate_trampoline<P, F: Fn(&P, &PrintContext) -> bool + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib()
 }
 
 unsafe extern "C" fn preview_trampoline<P, F: Fn(&P, &PrintOperationPreview, &PrintContext, &Option<Window>) -> bool + 'static>(this: *mut ffi::GtkPrintOperation, preview: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, parent: *mut ffi::GtkWindow, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(preview), &from_glib_borrow(context), &from_glib_borrow(parent)).to_glib()
 }
 
 unsafe extern "C" fn request_page_setup_trampoline<P, F: Fn(&P, &PrintContext, i32, &PageSetup) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, page_nr: libc::c_int, setup: *mut ffi::GtkPageSetup, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), page_nr, &from_glib_borrow(setup))
 }
 
 unsafe extern "C" fn status_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn update_custom_widget_trampoline<P, F: Fn(&P, &Widget, &PageSetup, &PrintSettings) + 'static>(this: *mut ffi::GtkPrintOperation, widget: *mut ffi::GtkWidget, setup: *mut ffi::GtkPageSetup, settings: *mut ffi::GtkPrintSettings, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(widget), &from_glib_borrow(setup), &from_glib_borrow(settings))
 }
 
 unsafe extern "C" fn notify_allow_async_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_current_page_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_custom_tab_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_default_page_setup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_embed_page_setup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_export_filename_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_selection_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_job_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_n_pages_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_n_pages_to_print_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_print_settings_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_progress_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_status_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_status_string_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_support_selection_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_track_print_status_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_unit_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_full_page_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -86,29 +86,29 @@ pub trait AboutDialogExt: 'static {
 
     fn set_authors(&self, authors: &[&str]);
 
-    fn set_comments<'a, P: Into<Option<&'a str>>>(&self, comments: P);
+    fn set_comments(&self, comments: Option<&str>);
 
-    fn set_copyright<'a, P: Into<Option<&'a str>>>(&self, copyright: P);
+    fn set_copyright(&self, copyright: Option<&str>);
 
     fn set_documenters(&self, documenters: &[&str]);
 
-    fn set_license<'a, P: Into<Option<&'a str>>>(&self, license: P);
+    fn set_license(&self, license: Option<&str>);
 
     fn set_license_type(&self, license_type: License);
 
-    fn set_logo<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, logo: P);
+    fn set_logo(&self, logo: Option<&gdk_pixbuf::Pixbuf>);
 
-    fn set_logo_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
+    fn set_logo_icon_name(&self, icon_name: Option<&str>);
 
     fn set_program_name(&self, name: &str);
 
-    fn set_translator_credits<'a, P: Into<Option<&'a str>>>(&self, translator_credits: P);
+    fn set_translator_credits(&self, translator_credits: Option<&str>);
 
-    fn set_version<'a, P: Into<Option<&'a str>>>(&self, version: P);
+    fn set_version(&self, version: Option<&str>);
 
-    fn set_website<'a, P: Into<Option<&'a str>>>(&self, website: P);
+    fn set_website(&self, website: Option<&str>);
 
-    fn set_website_label<'a, P: Into<Option<&'a str>>>(&self, website_label: P);
+    fn set_website_label(&self, website_label: Option<&str>);
 
     fn set_wrap_license(&self, wrap_license: bool);
 
@@ -254,15 +254,13 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
         }
     }
 
-    fn set_comments<'a, P: Into<Option<&'a str>>>(&self, comments: P) {
-        let comments = comments.into();
+    fn set_comments(&self, comments: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_comments(self.as_ref().to_glib_none().0, comments.to_glib_none().0);
         }
     }
 
-    fn set_copyright<'a, P: Into<Option<&'a str>>>(&self, copyright: P) {
-        let copyright = copyright.into();
+    fn set_copyright(&self, copyright: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_copyright(self.as_ref().to_glib_none().0, copyright.to_glib_none().0);
         }
@@ -274,8 +272,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
         }
     }
 
-    fn set_license<'a, P: Into<Option<&'a str>>>(&self, license: P) {
-        let license = license.into();
+    fn set_license(&self, license: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_license(self.as_ref().to_glib_none().0, license.to_glib_none().0);
         }
@@ -287,15 +284,13 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
         }
     }
 
-    fn set_logo<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, logo: P) {
-        let logo = logo.into();
+    fn set_logo(&self, logo: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             ffi::gtk_about_dialog_set_logo(self.as_ref().to_glib_none().0, logo.to_glib_none().0);
         }
     }
 
-    fn set_logo_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
-        let icon_name = icon_name.into();
+    fn set_logo_icon_name(&self, icon_name: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_logo_icon_name(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0);
         }
@@ -307,29 +302,25 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
         }
     }
 
-    fn set_translator_credits<'a, P: Into<Option<&'a str>>>(&self, translator_credits: P) {
-        let translator_credits = translator_credits.into();
+    fn set_translator_credits(&self, translator_credits: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_translator_credits(self.as_ref().to_glib_none().0, translator_credits.to_glib_none().0);
         }
     }
 
-    fn set_version<'a, P: Into<Option<&'a str>>>(&self, version: P) {
-        let version = version.into();
+    fn set_version(&self, version: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_version(self.as_ref().to_glib_none().0, version.to_glib_none().0);
         }
     }
 
-    fn set_website<'a, P: Into<Option<&'a str>>>(&self, website: P) {
-        let website = website.into();
+    fn set_website(&self, website: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_website(self.as_ref().to_glib_none().0, website.to_glib_none().0);
         }
     }
 
-    fn set_website_label<'a, P: Into<Option<&'a str>>>(&self, website_label: P) {
-        let website_label = website_label.into();
+    fn set_website_label(&self, website_label: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_website_label(self.as_ref().to_glib_none().0, website_label.to_glib_none().0);
         }
@@ -472,97 +463,97 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
 
 unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P, &str) -> Inhibit + 'static>(this: *mut ffi::GtkAboutDialog, uri: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(uri)).to_glib()
 }
 
 unsafe extern "C" fn notify_artists_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_authors_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_comments_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_copyright_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_documenters_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_license_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_license_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_logo_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_logo_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_program_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_translator_credits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_version_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_website_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_website_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_wrap_license_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 

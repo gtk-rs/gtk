@@ -101,11 +101,11 @@ pub trait StackExt: 'static {
 
     fn get_child_icon_name<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
-    fn set_child_icon_name<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, icon_name: P);
+    fn set_child_icon_name<T: IsA<Widget>>(&self, item: &T, icon_name: Option<&str>);
 
     fn get_child_name<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
-    fn set_child_name<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, name: P);
+    fn set_child_name<T: IsA<Widget>>(&self, item: &T, name: Option<&str>);
 
     fn get_child_needs_attention<T: IsA<Widget>>(&self, item: &T) -> bool;
 
@@ -117,7 +117,7 @@ pub trait StackExt: 'static {
 
     fn get_child_title<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
-    fn set_child_title<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, title: P);
+    fn set_child_title<T: IsA<Widget>>(&self, item: &T, title: Option<&str>);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_hhomogeneous_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -295,8 +295,7 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    fn set_child_icon_name<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, icon_name: P) {
-        let icon_name = icon_name.into();
+    fn set_child_icon_name<T: IsA<Widget>>(&self, item: &T, icon_name: Option<&str>) {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"icon-name\0".as_ptr() as *const _, Value::from(icon_name).to_glib_none().0);
         }
@@ -310,8 +309,7 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    fn set_child_name<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, name: P) {
-        let name = name.into();
+    fn set_child_name<T: IsA<Widget>>(&self, item: &T, name: Option<&str>) {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"name\0".as_ptr() as *const _, Value::from(name).to_glib_none().0);
         }
@@ -353,8 +351,7 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    fn set_child_title<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, title: P) {
-        let title = title.into();
+    fn set_child_title<T: IsA<Widget>>(&self, item: &T, title: Option<&str>) {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, Value::from(title).to_glib_none().0);
         }
@@ -438,56 +435,56 @@ impl<O: IsA<Stack>> StackExt for O {
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_hhomogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_interpolate_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_transition_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_transition_running_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_transition_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_vhomogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_visible_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_visible_child_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Stack> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 

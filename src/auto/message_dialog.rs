@@ -33,11 +33,11 @@ glib_wrapper! {
 }
 
 impl MessageDialog {
-    //pub fn new<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(parent: Q, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: R, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
+    //pub fn new<P: IsA<Window>>(parent: Option<&P>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
     //    unsafe { TODO: call ffi::gtk_message_dialog_new() }
     //}
 
-    //pub fn new_with_markup<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(parent: Q, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: R, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
+    //pub fn new_with_markup<P: IsA<Window>>(parent: Option<&P>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
     //    unsafe { TODO: call ffi::gtk_message_dialog_new_with_markup() }
     //}
 }
@@ -47,7 +47,7 @@ pub const NONE_MESSAGE_DIALOG: Option<&MessageDialog> = None;
 pub trait MessageDialogExt: 'static {
     //fn format_secondary_markup(&self, message_format: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    //fn format_secondary_text<'a, P: Into<Option<&'a str>>>(&self, message_format: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn format_secondary_text(&self, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     fn get_message_area(&self) -> Option<Widget>;
 
@@ -59,7 +59,7 @@ pub trait MessageDialogExt: 'static {
 
     fn get_property_secondary_text(&self) -> Option<GString>;
 
-    fn set_property_secondary_text<'a, P: Into<Option<&'a str>>>(&self, secondary_text: P);
+    fn set_property_secondary_text(&self, secondary_text: Option<&str>);
 
     fn get_property_secondary_use_markup(&self) -> bool;
 
@@ -67,7 +67,7 @@ pub trait MessageDialogExt: 'static {
 
     fn get_property_text(&self) -> Option<GString>;
 
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
+    fn set_property_text(&self, text: Option<&str>);
 
     fn get_property_use_markup(&self) -> bool;
 
@@ -91,7 +91,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
     //    unsafe { TODO: call ffi::gtk_message_dialog_format_secondary_markup() }
     //}
 
-    //fn format_secondary_text<'a, P: Into<Option<&'a str>>>(&self, message_format: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn format_secondary_text(&self, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_message_dialog_format_secondary_text() }
     //}
 
@@ -129,8 +129,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
         }
     }
 
-    fn set_property_secondary_text<'a, P: Into<Option<&'a str>>>(&self, secondary_text: P) {
-        let secondary_text = secondary_text.into();
+    fn set_property_secondary_text(&self, secondary_text: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-text\0".as_ptr() as *const _, Value::from(secondary_text).to_glib_none().0);
         }
@@ -158,8 +157,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
         }
     }
 
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    fn set_property_text(&self, text: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
         }
@@ -230,37 +228,37 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
 
 unsafe extern "C" fn notify_message_area_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MessageDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_message_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MessageDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_secondary_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MessageDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_secondary_use_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MessageDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MessageDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MessageDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
 }
 

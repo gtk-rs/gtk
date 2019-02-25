@@ -61,7 +61,7 @@ pub trait ListBoxRowExt: 'static {
 
     fn set_activatable(&self, activatable: bool);
 
-    fn set_header<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, header: Q);
+    fn set_header<P: IsA<Widget>>(&self, header: Option<&P>);
 
     fn set_selectable(&self, selectable: bool);
 
@@ -117,8 +117,7 @@ impl<O: IsA<ListBoxRow>> ListBoxRowExt for O {
         }
     }
 
-    fn set_header<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, header: Q) {
-        let header = header.into();
+    fn set_header<P: IsA<Widget>>(&self, header: Option<&P>) {
         unsafe {
             ffi::gtk_list_box_row_set_header(self.as_ref().to_glib_none().0, header.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -161,19 +160,19 @@ impl<O: IsA<ListBoxRow>> ListBoxRowExt for O {
 
 unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBoxRow::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_activatable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBoxRow::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_selectable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBoxRow::from_glib_borrow(this).unsafe_cast())
 }
 

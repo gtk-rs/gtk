@@ -30,10 +30,8 @@ glib_wrapper! {
 }
 
 impl Viewport {
-    pub fn new<'a, 'b, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>, R: IsA<Adjustment> + 'b, S: Into<Option<&'b R>>>(hadjustment: Q, vadjustment: S) -> Viewport {
+    pub fn new<P: IsA<Adjustment>, Q: IsA<Adjustment>>(hadjustment: Option<&P>, vadjustment: Option<&Q>) -> Viewport {
         assert_initialized_main_thread!();
-        let hadjustment = hadjustment.into();
-        let vadjustment = vadjustment.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_viewport_new(hadjustment.map(|p| p.as_ref()).to_glib_none().0, vadjustment.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
@@ -90,7 +88,7 @@ impl<O: IsA<Viewport>> ViewportExt for O {
 
 unsafe extern "C" fn notify_shadow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkViewport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Viewport> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Viewport::from_glib_borrow(this).unsafe_cast())
 }
 

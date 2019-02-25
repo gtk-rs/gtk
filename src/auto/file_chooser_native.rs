@@ -33,12 +33,8 @@ glib_wrapper! {
 
 impl FileChooserNative {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    pub fn new<'a, 'b, 'c, 'd, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>, S: Into<Option<&'c str>>, T: Into<Option<&'d str>>>(title: P, parent: R, action: FileChooserAction, accept_label: S, cancel_label: T) -> FileChooserNative {
+    pub fn new<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, action: FileChooserAction, accept_label: Option<&str>, cancel_label: Option<&str>) -> FileChooserNative {
         assert_initialized_main_thread!();
-        let title = title.into();
-        let parent = parent.into();
-        let accept_label = accept_label.into();
-        let cancel_label = cancel_label.into();
         unsafe {
             from_glib_full(ffi::gtk_file_chooser_native_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0, action.to_glib(), accept_label.to_glib_none().0, cancel_label.to_glib_none().0))
         }
@@ -55,18 +51,18 @@ pub trait FileChooserNativeExt: 'static {
     fn get_cancel_label(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P);
+    fn set_accept_label(&self, accept_label: Option<&str>);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P);
+    fn set_cancel_label(&self, cancel_label: Option<&str>);
 
     fn get_property_accept_label(&self) -> Option<GString>;
 
-    fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P);
+    fn set_property_accept_label(&self, accept_label: Option<&str>);
 
     fn get_property_cancel_label(&self) -> Option<GString>;
 
-    fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P);
+    fn set_property_cancel_label(&self, cancel_label: Option<&str>);
 
     fn connect_property_accept_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -89,16 +85,14 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P) {
-        let accept_label = accept_label.into();
+    fn set_accept_label(&self, accept_label: Option<&str>) {
         unsafe {
             ffi::gtk_file_chooser_native_set_accept_label(self.as_ref().to_glib_none().0, accept_label.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P) {
-        let cancel_label = cancel_label.into();
+    fn set_cancel_label(&self, cancel_label: Option<&str>) {
         unsafe {
             ffi::gtk_file_chooser_native_set_cancel_label(self.as_ref().to_glib_none().0, cancel_label.to_glib_none().0);
         }
@@ -112,8 +106,7 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
         }
     }
 
-    fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P) {
-        let accept_label = accept_label.into();
+    fn set_property_accept_label(&self, accept_label: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accept-label\0".as_ptr() as *const _, Value::from(accept_label).to_glib_none().0);
         }
@@ -127,8 +120,7 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
         }
     }
 
-    fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P) {
-        let cancel_label = cancel_label.into();
+    fn set_property_cancel_label(&self, cancel_label: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cancel-label\0".as_ptr() as *const _, Value::from(cancel_label).to_glib_none().0);
         }
@@ -153,13 +145,13 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
 
 unsafe extern "C" fn notify_accept_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserNative, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserNative> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_cancel_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserNative, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserNative> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
 }
 

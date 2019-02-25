@@ -92,7 +92,7 @@ pub trait PlacesSidebarExt: 'static {
 
     fn set_local_only(&self, local_only: bool);
 
-    fn set_location<'a, P: IsA<gio::File> + 'a, Q: Into<Option<&'a P>>>(&self, location: Q);
+    fn set_location<P: IsA<gio::File>>(&self, location: Option<&P>);
 
     fn set_open_flags(&self, flags: PlacesOpenFlags);
 
@@ -289,8 +289,7 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    fn set_location<'a, P: IsA<gio::File> + 'a, Q: Into<Option<&'a P>>>(&self, location: Q) {
-        let location = location.into();
+    fn set_location<P: IsA<gio::File>>(&self, location: Option<&P>) {
         unsafe {
             ffi::gtk_places_sidebar_set_location(self.as_ref().to_glib_none().0, location.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -588,134 +587,134 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
 
 unsafe extern "C" fn drag_action_ask_trampoline<P, F: Fn(&P, i32) -> i32 + 'static>(this: *mut ffi::GtkPlacesSidebar, actions: libc::c_int, f: glib_ffi::gpointer) -> libc::c_int
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), actions)
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn mount_trampoline<P, F: Fn(&P, &gio::MountOperation) + 'static>(this: *mut ffi::GtkPlacesSidebar, mount_operation: *mut gio_ffi::GMountOperation, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(mount_operation))
 }
 
 unsafe extern "C" fn open_location_trampoline<P, F: Fn(&P, &gio::File, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, location: *mut gio_ffi::GFile, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(location), from_glib(open_flags))
 }
 
 unsafe extern "C" fn show_connect_to_server_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn show_enter_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn show_error_message_trampoline<P, F: Fn(&P, &str, &str) + 'static>(this: *mut ffi::GtkPlacesSidebar, primary: *mut libc::c_char, secondary: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(primary), &GString::from_glib_borrow(secondary))
 }
 
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 unsafe extern "C" fn show_other_locations_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn show_other_locations_with_flags_trampoline<P, F: Fn(&P, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), from_glib(open_flags))
 }
 
 #[cfg(any(feature = "v3_22_26", feature = "dox"))]
 unsafe extern "C" fn show_starred_location_trampoline<P, F: Fn(&P, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), from_glib(open_flags))
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn unmount_trampoline<P, F: Fn(&P, &gio::MountOperation) + 'static>(this: *mut ffi::GtkPlacesSidebar, mount_operation: *mut gio_ffi::GMountOperation, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(mount_operation))
 }
 
 unsafe extern "C" fn notify_local_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_open_flags_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_connect_to_server_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_desktop_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_enter_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_other_locations_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_recent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22_26", feature = "dox"))]
 unsafe extern "C" fn notify_show_starred_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_trash_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 

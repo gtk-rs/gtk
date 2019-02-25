@@ -97,7 +97,7 @@ pub trait GLAreaExt: 'static {
     fn set_auto_render(&self, auto_render: bool);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_error<'a, P: Into<Option<&'a Error>>>(&self, error: P);
+    fn set_error(&self, error: Option<&Error>);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_has_alpha(&self, has_alpha: bool);
@@ -231,8 +231,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_error<'a, P: Into<Option<&'a Error>>>(&self, error: P) {
-        let error = error.into();
+    fn set_error(&self, error: Option<&Error>) {
         unsafe {
             ffi::gtk_gl_area_set_error(self.as_ref().to_glib_none().0, error.to_glib_none().0);
         }
@@ -358,63 +357,63 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn create_context_trampoline<P, F: Fn(&P) -> Option<gdk::GLContext> + 'static>(this: *mut ffi::GtkGLArea, f: glib_ffi::gpointer) -> *mut gdk_ffi::GdkGLContext
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast()).to_glib_full()
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn render_trampoline<P, F: Fn(&P, &gdk::GLContext) -> Inhibit + 'static>(this: *mut ffi::GtkGLArea, context: *mut gdk_ffi::GdkGLContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib()
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn resize_trampoline<P, F: Fn(&P, i32, i32) + 'static>(this: *mut ffi::GtkGLArea, width: libc::c_int, height: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast(), width, height)
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_auto_render_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_has_alpha_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_has_depth_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_has_stencil_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 unsafe extern "C" fn notify_use_es_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 

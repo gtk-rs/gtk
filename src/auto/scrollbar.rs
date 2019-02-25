@@ -23,9 +23,8 @@ glib_wrapper! {
 }
 
 impl Scrollbar {
-    pub fn new<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(orientation: Orientation, adjustment: Q) -> Scrollbar {
+    pub fn new<P: IsA<Adjustment>>(orientation: Orientation, adjustment: Option<&P>) -> Scrollbar {
         assert_initialized_main_thread!();
-        let adjustment = adjustment.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_scrollbar_new(orientation.to_glib(), adjustment.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }

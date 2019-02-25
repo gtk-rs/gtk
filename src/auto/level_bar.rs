@@ -63,11 +63,11 @@ pub trait LevelBarExt: 'static {
 
     fn get_mode(&self) -> LevelBarMode;
 
-    fn get_offset_value<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<f64>;
+    fn get_offset_value(&self, name: Option<&str>) -> Option<f64>;
 
     fn get_value(&self) -> f64;
 
-    fn remove_offset_value<'a, P: Into<Option<&'a str>>>(&self, name: P);
+    fn remove_offset_value(&self, name: Option<&str>);
 
     fn set_inverted(&self, inverted: bool);
 
@@ -123,8 +123,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
         }
     }
 
-    fn get_offset_value<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<f64> {
-        let name = name.into();
+    fn get_offset_value(&self, name: Option<&str>) -> Option<f64> {
         unsafe {
             let mut value = mem::uninitialized();
             let ret = from_glib(ffi::gtk_level_bar_get_offset_value(self.as_ref().to_glib_none().0, name.to_glib_none().0, &mut value));
@@ -138,8 +137,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
         }
     }
 
-    fn remove_offset_value<'a, P: Into<Option<&'a str>>>(&self, name: P) {
-        let name = name.into();
+    fn remove_offset_value(&self, name: Option<&str>) {
         unsafe {
             ffi::gtk_level_bar_remove_offset_value(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
@@ -226,37 +224,37 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
 
 unsafe extern "C" fn offset_changed_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkLevelBar, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(name))
 }
 
 unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_max_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_min_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 

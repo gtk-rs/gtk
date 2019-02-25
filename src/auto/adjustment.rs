@@ -256,49 +256,49 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
 
 unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn value_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_lower_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_page_increment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_page_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_step_increment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_upper_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAdjustment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Adjustment> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Adjustment::from_glib_borrow(this).unsafe_cast())
 }
 

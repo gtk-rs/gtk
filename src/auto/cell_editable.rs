@@ -34,7 +34,7 @@ pub trait CellEditableExt: 'static {
 
     fn remove_widget(&self);
 
-    fn start_editing<'a, P: Into<Option<&'a gdk::Event>>>(&self, event: P);
+    fn start_editing(&self, event: Option<&gdk::Event>);
 
     fn get_property_editing_canceled(&self) -> bool;
 
@@ -60,8 +60,7 @@ impl<O: IsA<CellEditable>> CellEditableExt for O {
         }
     }
 
-    fn start_editing<'a, P: Into<Option<&'a gdk::Event>>>(&self, event: P) {
-        let event = event.into();
+    fn start_editing(&self, event: Option<&gdk::Event>) {
         unsafe {
             ffi::gtk_cell_editable_start_editing(self.as_ref().to_glib_none().0, mut_override(event.to_glib_none().0));
         }
@@ -108,19 +107,19 @@ impl<O: IsA<CellEditable>> CellEditableExt for O {
 
 unsafe extern "C" fn editing_done_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellEditable, f: glib_ffi::gpointer)
 where P: IsA<CellEditable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellEditable::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn remove_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellEditable, f: glib_ffi::gpointer)
 where P: IsA<CellEditable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellEditable::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_editing_canceled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellEditable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellEditable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellEditable::from_glib_borrow(this).unsafe_cast())
 }
 

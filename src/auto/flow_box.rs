@@ -54,7 +54,7 @@ pub const NONE_FLOW_BOX: Option<&FlowBox> = None;
 
 pub trait FlowBoxExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn bind_model<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(&self, model: Q, create_widget_func: R);
+    fn bind_model<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(&self, model: Option<&P>, create_widget_func: Q);
 
     fn get_activate_on_single_click(&self) -> bool;
 
@@ -156,21 +156,20 @@ pub trait FlowBoxExt: 'static {
 
 impl<O: IsA<FlowBox>> FlowBoxExt for O {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn bind_model<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(&self, model: Q, create_widget_func: R) {
-        let model = model.into();
-        let create_widget_func_data: Box_<R> = Box::new(create_widget_func);
-        unsafe extern "C" fn create_widget_func_func<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(item: *mut gobject_ffi::GObject, user_data: glib_ffi::gpointer) -> *mut ffi::GtkWidget {
+    fn bind_model<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(&self, model: Option<&P>, create_widget_func: Q) {
+        let create_widget_func_data: Box_<Q> = Box::new(create_widget_func);
+        unsafe extern "C" fn create_widget_func_func<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(item: *mut gobject_ffi::GObject, user_data: glib_ffi::gpointer) -> *mut ffi::GtkWidget {
             let item = from_glib_borrow(item);
-            let callback: &R = &*(user_data as *mut _);
+            let callback: &Q = &*(user_data as *mut _);
             let res = (*callback)(&item);
             res.to_glib_full()
         }
-        let create_widget_func = Some(create_widget_func_func::<'a, P, Q, R> as _);
-        unsafe extern "C" fn user_data_free_func_func<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<R> = Box_::from_raw(data as *mut _);
+        let create_widget_func = Some(create_widget_func_func::<P, Q> as _);
+        unsafe extern "C" fn user_data_free_func_func<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Q> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call4 = Some(user_data_free_func_func::<'a, P, Q, R> as _);
-        let super_callback0: Box_<R> = create_widget_func_data;
+        let destroy_call4 = Some(user_data_free_func_func::<P, Q> as _);
+        let super_callback0: Box_<Q> = create_widget_func_data;
         unsafe {
             ffi::gtk_flow_box_bind_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0, create_widget_func, Box::into_raw(super_callback0) as *mut _, destroy_call4);
         }
@@ -531,85 +530,85 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
 unsafe extern "C" fn activate_cursor_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn child_activated_trampoline<P, F: Fn(&P, &FlowBoxChild) + 'static>(this: *mut ffi::GtkFlowBox, child: *mut ffi::GtkFlowBoxChild, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child))
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) -> bool + 'static>(this: *mut ffi::GtkFlowBox, step: ffi::GtkMovementStep, count: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast(), from_glib(step), count).to_glib()
 }
 
 unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn selected_children_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn toggle_cursor_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_column_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_max_children_per_line_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_min_children_per_line_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_row_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 

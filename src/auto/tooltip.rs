@@ -21,43 +21,37 @@ glib_wrapper! {
 }
 
 impl Tooltip {
-    pub fn set_custom<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, custom_widget: Q) {
-        let custom_widget = custom_widget.into();
+    pub fn set_custom<P: IsA<Widget>>(&self, custom_widget: Option<&P>) {
         unsafe {
             ffi::gtk_tooltip_set_custom(self.to_glib_none().0, custom_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    pub fn set_icon<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P) {
-        let pixbuf = pixbuf.into();
+    pub fn set_icon(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             ffi::gtk_tooltip_set_icon(self.to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
-    pub fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: IconSize) {
-        let gicon = gicon.into();
+    pub fn set_icon_from_gicon<P: IsA<gio::Icon>>(&self, gicon: Option<&P>, size: IconSize) {
         unsafe {
             ffi::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.map(|p| p.as_ref()).to_glib_none().0, size.to_glib());
         }
     }
 
-    pub fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize) {
-        let icon_name = icon_name.into();
+    pub fn set_icon_from_icon_name(&self, icon_name: Option<&str>, size: IconSize) {
         unsafe {
             ffi::gtk_tooltip_set_icon_from_icon_name(self.to_glib_none().0, icon_name.to_glib_none().0, size.to_glib());
         }
     }
 
-    pub fn set_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
-        let markup = markup.into();
+    pub fn set_markup(&self, markup: Option<&str>) {
         unsafe {
             ffi::gtk_tooltip_set_markup(self.to_glib_none().0, markup.to_glib_none().0);
         }
     }
 
-    pub fn set_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    pub fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::gtk_tooltip_set_text(self.to_glib_none().0, text.to_glib_none().0);
         }

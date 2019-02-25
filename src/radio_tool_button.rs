@@ -23,8 +23,7 @@ impl RadioToolButton {
         }
     }
 
-    pub fn join_group<'a, P: Into<Option<&'a RadioToolButton>>>(&self, group: P) {
-        let group = group.into();
+    pub fn join_group(&self, group: Option<&RadioToolButton>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.as_ptr() as *mut _, "group".to_glib_none().0, Value::from(group).to_glib_none().0);
         }

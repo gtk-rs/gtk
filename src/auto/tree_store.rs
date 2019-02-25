@@ -34,19 +34,19 @@ impl TreeStore {
 pub const NONE_TREE_STORE: Option<&TreeStore> = None;
 
 pub trait TreeStoreExt: 'static {
-    fn append<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P) -> TreeIter;
+    fn append(&self, parent: Option<&TreeIter>) -> TreeIter;
 
     fn clear(&self);
 
-    fn insert<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, position: i32) -> TreeIter;
+    fn insert(&self, parent: Option<&TreeIter>, position: i32) -> TreeIter;
 
-    fn insert_after<'a, 'b, P: Into<Option<&'a TreeIter>>, Q: Into<Option<&'b TreeIter>>>(&self, parent: P, sibling: Q) -> TreeIter;
+    fn insert_after(&self, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) -> TreeIter;
 
-    fn insert_before<'a, 'b, P: Into<Option<&'a TreeIter>>, Q: Into<Option<&'b TreeIter>>>(&self, parent: P, sibling: Q) -> TreeIter;
+    fn insert_before(&self, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) -> TreeIter;
 
-    //fn insert_with_values<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, position: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeIter;
+    //fn insert_with_values(&self, parent: Option<&TreeIter>, position: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeIter;
 
-    //fn insert_with_valuesv<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, position: i32, columns: &[i32], values: &[&glib::Value]) -> TreeIter;
+    //fn insert_with_valuesv(&self, parent: Option<&TreeIter>, position: i32, columns: &[i32], values: &[&glib::Value]) -> TreeIter;
 
     fn is_ancestor(&self, iter: &TreeIter, descendant: &TreeIter) -> bool;
 
@@ -54,15 +54,15 @@ pub trait TreeStoreExt: 'static {
 
     fn iter_is_valid(&self, iter: &TreeIter) -> bool;
 
-    fn move_after<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P);
+    fn move_after(&self, iter: &TreeIter, position: Option<&TreeIter>);
 
-    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P);
+    fn move_before(&self, iter: &TreeIter, position: Option<&TreeIter>);
 
-    fn prepend<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P) -> TreeIter;
+    fn prepend(&self, parent: Option<&TreeIter>) -> TreeIter;
 
     fn remove(&self, iter: &TreeIter) -> bool;
 
-    //fn reorder<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, new_order: &[i32]);
+    //fn reorder(&self, parent: Option<&TreeIter>, new_order: &[i32]);
 
     //fn set(&self, iter: &TreeIter, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -76,8 +76,7 @@ pub trait TreeStoreExt: 'static {
 }
 
 impl<O: IsA<TreeStore>> TreeStoreExt for O {
-    fn append<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P) -> TreeIter {
-        let parent = parent.into();
+    fn append(&self, parent: Option<&TreeIter>) -> TreeIter {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             ffi::gtk_tree_store_append(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0, mut_override(parent.to_glib_none().0));
@@ -91,8 +90,7 @@ impl<O: IsA<TreeStore>> TreeStoreExt for O {
         }
     }
 
-    fn insert<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, position: i32) -> TreeIter {
-        let parent = parent.into();
+    fn insert(&self, parent: Option<&TreeIter>, position: i32) -> TreeIter {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             ffi::gtk_tree_store_insert(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0, mut_override(parent.to_glib_none().0), position);
@@ -100,9 +98,7 @@ impl<O: IsA<TreeStore>> TreeStoreExt for O {
         }
     }
 
-    fn insert_after<'a, 'b, P: Into<Option<&'a TreeIter>>, Q: Into<Option<&'b TreeIter>>>(&self, parent: P, sibling: Q) -> TreeIter {
-        let parent = parent.into();
-        let sibling = sibling.into();
+    fn insert_after(&self, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) -> TreeIter {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             ffi::gtk_tree_store_insert_after(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0, mut_override(parent.to_glib_none().0), mut_override(sibling.to_glib_none().0));
@@ -110,9 +106,7 @@ impl<O: IsA<TreeStore>> TreeStoreExt for O {
         }
     }
 
-    fn insert_before<'a, 'b, P: Into<Option<&'a TreeIter>>, Q: Into<Option<&'b TreeIter>>>(&self, parent: P, sibling: Q) -> TreeIter {
-        let parent = parent.into();
-        let sibling = sibling.into();
+    fn insert_before(&self, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) -> TreeIter {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             ffi::gtk_tree_store_insert_before(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0, mut_override(parent.to_glib_none().0), mut_override(sibling.to_glib_none().0));
@@ -120,11 +114,11 @@ impl<O: IsA<TreeStore>> TreeStoreExt for O {
         }
     }
 
-    //fn insert_with_values<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, position: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeIter {
+    //fn insert_with_values(&self, parent: Option<&TreeIter>, position: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeIter {
     //    unsafe { TODO: call ffi::gtk_tree_store_insert_with_values() }
     //}
 
-    //fn insert_with_valuesv<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, position: i32, columns: &[i32], values: &[&glib::Value]) -> TreeIter {
+    //fn insert_with_valuesv(&self, parent: Option<&TreeIter>, position: i32, columns: &[i32], values: &[&glib::Value]) -> TreeIter {
     //    unsafe { TODO: call ffi::gtk_tree_store_insert_with_valuesv() }
     //}
 
@@ -146,22 +140,19 @@ impl<O: IsA<TreeStore>> TreeStoreExt for O {
         }
     }
 
-    fn move_after<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P) {
-        let position = position.into();
+    fn move_after(&self, iter: &TreeIter, position: Option<&TreeIter>) {
         unsafe {
             ffi::gtk_tree_store_move_after(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0), mut_override(position.to_glib_none().0));
         }
     }
 
-    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P) {
-        let position = position.into();
+    fn move_before(&self, iter: &TreeIter, position: Option<&TreeIter>) {
         unsafe {
             ffi::gtk_tree_store_move_before(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0), mut_override(position.to_glib_none().0));
         }
     }
 
-    fn prepend<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P) -> TreeIter {
-        let parent = parent.into();
+    fn prepend(&self, parent: Option<&TreeIter>) -> TreeIter {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             ffi::gtk_tree_store_prepend(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0, mut_override(parent.to_glib_none().0));
@@ -175,7 +166,7 @@ impl<O: IsA<TreeStore>> TreeStoreExt for O {
         }
     }
 
-    //fn reorder<'a, P: Into<Option<&'a TreeIter>>>(&self, parent: P, new_order: &[i32]) {
+    //fn reorder(&self, parent: Option<&TreeIter>, new_order: &[i32]) {
     //    unsafe { TODO: call ffi::gtk_tree_store_reorder() }
     //}
 

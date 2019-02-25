@@ -61,7 +61,7 @@ pub trait BoxExt: 'static {
 
     fn set_baseline_position(&self, position: BaselinePosition);
 
-    fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q);
+    fn set_center_widget<P: IsA<Widget>>(&self, widget: Option<&P>);
 
     fn set_child_packing<P: IsA<Widget>>(&self, child: &P, expand: bool, fill: bool, padding: u32, pack_type: PackType);
 
@@ -164,8 +164,7 @@ impl<O: IsA<Box>> BoxExt for O {
         }
     }
 
-    fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q) {
-        let widget = widget.into();
+    fn set_center_widget<P: IsA<Widget>>(&self, widget: Option<&P>) {
         unsafe {
             ffi::gtk_box_set_center_widget(self.as_ref().to_glib_none().0, widget.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -294,19 +293,19 @@ impl<O: IsA<Box>> BoxExt for O {
 
 unsafe extern "C" fn notify_baseline_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Box> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Box::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Box> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Box::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Box> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Box::from_glib_borrow(this).unsafe_cast())
 }
 

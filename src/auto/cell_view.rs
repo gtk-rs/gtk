@@ -96,9 +96,9 @@ pub trait CellViewExt: 'static {
 
     fn set_fit_model(&self, fit_model: bool);
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q);
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>);
 
-    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P);
+    fn set_property_background(&self, background: Option<&str>);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -172,15 +172,13 @@ impl<O: IsA<CellView>> CellViewExt for O {
         }
     }
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q) {
-        let model = model.into();
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>) {
         unsafe {
             ffi::gtk_cell_view_set_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P) {
-        let background = background.into();
+    fn set_property_background(&self, background: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background\0".as_ptr() as *const _, Value::from(background).to_glib_none().0);
         }
@@ -275,37 +273,37 @@ impl<O: IsA<CellView>> CellViewExt for O {
 
 unsafe extern "C" fn notify_background_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_background_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_background_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_draw_sensitive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_fit_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellView::from_glib_borrow(this).unsafe_cast())
 }
 

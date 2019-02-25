@@ -145,25 +145,25 @@ impl<O: IsA<Revealer>> RevealerExt for O {
 
 unsafe extern "C" fn notify_child_revealed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_reveal_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_transition_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_transition_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -194,38 +194,38 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
 
 unsafe extern "C" fn toggled_trampoline<P, F: Fn(&P, TreePath) + 'static>(this: *mut ffi::GtkCellRendererToggle, path: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path));
     f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast(), path)
 }
 
 unsafe extern "C" fn notify_activatable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_inconsistent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_indicator_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_radio_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
 }
 

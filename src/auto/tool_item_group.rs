@@ -298,31 +298,31 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
 
 unsafe extern "C" fn notify_collapsed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_header_relief_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 

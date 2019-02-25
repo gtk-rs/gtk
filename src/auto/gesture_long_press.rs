@@ -94,19 +94,19 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
 
 unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureLongPress, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn pressed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureLongPress, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureLongPress::from_glib_borrow(this).unsafe_cast(), x, y)
 }
 
 unsafe extern "C" fn notify_delay_factor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureLongPress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -12,12 +12,11 @@ use Widget;
 use Window;
 
 impl RecentChooserDialog {
-    pub fn new<'a, I: Into<Option<&'a str>>, T: IsA<Window>>(
-        title: I,
+    pub fn new<T: IsA<Window>>(
+        title: Option<&str>,
         parent: Option<&T>,
     ) -> RecentChooserDialog {
         assert_initialized_main_thread!();
-        let title = title.into();
         unsafe {
             Widget::from_glib_none(
                 ffi::gtk_recent_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
@@ -26,13 +25,12 @@ impl RecentChooserDialog {
         }
     }
 
-    pub fn new_for_manager<'a, I: Into<Option<&'a str>>, T: IsA<Window>>(
-        title: I,
+    pub fn new_for_manager<T: IsA<Window>>(
+        title: Option<&str>,
         parent: Option<&T>,
         manager: &RecentManager,
     ) -> RecentChooserDialog {
         assert_initialized_main_thread!();
-        let title = title.into();
         unsafe {
             Widget::from_glib_none(
                 ffi::gtk_recent_chooser_dialog_new_for_manager(title.to_glib_none().0,
