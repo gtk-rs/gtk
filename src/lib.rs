@@ -298,3 +298,4 @@ pub use response_type::ResponseType;
 pub use socket::Socket;
 pub use target_entry::TargetEntry;
 pub use tree_sortable::SortColumn;
+pub use widget::TickCallbackId;
