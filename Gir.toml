@@ -2026,6 +2026,12 @@ manual_traits = ["WidgetExtManual"]
         [object.function.return]
         nullable = false
     [[object.function]]
+    name = "add_tick_callback"
+    ignore = true
+    [[object.function]]
+    name = "remove_tick_callback"
+    ignore = true
+    [[object.function]]
     name = "add_events"
     ignore = true
     [[object.function]]

@@ -5,9 +5,10 @@
 use std::mem::transmute;
 use std::ptr;
 
-use glib::object::{Cast, IsA};
+use glib::object::{Cast, IsA, WeakRef};
 use glib::signal::{SignalHandlerId, connect_raw};
 use glib::translate::*;
+use glib::ObjectExt;
 use glib_ffi::gboolean;
 use gdk::{DragAction, Event, ModifierType};
 use gdk;
@@ -16,12 +17,28 @@ use pango;
 use ffi;
 
 use {
+    Continue,
     DestDefaults,
     Inhibit,
     Rectangle,
     TargetEntry,
     Widget,
 };
+
+pub struct TickCallbackId {
+    id: u32,
+    widget: WeakRef<Widget>,
+}
+
+impl TickCallbackId {
+    pub fn remove(self) {
+        if let Some(widget) = self.widget.upgrade() {
+            unsafe {
+                ffi::gtk_widget_remove_tick_callback(widget.to_glib_none().0, self.id);
+            }
+        }
+    }
+}
 
 pub trait WidgetExtManual: 'static {
     fn drag_dest_set(&self, flags: DestDefaults, targets: &[TargetEntry], actions: DragAction);
@@ -39,6 +56,11 @@ pub trait WidgetExtManual: 'static {
     fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn add_tick_callback<P: Fn(&Self, &gdk::FrameClock) -> Continue + 'static>(
+        &self,
+        callback: P,
+    ) -> TickCallbackId;
 
     fn add_events(&self, events: gdk::EventMask);
     fn get_events(&self) -> gdk::EventMask;
@@ -105,6 +127,53 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             let f: Box<F> = Box::new(f);
             connect_raw(self.to_glib_none().0 as *mut _, b"unmap-event\0".as_ptr() as *mut _,
                 Some(transmute(event_any_trampoline::<Self, F> as usize)), Box::into_raw(f))
+        }
+    }
+
+    fn add_tick_callback<P: Fn(&Self, &gdk::FrameClock) -> Continue + 'static>(
+        &self,
+        callback: P,
+    ) -> TickCallbackId {
+        let callback_data: Box<P> = Box::new(callback);
+
+        unsafe extern "C" fn callback_func<
+            O: IsA<Widget>,
+            P: Fn(&O, &gdk::FrameClock) -> Continue + 'static,
+        >(
+            widget: *mut ffi::GtkWidget,
+            frame_clock: *mut gdk_ffi::GdkFrameClock,
+            user_data: glib_ffi::gpointer,
+        ) -> glib_ffi::gboolean {
+            let widget: Widget = from_glib_borrow(widget);
+            let widget = widget.downcast().unwrap();
+            let frame_clock = from_glib_borrow(frame_clock);
+            let callback: &P = &*(user_data as *mut _);
+            let res = (*callback)(&widget, &frame_clock);
+            res.to_glib()
+        }
+        let callback = Some(callback_func::<Self, P> as _);
+
+        unsafe extern "C" fn notify_func<
+            O: IsA<Widget>,
+            P: Fn(&O, &gdk::FrameClock) -> Continue + 'static,
+        >(
+            data: glib_ffi::gpointer,
+        ) {
+            let _callback: Box<P> = Box::from_raw(data as *mut _);
+        }
+        let destroy_call = Some(notify_func::<Self, P> as _);
+
+        let id = unsafe {
+            ffi::gtk_widget_add_tick_callback(
+                self.as_ref().to_glib_none().0,
+                callback,
+                Box::into_raw(callback_data) as *mut _,
+                destroy_call,
+            )
+        };
+        TickCallbackId {
+            id,
+            widget: self.upcast_ref().downgrade(),
         }
     }
 
