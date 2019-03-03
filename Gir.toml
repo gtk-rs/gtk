@@ -760,10 +760,12 @@ manual_traits = ["DialogExtManual"]
         nullable = false
     [[object.function]]
     name = "run"
-    ignore = true
+        [object.function.return]
+        type = "Gtk.ResponseType"
     [[object.function]]
     name = "get_response_for_widget"
-    ignore = true
+        [object.function.return]
+        type = "Gtk.ResponseType"
 
 [[object]]
 name = "Gtk.Editable"
