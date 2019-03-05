@@ -6,15 +6,15 @@ use Bin;
 use Buildable;
 use Container;
 use Widget;
-use ffi;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct Alignment(Object<ffi::GtkAlignment, ffi::GtkAlignmentClass, AlignmentClass>) @extends Bin, Container, Widget, @implements Buildable;
+    pub struct Alignment(Object<gtk_sys::GtkAlignment, gtk_sys::GtkAlignmentClass, AlignmentClass>) @extends Bin, Container, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_alignment_get_type(),
+        get_type => || gtk_sys::gtk_alignment_get_type(),
     }
 }
 

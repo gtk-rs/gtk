@@ -2,15 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use ffi;
+use gtk_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct IconSource(Boxed<ffi::GtkIconSource>);
+    pub struct IconSource(Boxed<gtk_sys::GtkIconSource>);
 
     match fn {
-        copy => |ptr| gobject_ffi::g_boxed_copy(ffi::gtk_icon_source_get_type(), ptr as *mut _) as *mut ffi::GtkIconSource,
-        free => |ptr| gobject_ffi::g_boxed_free(ffi::gtk_icon_source_get_type(), ptr as *mut _),
-        get_type => || ffi::gtk_icon_source_get_type(),
+        copy => |ptr| gobject_sys::g_boxed_copy(gtk_sys::gtk_icon_source_get_type(), ptr as *mut _) as *mut gtk_sys::GtkIconSource,
+        free => |ptr| gobject_sys::g_boxed_free(gtk_sys::gtk_icon_source_get_type(), ptr as *mut _),
+        get_type => || gtk_sys::gtk_icon_source_get_type(),
     }
 }

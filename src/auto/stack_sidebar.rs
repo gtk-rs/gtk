@@ -7,7 +7,6 @@ use Buildable;
 use Container;
 use Stack;
 use Widget;
-use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -15,17 +14,18 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct StackSidebar(Object<ffi::GtkStackSidebar, ffi::GtkStackSidebarClass, StackSidebarClass>) @extends Bin, Container, Widget, @implements Buildable;
+    pub struct StackSidebar(Object<gtk_sys::GtkStackSidebar, gtk_sys::GtkStackSidebarClass, StackSidebarClass>) @extends Bin, Container, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_stack_sidebar_get_type(),
+        get_type => || gtk_sys::gtk_stack_sidebar_get_type(),
     }
 }
 
@@ -34,7 +34,7 @@ impl StackSidebar {
     pub fn new() -> StackSidebar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_stack_sidebar_new()).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_stack_sidebar_new()).unsafe_cast()
         }
     }
 }
@@ -66,28 +66,28 @@ impl<O: IsA<StackSidebar>> StackSidebarExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_stack(&self) -> Option<Stack> {
         unsafe {
-            from_glib_none(ffi::gtk_stack_sidebar_get_stack(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_stack_sidebar_get_stack(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_stack<P: IsA<Stack>>(&self, stack: &P) {
         unsafe {
-            ffi::gtk_stack_sidebar_set_stack(self.as_ref().to_glib_none().0, stack.as_ref().to_glib_none().0);
+            gtk_sys::gtk_stack_sidebar_set_stack(self.as_ref().to_glib_none().0, stack.as_ref().to_glib_none().0);
         }
     }
 
     fn get_property_stack(&self) -> Option<Stack> {
         unsafe {
             let mut value = Value::from_type(<Stack as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stack\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"stack\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_property_stack(&self, stack: Option<&Stack>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stack\0".as_ptr() as *const _, Value::from(stack).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"stack\0".as_ptr() as *const _, Value::from(stack).to_glib_none().0);
         }
     }
 
@@ -100,7 +100,7 @@ impl<O: IsA<StackSidebar>> StackSidebarExt for O {
     }
 }
 
-unsafe extern "C" fn notify_stack_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStackSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_stack_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStackSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<StackSidebar> {
     let f: &F = &*(f as *const F);
     f(&StackSidebar::from_glib_borrow(this).unsafe_cast())

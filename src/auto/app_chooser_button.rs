@@ -10,7 +10,6 @@ use CellLayout;
 use ComboBox;
 use Container;
 use Widget;
-use ffi;
 use gio;
 use glib::GString;
 use glib::object::Cast;
@@ -18,17 +17,18 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct AppChooserButton(Object<ffi::GtkAppChooserButton, ffi::GtkAppChooserButtonClass, AppChooserButtonClass>) @extends ComboBox, Bin, Container, Widget, @implements Buildable, CellEditable, CellLayout, AppChooser;
+    pub struct AppChooserButton(Object<gtk_sys::GtkAppChooserButton, gtk_sys::GtkAppChooserButtonClass, AppChooserButtonClass>) @extends ComboBox, Bin, Container, Widget, @implements Buildable, CellEditable, CellLayout, AppChooser;
 
     match fn {
-        get_type => || ffi::gtk_app_chooser_button_get_type(),
+        get_type => || gtk_sys::gtk_app_chooser_button_get_type(),
     }
 }
 
@@ -36,7 +36,7 @@ impl AppChooserButton {
     pub fn new(content_type: &str) -> AppChooserButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_app_chooser_button_new(content_type.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_app_chooser_button_new(content_type.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -74,55 +74,55 @@ pub trait AppChooserButtonExt: 'static {
 impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
     fn append_custom_item<P: IsA<gio::Icon>>(&self, name: &str, label: &str, icon: &P) {
         unsafe {
-            ffi::gtk_app_chooser_button_append_custom_item(self.as_ref().to_glib_none().0, name.to_glib_none().0, label.to_glib_none().0, icon.as_ref().to_glib_none().0);
+            gtk_sys::gtk_app_chooser_button_append_custom_item(self.as_ref().to_glib_none().0, name.to_glib_none().0, label.to_glib_none().0, icon.as_ref().to_glib_none().0);
         }
     }
 
     fn append_separator(&self) {
         unsafe {
-            ffi::gtk_app_chooser_button_append_separator(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_app_chooser_button_append_separator(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_heading(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_app_chooser_button_get_heading(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_app_chooser_button_get_heading(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_show_default_item(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_app_chooser_button_get_show_default_item(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_app_chooser_button_get_show_default_item(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_show_dialog_item(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_app_chooser_button_get_show_dialog_item(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_app_chooser_button_get_show_dialog_item(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_active_custom_item(&self, name: &str) {
         unsafe {
-            ffi::gtk_app_chooser_button_set_active_custom_item(self.as_ref().to_glib_none().0, name.to_glib_none().0);
+            gtk_sys::gtk_app_chooser_button_set_active_custom_item(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     fn set_heading(&self, heading: &str) {
         unsafe {
-            ffi::gtk_app_chooser_button_set_heading(self.as_ref().to_glib_none().0, heading.to_glib_none().0);
+            gtk_sys::gtk_app_chooser_button_set_heading(self.as_ref().to_glib_none().0, heading.to_glib_none().0);
         }
     }
 
     fn set_show_default_item(&self, setting: bool) {
         unsafe {
-            ffi::gtk_app_chooser_button_set_show_default_item(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_app_chooser_button_set_show_default_item(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
     fn set_show_dialog_item(&self, setting: bool) {
         unsafe {
-            ffi::gtk_app_chooser_button_set_show_dialog_item(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_app_chooser_button_set_show_dialog_item(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
@@ -159,25 +159,25 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
     }
 }
 
-unsafe extern "C" fn custom_item_activated_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkAppChooserButton, item_name: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn custom_item_activated_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkAppChooserButton, item_name: *mut libc::c_char, f: glib_sys::gpointer)
 where P: IsA<AppChooserButton> {
     let f: &F = &*(f as *const F);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(item_name))
 }
 
-unsafe extern "C" fn notify_heading_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_heading_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAppChooserButton, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<AppChooserButton> {
     let f: &F = &*(f as *const F);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_default_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_default_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAppChooserButton, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<AppChooserButton> {
     let f: &F = &*(f as *const F);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_dialog_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_dialog_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAppChooserButton, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<AppChooserButton> {
     let f: &F = &*(f as *const F);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())

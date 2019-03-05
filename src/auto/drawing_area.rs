@@ -4,16 +4,16 @@
 
 use Buildable;
 use Widget;
-use ffi;
 use glib::object::Cast;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct DrawingArea(Object<ffi::GtkDrawingArea, ffi::GtkDrawingAreaClass, DrawingAreaClass>) @extends Widget, @implements Buildable;
+    pub struct DrawingArea(Object<gtk_sys::GtkDrawingArea, gtk_sys::GtkDrawingAreaClass, DrawingAreaClass>) @extends Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_drawing_area_get_type(),
+        get_type => || gtk_sys::gtk_drawing_area_get_type(),
     }
 }
 
@@ -21,7 +21,7 @@ impl DrawingArea {
     pub fn new() -> DrawingArea {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_drawing_area_new()).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_drawing_area_new()).unsafe_cast()
         }
     }
 }

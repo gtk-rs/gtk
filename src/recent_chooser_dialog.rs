@@ -2,10 +2,10 @@
 // See the COPYRIGHT recent at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE recent or <http://opensource.org/licenses/MIT>
 
-use ffi;
-use glib::translate::*;
 use glib::object::{Cast, IsA};
+use glib::translate::*;
 use std::ptr;
+use gtk_sys;
 use RecentChooserDialog;
 use RecentManager;
 use Widget;
@@ -19,7 +19,7 @@ impl RecentChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_recent_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
+                gtk_sys::gtk_recent_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
                     ptr::null_mut()))
                 .unsafe_cast()
         }
@@ -33,7 +33,7 @@ impl RecentChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_recent_chooser_dialog_new_for_manager(title.to_glib_none().0,
+                gtk_sys::gtk_recent_chooser_dialog_new_for_manager(title.to_glib_none().0,
                     parent.map(|p| p.as_ref()).to_glib_none().0, manager.to_glib_none().0, ptr::null_mut()))
                 .unsafe_cast()
         }

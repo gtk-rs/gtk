@@ -9,25 +9,25 @@ use Dialog;
 use RecentChooser;
 use Widget;
 use Window;
-use ffi;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct RecentChooserDialog(Object<ffi::GtkRecentChooserDialog, ffi::GtkRecentChooserDialogClass, RecentChooserDialogClass>) @extends Dialog, Window, Bin, Container, Widget, @implements Buildable, RecentChooser;
+    pub struct RecentChooserDialog(Object<gtk_sys::GtkRecentChooserDialog, gtk_sys::GtkRecentChooserDialogClass, RecentChooserDialogClass>) @extends Dialog, Window, Bin, Container, Widget, @implements Buildable, RecentChooser;
 
     match fn {
-        get_type => || ffi::gtk_recent_chooser_dialog_get_type(),
+        get_type => || gtk_sys::gtk_recent_chooser_dialog_get_type(),
     }
 }
 
 impl RecentChooserDialog {
     //pub fn new<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> RecentChooserDialog {
-    //    unsafe { TODO: call ffi::gtk_recent_chooser_dialog_new() }
+    //    unsafe { TODO: call gtk_sys:gtk_recent_chooser_dialog_new() }
     //}
 
     //pub fn new_for_manager<P: IsA<Window>, Q: IsA<RecentManager>>(title: Option<&str>, parent: Option<&P>, manager: &Q, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> RecentChooserDialog {
-    //    unsafe { TODO: call ffi::gtk_recent_chooser_dialog_new_for_manager() }
+    //    unsafe { TODO: call gtk_sys:gtk_recent_chooser_dialog_new_for_manager() }
     //}
 }
 

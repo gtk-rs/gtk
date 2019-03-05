@@ -3,61 +3,61 @@
 // DO NOT EDIT
 
 use CssSectionType;
-use ffi;
 use gio;
 use glib::translate::*;
+use gtk_sys;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct CssSection(Shared<ffi::GtkCssSection>);
+    pub struct CssSection(Shared<gtk_sys::GtkCssSection>);
 
     match fn {
-        ref => |ptr| ffi::gtk_css_section_ref(ptr),
-        unref => |ptr| ffi::gtk_css_section_unref(ptr),
-        get_type => || ffi::gtk_css_section_get_type(),
+        ref => |ptr| gtk_sys::gtk_css_section_ref(ptr),
+        unref => |ptr| gtk_sys::gtk_css_section_unref(ptr),
+        get_type => || gtk_sys::gtk_css_section_get_type(),
     }
 }
 
 impl CssSection {
     pub fn get_end_line(&self) -> u32 {
         unsafe {
-            ffi::gtk_css_section_get_end_line(self.to_glib_none().0)
+            gtk_sys::gtk_css_section_get_end_line(self.to_glib_none().0)
         }
     }
 
     pub fn get_end_position(&self) -> u32 {
         unsafe {
-            ffi::gtk_css_section_get_end_position(self.to_glib_none().0)
+            gtk_sys::gtk_css_section_get_end_position(self.to_glib_none().0)
         }
     }
 
     pub fn get_file(&self) -> Option<gio::File> {
         unsafe {
-            from_glib_none(ffi::gtk_css_section_get_file(self.to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_css_section_get_file(self.to_glib_none().0))
         }
     }
 
     pub fn get_parent(&self) -> Option<CssSection> {
         unsafe {
-            from_glib_none(ffi::gtk_css_section_get_parent(self.to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_css_section_get_parent(self.to_glib_none().0))
         }
     }
 
     pub fn get_section_type(&self) -> CssSectionType {
         unsafe {
-            from_glib(ffi::gtk_css_section_get_section_type(self.to_glib_none().0))
+            from_glib(gtk_sys::gtk_css_section_get_section_type(self.to_glib_none().0))
         }
     }
 
     pub fn get_start_line(&self) -> u32 {
         unsafe {
-            ffi::gtk_css_section_get_start_line(self.to_glib_none().0)
+            gtk_sys::gtk_css_section_get_start_line(self.to_glib_none().0)
         }
     }
 
     pub fn get_start_position(&self) -> u32 {
         unsafe {
-            ffi::gtk_css_section_get_start_position(self.to_glib_none().0)
+            gtk_sys::gtk_css_section_get_start_position(self.to_glib_none().0)
         }
     }
 }

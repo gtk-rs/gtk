@@ -10,22 +10,22 @@ use CheckButton;
 use Container;
 use ToggleButton;
 use Widget;
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RadioButton(Object<ffi::GtkRadioButton, ffi::GtkRadioButtonClass, RadioButtonClass>) @extends CheckButton, ToggleButton, Button, Bin, Container, Widget, @implements Buildable, Actionable;
+    pub struct RadioButton(Object<gtk_sys::GtkRadioButton, gtk_sys::GtkRadioButtonClass, RadioButtonClass>) @extends CheckButton, ToggleButton, Button, Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
-        get_type => || ffi::gtk_radio_button_get_type(),
+        get_type => || gtk_sys::gtk_radio_button_get_type(),
     }
 }
 
@@ -33,21 +33,21 @@ impl RadioButton {
     pub fn new_from_widget<P: IsA<RadioButton>>(radio_group_member: &P) -> RadioButton {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_from_widget(radio_group_member.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_radio_button_new_from_widget(radio_group_member.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_with_label_from_widget<P: IsA<RadioButton>>(radio_group_member: &P, label: &str) -> RadioButton {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_with_label_from_widget(radio_group_member.as_ref().to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_radio_button_new_with_label_from_widget(radio_group_member.as_ref().to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_with_mnemonic_from_widget<P: IsA<RadioButton>>(radio_group_member: &P, label: &str) -> RadioButton {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_with_mnemonic_from_widget(radio_group_member.as_ref().to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_radio_button_new_with_mnemonic_from_widget(radio_group_member.as_ref().to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -65,13 +65,13 @@ pub trait RadioButtonExt: 'static {
 impl<O: IsA<RadioButton>> RadioButtonExt for O {
     fn get_group(&self) -> Vec<RadioButton> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gtk_radio_button_get_group(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(gtk_sys::gtk_radio_button_get_group(self.as_ref().to_glib_none().0))
         }
     }
 
     fn join_group<P: IsA<RadioButton>>(&self, group_source: Option<&P>) {
         unsafe {
-            ffi::gtk_radio_button_join_group(self.as_ref().to_glib_none().0, group_source.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_radio_button_join_group(self.as_ref().to_glib_none().0, group_source.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
@@ -84,7 +84,7 @@ impl<O: IsA<RadioButton>> RadioButtonExt for O {
     }
 }
 
-unsafe extern "C" fn group_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRadioButton, f: glib_ffi::gpointer)
+unsafe extern "C" fn group_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRadioButton, f: glib_sys::gpointer)
 where P: IsA<RadioButton> {
     let f: &F = &*(f as *const F);
     f(&RadioButton::from_glib_borrow(this).unsafe_cast())

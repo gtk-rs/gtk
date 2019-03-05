@@ -2,19 +2,18 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use std::mem::transmute;
-use std::ptr;
-
+use gdk;
+use gdk::{DragAction, Event, ModifierType};
+use gdk_sys;
 use glib::object::{Cast, IsA, WeakRef};
-use glib::signal::{SignalHandlerId, connect_raw};
+use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
 use glib::ObjectExt;
-use glib_ffi::gboolean;
-use gdk::{DragAction, Event, ModifierType};
-use gdk;
-use gdk_ffi;
+use glib_sys::gboolean;
 use pango;
-use ffi;
+use std::mem::transmute;
+use std::ptr;
+use gtk_sys;
 
 use {
     Continue,
@@ -34,7 +33,7 @@ impl TickCallbackId {
     pub fn remove(self) {
         if let Some(widget) = self.widget.upgrade() {
             unsafe {
-                ffi::gtk_widget_remove_tick_callback(widget.to_glib_none().0, self.id);
+                gtk_sys::gtk_widget_remove_tick_callback(widget.to_glib_none().0, self.id);
             }
         }
     }
@@ -71,12 +70,12 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     fn drag_dest_set(&self, flags: DestDefaults, targets: &[TargetEntry], actions: DragAction) {
         let stashes: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
         let t: Vec<_> = stashes.iter().map(|stash| unsafe { *stash.0 }).collect();
-        let t_ptr: *mut ffi::GtkTargetEntry = if !t.is_empty() {
+        let t_ptr: *mut gtk_sys::GtkTargetEntry = if !t.is_empty() {
             t.as_ptr() as *mut _
         } else {
             ptr::null_mut()
         };
-        unsafe { ffi::gtk_drag_dest_set(self.as_ref().to_glib_none().0,
+        unsafe { gtk_sys::gtk_drag_dest_set(self.as_ref().to_glib_none().0,
                                         flags.to_glib(),
                                         t_ptr,
                                         t.len() as i32,
@@ -86,12 +85,12 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     fn drag_source_set(&self, start_button_mask: ModifierType, targets: &[TargetEntry], actions: DragAction) {
         let stashes: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
         let t: Vec<_> = stashes.iter().map(|stash| unsafe { *stash.0 }).collect();
-        let t_ptr: *mut ffi::GtkTargetEntry = if !t.is_empty() {
+        let t_ptr: *mut gtk_sys::GtkTargetEntry = if !t.is_empty() {
             t.as_ptr() as *mut _
         } else {
             ptr::null_mut()
         };
-        unsafe { ffi::gtk_drag_source_set(self.as_ref().to_glib_none().0,
+        unsafe { gtk_sys::gtk_drag_source_set(self.as_ref().to_glib_none().0,
                                           start_button_mask.to_glib(),
                                           t_ptr,
                                           t.len() as i32,
@@ -104,13 +103,13 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
         mut intersection: Option<&mut Rectangle>,
     ) -> bool {
         unsafe {
-            from_glib(ffi::gtk_widget_intersect(self.as_ref().to_glib_none().0, area.to_glib_none().0, intersection.to_glib_none_mut().0))
+            from_glib(gtk_sys::gtk_widget_intersect(self.as_ref().to_glib_none().0, area.to_glib_none().0, intersection.to_glib_none_mut().0))
         }
     }
 
     fn override_font(&self, font: &pango::FontDescription) {
         unsafe {
-            ffi::gtk_widget_override_font(self.as_ref().to_glib_none().0, font.to_glib_none().0)
+            gtk_sys::gtk_widget_override_font(self.as_ref().to_glib_none().0, font.to_glib_none().0)
         }
     }
 
@@ -140,10 +139,10 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             O: IsA<Widget>,
             P: Fn(&O, &gdk::FrameClock) -> Continue + 'static,
         >(
-            widget: *mut ffi::GtkWidget,
-            frame_clock: *mut gdk_ffi::GdkFrameClock,
-            user_data: glib_ffi::gpointer,
-        ) -> glib_ffi::gboolean {
+            widget: *mut gtk_sys::GtkWidget,
+            frame_clock: *mut gdk_sys::GdkFrameClock,
+            user_data: glib_sys::gpointer,
+        ) -> glib_sys::gboolean {
             let widget: Widget = from_glib_borrow(widget);
             let widget = widget.downcast().unwrap();
             let frame_clock = from_glib_borrow(frame_clock);
@@ -157,14 +156,14 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             O: IsA<Widget>,
             P: Fn(&O, &gdk::FrameClock) -> Continue + 'static,
         >(
-            data: glib_ffi::gpointer,
+            data: glib_sys::gpointer,
         ) {
             let _callback: Box<P> = Box::from_raw(data as *mut _);
         }
         let destroy_call = Some(notify_func::<Self, P> as _);
 
         let id = unsafe {
-            ffi::gtk_widget_add_tick_callback(
+            gtk_sys::gtk_widget_add_tick_callback(
                 self.as_ref().to_glib_none().0,
                 callback,
                 Box::into_raw(callback_data) as *mut _,
@@ -179,25 +178,25 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
 
     fn add_events(&self, events: gdk::EventMask) {
         unsafe {
-            ffi::gtk_widget_add_events(self.as_ref().to_glib_none().0, events.to_glib() as i32);
+            gtk_sys::gtk_widget_add_events(self.as_ref().to_glib_none().0, events.to_glib() as i32);
         }
     }
 
     fn get_events(&self) -> gdk::EventMask {
         unsafe {
-            from_glib(ffi::gtk_widget_get_events(self.as_ref().to_glib_none().0) as u32)
+            from_glib(gtk_sys::gtk_widget_get_events(self.as_ref().to_glib_none().0) as u32)
         }
     }
 
     fn set_events(&self, events: gdk::EventMask) {
         unsafe {
-            ffi::gtk_widget_set_events(self.as_ref().to_glib_none().0, events.to_glib() as i32);
+            gtk_sys::gtk_widget_set_events(self.as_ref().to_glib_none().0, events.to_glib() as i32);
         }
     }
 }
 
-unsafe extern "C" fn event_any_trampoline<T, F: Fn(&T, &Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget,
-                                             event: *mut gdk_ffi::GdkEventAny,
+unsafe extern "C" fn event_any_trampoline<T, F: Fn(&T, &Event) -> Inhibit + 'static>(this: *mut gtk_sys::GtkWidget,
+                                             event: *mut gdk_sys::GdkEventAny,
                                              f: &F) -> gboolean
 where T: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()

@@ -1,9 +1,9 @@
-use ffi;
 use glib;
 use glib::translate::*;
 use libc::c_char;
-use std::mem;
 use std::ffi::CStr;
+use std::mem;
+use gtk_sys;
 use TargetFlags;
 
 #[derive(Clone, Debug)]
@@ -46,14 +46,14 @@ impl Uninitialized for TargetEntry {
 }
 
 #[doc(hidden)]
-impl<'a> ToGlibPtr<'a, *const ffi::GtkTargetEntry> for TargetEntry {
-    type Storage = (Box<ffi::GtkTargetEntry>, Stash<'a, *mut c_char, String>);
+impl<'a> ToGlibPtr<'a, *const gtk_sys::GtkTargetEntry> for TargetEntry {
+    type Storage = (Box<gtk_sys::GtkTargetEntry>, Stash<'a, *mut c_char, String>);
 
     #[inline]
-    fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GtkTargetEntry, Self> {
+    fn to_glib_none(&'a self) -> Stash<'a, *const gtk_sys::GtkTargetEntry, Self> {
         let target = self.target.to_glib_none();
 
-        let target_entry = Box::new(ffi::GtkTargetEntry {
+        let target_entry = Box::new(gtk_sys::GtkTargetEntry {
             target: target.0,
             flags: self.flags.bits(),
             info: self.info,
@@ -63,14 +63,14 @@ impl<'a> ToGlibPtr<'a, *const ffi::GtkTargetEntry> for TargetEntry {
 }
 
 #[doc(hidden)]
-impl<'a> ToGlibPtrMut<'a, *mut ffi::GtkTargetEntry> for TargetEntry {
-    type Storage = (Box<ffi::GtkTargetEntry>, Stash<'a, *mut c_char, String>);
+impl<'a> ToGlibPtrMut<'a, *mut gtk_sys::GtkTargetEntry> for TargetEntry {
+    type Storage = (Box<gtk_sys::GtkTargetEntry>, Stash<'a, *mut c_char, String>);
 
     #[inline]
-    fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut ffi::GtkTargetEntry, Self> {
+    fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut gtk_sys::GtkTargetEntry, Self> {
         let target = self.target.to_glib_none();
 
-        let mut target_entry = Box::new(ffi::GtkTargetEntry {
+        let mut target_entry = Box::new(gtk_sys::GtkTargetEntry {
             target: target.0,
             flags: self.flags.bits(),
             info: self.info,
@@ -80,8 +80,8 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GtkTargetEntry> for TargetEntry {
 }
 
 #[doc(hidden)]
-impl FromGlibPtrNone<*const ffi::GtkTargetEntry> for TargetEntry {
-    unsafe fn from_glib_none(ptr: *const ffi::GtkTargetEntry) -> Self {
+impl FromGlibPtrNone<*const gtk_sys::GtkTargetEntry> for TargetEntry {
+    unsafe fn from_glib_none(ptr: *const gtk_sys::GtkTargetEntry) -> Self {
         TargetEntry {
             target: CStr::from_ptr((*ptr).target).to_string_lossy().into_owned(),
             flags: TargetFlags::from_bits((*ptr).flags).unwrap(),
@@ -91,8 +91,8 @@ impl FromGlibPtrNone<*const ffi::GtkTargetEntry> for TargetEntry {
 }
 
 #[doc(hidden)]
-impl FromGlibPtrNone<*mut ffi::GtkTargetEntry> for TargetEntry {
-    unsafe fn from_glib_none(ptr: *mut ffi::GtkTargetEntry) -> Self {
+impl FromGlibPtrNone<*mut gtk_sys::GtkTargetEntry> for TargetEntry {
+    unsafe fn from_glib_none(ptr: *mut gtk_sys::GtkTargetEntry) -> Self {
         TargetEntry {
             target: CStr::from_ptr((*ptr).target).to_string_lossy().into_owned(),
             flags: TargetFlags::from_bits((*ptr).flags).unwrap(),
@@ -102,15 +102,15 @@ impl FromGlibPtrNone<*mut ffi::GtkTargetEntry> for TargetEntry {
 }
 
 #[doc(hidden)]
-impl FromGlibPtrFull<*mut ffi::GtkTargetEntry> for TargetEntry {
+impl FromGlibPtrFull<*mut gtk_sys::GtkTargetEntry> for TargetEntry {
     #[inline]
-    unsafe fn from_glib_full(ptr: *mut ffi::GtkTargetEntry) -> Self {
+    unsafe fn from_glib_full(ptr: *mut gtk_sys::GtkTargetEntry) -> Self {
         let target_entry = TargetEntry {
             target: CStr::from_ptr((*ptr).target).to_string_lossy().into_owned(),
             flags: TargetFlags::from_bits((*ptr).flags).unwrap(),
             info: (*ptr).info,
         };
-        ffi::gtk_target_entry_free(ptr);
+        gtk_sys::gtk_target_entry_free(ptr);
         target_entry
     }
 }
@@ -118,6 +118,6 @@ impl FromGlibPtrFull<*mut ffi::GtkTargetEntry> for TargetEntry {
 impl glib::StaticType for TargetEntry {
     fn static_type() -> glib::types::Type {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gtk_target_entry_get_type()) }
+        unsafe { from_glib(gtk_sys::gtk_target_entry_get_type()) }
     }
 }

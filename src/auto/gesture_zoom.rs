@@ -5,23 +5,23 @@
 use EventController;
 use Gesture;
 use Widget;
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GestureZoom(Object<ffi::GtkGestureZoom, ffi::GtkGestureZoomClass, GestureZoomClass>) @extends Gesture, EventController;
+    pub struct GestureZoom(Object<gtk_sys::GtkGestureZoom, gtk_sys::GtkGestureZoomClass, GestureZoomClass>) @extends Gesture, EventController;
 
     match fn {
-        get_type => || ffi::gtk_gesture_zoom_get_type(),
+        get_type => || gtk_sys::gtk_gesture_zoom_get_type(),
     }
 }
 
@@ -29,7 +29,7 @@ impl GestureZoom {
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureZoom {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_zoom_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
+            Gesture::from_glib_full(gtk_sys::gtk_gesture_zoom_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -45,7 +45,7 @@ pub trait GestureZoomExt: 'static {
 impl<O: IsA<GestureZoom>> GestureZoomExt for O {
     fn get_scale_delta(&self) -> f64 {
         unsafe {
-            ffi::gtk_gesture_zoom_get_scale_delta(self.as_ref().to_glib_none().0)
+            gtk_sys::gtk_gesture_zoom_get_scale_delta(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -58,7 +58,7 @@ impl<O: IsA<GestureZoom>> GestureZoomExt for O {
     }
 }
 
-unsafe extern "C" fn scale_changed_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut ffi::GtkGestureZoom, scale: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn scale_changed_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut gtk_sys::GtkGestureZoom, scale: libc::c_double, f: glib_sys::gpointer)
 where P: IsA<GestureZoom> {
     let f: &F = &*(f as *const F);
     f(&GestureZoom::from_glib_borrow(this).unsafe_cast(), scale)
