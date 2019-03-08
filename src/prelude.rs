@@ -10,6 +10,7 @@ pub use auto::traits::*;
 
 pub use app_chooser::AppChooserExt;
 pub use buildable::BuildableExtManual;
+pub use builder::BuilderExtManual;
 pub use cell_renderer_pixbuf::CellRendererPixbufExtManual;
 pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
