@@ -4,69 +4,69 @@
 
 use IconSize;
 use Widget;
-use ffi;
 use gdk;
 use gdk_pixbuf;
 use gio;
 use glib::object::IsA;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct Tooltip(Object<ffi::GtkTooltip, TooltipClass>);
+    pub struct Tooltip(Object<gtk_sys::GtkTooltip, TooltipClass>);
 
     match fn {
-        get_type => || ffi::gtk_tooltip_get_type(),
+        get_type => || gtk_sys::gtk_tooltip_get_type(),
     }
 }
 
 impl Tooltip {
     pub fn set_custom<P: IsA<Widget>>(&self, custom_widget: Option<&P>) {
         unsafe {
-            ffi::gtk_tooltip_set_custom(self.to_glib_none().0, custom_widget.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_tooltip_set_custom(self.to_glib_none().0, custom_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     pub fn set_icon(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
-            ffi::gtk_tooltip_set_icon(self.to_glib_none().0, pixbuf.to_glib_none().0);
+            gtk_sys::gtk_tooltip_set_icon(self.to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
     pub fn set_icon_from_gicon<P: IsA<gio::Icon>>(&self, gicon: Option<&P>, size: IconSize) {
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.map(|p| p.as_ref()).to_glib_none().0, size.to_glib());
+            gtk_sys::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.map(|p| p.as_ref()).to_glib_none().0, size.to_glib());
         }
     }
 
     pub fn set_icon_from_icon_name(&self, icon_name: Option<&str>, size: IconSize) {
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_icon_name(self.to_glib_none().0, icon_name.to_glib_none().0, size.to_glib());
+            gtk_sys::gtk_tooltip_set_icon_from_icon_name(self.to_glib_none().0, icon_name.to_glib_none().0, size.to_glib());
         }
     }
 
     pub fn set_markup(&self, markup: Option<&str>) {
         unsafe {
-            ffi::gtk_tooltip_set_markup(self.to_glib_none().0, markup.to_glib_none().0);
+            gtk_sys::gtk_tooltip_set_markup(self.to_glib_none().0, markup.to_glib_none().0);
         }
     }
 
     pub fn set_text(&self, text: Option<&str>) {
         unsafe {
-            ffi::gtk_tooltip_set_text(self.to_glib_none().0, text.to_glib_none().0);
+            gtk_sys::gtk_tooltip_set_text(self.to_glib_none().0, text.to_glib_none().0);
         }
     }
 
     pub fn set_tip_area(&self, rect: &gdk::Rectangle) {
         unsafe {
-            ffi::gtk_tooltip_set_tip_area(self.to_glib_none().0, rect.to_glib_none().0);
+            gtk_sys::gtk_tooltip_set_tip_area(self.to_glib_none().0, rect.to_glib_none().0);
         }
     }
 
     pub fn trigger_tooltip_query(display: &gdk::Display) {
         assert_initialized_main_thread!();
         unsafe {
-            ffi::gtk_tooltip_trigger_tooltip_query(display.to_glib_none().0);
+            gtk_sys::gtk_tooltip_trigger_tooltip_query(display.to_glib_none().0);
         }
     }
 }

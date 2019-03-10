@@ -11,17 +11,17 @@ use ToggleToolButton;
 use ToolButton;
 use ToolItem;
 use Widget;
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct RadioToolButton(Object<ffi::GtkRadioToolButton, ffi::GtkRadioToolButtonClass, RadioToolButtonClass>) @extends ToggleToolButton, ToolButton, ToolItem, Bin, Container, Widget, @implements Buildable, Actionable;
+    pub struct RadioToolButton(Object<gtk_sys::GtkRadioToolButton, gtk_sys::GtkRadioToolButtonClass, RadioToolButtonClass>) @extends ToggleToolButton, ToolButton, ToolItem, Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
-        get_type => || ffi::gtk_radio_tool_button_get_type(),
+        get_type => || gtk_sys::gtk_radio_tool_button_get_type(),
     }
 }
 
@@ -29,7 +29,7 @@ impl RadioToolButton {
     pub fn new_from_widget<P: IsA<RadioToolButton>>(group: &P) -> RadioToolButton {
         skip_assert_initialized!();
         unsafe {
-            ToolItem::from_glib_none(ffi::gtk_radio_tool_button_new_from_widget(group.as_ref().to_glib_none().0)).unsafe_cast()
+            ToolItem::from_glib_none(gtk_sys::gtk_radio_tool_button_new_from_widget(group.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -43,7 +43,7 @@ pub trait RadioToolButtonExt: 'static {
 impl<O: IsA<RadioToolButton>> RadioToolButtonExt for O {
     fn get_group(&self) -> Vec<RadioButton> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gtk_radio_tool_button_get_group(self.as_ref().to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(gtk_sys::gtk_radio_tool_button_get_group(self.as_ref().to_glib_none().0))
         }
     }
 }

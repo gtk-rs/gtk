@@ -5,17 +5,17 @@
 use Buildable;
 use Container;
 use Widget;
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct Fixed(Object<ffi::GtkFixed, ffi::GtkFixedClass, FixedClass>) @extends Container, Widget, @implements Buildable;
+    pub struct Fixed(Object<gtk_sys::GtkFixed, gtk_sys::GtkFixedClass, FixedClass>) @extends Container, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_fixed_get_type(),
+        get_type => || gtk_sys::gtk_fixed_get_type(),
     }
 }
 
@@ -23,7 +23,7 @@ impl Fixed {
     pub fn new() -> Fixed {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_fixed_new()).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_fixed_new()).unsafe_cast()
         }
     }
 }
@@ -45,13 +45,13 @@ pub trait FixedExt: 'static {
 impl<O: IsA<Fixed>> FixedExt for O {
     fn move_<P: IsA<Widget>>(&self, widget: &P, x: i32, y: i32) {
         unsafe {
-            ffi::gtk_fixed_move(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, x, y);
+            gtk_sys::gtk_fixed_move(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, x, y);
         }
     }
 
     fn put<P: IsA<Widget>>(&self, widget: &P, x: i32, y: i32) {
         unsafe {
-            ffi::gtk_fixed_put(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, x, y);
+            gtk_sys::gtk_fixed_put(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, x, y);
         }
     }
 }

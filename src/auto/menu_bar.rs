@@ -7,23 +7,23 @@ use Container;
 use MenuShell;
 use PackDirection;
 use Widget;
-use ffi;
 use gio;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct MenuBar(Object<ffi::GtkMenuBar, ffi::GtkMenuBarClass, MenuBarClass>) @extends MenuShell, Container, Widget, @implements Buildable;
+    pub struct MenuBar(Object<gtk_sys::GtkMenuBar, gtk_sys::GtkMenuBarClass, MenuBarClass>) @extends MenuShell, Container, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_menu_bar_get_type(),
+        get_type => || gtk_sys::gtk_menu_bar_get_type(),
     }
 }
 
@@ -31,14 +31,14 @@ impl MenuBar {
     pub fn new() -> MenuBar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_menu_bar_new()).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_menu_bar_new()).unsafe_cast()
         }
     }
 
     pub fn new_from_model<P: IsA<gio::MenuModel>>(model: &P) -> MenuBar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_menu_bar_new_from_model(model.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_menu_bar_new_from_model(model.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -68,25 +68,25 @@ pub trait MenuBarExt: 'static {
 impl<O: IsA<MenuBar>> MenuBarExt for O {
     fn get_child_pack_direction(&self) -> PackDirection {
         unsafe {
-            from_glib(ffi::gtk_menu_bar_get_child_pack_direction(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_menu_bar_get_child_pack_direction(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_pack_direction(&self) -> PackDirection {
         unsafe {
-            from_glib(ffi::gtk_menu_bar_get_pack_direction(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_menu_bar_get_pack_direction(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_child_pack_direction(&self, child_pack_dir: PackDirection) {
         unsafe {
-            ffi::gtk_menu_bar_set_child_pack_direction(self.as_ref().to_glib_none().0, child_pack_dir.to_glib());
+            gtk_sys::gtk_menu_bar_set_child_pack_direction(self.as_ref().to_glib_none().0, child_pack_dir.to_glib());
         }
     }
 
     fn set_pack_direction(&self, pack_dir: PackDirection) {
         unsafe {
-            ffi::gtk_menu_bar_set_pack_direction(self.as_ref().to_glib_none().0, pack_dir.to_glib());
+            gtk_sys::gtk_menu_bar_set_pack_direction(self.as_ref().to_glib_none().0, pack_dir.to_glib());
         }
     }
 
@@ -107,13 +107,13 @@ impl<O: IsA<MenuBar>> MenuBarExt for O {
     }
 }
 
-unsafe extern "C" fn notify_child_pack_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_child_pack_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkMenuBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<MenuBar> {
     let f: &F = &*(f as *const F);
     f(&MenuBar::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_pack_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_pack_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkMenuBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<MenuBar> {
     let f: &F = &*(f as *const F);
     f(&MenuBar::from_glib_borrow(this).unsafe_cast())

@@ -3,27 +3,27 @@
 // DO NOT EDIT
 
 use AccelFlags;
-use ffi;
 use gdk;
-use gdk_ffi;
+use gdk_sys;
 use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct AccelGroup(Object<ffi::GtkAccelGroup, ffi::GtkAccelGroupClass, AccelGroupClass>);
+    pub struct AccelGroup(Object<gtk_sys::GtkAccelGroup, gtk_sys::GtkAccelGroupClass, AccelGroupClass>);
 
     match fn {
-        get_type => || ffi::gtk_accel_group_get_type(),
+        get_type => || gtk_sys::gtk_accel_group_get_type(),
     }
 }
 
@@ -31,14 +31,14 @@ impl AccelGroup {
     pub fn new() -> AccelGroup {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gtk_accel_group_new())
+            from_glib_full(gtk_sys::gtk_accel_group_new())
         }
     }
 
     pub fn from_accel_closure(closure: &glib::Closure) -> Option<AccelGroup> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::gtk_accel_group_from_accel_closure(closure.to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_accel_group_from_accel_closure(closure.to_glib_none().0))
         }
     }
 }
@@ -84,59 +84,59 @@ pub trait AccelGroupExt: 'static {
 impl<O: IsA<AccelGroup>> AccelGroupExt for O {
     fn activate<P: IsA<glib::Object>>(&self, accel_quark: glib::Quark, acceleratable: &P, accel_key: u32, accel_mods: gdk::ModifierType) -> bool {
         unsafe {
-            from_glib(ffi::gtk_accel_group_activate(self.as_ref().to_glib_none().0, accel_quark.to_glib(), acceleratable.as_ref().to_glib_none().0, accel_key, accel_mods.to_glib()))
+            from_glib(gtk_sys::gtk_accel_group_activate(self.as_ref().to_glib_none().0, accel_quark.to_glib(), acceleratable.as_ref().to_glib_none().0, accel_key, accel_mods.to_glib()))
         }
     }
 
     fn connect(&self, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags, closure: &glib::Closure) {
         unsafe {
-            ffi::gtk_accel_group_connect(self.as_ref().to_glib_none().0, accel_key, accel_mods.to_glib(), accel_flags.to_glib(), closure.to_glib_none().0);
+            gtk_sys::gtk_accel_group_connect(self.as_ref().to_glib_none().0, accel_key, accel_mods.to_glib(), accel_flags.to_glib(), closure.to_glib_none().0);
         }
     }
 
     fn connect_by_path(&self, accel_path: &str, closure: &glib::Closure) {
         unsafe {
-            ffi::gtk_accel_group_connect_by_path(self.as_ref().to_glib_none().0, accel_path.to_glib_none().0, closure.to_glib_none().0);
+            gtk_sys::gtk_accel_group_connect_by_path(self.as_ref().to_glib_none().0, accel_path.to_glib_none().0, closure.to_glib_none().0);
         }
     }
 
     fn disconnect(&self, closure: Option<&glib::Closure>) -> bool {
         unsafe {
-            from_glib(ffi::gtk_accel_group_disconnect(self.as_ref().to_glib_none().0, closure.to_glib_none().0))
+            from_glib(gtk_sys::gtk_accel_group_disconnect(self.as_ref().to_glib_none().0, closure.to_glib_none().0))
         }
     }
 
     fn disconnect_key(&self, accel_key: u32, accel_mods: gdk::ModifierType) -> bool {
         unsafe {
-            from_glib(ffi::gtk_accel_group_disconnect_key(self.as_ref().to_glib_none().0, accel_key, accel_mods.to_glib()))
+            from_glib(gtk_sys::gtk_accel_group_disconnect_key(self.as_ref().to_glib_none().0, accel_key, accel_mods.to_glib()))
         }
     }
 
     //fn find(&self, find_func: /*Unimplemented*/FnMut(/*Ignored*/AccelKey, &glib::Closure) -> bool, data: /*Unimplemented*/Option<Fundamental: Pointer>) -> /*Ignored*/Option<AccelKey> {
-    //    unsafe { TODO: call ffi::gtk_accel_group_find() }
+    //    unsafe { TODO: call gtk_sys:gtk_accel_group_find() }
     //}
 
     fn get_is_locked(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_accel_group_get_is_locked(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_accel_group_get_is_locked(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_modifier_mask(&self) -> gdk::ModifierType {
         unsafe {
-            from_glib(ffi::gtk_accel_group_get_modifier_mask(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_accel_group_get_modifier_mask(self.as_ref().to_glib_none().0))
         }
     }
 
     fn lock(&self) {
         unsafe {
-            ffi::gtk_accel_group_lock(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_accel_group_lock(self.as_ref().to_glib_none().0);
         }
     }
 
     fn unlock(&self) {
         unsafe {
-            ffi::gtk_accel_group_unlock(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_accel_group_unlock(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -173,25 +173,25 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
     }
 }
 
-unsafe extern "C" fn accel_activate_trampoline<P, F: Fn(&P, &glib::Object, u32, gdk::ModifierType) -> bool + 'static>(this: *mut ffi::GtkAccelGroup, acceleratable: *mut gobject_ffi::GObject, keyval: libc::c_uint, modifier: gdk_ffi::GdkModifierType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn accel_activate_trampoline<P, F: Fn(&P, &glib::Object, u32, gdk::ModifierType) -> bool + 'static>(this: *mut gtk_sys::GtkAccelGroup, acceleratable: *mut gobject_sys::GObject, keyval: libc::c_uint, modifier: gdk_sys::GdkModifierType, f: glib_sys::gpointer) -> glib_sys::gboolean
 where P: IsA<AccelGroup> {
     let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(acceleratable), keyval, from_glib(modifier)).to_glib()
 }
 
-unsafe extern "C" fn accel_changed_trampoline<P, F: Fn(&P, u32, gdk::ModifierType, &glib::Closure) + 'static>(this: *mut ffi::GtkAccelGroup, keyval: libc::c_uint, modifier: gdk_ffi::GdkModifierType, accel_closure: *mut gobject_ffi::GClosure, f: glib_ffi::gpointer)
+unsafe extern "C" fn accel_changed_trampoline<P, F: Fn(&P, u32, gdk::ModifierType, &glib::Closure) + 'static>(this: *mut gtk_sys::GtkAccelGroup, keyval: libc::c_uint, modifier: gdk_sys::GdkModifierType, accel_closure: *mut gobject_sys::GClosure, f: glib_sys::gpointer)
 where P: IsA<AccelGroup> {
     let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast(), keyval, from_glib(modifier), &from_glib_borrow(accel_closure))
 }
 
-unsafe extern "C" fn notify_is_locked_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_is_locked_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAccelGroup, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<AccelGroup> {
     let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_modifier_mask_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_modifier_mask_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAccelGroup, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<AccelGroup> {
     let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast())

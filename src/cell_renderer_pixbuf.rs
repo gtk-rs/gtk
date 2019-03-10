@@ -7,7 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 use glib::Value;
-use gobject_ffi;
+use gobject_sys;
 use CellRendererPixbuf;
 use IconSize;
 
@@ -21,7 +21,7 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
     fn get_property_stock_size(&self) -> IconSize {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(
+            gobject_sys::g_object_get_property(
                 self.to_glib_none().0 as *mut _,
                 "stock-size".to_glib_none().0,
                 value.to_glib_none_mut().0,
@@ -33,7 +33,7 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
     fn set_property_stock_size(&self, stock_size: IconSize) {
         unsafe {
             let value = Value::from(&(stock_size.to_glib() as u32));
-            gobject_ffi::g_object_set_property(
+            gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut _,
                 "stock-size".to_glib_none().0,
                 value.to_glib_none().0,

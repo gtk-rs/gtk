@@ -2,18 +2,18 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use PadActionType;
-use ffi;
 use glib::translate::*;
+use gtk_sys;
+use PadActionType;
 
 #[repr(C)]
-pub struct PadActionEntry(ffi::GtkPadActionEntry);
+pub struct PadActionEntry(gtk_sys::GtkPadActionEntry);
 
 impl PadActionEntry {
     pub fn new(type_: PadActionType, index: i32, mode: i32, label: &str,
                action_name: &str) -> PadActionEntry {
         assert_initialized_main_thread!();
-        PadActionEntry(ffi::GtkPadActionEntry {
+        PadActionEntry(gtk_sys::GtkPadActionEntry {
             type_: type_.to_glib(),
             index,
             mode,
@@ -45,9 +45,9 @@ impl PadActionEntry {
 
 #[doc(hidden)]
 impl ToGlib for PadActionEntry {
-    type GlibType = ffi::GtkPadActionEntry;
+    type GlibType = gtk_sys::GtkPadActionEntry;
 
-    fn to_glib(&self) -> ffi::GtkPadActionEntry {
+    fn to_glib(&self) -> gtk_sys::GtkPadActionEntry {
         self.0
     }
 }

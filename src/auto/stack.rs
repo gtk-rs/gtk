@@ -6,7 +6,6 @@ use Buildable;
 use Container;
 use StackTransitionType;
 use Widget;
-use ffi;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -15,17 +14,18 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Stack(Object<ffi::GtkStack, ffi::GtkStackClass, StackClass>) @extends Container, Widget, @implements Buildable;
+    pub struct Stack(Object<gtk_sys::GtkStack, gtk_sys::GtkStackClass, StackClass>) @extends Container, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_stack_get_type(),
+        get_type => || gtk_sys::gtk_stack_get_type(),
     }
 }
 
@@ -33,7 +33,7 @@ impl Stack {
     pub fn new() -> Stack {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_stack_new()).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_stack_new()).unsafe_cast()
         }
     }
 }
@@ -143,217 +143,217 @@ pub trait StackExt: 'static {
 impl<O: IsA<Stack>> StackExt for O {
     fn add_named<P: IsA<Widget>>(&self, child: &P, name: &str) {
         unsafe {
-            ffi::gtk_stack_add_named(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0);
+            gtk_sys::gtk_stack_add_named(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     fn add_titled<P: IsA<Widget>>(&self, child: &P, name: &str, title: &str) {
         unsafe {
-            ffi::gtk_stack_add_titled(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0, title.to_glib_none().0);
+            gtk_sys::gtk_stack_add_titled(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0, title.to_glib_none().0);
         }
     }
 
     fn get_child_by_name(&self, name: &str) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_stack_get_child_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_stack_get_child_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_hhomogeneous(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_stack_get_hhomogeneous(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_stack_get_hhomogeneous(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_homogeneous(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_stack_get_homogeneous(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_stack_get_homogeneous(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_interpolate_size(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_stack_get_interpolate_size(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_stack_get_interpolate_size(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_transition_duration(&self) -> u32 {
         unsafe {
-            ffi::gtk_stack_get_transition_duration(self.as_ref().to_glib_none().0)
+            gtk_sys::gtk_stack_get_transition_duration(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_transition_running(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_stack_get_transition_running(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_stack_get_transition_running(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_transition_type(&self) -> StackTransitionType {
         unsafe {
-            from_glib(ffi::gtk_stack_get_transition_type(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_stack_get_transition_type(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_vhomogeneous(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_stack_get_vhomogeneous(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_stack_get_vhomogeneous(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_visible_child(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_stack_get_visible_child(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_stack_get_visible_child(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_visible_child_name(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_stack_get_visible_child_name(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_stack_get_visible_child_name(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_hhomogeneous(&self, hhomogeneous: bool) {
         unsafe {
-            ffi::gtk_stack_set_hhomogeneous(self.as_ref().to_glib_none().0, hhomogeneous.to_glib());
+            gtk_sys::gtk_stack_set_hhomogeneous(self.as_ref().to_glib_none().0, hhomogeneous.to_glib());
         }
     }
 
     fn set_homogeneous(&self, homogeneous: bool) {
         unsafe {
-            ffi::gtk_stack_set_homogeneous(self.as_ref().to_glib_none().0, homogeneous.to_glib());
+            gtk_sys::gtk_stack_set_homogeneous(self.as_ref().to_glib_none().0, homogeneous.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_interpolate_size(&self, interpolate_size: bool) {
         unsafe {
-            ffi::gtk_stack_set_interpolate_size(self.as_ref().to_glib_none().0, interpolate_size.to_glib());
+            gtk_sys::gtk_stack_set_interpolate_size(self.as_ref().to_glib_none().0, interpolate_size.to_glib());
         }
     }
 
     fn set_transition_duration(&self, duration: u32) {
         unsafe {
-            ffi::gtk_stack_set_transition_duration(self.as_ref().to_glib_none().0, duration);
+            gtk_sys::gtk_stack_set_transition_duration(self.as_ref().to_glib_none().0, duration);
         }
     }
 
     fn set_transition_type(&self, transition: StackTransitionType) {
         unsafe {
-            ffi::gtk_stack_set_transition_type(self.as_ref().to_glib_none().0, transition.to_glib());
+            gtk_sys::gtk_stack_set_transition_type(self.as_ref().to_glib_none().0, transition.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_vhomogeneous(&self, vhomogeneous: bool) {
         unsafe {
-            ffi::gtk_stack_set_vhomogeneous(self.as_ref().to_glib_none().0, vhomogeneous.to_glib());
+            gtk_sys::gtk_stack_set_vhomogeneous(self.as_ref().to_glib_none().0, vhomogeneous.to_glib());
         }
     }
 
     fn set_visible_child<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
-            ffi::gtk_stack_set_visible_child(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
+            gtk_sys::gtk_stack_set_visible_child(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
         }
     }
 
     fn set_visible_child_full(&self, name: &str, transition: StackTransitionType) {
         unsafe {
-            ffi::gtk_stack_set_visible_child_full(self.as_ref().to_glib_none().0, name.to_glib_none().0, transition.to_glib());
+            gtk_sys::gtk_stack_set_visible_child_full(self.as_ref().to_glib_none().0, name.to_glib_none().0, transition.to_glib());
         }
     }
 
     fn set_visible_child_name(&self, name: &str) {
         unsafe {
-            ffi::gtk_stack_set_visible_child_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
+            gtk_sys::gtk_stack_set_visible_child_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     fn get_property_interpolate_size(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"interpolate-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"interpolate-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_interpolate_size(&self, interpolate_size: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"interpolate-size\0".as_ptr() as *const _, Value::from(&interpolate_size).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"interpolate-size\0".as_ptr() as *const _, Value::from(&interpolate_size).to_glib_none().0);
         }
     }
 
     fn get_child_icon_name<T: IsA<Widget>>(&self, item: &T) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"icon-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"icon-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_child_icon_name<T: IsA<Widget>>(&self, item: &T, icon_name: Option<&str>) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"icon-name\0".as_ptr() as *const _, Value::from(icon_name).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"icon-name\0".as_ptr() as *const _, Value::from(icon_name).to_glib_none().0);
         }
     }
 
     fn get_child_name<T: IsA<Widget>>(&self, item: &T) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_child_name<T: IsA<Widget>>(&self, item: &T, name: Option<&str>) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"name\0".as_ptr() as *const _, Value::from(name).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"name\0".as_ptr() as *const _, Value::from(name).to_glib_none().0);
         }
     }
 
     fn get_child_needs_attention<T: IsA<Widget>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"needs-attention\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"needs-attention\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_needs_attention<T: IsA<Widget>>(&self, item: &T, needs_attention: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"needs-attention\0".as_ptr() as *const _, Value::from(&needs_attention).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"needs-attention\0".as_ptr() as *const _, Value::from(&needs_attention).to_glib_none().0);
         }
     }
 
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_position<T: IsA<Widget>>(&self, item: &T, position: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"position\0".as_ptr() as *const _, Value::from(&position).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"position\0".as_ptr() as *const _, Value::from(&position).to_glib_none().0);
         }
     }
 
     fn get_child_title<T: IsA<Widget>>(&self, item: &T) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_child_title<T: IsA<Widget>>(&self, item: &T, title: Option<&str>) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, Value::from(title).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, Value::from(title).to_glib_none().0);
         }
     }
 
@@ -433,56 +433,56 @@ impl<O: IsA<Stack>> StackExt for O {
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_hhomogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_hhomogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_interpolate_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_interpolate_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_transition_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transition_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_transition_running_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transition_running_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_transition_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transition_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_vhomogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_vhomogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_visible_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_visible_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_visible_child_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStack, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_visible_child_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkStack, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Stack> {
     let f: &F = &*(f as *const F);
     f(&Stack::from_glib_borrow(this).unsafe_cast())

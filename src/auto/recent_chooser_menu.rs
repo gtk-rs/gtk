@@ -9,22 +9,22 @@ use MenuShell;
 use RecentChooser;
 use RecentManager;
 use Widget;
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct RecentChooserMenu(Object<ffi::GtkRecentChooserMenu, ffi::GtkRecentChooserMenuClass, RecentChooserMenuClass>) @extends Menu, MenuShell, Container, Widget, @implements Buildable, RecentChooser;
+    pub struct RecentChooserMenu(Object<gtk_sys::GtkRecentChooserMenu, gtk_sys::GtkRecentChooserMenuClass, RecentChooserMenuClass>) @extends Menu, MenuShell, Container, Widget, @implements Buildable, RecentChooser;
 
     match fn {
-        get_type => || ffi::gtk_recent_chooser_menu_get_type(),
+        get_type => || gtk_sys::gtk_recent_chooser_menu_get_type(),
     }
 }
 
@@ -32,14 +32,14 @@ impl RecentChooserMenu {
     pub fn new() -> RecentChooserMenu {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_recent_chooser_menu_new()).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_recent_chooser_menu_new()).unsafe_cast()
         }
     }
 
     pub fn new_for_manager<P: IsA<RecentManager>>(manager: &P) -> RecentChooserMenu {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_recent_chooser_menu_new_for_manager(manager.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_recent_chooser_menu_new_for_manager(manager.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -63,13 +63,13 @@ pub trait RecentChooserMenuExt: 'static {
 impl<O: IsA<RecentChooserMenu>> RecentChooserMenuExt for O {
     fn get_show_numbers(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_menu_get_show_numbers(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_recent_chooser_menu_get_show_numbers(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_show_numbers(&self, show_numbers: bool) {
         unsafe {
-            ffi::gtk_recent_chooser_menu_set_show_numbers(self.as_ref().to_glib_none().0, show_numbers.to_glib());
+            gtk_sys::gtk_recent_chooser_menu_set_show_numbers(self.as_ref().to_glib_none().0, show_numbers.to_glib());
         }
     }
 
@@ -82,7 +82,7 @@ impl<O: IsA<RecentChooserMenu>> RecentChooserMenuExt for O {
     }
 }
 
-unsafe extern "C" fn notify_show_numbers_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooserMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_numbers_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooserMenu, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<RecentChooserMenu> {
     let f: &F = &*(f as *const F);
     f(&RecentChooserMenu::from_glib_borrow(this).unsafe_cast())

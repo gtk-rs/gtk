@@ -7,7 +7,6 @@ use Buildable;
 use Misc;
 use ShadowType;
 use Widget;
-use ffi;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -15,17 +14,18 @@ use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Arrow(Object<ffi::GtkArrow, ffi::GtkArrowClass, ArrowClass>) @extends Misc, Widget, @implements Buildable;
+    pub struct Arrow(Object<gtk_sys::GtkArrow, gtk_sys::GtkArrowClass, ArrowClass>) @extends Misc, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_arrow_get_type(),
+        get_type => || gtk_sys::gtk_arrow_get_type(),
     }
 }
 
@@ -49,28 +49,28 @@ impl<O: IsA<Arrow>> ArrowExt for O {
     fn get_property_arrow_type(&self) -> ArrowType {
         unsafe {
             let mut value = Value::from_type(<ArrowType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"arrow-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"arrow-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_arrow_type(&self, arrow_type: ArrowType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"arrow-type\0".as_ptr() as *const _, Value::from(&arrow_type).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"arrow-type\0".as_ptr() as *const _, Value::from(&arrow_type).to_glib_none().0);
         }
     }
 
     fn get_property_shadow_type(&self) -> ShadowType {
         unsafe {
             let mut value = Value::from_type(<ShadowType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"shadow-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"shadow-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_shadow_type(&self, shadow_type: ShadowType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"shadow-type\0".as_ptr() as *const _, Value::from(&shadow_type).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"shadow-type\0".as_ptr() as *const _, Value::from(&shadow_type).to_glib_none().0);
         }
     }
 
@@ -91,13 +91,13 @@ impl<O: IsA<Arrow>> ArrowExt for O {
     }
 }
 
-unsafe extern "C" fn notify_arrow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkArrow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_arrow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkArrow, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Arrow> {
     let f: &F = &*(f as *const F);
     f(&Arrow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_shadow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkArrow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_shadow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkArrow, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
 where P: IsA<Arrow> {
     let f: &F = &*(f as *const F);
     f(&Arrow::from_glib_borrow(this).unsafe_cast())

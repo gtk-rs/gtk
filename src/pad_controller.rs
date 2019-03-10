@@ -2,10 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use ffi;
-use glib::IsA;
 use glib::translate::*;
-
+use glib::IsA;
+use gtk_sys;
 use PadActionEntry;
 use PadController;
 
@@ -20,7 +19,7 @@ impl<O: IsA<PadController>> PadControllerExtManual for O {
         let n_entries = entries.len() as i32;
         let entries = entries.as_ptr();
         unsafe {
-            ffi::gtk_pad_controller_set_action_entries(self.as_ref().to_glib_none().0,
+            gtk_sys::gtk_pad_controller_set_action_entries(self.as_ref().to_glib_none().0,
                                                        mut_override(entries as *const _),
                                                        n_entries);
         }

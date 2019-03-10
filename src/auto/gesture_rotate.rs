@@ -5,23 +5,23 @@
 use EventController;
 use Gesture;
 use Widget;
-use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GestureRotate(Object<ffi::GtkGestureRotate, ffi::GtkGestureRotateClass, GestureRotateClass>) @extends Gesture, EventController;
+    pub struct GestureRotate(Object<gtk_sys::GtkGestureRotate, gtk_sys::GtkGestureRotateClass, GestureRotateClass>) @extends Gesture, EventController;
 
     match fn {
-        get_type => || ffi::gtk_gesture_rotate_get_type(),
+        get_type => || gtk_sys::gtk_gesture_rotate_get_type(),
     }
 }
 
@@ -29,7 +29,7 @@ impl GestureRotate {
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureRotate {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_rotate_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
+            Gesture::from_glib_full(gtk_sys::gtk_gesture_rotate_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -45,7 +45,7 @@ pub trait GestureRotateExt: 'static {
 impl<O: IsA<GestureRotate>> GestureRotateExt for O {
     fn get_angle_delta(&self) -> f64 {
         unsafe {
-            ffi::gtk_gesture_rotate_get_angle_delta(self.as_ref().to_glib_none().0)
+            gtk_sys::gtk_gesture_rotate_get_angle_delta(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -58,7 +58,7 @@ impl<O: IsA<GestureRotate>> GestureRotateExt for O {
     }
 }
 
-unsafe extern "C" fn angle_changed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureRotate, angle: libc::c_double, angle_delta: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn angle_changed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureRotate, angle: libc::c_double, angle_delta: libc::c_double, f: glib_sys::gpointer)
 where P: IsA<GestureRotate> {
     let f: &F = &*(f as *const F);
     f(&GestureRotate::from_glib_borrow(this).unsafe_cast(), angle, angle_delta)

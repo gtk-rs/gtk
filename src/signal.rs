@@ -2,11 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+use gdk::Rectangle;
 use glib;
 pub use glib::signal::Inhibit;
-use glib::SourceId;
 use glib::signal::SignalHandlerId;
-use gdk::Rectangle;
+use glib::SourceId;
 
 use {
     Continue,
@@ -67,17 +67,17 @@ pub trait EditableSignals: 'static {
 }
 
 mod editable {
-    use Editable;
-    use std::mem::transmute;
-    use ffi::GtkEditable;
-    use glib::signal::{SignalHandlerId, connect_raw};
+    use glib::object::Cast;
+    use glib::signal::{connect_raw, SignalHandlerId};
     use glib::translate::*;
-    use IsA;
     use libc::{c_char, c_int, c_uchar};
     use std::ffi::CStr;
-    use std::str;
-    use glib::object::Cast;
+    use std::mem::transmute;
     use std::slice;
+    use std::str;
+    use gtk_sys::GtkEditable;
+    use Editable;
+    use IsA;
 
     impl<T: IsA<Editable>> super::EditableSignals for T {
         fn connect_changed<F>(&self, changed_func: F) -> SignalHandlerId
@@ -155,19 +155,19 @@ pub trait SpinButtonSignals: 'static {
 }
 
 mod spin_button {
-    use Inhibit;
-    use SpinButton;
-    use ScrollType;
-    use ffi::{GTK_INPUT_ERROR, GtkSpinButton};
-    use glib::signal::{SignalHandlerId, connect_raw};
     use glib::object::Cast;
-    use glib::IsA;
+    use glib::signal::{connect_raw, SignalHandlerId};
     use glib::translate::*;
-    use glib_ffi::{GTRUE, GFALSE};
-    use libc::{c_int, c_double};
+    use glib::IsA;
+    use glib_sys::gboolean;
+    use glib_sys::{GFALSE, GTRUE};
+    use libc::{c_double, c_int};
     use std::boxed::Box as Box_;
     use std::mem::transmute;
-    use glib_ffi::gboolean;
+    use gtk_sys::{GtkSpinButton, GTK_INPUT_ERROR};
+    use Inhibit;
+    use ScrollType;
+    use SpinButton;
 
     impl<T: IsA<SpinButton>> ::SpinButtonSignals for T {
         fn connect_change_value<F>(&self, change_value_func: F) -> SignalHandlerId
@@ -259,14 +259,14 @@ pub trait OverlaySignals: 'static {
 
 mod overlay {
     use gdk::Rectangle;
-    use ffi::{GtkOverlay, GtkWidget};
-    use gdk_ffi::GdkRectangle;
+    use gdk_sys::GdkRectangle;
+    use glib::object::Cast;
     use glib::signal::{connect_raw, SignalHandlerId};
     use glib::translate::*;
-    use glib::object::Cast;
+    use glib_sys::{gboolean, gpointer};
     use std::mem::transmute;
     use std::ptr;
-    use glib_ffi::{gboolean, gpointer};
+    use gtk_sys::{GtkOverlay, GtkWidget};
     use IsA;
     use Overlay;
     use Widget;

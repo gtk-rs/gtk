@@ -3,15 +3,15 @@
 // DO NOT EDIT
 
 use Buildable;
-use ffi;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct IconFactory(Object<ffi::GtkIconFactory, ffi::GtkIconFactoryClass, IconFactoryClass>) @implements Buildable;
+    pub struct IconFactory(Object<gtk_sys::GtkIconFactory, gtk_sys::GtkIconFactoryClass, IconFactoryClass>) @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_icon_factory_get_type(),
+        get_type => || gtk_sys::gtk_icon_factory_get_type(),
     }
 }
 

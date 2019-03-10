@@ -5,24 +5,24 @@
 use Buildable;
 use Container;
 use Widget;
-use ffi;
 use gdk;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
+use glib_sys;
+use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use xlib;
 
 glib_wrapper! {
-    pub struct Socket(Object<ffi::GtkSocket, ffi::GtkSocketClass, SocketClass>) @extends Container, Widget, @implements Buildable;
+    pub struct Socket(Object<gtk_sys::GtkSocket, gtk_sys::GtkSocketClass, SocketClass>) @extends Container, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_socket_get_type(),
+        get_type => || gtk_sys::gtk_socket_get_type(),
     }
 }
 
@@ -30,7 +30,7 @@ impl Socket {
     pub fn new() -> Socket {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_socket_new()).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_socket_new()).unsafe_cast()
         }
     }
 }
@@ -58,19 +58,19 @@ pub trait GtkSocketExt: 'static {
 impl<O: IsA<Socket>> GtkSocketExt for O {
     fn add_id(&self, window: xlib::Window) {
         unsafe {
-            ffi::gtk_socket_add_id(self.as_ref().to_glib_none().0, window);
+            gtk_sys::gtk_socket_add_id(self.as_ref().to_glib_none().0, window);
         }
     }
 
     fn get_id(&self) -> xlib::Window {
         unsafe {
-            ffi::gtk_socket_get_id(self.as_ref().to_glib_none().0)
+            gtk_sys::gtk_socket_get_id(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_plug_window(&self) -> Option<gdk::Window> {
         unsafe {
-            from_glib_none(ffi::gtk_socket_get_plug_window(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_socket_get_plug_window(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -91,13 +91,13 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
     }
 }
 
-unsafe extern "C" fn plug_added_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSocket, f: glib_ffi::gpointer)
+unsafe extern "C" fn plug_added_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer)
 where P: IsA<Socket> {
     let f: &F = &*(f as *const F);
     f(&Socket::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn plug_removed_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkSocket, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn plug_removed_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer) -> glib_sys::gboolean
 where P: IsA<Socket> {
     let f: &F = &*(f as *const F);
     f(&Socket::from_glib_borrow(this).unsafe_cast()).to_glib()

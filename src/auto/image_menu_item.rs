@@ -8,15 +8,15 @@ use Buildable;
 use Container;
 use MenuItem;
 use Widget;
-use ffi;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct ImageMenuItem(Object<ffi::GtkImageMenuItem, ffi::GtkImageMenuItemClass, ImageMenuItemClass>) @extends MenuItem, Bin, Container, Widget, @implements Buildable, Actionable;
+    pub struct ImageMenuItem(Object<gtk_sys::GtkImageMenuItem, gtk_sys::GtkImageMenuItemClass, ImageMenuItemClass>) @extends MenuItem, Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
-        get_type => || ffi::gtk_image_menu_item_get_type(),
+        get_type => || gtk_sys::gtk_image_menu_item_get_type(),
     }
 }
 

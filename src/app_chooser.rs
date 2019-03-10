@@ -2,18 +2,17 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::*;
 use gio::AppInfo;
-use ffi;
-
 use glib::object::IsA;
+use glib::translate::*;
+use gtk_sys;
 use Widget;
 
 glib_wrapper! {
-    pub struct AppChooser(Interface<ffi::GtkAppChooser>) @requires Widget;
+    pub struct AppChooser(Interface<gtk_sys::GtkAppChooser>) @requires Widget;
 
     match fn {
-        get_type => || ffi::gtk_app_chooser_get_type(),
+        get_type => || gtk_sys::gtk_app_chooser_get_type(),
     }
 }
 
@@ -25,17 +24,17 @@ pub trait AppChooserExt: 'static {
 
 impl<O: IsA<AppChooser>> AppChooserExt for O {
     fn get_app_info(&self) -> Option<AppInfo> {
-        unsafe { from_glib_full(ffi::gtk_app_chooser_get_app_info(self.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_full(gtk_sys::gtk_app_chooser_get_app_info(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_content_type(&self) -> Option<String> {
         unsafe {
             from_glib_full(
-                ffi::gtk_app_chooser_get_content_type(self.as_ref().to_glib_none().0))
+                gtk_sys::gtk_app_chooser_get_content_type(self.as_ref().to_glib_none().0))
         }
     }
 
     fn refresh(&self) {
-        unsafe { ffi::gtk_app_chooser_refresh(self.as_ref().to_glib_none().0) }
+        unsafe { gtk_sys::gtk_app_chooser_refresh(self.as_ref().to_glib_none().0) }
     }
 }

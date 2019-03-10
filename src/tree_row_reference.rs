@@ -2,11 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use ffi;
 use glib;
-use glib::translate::*;
 use glib::object::IsA;
+use glib::translate::*;
 use libc::c_int;
+use gtk_sys;
 use TreeIter;
 use TreePath;
 use TreeRowReference;
@@ -22,7 +22,7 @@ impl TreeRowReference {
         assert_initialized_main_thread!();
         assert!(iter.is_some() || path.get_depth() == 0,
                 "If 'iter' is None, 'path' must point to the root.");
-        ffi::gtk_tree_row_reference_reordered(proxy.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0),
+        gtk_sys::gtk_tree_row_reference_reordered(proxy.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0),
             mut_override(iter.to_glib_none().0), mut_override(new_order.as_ptr() as *const c_int));
     }
 }

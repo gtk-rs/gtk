@@ -2,17 +2,17 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use ffi;
+use auto::DialogExt;
 use glib::object::Cast;
 use glib::translate::*;
 use std::ptr;
+use gtk_sys;
 use Dialog;
 use DialogFlags;
 use IsA;
+use ResponseType;
 use Widget;
 use Window;
-use auto::DialogExt;
-use ResponseType;
 
 impl Dialog {
     pub fn new_with_buttons<T: IsA<Window>>(
@@ -24,7 +24,7 @@ impl Dialog {
         assert_initialized_main_thread!();
         let ret: Dialog = unsafe {
             Widget::from_glib_none(
-                ffi::gtk_dialog_new_with_buttons(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
+                gtk_sys::gtk_dialog_new_with_buttons(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
                     flags.to_glib(), ptr::null_mut()))
                 .unsafe_cast()
         };
