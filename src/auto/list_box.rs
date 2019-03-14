@@ -95,7 +95,7 @@ pub trait ListBoxExt: 'static {
 
     fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>>);
 
-    fn set_header_func(&self, update_header: Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>);
+    fn set_header_func(&self, update_header: Option<Box<dyn Fn(&ListBoxRow, &Option<ListBoxRow>) + 'static>>);
 
     fn set_placeholder<P: IsA<Widget>>(&self, placeholder: Option<&P>);
 
@@ -305,12 +305,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
     }
 
-    fn set_header_func(&self, update_header: Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>) {
-        let update_header_data: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>> = Box::new(update_header);
+    fn set_header_func(&self, update_header: Option<Box<dyn Fn(&ListBoxRow, &Option<ListBoxRow>) + 'static>>) {
+        let update_header_data: Box_<Option<Box<dyn Fn(&ListBoxRow, &Option<ListBoxRow>) + 'static>>> = Box::new(update_header);
         unsafe extern "C" fn update_header_func(row: *mut gtk_sys::GtkListBoxRow, before: *mut gtk_sys::GtkListBoxRow, user_data: glib_sys::gpointer) {
             let row = from_glib_borrow(row);
             let before = from_glib_borrow(before);
-            let callback: &Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>> = &*(user_data as *mut _);
+            let callback: &Option<Box<dyn Fn(&ListBoxRow, &Option<ListBoxRow>) + 'static>> = &*(user_data as *mut _);
             if let Some(ref callback) = *callback {
                 callback(&row, &before)
             } else {
@@ -319,10 +319,10 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
         let update_header = if update_header_data.is_some() { Some(update_header_func as _) } else { None };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
-            let _callback: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>> = Box_::from_raw(data as *mut _);
+            let _callback: Box_<Option<Box<dyn Fn(&ListBoxRow, &Option<ListBoxRow>) + 'static>>> = Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
-        let super_callback0: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>> = update_header_data;
+        let super_callback0: Box_<Option<Box<dyn Fn(&ListBoxRow, &Option<ListBoxRow>) + 'static>>> = update_header_data;
         unsafe {
             gtk_sys::gtk_list_box_set_header_func(self.as_ref().to_glib_none().0, update_header, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }

@@ -80,14 +80,15 @@ impl Clipboard {
         }
     }
 
-    pub fn request_rich_text<P: IsA<TextBuffer>, Q: FnOnce(&Clipboard, &gdk::Atom, &str, usize) + 'static>(&self, buffer: &P, callback: Q) {
+    pub fn request_rich_text<P: IsA<TextBuffer>, Q: FnOnce(&Clipboard, &gdk::Atom, Option<&str>, usize) + 'static>(&self, buffer: &P, callback: Q) {
         let callback_data: Box_<Q> = Box::new(callback);
-        unsafe extern "C" fn callback_func<P: IsA<TextBuffer>, Q: FnOnce(&Clipboard, &gdk::Atom, &str, usize) + 'static>(clipboard: *mut gtk_sys::GtkClipboard, format: gdk_sys::GdkAtom, text: *const libc::c_char, length: libc::size_t, data: glib_sys::gpointer) {
+        unsafe extern "C" fn callback_func<P: IsA<TextBuffer>, Q: FnOnce(&Clipboard, &gdk::Atom, Option<&str>, usize) + 'static>(clipboard: *mut gtk_sys::GtkClipboard, format: gdk_sys::GdkAtom, text: *const libc::c_char, length: libc::size_t, data: glib_sys::gpointer) {
             let clipboard = from_glib_borrow(clipboard);
             let format = from_glib_borrow(format);
-            let text: GString = from_glib_borrow(text);
+            let text: Option<GString> = from_glib_borrow(text);
+            let text = text.as_ref();
             let callback: Box_<Q> = Box_::from_raw(data as *mut _);
-            (*callback)(&clipboard, &format, text.as_str(), length);
+            (*callback)(&clipboard, &format, text.map(|x| x.as_str()), length);
         }
         let callback = Some(callback_func::<P, Q> as _);
         let super_callback0: Box_<Q> = callback_data;
@@ -96,13 +97,14 @@ impl Clipboard {
         }
     }
 
-    pub fn request_text<P: FnOnce(&Clipboard, &str) + 'static>(&self, callback: P) {
+    pub fn request_text<P: FnOnce(&Clipboard, Option<&str>) + 'static>(&self, callback: P) {
         let callback_data: Box_<P> = Box::new(callback);
-        unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, &str) + 'static>(clipboard: *mut gtk_sys::GtkClipboard, text: *const libc::c_char, data: glib_sys::gpointer) {
+        unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, Option<&str>) + 'static>(clipboard: *mut gtk_sys::GtkClipboard, text: *const libc::c_char, data: glib_sys::gpointer) {
             let clipboard = from_glib_borrow(clipboard);
-            let text: GString = from_glib_borrow(text);
+            let text: Option<GString> = from_glib_borrow(text);
+            let text = text.as_ref();
             let callback: Box_<P> = Box_::from_raw(data as *mut _);
-            (*callback)(&clipboard, text.as_str());
+            (*callback)(&clipboard, text.map(|x| x.as_str()));
         }
         let callback = Some(callback_func::<P> as _);
         let super_callback0: Box_<P> = callback_data;

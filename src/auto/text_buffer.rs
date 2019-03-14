@@ -169,7 +169,7 @@ pub trait TextBufferExt: 'static {
 
     fn place_cursor(&self, where_: &TextIter);
 
-    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, &Error) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom>;
+    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, &Option<Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom>;
 
     fn register_deserialize_tagset(&self, tagset_name: Option<&str>) -> gdk::Atom;
 
@@ -616,7 +616,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, &Error) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom> {
+    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, &Option<Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom> {
     //    unsafe { TODO: call gtk_sys:gtk_text_buffer_register_deserialize_format() }
     //}
 
