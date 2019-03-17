@@ -65,7 +65,7 @@ pub trait CalendarExt: 'static {
 
     fn select_month(&self, month: u32, year: u32);
 
-    fn set_detail_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(&self, func: P);
+    fn set_detail_func<P: Fn(&Calendar, u32, u32, u32) -> Option<String> + 'static>(&self, func: P);
 
     fn set_detail_height_rows(&self, rows: i32);
 
@@ -201,16 +201,16 @@ impl<O: IsA<Calendar>> CalendarExt for O {
         }
     }
 
-    fn set_detail_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(&self, func: P) {
+    fn set_detail_func<P: Fn(&Calendar, u32, u32, u32) -> Option<String> + 'static>(&self, func: P) {
         let func_data: Box_<P> = Box::new(func);
-        unsafe extern "C" fn func_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(calendar: *mut gtk_sys::GtkCalendar, year: libc::c_uint, month: libc::c_uint, day: libc::c_uint, user_data: glib_sys::gpointer) -> *mut libc::c_char {
+        unsafe extern "C" fn func_func<P: Fn(&Calendar, u32, u32, u32) -> Option<String> + 'static>(calendar: *mut gtk_sys::GtkCalendar, year: libc::c_uint, month: libc::c_uint, day: libc::c_uint, user_data: glib_sys::gpointer) -> *mut libc::c_char {
             let calendar = from_glib_borrow(calendar);
             let callback: &P = &*(user_data as *mut _);
             let res = (*callback)(&calendar, year, month, day);
             res.to_glib_full()
         }
         let func = Some(func_func::<P> as _);
-        unsafe extern "C" fn destroy_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(data: glib_sys::gpointer) {
+        unsafe extern "C" fn destroy_func<P: Fn(&Calendar, u32, u32, u32) -> Option<String> + 'static>(data: glib_sys::gpointer) {
             let _callback: Box_<P> = Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func::<P> as _);
