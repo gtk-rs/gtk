@@ -14,11 +14,9 @@ generate = [
     "Gtk.AccelLabel",
     "Gtk.Adjustment",
     "Gtk.Align",
-    "Gtk.Alignment",
     "Gtk.AppChooserButton",
     "Gtk.AppChooserWidget",
     "Gtk.ApplicationInhibitFlags",
-    "Gtk.Arrow",
     "Gtk.ArrowType",
     "Gtk.AspectFrame",
     "Gtk.AssistantPageType",
@@ -85,14 +83,11 @@ generate = [
     "Gtk.GestureSingle",
     "Gtk.GestureSwipe",
     "Gtk.GestureZoom",
-    "Gtk.IconFactory",
     "Gtk.IconInfo",
     "Gtk.IconLookupFlags",
     "Gtk.IconSize",
-    "Gtk.IconSource",
     "Gtk.IconThemeError",
     "Gtk.IconViewDropPosition",
-    "Gtk.ImageMenuItem",
     "Gtk.ImageType",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
@@ -184,10 +179,8 @@ generate = [
     "Gtk.StateFlags",
     "Gtk.StateType",
     "Gtk.Statusbar",
-    "Gtk.StatusIcon",
     "Gtk.StyleProperties",
     "Gtk.StyleProvider",
-    "Gtk.SymbolicColor",
     "Gtk.TargetFlags",
     "Gtk.TextAttributes",
     "Gtk.TextChildAnchor",
@@ -419,6 +412,11 @@ status = "generate"
     type = "gint"
 
 [[object]]
+name = "Gtk.Alignment"
+#deprecated since 3.14
+status = "ignore"
+
+[[object]]
 name = "Gtk.AppChooserDialog"
 status = "generate"
     [[object.function]]
@@ -441,6 +439,11 @@ status = "generate"
     [[object.function]]
     name = "new"
     ignore = true
+
+[[object]]
+name = "Gtk.Arrow"
+#deprecated since 3.14
+status = "ignore"
 
 [[object]]
 name = "Gtk.Assistant"
@@ -907,12 +910,19 @@ status = "generate"
     type = "gint"
 
 [[object]]
+name = "Gtk.IconFactory"
+#deprecated since 3.10
+status = "ignore"
+
+[[object]]
 name = "Gtk.IconSet"
-status = "generate"
-    [[object.function]]
-    name = "get_sizes"
-    #return array of IconSize
-    ignore = true
+#deprecated since 3.10
+status = "ignore"
+
+[[object]]
+name = "Gtk.IconSource"
+#deprecated since 3.10
+status = "ignore"
 
 [[object]]
 name = "Gtk.IconTheme"
@@ -983,6 +993,11 @@ status = "generate"
     name = "get_stock"
     # wrong out parameter mutability and deprecated anyway
     ignore = true
+
+[[object]]
+name = "Gtk.ImageMenuItem"
+#deprecated since 3.10
+status = "ignore"
 
 [[object]]
 name = "Gtk.IMContext"
@@ -1529,6 +1544,11 @@ status = "generate"
     type = "utf8"
 
 [[object]]
+name = "Gtk.StatusIcon"
+#deprecated since 3.14
+status = "ignore"
+
+[[object]]
 name = "Gtk.StyleContext"
 status = "generate"
     [[object.function]]
@@ -1553,6 +1573,11 @@ manual_traits = ["SwitchExtManual"]
     [[object.signal]]
     name = "state-set"
     inhibit = true
+
+[[object]]
+name = "Gtk.SymbolicColor"
+#deprecated since 3.8
+status = "ignore"
 
 [[object]]
 name = "Gtk.TargetList"

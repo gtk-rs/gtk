@@ -26,9 +26,6 @@ mod adjustment;
 pub use self::adjustment::{Adjustment, AdjustmentClass, NONE_ADJUSTMENT};
 pub use self::adjustment::AdjustmentExt;
 
-mod alignment;
-pub use self::alignment::{Alignment, AlignmentClass, NONE_ALIGNMENT};
-
 mod app_chooser_button;
 pub use self::app_chooser_button::{AppChooserButton, AppChooserButtonClass, NONE_APP_CHOOSER_BUTTON};
 pub use self::app_chooser_button::AppChooserButtonExt;
@@ -48,10 +45,6 @@ pub use self::application::GtkApplicationExt;
 mod application_window;
 pub use self::application_window::{ApplicationWindow, ApplicationWindowClass, NONE_APPLICATION_WINDOW};
 pub use self::application_window::ApplicationWindowExt;
-
-mod arrow;
-pub use self::arrow::{Arrow, ArrowClass, NONE_ARROW};
-pub use self::arrow::ArrowExt;
 
 mod aspect_frame;
 pub use self::aspect_frame::{AspectFrame, AspectFrameClass, NONE_ASPECT_FRAME};
@@ -340,9 +333,6 @@ mod im_multicontext;
 pub use self::im_multicontext::{IMMulticontext, IMMulticontextClass, NONE_IM_MULTICONTEXT};
 pub use self::im_multicontext::IMMulticontextExt;
 
-mod icon_factory;
-pub use self::icon_factory::{IconFactory, IconFactoryClass, NONE_ICON_FACTORY};
-
 mod icon_info;
 pub use self::icon_info::{IconInfo, IconInfoClass, NONE_ICON_INFO};
 pub use self::icon_info::IconInfoExt;
@@ -358,9 +348,6 @@ pub use self::icon_view::IconViewExt;
 mod image;
 pub use self::image::{Image, ImageClass, NONE_IMAGE};
 pub use self::image::ImageExt;
-
-mod image_menu_item;
-pub use self::image_menu_item::{ImageMenuItem, ImageMenuItemClass, NONE_IMAGE_MENU_ITEM};
 
 mod info_bar;
 pub use self::info_bar::{InfoBar, InfoBarClass, NONE_INFO_BAR};
@@ -642,10 +629,6 @@ mod stack_switcher;
 pub use self::stack_switcher::{StackSwitcher, StackSwitcherClass, NONE_STACK_SWITCHER};
 pub use self::stack_switcher::StackSwitcherExt;
 
-mod status_icon;
-pub use self::status_icon::{StatusIcon, StatusIconClass, NONE_STATUS_ICON};
-pub use self::status_icon::StatusIconExt;
-
 mod statusbar;
 pub use self::statusbar::{Statusbar, StatusbarClass, NONE_STATUSBAR};
 pub use self::statusbar::StatusbarExt;
@@ -788,12 +771,6 @@ pub use self::window_group::WindowGroupExt;
 mod css_section;
 pub use self::css_section::CssSection;
 
-mod icon_set;
-pub use self::icon_set::IconSet;
-
-mod icon_source;
-pub use self::icon_source::IconSource;
-
 mod paper_size;
 pub use self::paper_size::PaperSize;
 
@@ -802,9 +779,6 @@ pub use self::recent_info::RecentInfo;
 
 mod selection_data;
 pub use self::selection_data::SelectionData;
-
-mod symbolic_color;
-pub use self::symbolic_color::SymbolicColor;
 
 mod target_list;
 pub use self::target_list::TargetList;
@@ -1108,7 +1082,6 @@ pub mod traits {
     pub use super::AppChooserWidgetExt;
     pub use super::GtkApplicationExt;
     pub use super::ApplicationWindowExt;
-    pub use super::ArrowExt;
     pub use super::AspectFrameExt;
     pub use super::AssistantExt;
     pub use super::BinExt;
@@ -1243,7 +1216,6 @@ pub mod traits {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::StackSidebarExt;
     pub use super::StackSwitcherExt;
-    pub use super::StatusIconExt;
     pub use super::StatusbarExt;
     pub use super::StyleContextExt;
     pub use super::StylePropertiesExt;
