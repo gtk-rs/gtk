@@ -902,6 +902,7 @@ pub use self::flags::CellRendererState;
 pub use self::flags::DestDefaults;
 pub use self::flags::DialogFlags;
 pub use self::flags::FileFilterFlags;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 pub use self::flags::FontChooserLevel;
 pub use self::flags::IconLookupFlags;
 pub use self::flags::InputHints;
