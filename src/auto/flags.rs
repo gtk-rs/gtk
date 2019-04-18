@@ -364,6 +364,7 @@ impl SetValue for FileFilterFlags {
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 bitflags! {
     pub struct FontChooserLevel: u32 {
         const FAMILY = 0;
@@ -374,6 +375,7 @@ bitflags! {
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for FontChooserLevel {
     type GlibType = gtk_sys::GtkFontChooserLevel;
@@ -383,6 +385,7 @@ impl ToGlib for FontChooserLevel {
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<gtk_sys::GtkFontChooserLevel> for FontChooserLevel {
     fn from_glib(value: gtk_sys::GtkFontChooserLevel) -> FontChooserLevel {
@@ -391,24 +394,28 @@ impl FromGlib<gtk_sys::GtkFontChooserLevel> for FontChooserLevel {
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 impl StaticType for FontChooserLevel {
     fn static_type() -> Type {
         unsafe { from_glib(gtk_sys::gtk_font_chooser_level_get_type()) }
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for FontChooserLevel {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 impl<'a> FromValue<'a> for FontChooserLevel {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 impl SetValue for FontChooserLevel {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
