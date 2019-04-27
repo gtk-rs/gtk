@@ -7,7 +7,7 @@ use IconTheme;
 use StyleContext;
 use cairo;
 #[cfg(feature = "futures")]
-use futures_core;
+use futures::future;
 use gdk;
 use gdk_pixbuf;
 use gio;
@@ -57,7 +57,7 @@ pub trait IconInfoExt: 'static {
     fn load_icon_async<P: IsA<gio::Cancellable>, Q: FnOnce(Result<gdk_pixbuf::Pixbuf, Error>) + Send + 'static>(&self, cancellable: Option<&P>, callback: Q);
 
     #[cfg(feature = "futures")]
-    fn load_icon_async_future(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> where Self: Sized + Clone;
+    fn load_icon_async_future(&self) -> Box_<future::Future<Output = Result<gdk_pixbuf::Pixbuf, Error>> + std::marker::Unpin>;
 
     fn load_surface<P: IsA<gdk::Window>>(&self, for_window: Option<&P>) -> Result<cairo::Surface, Error>;
 
@@ -66,14 +66,14 @@ pub trait IconInfoExt: 'static {
     fn load_symbolic_async<P: IsA<gio::Cancellable>, Q: FnOnce(Result<(gdk_pixbuf::Pixbuf, bool), Error>) + Send + 'static>(&self, fg: &gdk::RGBA, success_color: Option<&gdk::RGBA>, warning_color: Option<&gdk::RGBA>, error_color: Option<&gdk::RGBA>, cancellable: Option<&P>, callback: Q);
 
     #[cfg(feature = "futures")]
-    fn load_symbolic_async_future(&self, fg: &gdk::RGBA, success_color: Option<&gdk::RGBA>, warning_color: Option<&gdk::RGBA>, error_color: Option<&gdk::RGBA>) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone;
+    fn load_symbolic_async_future(&self, fg: &gdk::RGBA, success_color: Option<&gdk::RGBA>, warning_color: Option<&gdk::RGBA>, error_color: Option<&gdk::RGBA>) -> Box_<future::Future<Output = Result<(gdk_pixbuf::Pixbuf, bool), Error>> + std::marker::Unpin>;
 
     fn load_symbolic_for_context<P: IsA<StyleContext>>(&self, context: &P) -> Result<(gdk_pixbuf::Pixbuf, bool), Error>;
 
     fn load_symbolic_for_context_async<P: IsA<StyleContext>, Q: IsA<gio::Cancellable>, R: FnOnce(Result<(gdk_pixbuf::Pixbuf, bool), Error>) + Send + 'static>(&self, context: &P, cancellable: Option<&Q>, callback: R);
 
     #[cfg(feature = "futures")]
-    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static>(&self, context: &P) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone;
+    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static>(&self, context: &P) -> Box_<future::Future<Output = Result<(gdk_pixbuf::Pixbuf, bool), Error>> + std::marker::Unpin>;
 }
 
 impl<O: IsA<IconInfo>> IconInfoExt for O {
@@ -125,19 +125,16 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
     }
 
     #[cfg(feature = "futures")]
-    fn load_icon_async_future(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> where Self: Sized + Clone {
+    fn load_icon_async_future(&self) -> Box_<future::Future<Output = Result<gdk_pixbuf::Pixbuf, Error>> + std::marker::Unpin> {
         use gio::GioFuture;
         use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
             let send = Fragile::new(send);
-            let obj_clone = Fragile::new(obj.clone());
             obj.load_icon_async(
                 Some(&cancellable),
                 move |res| {
-                    let obj = obj_clone.into_inner();
-                    let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
                     let _ = send.into_inner().send(res);
                 },
             );
@@ -180,7 +177,7 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
     }
 
     #[cfg(feature = "futures")]
-    fn load_symbolic_async_future(&self, fg: &gdk::RGBA, success_color: Option<&gdk::RGBA>, warning_color: Option<&gdk::RGBA>, error_color: Option<&gdk::RGBA>) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone {
+    fn load_symbolic_async_future(&self, fg: &gdk::RGBA, success_color: Option<&gdk::RGBA>, warning_color: Option<&gdk::RGBA>, error_color: Option<&gdk::RGBA>) -> Box_<future::Future<Output = Result<(gdk_pixbuf::Pixbuf, bool), Error>> + std::marker::Unpin> {
         use gio::GioFuture;
         use fragile::Fragile;
 
@@ -191,7 +188,6 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
             let send = Fragile::new(send);
-            let obj_clone = Fragile::new(obj.clone());
             obj.load_symbolic_async(
                 &fg,
                 success_color.as_ref().map(::std::borrow::Borrow::borrow),
@@ -199,8 +195,6 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
                 error_color.as_ref().map(::std::borrow::Borrow::borrow),
                 Some(&cancellable),
                 move |res| {
-                    let obj = obj_clone.into_inner();
-                    let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
                     let _ = send.into_inner().send(res);
                 },
             );
@@ -235,7 +229,7 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
     }
 
     #[cfg(feature = "futures")]
-    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static>(&self, context: &P) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone {
+    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static>(&self, context: &P) -> Box_<future::Future<Output = Result<(gdk_pixbuf::Pixbuf, bool), Error>> + std::marker::Unpin> {
         use gio::GioFuture;
         use fragile::Fragile;
 
@@ -243,13 +237,10 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
             let send = Fragile::new(send);
-            let obj_clone = Fragile::new(obj.clone());
             obj.load_symbolic_for_context_async(
                 &context,
                 Some(&cancellable),
                 move |res| {
-                    let obj = obj_clone.into_inner();
-                    let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
                     let _ = send.into_inner().send(res);
                 },
             );
