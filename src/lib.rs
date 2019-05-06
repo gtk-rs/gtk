@@ -258,8 +258,6 @@ mod requisition;
 mod response_type;
 mod selection_data;
 mod signal;
-#[cfg(any(target_os = "linux", feature = "dox"))]
-mod socket;
 mod switch;
 mod target_entry;
 mod target_list;
@@ -294,8 +292,6 @@ pub use page_range::PageRange;
 pub use recent_data::RecentData;
 pub use requisition::Requisition;
 pub use response_type::ResponseType;
-#[cfg(any(target_os = "linux", feature = "dox"))]
-pub use socket::Socket;
 pub use target_entry::TargetEntry;
 pub use tree_sortable::SortColumn;
 pub use widget::TickCallbackId;
