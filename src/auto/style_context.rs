@@ -133,7 +133,7 @@ pub trait StyleContextExt: 'static {
     #[cfg_attr(feature = "v3_18", deprecated)]
     fn set_background<P: IsA<gdk::Window>>(&self, window: &P);
 
-    fn set_frame_clock<P: IsA<gdk::FrameClock>>(&self, frame_clock: &P);
+    fn set_frame_clock(&self, frame_clock: &gdk::FrameClock);
 
     fn set_junction_sides(&self, sides: JunctionSides);
 
@@ -344,9 +344,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn set_frame_clock<P: IsA<gdk::FrameClock>>(&self, frame_clock: &P) {
+    fn set_frame_clock(&self, frame_clock: &gdk::FrameClock) {
         unsafe {
-            gtk_sys::gtk_style_context_set_frame_clock(self.as_ref().to_glib_none().0, frame_clock.as_ref().to_glib_none().0);
+            gtk_sys::gtk_style_context_set_frame_clock(self.as_ref().to_glib_none().0, frame_clock.to_glib_none().0);
         }
     }
 

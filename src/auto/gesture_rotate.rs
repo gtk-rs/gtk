@@ -7,6 +7,7 @@ use Gesture;
 use Widget;
 use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -32,36 +33,25 @@ impl GestureRotate {
             Gesture::from_glib_full(gtk_sys::gtk_gesture_rotate_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
-}
 
-pub const NONE_GESTURE_ROTATE: Option<&GestureRotate> = None;
-
-pub trait GestureRotateExt: 'static {
-    fn get_angle_delta(&self) -> f64;
-
-    fn connect_angle_changed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<GestureRotate>> GestureRotateExt for O {
-    fn get_angle_delta(&self) -> f64 {
+    pub fn get_angle_delta(&self) -> f64 {
         unsafe {
-            gtk_sys::gtk_gesture_rotate_get_angle_delta(self.as_ref().to_glib_none().0)
+            gtk_sys::gtk_gesture_rotate_get_angle_delta(self.to_glib_none().0)
         }
     }
 
-    fn connect_angle_changed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_angle_changed<F: Fn(&GestureRotate, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"angle-changed\0".as_ptr() as *const _,
-                Some(transmute(angle_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute(angle_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn angle_changed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureRotate, angle: libc::c_double, angle_delta: libc::c_double, f: glib_sys::gpointer)
-where P: IsA<GestureRotate> {
+unsafe extern "C" fn angle_changed_trampoline<F: Fn(&GestureRotate, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureRotate, angle: libc::c_double, angle_delta: libc::c_double, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&GestureRotate::from_glib_borrow(this).unsafe_cast(), angle, angle_delta)
+    f(&from_glib_borrow(this), angle, angle_delta)
 }
 
 impl fmt::Display for GestureRotate {

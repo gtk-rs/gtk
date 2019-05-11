@@ -8,6 +8,7 @@ use GestureSingle;
 use Widget;
 use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -34,39 +35,28 @@ impl GestureSwipe {
             Gesture::from_glib_full(gtk_sys::gtk_gesture_swipe_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
-}
 
-pub const NONE_GESTURE_SWIPE: Option<&GestureSwipe> = None;
-
-pub trait GestureSwipeExt: 'static {
-    fn get_velocity(&self) -> Option<(f64, f64)>;
-
-    fn connect_swipe<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<GestureSwipe>> GestureSwipeExt for O {
-    fn get_velocity(&self) -> Option<(f64, f64)> {
+    pub fn get_velocity(&self) -> Option<(f64, f64)> {
         unsafe {
             let mut velocity_x = mem::uninitialized();
             let mut velocity_y = mem::uninitialized();
-            let ret = from_glib(gtk_sys::gtk_gesture_swipe_get_velocity(self.as_ref().to_glib_none().0, &mut velocity_x, &mut velocity_y));
+            let ret = from_glib(gtk_sys::gtk_gesture_swipe_get_velocity(self.to_glib_none().0, &mut velocity_x, &mut velocity_y));
             if ret { Some((velocity_x, velocity_y)) } else { None }
         }
     }
 
-    fn connect_swipe<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_swipe<F: Fn(&GestureSwipe, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"swipe\0".as_ptr() as *const _,
-                Some(transmute(swipe_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute(swipe_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn swipe_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_sys::gpointer)
-where P: IsA<GestureSwipe> {
+unsafe extern "C" fn swipe_trampoline<F: Fn(&GestureSwipe, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&GestureSwipe::from_glib_borrow(this).unsafe_cast(), velocity_x, velocity_y)
+    f(&from_glib_borrow(this), velocity_x, velocity_y)
 }
 
 impl fmt::Display for GestureSwipe {

@@ -12,6 +12,7 @@ use gio;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::translate::*;
 use gobject_sys;
 use gtk_sys;
@@ -33,39 +34,26 @@ impl PadController {
             from_glib_full(gtk_sys::gtk_pad_controller_new(window.as_ref().to_glib_none().0, group.as_ref().to_glib_none().0, pad.to_glib_none().0))
         }
     }
-}
 
-pub const NONE_PAD_CONTROLLER: Option<&PadController> = None;
-
-pub trait PadControllerExt: 'static {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str);
-
-    fn get_property_action_group(&self) -> Option<gio::ActionGroup>;
-
-    fn get_property_pad(&self) -> Option<gdk::Device>;
-}
-
-impl<O: IsA<PadController>> PadControllerExt for O {
-    #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str) {
+    pub fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str) {
         unsafe {
-            gtk_sys::gtk_pad_controller_set_action(self.as_ref().to_glib_none().0, type_.to_glib(), index, mode, label.to_glib_none().0, action_name.to_glib_none().0);
+            gtk_sys::gtk_pad_controller_set_action(self.to_glib_none().0, type_.to_glib(), index, mode, label.to_glib_none().0, action_name.to_glib_none().0);
         }
     }
 
-    fn get_property_action_group(&self) -> Option<gio::ActionGroup> {
+    pub fn get_property_action_group(&self) -> Option<gio::ActionGroup> {
         unsafe {
             let mut value = Value::from_type(<gio::ActionGroup as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"action-group\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"action-group\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn get_property_pad(&self) -> Option<gdk::Device> {
+    pub fn get_property_pad(&self) -> Option<gdk::Device> {
         unsafe {
             let mut value = Value::from_type(<gdk::Device as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"pad\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"pad\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }

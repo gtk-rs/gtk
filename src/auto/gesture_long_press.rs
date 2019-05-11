@@ -10,6 +10,7 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -36,78 +37,59 @@ impl GestureLongPress {
             Gesture::from_glib_full(gtk_sys::gtk_gesture_long_press_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
-}
 
-pub const NONE_GESTURE_LONG_PRESS: Option<&GestureLongPress> = None;
-
-pub trait GestureLongPressExt: 'static {
-    fn get_property_delay_factor(&self) -> f64;
-
-    fn set_property_delay_factor(&self, delay_factor: f64);
-
-    fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_pressed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_delay_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
-    fn get_property_delay_factor(&self) -> f64 {
+    pub fn get_property_delay_factor(&self) -> f64 {
         unsafe {
             let mut value = Value::from_type(<f64 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"delay-factor\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"delay-factor\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
-    fn set_property_delay_factor(&self, delay_factor: f64) {
+    pub fn set_property_delay_factor(&self, delay_factor: f64) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"delay-factor\0".as_ptr() as *const _, Value::from(&delay_factor).to_glib_none().0);
+            gobject_sys::g_object_set_property(self.as_ptr() as *mut gobject_sys::GObject, b"delay-factor\0".as_ptr() as *const _, Value::from(&delay_factor).to_glib_none().0);
         }
     }
 
-    fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_cancelled<F: Fn(&GestureLongPress) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cancelled\0".as_ptr() as *const _,
-                Some(transmute(cancelled_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute(cancelled_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
-    fn connect_pressed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_pressed<F: Fn(&GestureLongPress, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pressed\0".as_ptr() as *const _,
-                Some(transmute(pressed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute(pressed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
-    fn connect_property_delay_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_property_delay_factor_notify<F: Fn(&GestureLongPress) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::delay-factor\0".as_ptr() as *const _,
-                Some(transmute(notify_delay_factor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute(notify_delay_factor_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkGestureLongPress, f: glib_sys::gpointer)
-where P: IsA<GestureLongPress> {
+unsafe extern "C" fn cancelled_trampoline<F: Fn(&GestureLongPress) + 'static>(this: *mut gtk_sys::GtkGestureLongPress, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
+    f(&from_glib_borrow(this))
 }
 
-unsafe extern "C" fn pressed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureLongPress, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer)
-where P: IsA<GestureLongPress> {
+unsafe extern "C" fn pressed_trampoline<F: Fn(&GestureLongPress, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureLongPress, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&GestureLongPress::from_glib_borrow(this).unsafe_cast(), x, y)
+    f(&from_glib_borrow(this), x, y)
 }
 
-unsafe extern "C" fn notify_delay_factor_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkGestureLongPress, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<GestureLongPress> {
+unsafe extern "C" fn notify_delay_factor_trampoline<F: Fn(&GestureLongPress) + 'static>(this: *mut gtk_sys::GtkGestureLongPress, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
+    f(&from_glib_borrow(this))
 }
 
 impl fmt::Display for GestureLongPress {

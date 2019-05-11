@@ -287,32 +287,26 @@ pub use self::gesture_drag::{GestureDrag, GestureDragClass, NONE_GESTURE_DRAG};
 pub use self::gesture_drag::GestureDragExt;
 
 mod gesture_long_press;
-pub use self::gesture_long_press::{GestureLongPress, GestureLongPressClass, NONE_GESTURE_LONG_PRESS};
-pub use self::gesture_long_press::GestureLongPressExt;
+pub use self::gesture_long_press::{GestureLongPress, GestureLongPressClass};
 
 mod gesture_multi_press;
-pub use self::gesture_multi_press::{GestureMultiPress, GestureMultiPressClass, NONE_GESTURE_MULTI_PRESS};
-pub use self::gesture_multi_press::GestureMultiPressExt;
+pub use self::gesture_multi_press::{GestureMultiPress, GestureMultiPressClass};
 
 mod gesture_pan;
-pub use self::gesture_pan::{GesturePan, GesturePanClass, NONE_GESTURE_PAN};
-pub use self::gesture_pan::GesturePanExt;
+pub use self::gesture_pan::{GesturePan, GesturePanClass};
 
 mod gesture_rotate;
-pub use self::gesture_rotate::{GestureRotate, GestureRotateClass, NONE_GESTURE_ROTATE};
-pub use self::gesture_rotate::GestureRotateExt;
+pub use self::gesture_rotate::{GestureRotate, GestureRotateClass};
 
 mod gesture_single;
 pub use self::gesture_single::{GestureSingle, GestureSingleClass, NONE_GESTURE_SINGLE};
 pub use self::gesture_single::GestureSingleExt;
 
 mod gesture_swipe;
-pub use self::gesture_swipe::{GestureSwipe, GestureSwipeClass, NONE_GESTURE_SWIPE};
-pub use self::gesture_swipe::GestureSwipeExt;
+pub use self::gesture_swipe::{GestureSwipe, GestureSwipeClass};
 
 mod gesture_zoom;
-pub use self::gesture_zoom::{GestureZoom, GestureZoomClass, NONE_GESTURE_ZOOM};
-pub use self::gesture_zoom::GestureZoomExt;
+pub use self::gesture_zoom::{GestureZoom, GestureZoomClass};
 
 mod grid;
 pub use self::grid::{Grid, GridClass, NONE_GRID};
@@ -334,8 +328,7 @@ pub use self::im_multicontext::{IMMulticontext, IMMulticontextClass, NONE_IM_MUL
 pub use self::im_multicontext::IMMulticontextExt;
 
 mod icon_info;
-pub use self::icon_info::{IconInfo, IconInfoClass, NONE_ICON_INFO};
-pub use self::icon_info::IconInfoExt;
+pub use self::icon_info::{IconInfo, IconInfoClass};
 
 mod icon_theme;
 pub use self::icon_theme::{IconTheme, IconThemeClass, NONE_ICON_THEME};
@@ -455,9 +448,7 @@ pub use self::overlay::OverlayExt;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 mod pad_controller;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-pub use self::pad_controller::{PadController, PadControllerClass, NONE_PAD_CONTROLLER};
-#[cfg(any(feature = "v3_22", feature = "dox"))]
-pub use self::pad_controller::PadControllerExt;
+pub use self::pad_controller::{PadController, PadControllerClass};
 
 mod page_setup;
 pub use self::page_setup::{PageSetup, PageSetupClass};
@@ -467,8 +458,7 @@ pub use self::paned::{Paned, PanedClass, NONE_PANED};
 pub use self::paned::PanedExt;
 
 mod places_sidebar;
-pub use self::places_sidebar::{PlacesSidebar, PlacesSidebarClass, NONE_PLACES_SIDEBAR};
-pub use self::places_sidebar::PlacesSidebarExt;
+pub use self::places_sidebar::{PlacesSidebar, PlacesSidebarClass};
 
 #[cfg(any(not(windows), feature = "dox"))]
 mod plug;
@@ -1139,18 +1129,11 @@ pub mod traits {
     pub use super::GLAreaExt;
     pub use super::GestureExt;
     pub use super::GestureDragExt;
-    pub use super::GestureLongPressExt;
-    pub use super::GestureMultiPressExt;
-    pub use super::GesturePanExt;
-    pub use super::GestureRotateExt;
     pub use super::GestureSingleExt;
-    pub use super::GestureSwipeExt;
-    pub use super::GestureZoomExt;
     pub use super::GridExt;
     pub use super::HeaderBarExt;
     pub use super::IMContextExt;
     pub use super::IMMulticontextExt;
-    pub use super::IconInfoExt;
     pub use super::IconThemeExt;
     pub use super::IconViewExt;
     pub use super::ImageExt;
@@ -1178,10 +1161,7 @@ pub mod traits {
     pub use super::OffscreenWindowExt;
     pub use super::OrientableExt;
     pub use super::OverlayExt;
-    #[cfg(any(feature = "v3_22", feature = "dox"))]
-    pub use super::PadControllerExt;
     pub use super::PanedExt;
-    pub use super::PlacesSidebarExt;
     #[cfg(any(not(windows), feature = "dox"))]
     pub use super::PlugExt;
     pub use super::PopoverExt;

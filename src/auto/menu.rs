@@ -87,7 +87,7 @@ pub trait GtkMenuExt: 'static {
     fn get_reserve_toggle_size(&self) -> bool;
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn place_on_monitor<P: IsA<gdk::Monitor>>(&self, monitor: &P);
+    fn place_on_monitor(&self, monitor: &gdk::Monitor);
 
     fn popdown(&self);
 
@@ -250,9 +250,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn place_on_monitor<P: IsA<gdk::Monitor>>(&self, monitor: &P) {
+    fn place_on_monitor(&self, monitor: &gdk::Monitor) {
         unsafe {
-            gtk_sys::gtk_menu_place_on_monitor(self.as_ref().to_glib_none().0, monitor.as_ref().to_glib_none().0);
+            gtk_sys::gtk_menu_place_on_monitor(self.as_ref().to_glib_none().0, monitor.to_glib_none().0);
         }
     }
 

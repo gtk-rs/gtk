@@ -7,6 +7,7 @@ use Gesture;
 use Widget;
 use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectType;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -32,36 +33,25 @@ impl GestureZoom {
             Gesture::from_glib_full(gtk_sys::gtk_gesture_zoom_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
-}
 
-pub const NONE_GESTURE_ZOOM: Option<&GestureZoom> = None;
-
-pub trait GestureZoomExt: 'static {
-    fn get_scale_delta(&self) -> f64;
-
-    fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<GestureZoom>> GestureZoomExt for O {
-    fn get_scale_delta(&self) -> f64 {
+    pub fn get_scale_delta(&self) -> f64 {
         unsafe {
-            gtk_sys::gtk_gesture_zoom_get_scale_delta(self.as_ref().to_glib_none().0)
+            gtk_sys::gtk_gesture_zoom_get_scale_delta(self.to_glib_none().0)
         }
     }
 
-    fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_scale_changed<F: Fn(&GestureZoom, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"scale-changed\0".as_ptr() as *const _,
-                Some(transmute(scale_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute(scale_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn scale_changed_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut gtk_sys::GtkGestureZoom, scale: libc::c_double, f: glib_sys::gpointer)
-where P: IsA<GestureZoom> {
+unsafe extern "C" fn scale_changed_trampoline<F: Fn(&GestureZoom, f64) + 'static>(this: *mut gtk_sys::GtkGestureZoom, scale: libc::c_double, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&GestureZoom::from_glib_borrow(this).unsafe_cast(), scale)
+    f(&from_glib_borrow(this), scale)
 }
 
 impl fmt::Display for GestureZoom {
