@@ -272,6 +272,10 @@ mod tree_store;
 mod widget;
 mod window;
 
+#[macro_use]
+#[cfg(feature = "subclassing")]
+pub mod subclass;
+
 pub mod prelude;
 
 pub use auto::*;
