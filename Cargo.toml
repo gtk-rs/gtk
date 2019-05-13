@@ -37,6 +37,7 @@ purge-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/purge-lgpl-docs"]
 embed-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/embed-lgpl-docs"]
 dox = ["gdk/dox", "gtk-sys/dox"]
 futures = ["futures-preview", "fragile", "gio/futures"]
+subclassing = ["glib/subclassing", "gio/subclassing"]
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cc = "^1.0"
