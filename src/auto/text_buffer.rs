@@ -15,6 +15,7 @@ use gdk_pixbuf;
 use gdk_pixbuf_sys;
 use glib::GString;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -44,6 +45,41 @@ impl TextBuffer {
         unsafe {
             from_glib_full(gtk_sys::gtk_text_buffer_new(table.map(|p| p.as_ref()).to_glib_none().0))
         }
+    }
+}
+
+pub struct TextBufferBuilder {
+    tag_table: Option<TextTagTable>,
+    text: Option<String>,
+}
+
+impl TextBufferBuilder {
+    pub fn new() -> Self {
+        Self {
+            tag_table: None,
+            text: None,
+        }
+    }
+
+    pub fn build(self) -> TextBuffer {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref tag_table) = self.tag_table {
+            properties.push(("tag-table", tag_table));
+        }
+        if let Some(ref text) = self.text {
+            properties.push(("text", text));
+        }
+        glib::Object::new(TextBuffer::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn tag_table(mut self, tag_table: &TextTagTable) -> Self {
+        self.tag_table = Some(tag_table.clone());
+        self
+    }
+
+    pub fn text(mut self, text: &str) -> Self {
+        self.text = Some(text.to_string());
+        self
     }
 }
 

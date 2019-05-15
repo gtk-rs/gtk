@@ -7,6 +7,7 @@ use Window;
 use gio;
 use glib::GString;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -25,6 +26,101 @@ glib_wrapper! {
 
     match fn {
         get_type => || gtk_sys::gtk_application_get_type(),
+    }
+}
+
+pub struct ApplicationBuilder {
+    app_menu: Option<gio::MenuModel>,
+    menubar: Option<gio::MenuModel>,
+    register_session: Option<bool>,
+    action_group: Option<gio::ActionGroup>,
+    application_id: Option<String>,
+    flags: Option<gio::ApplicationFlags>,
+    inactivity_timeout: Option<u32>,
+    resource_base_path: Option<String>,
+}
+
+impl ApplicationBuilder {
+    pub fn new() -> Self {
+        Self {
+            app_menu: None,
+            menubar: None,
+            register_session: None,
+            action_group: None,
+            application_id: None,
+            flags: None,
+            inactivity_timeout: None,
+            resource_base_path: None,
+        }
+    }
+
+    pub fn build(self) -> Application {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref app_menu) = self.app_menu {
+            properties.push(("app-menu", app_menu));
+        }
+        if let Some(ref menubar) = self.menubar {
+            properties.push(("menubar", menubar));
+        }
+        if let Some(ref register_session) = self.register_session {
+            properties.push(("register-session", register_session));
+        }
+        if let Some(ref action_group) = self.action_group {
+            properties.push(("action-group", action_group));
+        }
+        if let Some(ref application_id) = self.application_id {
+            properties.push(("application-id", application_id));
+        }
+        if let Some(ref flags) = self.flags {
+            properties.push(("flags", flags));
+        }
+        if let Some(ref inactivity_timeout) = self.inactivity_timeout {
+            properties.push(("inactivity-timeout", inactivity_timeout));
+        }
+        if let Some(ref resource_base_path) = self.resource_base_path {
+            properties.push(("resource-base-path", resource_base_path));
+        }
+        glib::Object::new(Application::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn app_menu(mut self, app_menu: &gio::MenuModel) -> Self {
+        self.app_menu = Some(app_menu.clone());
+        self
+    }
+
+    pub fn menubar(mut self, menubar: &gio::MenuModel) -> Self {
+        self.menubar = Some(menubar.clone());
+        self
+    }
+
+    pub fn register_session(mut self, register_session: bool) -> Self {
+        self.register_session = Some(register_session);
+        self
+    }
+
+    pub fn action_group(mut self, action_group: &gio::ActionGroup) -> Self {
+        self.action_group = Some(action_group.clone());
+        self
+    }
+
+    pub fn application_id(mut self, application_id: &str) -> Self {
+        self.application_id = Some(application_id.to_string());
+        self
+    }
+
+    pub fn flags(mut self, flags: gio::ApplicationFlags) -> Self {
+        self.flags = Some(flags);
+        self
+    }
+
+    pub fn inactivity_timeout(mut self, inactivity_timeout: u32) -> Self {
+        self.inactivity_timeout = Some(inactivity_timeout);
+        self
+    }
+
+    pub fn resource_base_path(mut self, resource_base_path: &str) -> Self {
+        self.resource_base_path = Some(resource_base_path.to_string());
+        self
     }
 }
 

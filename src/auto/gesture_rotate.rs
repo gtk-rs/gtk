@@ -4,7 +4,11 @@
 
 use EventController;
 use Gesture;
+use PropagationPhase;
 use Widget;
+use gdk;
+use glib::StaticType;
+use glib::ToValue;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectType;
@@ -46,6 +50,61 @@ impl GestureRotate {
             connect_raw(self.as_ptr() as *mut _, b"angle-changed\0".as_ptr() as *const _,
                 Some(transmute(angle_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
+    }
+}
+
+pub struct GestureRotateBuilder {
+    n_points: Option<u32>,
+    window: Option<gdk::Window>,
+    propagation_phase: Option<PropagationPhase>,
+    widget: Option<Widget>,
+}
+
+impl GestureRotateBuilder {
+    pub fn new() -> Self {
+        Self {
+            n_points: None,
+            window: None,
+            propagation_phase: None,
+            widget: None,
+        }
+    }
+
+    pub fn build(self) -> GestureRotate {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref n_points) = self.n_points {
+            properties.push(("n-points", n_points));
+        }
+        if let Some(ref window) = self.window {
+            properties.push(("window", window));
+        }
+        if let Some(ref propagation_phase) = self.propagation_phase {
+            properties.push(("propagation-phase", propagation_phase));
+        }
+        if let Some(ref widget) = self.widget {
+            properties.push(("widget", widget));
+        }
+        glib::Object::new(GestureRotate::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn n_points(mut self, n_points: u32) -> Self {
+        self.n_points = Some(n_points);
+        self
+    }
+
+    pub fn window(mut self, window: &gdk::Window) -> Self {
+        self.window = Some(window.clone());
+        self
+    }
+
+    pub fn propagation_phase(mut self, propagation_phase: PropagationPhase) -> Self {
+        self.propagation_phase = Some(propagation_phase);
+        self
+    }
+
+    pub fn widget(mut self, widget: &Widget) -> Self {
+        self.widget = Some(widget.clone());
+        self
     }
 }
 

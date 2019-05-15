@@ -7,6 +7,7 @@ use RecentData;
 use RecentInfo;
 use glib::GString;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -48,6 +49,31 @@ impl RecentManager {
 impl Default for RecentManager {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct RecentManagerBuilder {
+    filename: Option<String>,
+}
+
+impl RecentManagerBuilder {
+    pub fn new() -> Self {
+        Self {
+            filename: None,
+        }
+    }
+
+    pub fn build(self) -> RecentManager {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref filename) = self.filename {
+            properties.push(("filename", filename));
+        }
+        glib::Object::new(RecentManager::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn filename(mut self, filename: &str) -> Self {
+        self.filename = Some(filename.to_string());
+        self
     }
 }
 

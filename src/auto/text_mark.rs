@@ -4,6 +4,9 @@
 
 use TextBuffer;
 use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 use gtk_sys;
@@ -23,6 +26,41 @@ impl TextMark {
         unsafe {
             from_glib_full(gtk_sys::gtk_text_mark_new(name.to_glib_none().0, left_gravity.to_glib()))
         }
+    }
+}
+
+pub struct TextMarkBuilder {
+    left_gravity: Option<bool>,
+    name: Option<String>,
+}
+
+impl TextMarkBuilder {
+    pub fn new() -> Self {
+        Self {
+            left_gravity: None,
+            name: None,
+        }
+    }
+
+    pub fn build(self) -> TextMark {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref left_gravity) = self.left_gravity {
+            properties.push(("left-gravity", left_gravity));
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+        glib::Object::new(TextMark::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn left_gravity(mut self, left_gravity: bool) -> Self {
+        self.left_gravity = Some(left_gravity);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
     }
 }
 

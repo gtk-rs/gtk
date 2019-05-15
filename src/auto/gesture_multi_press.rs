@@ -5,8 +5,11 @@
 use EventController;
 use Gesture;
 use GestureSingle;
+use PropagationPhase;
 use Widget;
 use gdk;
+use glib::StaticType;
+use glib::ToValue;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectType;
@@ -72,6 +75,91 @@ impl GestureMultiPress {
             connect_raw(self.as_ptr() as *mut _, b"stopped\0".as_ptr() as *const _,
                 Some(transmute(stopped_trampoline::<F> as usize)), Box_::into_raw(f))
         }
+    }
+}
+
+pub struct GestureMultiPressBuilder {
+    button: Option<u32>,
+    exclusive: Option<bool>,
+    touch_only: Option<bool>,
+    n_points: Option<u32>,
+    window: Option<gdk::Window>,
+    propagation_phase: Option<PropagationPhase>,
+    widget: Option<Widget>,
+}
+
+impl GestureMultiPressBuilder {
+    pub fn new() -> Self {
+        Self {
+            button: None,
+            exclusive: None,
+            touch_only: None,
+            n_points: None,
+            window: None,
+            propagation_phase: None,
+            widget: None,
+        }
+    }
+
+    pub fn build(self) -> GestureMultiPress {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref button) = self.button {
+            properties.push(("button", button));
+        }
+        if let Some(ref exclusive) = self.exclusive {
+            properties.push(("exclusive", exclusive));
+        }
+        if let Some(ref touch_only) = self.touch_only {
+            properties.push(("touch-only", touch_only));
+        }
+        if let Some(ref n_points) = self.n_points {
+            properties.push(("n-points", n_points));
+        }
+        if let Some(ref window) = self.window {
+            properties.push(("window", window));
+        }
+        if let Some(ref propagation_phase) = self.propagation_phase {
+            properties.push(("propagation-phase", propagation_phase));
+        }
+        if let Some(ref widget) = self.widget {
+            properties.push(("widget", widget));
+        }
+        glib::Object::new(GestureMultiPress::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn button(mut self, button: u32) -> Self {
+        self.button = Some(button);
+        self
+    }
+
+    pub fn exclusive(mut self, exclusive: bool) -> Self {
+        self.exclusive = Some(exclusive);
+        self
+    }
+
+    pub fn touch_only(mut self, touch_only: bool) -> Self {
+        self.touch_only = Some(touch_only);
+        self
+    }
+
+    pub fn n_points(mut self, n_points: u32) -> Self {
+        self.n_points = Some(n_points);
+        self
+    }
+
+    pub fn window(mut self, window: &gdk::Window) -> Self {
+        self.window = Some(window.clone());
+        self
+    }
+
+    pub fn propagation_phase(mut self, propagation_phase: PropagationPhase) -> Self {
+        self.propagation_phase = Some(propagation_phase);
+        self
+    }
+
+    pub fn widget(mut self, widget: &Widget) -> Self {
+        self.widget = Some(widget.clone());
+        self
     }
 }
 

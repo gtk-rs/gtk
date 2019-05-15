@@ -6,6 +6,7 @@ use Window;
 use gdk;
 use gio;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -33,6 +34,122 @@ impl MountOperation {
         unsafe {
             gio::MountOperation::from_glib_full(gtk_sys::gtk_mount_operation_new(parent.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
+    }
+}
+
+pub struct MountOperationBuilder {
+    parent: Option<Window>,
+    screen: Option<gdk::Screen>,
+    anonymous: Option<bool>,
+    choice: Option<i32>,
+    domain: Option<String>,
+    is_tcrypt_hidden_volume: Option<bool>,
+    is_tcrypt_system_volume: Option<bool>,
+    password: Option<String>,
+    //password-save: /*Unknown type*/,
+    pim: Option<u32>,
+    username: Option<String>,
+}
+
+impl MountOperationBuilder {
+    pub fn new() -> Self {
+        Self {
+            parent: None,
+            screen: None,
+            anonymous: None,
+            choice: None,
+            domain: None,
+            is_tcrypt_hidden_volume: None,
+            is_tcrypt_system_volume: None,
+            password: None,
+            pim: None,
+            username: None,
+        }
+    }
+
+    pub fn build(self) -> MountOperation {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref screen) = self.screen {
+            properties.push(("screen", screen));
+        }
+        if let Some(ref anonymous) = self.anonymous {
+            properties.push(("anonymous", anonymous));
+        }
+        if let Some(ref choice) = self.choice {
+            properties.push(("choice", choice));
+        }
+        if let Some(ref domain) = self.domain {
+            properties.push(("domain", domain));
+        }
+        if let Some(ref is_tcrypt_hidden_volume) = self.is_tcrypt_hidden_volume {
+            properties.push(("is-tcrypt-hidden-volume", is_tcrypt_hidden_volume));
+        }
+        if let Some(ref is_tcrypt_system_volume) = self.is_tcrypt_system_volume {
+            properties.push(("is-tcrypt-system-volume", is_tcrypt_system_volume));
+        }
+        if let Some(ref password) = self.password {
+            properties.push(("password", password));
+        }
+        if let Some(ref pim) = self.pim {
+            properties.push(("pim", pim));
+        }
+        if let Some(ref username) = self.username {
+            properties.push(("username", username));
+        }
+        glib::Object::new(MountOperation::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn parent(mut self, parent: &Window) -> Self {
+        self.parent = Some(parent.clone());
+        self
+    }
+
+    pub fn screen(mut self, screen: &gdk::Screen) -> Self {
+        self.screen = Some(screen.clone());
+        self
+    }
+
+    pub fn anonymous(mut self, anonymous: bool) -> Self {
+        self.anonymous = Some(anonymous);
+        self
+    }
+
+    pub fn choice(mut self, choice: i32) -> Self {
+        self.choice = Some(choice);
+        self
+    }
+
+    pub fn domain(mut self, domain: &str) -> Self {
+        self.domain = Some(domain.to_string());
+        self
+    }
+
+    pub fn is_tcrypt_hidden_volume(mut self, is_tcrypt_hidden_volume: bool) -> Self {
+        self.is_tcrypt_hidden_volume = Some(is_tcrypt_hidden_volume);
+        self
+    }
+
+    pub fn is_tcrypt_system_volume(mut self, is_tcrypt_system_volume: bool) -> Self {
+        self.is_tcrypt_system_volume = Some(is_tcrypt_system_volume);
+        self
+    }
+
+    pub fn password(mut self, password: &str) -> Self {
+        self.password = Some(password.to_string());
+        self
+    }
+
+    pub fn pim(mut self, pim: u32) -> Self {
+        self.pim = Some(pim);
+        self
+    }
+
+    pub fn username(mut self, username: &str) -> Self {
+        self.username = Some(username.to_string());
+        self
     }
 }
 
