@@ -16,7 +16,7 @@ use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 use glib::translate::*;
 use gobject_sys;
 use gtk_sys;

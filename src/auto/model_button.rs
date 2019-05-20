@@ -25,7 +25,7 @@ use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-use glib::object::ObjectType;
+use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
