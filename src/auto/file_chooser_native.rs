@@ -10,6 +10,7 @@ use NativeDialog;
 use Window;
 use glib::GString;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -38,6 +39,105 @@ impl FileChooserNative {
         unsafe {
             from_glib_full(gtk_sys::gtk_file_chooser_native_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0, action.to_glib(), accept_label.to_glib_none().0, cancel_label.to_glib_none().0))
         }
+    }
+}
+
+pub struct FileChooserNativeBuilder {
+    accept_label: Option<String>,
+    cancel_label: Option<String>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    modal: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    title: Option<String>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    transient_for: Option<Window>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    visible: Option<bool>,
+}
+
+impl FileChooserNativeBuilder {
+    pub fn new() -> Self {
+        Self {
+            accept_label: None,
+            cancel_label: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            modal: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            title: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            transient_for: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            visible: None,
+        }
+    }
+
+    pub fn build(self) -> FileChooserNative {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref accept_label) = self.accept_label {
+            properties.push(("accept-label", accept_label));
+        }
+        if let Some(ref cancel_label) = self.cancel_label {
+            properties.push(("cancel-label", cancel_label));
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref modal) = self.modal {
+                properties.push(("modal", modal));
+            }
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref title) = self.title {
+                properties.push(("title", title));
+            }
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref transient_for) = self.transient_for {
+                properties.push(("transient-for", transient_for));
+            }
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref visible) = self.visible {
+                properties.push(("visible", visible));
+            }
+        }
+        glib::Object::new(FileChooserNative::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn accept_label(mut self, accept_label: &str) -> Self {
+        self.accept_label = Some(accept_label.to_string());
+        self
+    }
+
+    pub fn cancel_label(mut self, cancel_label: &str) -> Self {
+        self.cancel_label = Some(cancel_label.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn modal(mut self, modal: bool) -> Self {
+        self.modal = Some(modal);
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn title(mut self, title: &str) -> Self {
+        self.title = Some(title.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn transient_for(mut self, transient_for: &Window) -> Self {
+        self.transient_for = Some(transient_for.clone());
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
     }
 }
 

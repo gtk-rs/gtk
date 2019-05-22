@@ -14,6 +14,7 @@ use WidgetPath;
 use gdk;
 use glib::GString;
 use glib::StaticType;
+use glib::ToValue;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -68,6 +69,61 @@ impl StyleContext {
 impl Default for StyleContext {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct StyleContextBuilder {
+    direction: Option<TextDirection>,
+    paint_clock: Option<gdk::FrameClock>,
+    parent: Option<StyleContext>,
+    screen: Option<gdk::Screen>,
+}
+
+impl StyleContextBuilder {
+    pub fn new() -> Self {
+        Self {
+            direction: None,
+            paint_clock: None,
+            parent: None,
+            screen: None,
+        }
+    }
+
+    pub fn build(self) -> StyleContext {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref direction) = self.direction {
+            properties.push(("direction", direction));
+        }
+        if let Some(ref paint_clock) = self.paint_clock {
+            properties.push(("paint-clock", paint_clock));
+        }
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref screen) = self.screen {
+            properties.push(("screen", screen));
+        }
+        glib::Object::new(StyleContext::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn direction(mut self, direction: TextDirection) -> Self {
+        self.direction = Some(direction);
+        self
+    }
+
+    pub fn paint_clock(mut self, paint_clock: &gdk::FrameClock) -> Self {
+        self.paint_clock = Some(paint_clock.clone());
+        self
+    }
+
+    pub fn parent(mut self, parent: &StyleContext) -> Self {
+        self.parent = Some(parent.clone());
+        self
+    }
+
+    pub fn screen(mut self, screen: &gdk::Screen) -> Self {
+        self.screen = Some(screen.clone());
+        self
     }
 }
 
@@ -133,7 +189,7 @@ pub trait StyleContextExt: 'static {
     #[cfg_attr(feature = "v3_18", deprecated)]
     fn set_background<P: IsA<gdk::Window>>(&self, window: &P);
 
-    fn set_frame_clock<P: IsA<gdk::FrameClock>>(&self, frame_clock: &P);
+    fn set_frame_clock(&self, frame_clock: &gdk::FrameClock);
 
     fn set_junction_sides(&self, sides: JunctionSides);
 
@@ -344,9 +400,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn set_frame_clock<P: IsA<gdk::FrameClock>>(&self, frame_clock: &P) {
+    fn set_frame_clock(&self, frame_clock: &gdk::FrameClock) {
         unsafe {
-            gtk_sys::gtk_style_context_set_frame_clock(self.as_ref().to_glib_none().0, frame_clock.as_ref().to_glib_none().0);
+            gtk_sys::gtk_style_context_set_frame_clock(self.as_ref().to_glib_none().0, frame_clock.to_glib_none().0);
         }
     }
 

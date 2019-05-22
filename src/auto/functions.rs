@@ -415,17 +415,17 @@ pub fn render_icon_surface<P: IsA<StyleContext>>(context: &P, cr: &cairo::Contex
     }
 }
 
-pub fn render_insertion_cursor<P: IsA<StyleContext>, Q: IsA<pango::Layout>>(context: &P, cr: &cairo::Context, x: f64, y: f64, layout: &Q, index: i32, direction: pango::Direction) {
+pub fn render_insertion_cursor<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, layout: &pango::Layout, index: i32, direction: pango::Direction) {
     skip_assert_initialized!();
     unsafe {
-        gtk_sys::gtk_render_insertion_cursor(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.as_ref().to_glib_none().0, index, direction.to_glib());
+        gtk_sys::gtk_render_insertion_cursor(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.to_glib_none().0, index, direction.to_glib());
     }
 }
 
-pub fn render_layout<P: IsA<StyleContext>, Q: IsA<pango::Layout>>(context: &P, cr: &cairo::Context, x: f64, y: f64, layout: &Q) {
+pub fn render_layout<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, layout: &pango::Layout) {
     skip_assert_initialized!();
     unsafe {
-        gtk_sys::gtk_render_layout(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.as_ref().to_glib_none().0);
+        gtk_sys::gtk_render_layout(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.to_glib_none().0);
     }
 }
 

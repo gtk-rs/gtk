@@ -4,9 +4,14 @@
 
 use EventController;
 use Gesture;
+use PropagationPhase;
 use Widget;
+use gdk;
+use glib::StaticType;
+use glib::ToValue;
 use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
@@ -32,36 +37,80 @@ impl GestureZoom {
             Gesture::from_glib_full(gtk_sys::gtk_gesture_zoom_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
-}
 
-pub const NONE_GESTURE_ZOOM: Option<&GestureZoom> = None;
-
-pub trait GestureZoomExt: 'static {
-    fn get_scale_delta(&self) -> f64;
-
-    fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<GestureZoom>> GestureZoomExt for O {
-    fn get_scale_delta(&self) -> f64 {
+    pub fn get_scale_delta(&self) -> f64 {
         unsafe {
-            gtk_sys::gtk_gesture_zoom_get_scale_delta(self.as_ref().to_glib_none().0)
+            gtk_sys::gtk_gesture_zoom_get_scale_delta(self.to_glib_none().0)
         }
     }
 
-    fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+    pub fn connect_scale_changed<F: Fn(&GestureZoom, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"scale-changed\0".as_ptr() as *const _,
-                Some(transmute(scale_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+                Some(transmute(scale_changed_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn scale_changed_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut gtk_sys::GtkGestureZoom, scale: libc::c_double, f: glib_sys::gpointer)
-where P: IsA<GestureZoom> {
+pub struct GestureZoomBuilder {
+    n_points: Option<u32>,
+    window: Option<gdk::Window>,
+    propagation_phase: Option<PropagationPhase>,
+    widget: Option<Widget>,
+}
+
+impl GestureZoomBuilder {
+    pub fn new() -> Self {
+        Self {
+            n_points: None,
+            window: None,
+            propagation_phase: None,
+            widget: None,
+        }
+    }
+
+    pub fn build(self) -> GestureZoom {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref n_points) = self.n_points {
+            properties.push(("n-points", n_points));
+        }
+        if let Some(ref window) = self.window {
+            properties.push(("window", window));
+        }
+        if let Some(ref propagation_phase) = self.propagation_phase {
+            properties.push(("propagation-phase", propagation_phase));
+        }
+        if let Some(ref widget) = self.widget {
+            properties.push(("widget", widget));
+        }
+        glib::Object::new(GestureZoom::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn n_points(mut self, n_points: u32) -> Self {
+        self.n_points = Some(n_points);
+        self
+    }
+
+    pub fn window(mut self, window: &gdk::Window) -> Self {
+        self.window = Some(window.clone());
+        self
+    }
+
+    pub fn propagation_phase(mut self, propagation_phase: PropagationPhase) -> Self {
+        self.propagation_phase = Some(propagation_phase);
+        self
+    }
+
+    pub fn widget(mut self, widget: &Widget) -> Self {
+        self.widget = Some(widget.clone());
+        self
+    }
+}
+
+unsafe extern "C" fn scale_changed_trampoline<F: Fn(&GestureZoom, f64) + 'static>(this: *mut gtk_sys::GtkGestureZoom, scale: libc::c_double, f: glib_sys::gpointer) {
     let f: &F = &*(f as *const F);
-    f(&GestureZoom::from_glib_borrow(this).unsafe_cast(), scale)
+    f(&from_glib_borrow(this), scale)
 }
 
 impl fmt::Display for GestureZoom {

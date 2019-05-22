@@ -3,7 +3,11 @@
 // DO NOT EDIT
 
 use IMContext;
+use InputHints;
+use InputPurpose;
 use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
@@ -30,6 +34,41 @@ impl IMMulticontext {
 impl Default for IMMulticontext {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct IMMulticontextBuilder {
+    input_hints: Option<InputHints>,
+    input_purpose: Option<InputPurpose>,
+}
+
+impl IMMulticontextBuilder {
+    pub fn new() -> Self {
+        Self {
+            input_hints: None,
+            input_purpose: None,
+        }
+    }
+
+    pub fn build(self) -> IMMulticontext {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref input_hints) = self.input_hints {
+            properties.push(("input-hints", input_hints));
+        }
+        if let Some(ref input_purpose) = self.input_purpose {
+            properties.push(("input-purpose", input_purpose));
+        }
+        glib::Object::new(IMMulticontext::static_type(), &properties).expect("object new").downcast().expect("downcast")
+    }
+
+    pub fn input_hints(mut self, input_hints: InputHints) -> Self {
+        self.input_hints = Some(input_hints);
+        self
+    }
+
+    pub fn input_purpose(mut self, input_purpose: InputPurpose) -> Self {
+        self.input_purpose = Some(input_purpose);
+        self
     }
 }
 
