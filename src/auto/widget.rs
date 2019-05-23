@@ -636,7 +636,7 @@ pub trait WidgetExt: 'static {
 
     fn connect_hide<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_hierarchy_changed<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_hierarchy_changed<F: Fn(&Self, Option<&Widget>) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_key_press_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -656,7 +656,7 @@ pub trait WidgetExt: 'static {
 
     fn emit_move_focus(&self, direction: DirectionType);
 
-    fn connect_parent_set<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_parent_set<F: Fn(&Self, Option<&Widget>) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_popup_menu<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -672,7 +672,7 @@ pub trait WidgetExt: 'static {
 
     fn connect_realize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_screen_changed<F: Fn(&Self, &Option<gdk::Screen>) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_screen_changed<F: Fn(&Self, Option<&gdk::Screen>) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -2490,7 +2490,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_hierarchy_changed<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_hierarchy_changed<F: Fn(&Self, Option<&Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"hierarchy-changed\0".as_ptr() as *const _,
@@ -2566,7 +2566,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject).emit("move-focus", &[&direction]).unwrap() };
     }
 
-    fn connect_parent_set<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_parent_set<F: Fn(&Self, Option<&Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"parent-set\0".as_ptr() as *const _,
@@ -2627,7 +2627,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_screen_changed<F: Fn(&Self, &Option<gdk::Screen>) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_screen_changed<F: Fn(&Self, Option<&gdk::Screen>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"screen-changed\0".as_ptr() as *const _,
@@ -3228,10 +3228,10 @@ where P: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn hierarchy_changed_trampoline<P, F: Fn(&P, &Option<Widget>) + 'static>(this: *mut gtk_sys::GtkWidget, previous_toplevel: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
+unsafe extern "C" fn hierarchy_changed_trampoline<P, F: Fn(&P, Option<&Widget>) + 'static>(this: *mut gtk_sys::GtkWidget, previous_toplevel: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
 where P: IsA<Widget> {
     let f: &F = &*(f as *const F);
-    f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(previous_toplevel))
+    f(&Widget::from_glib_borrow(this).unsafe_cast(), Option::<Widget>::from_glib_borrow(previous_toplevel).as_ref())
 }
 
 unsafe extern "C" fn key_press_event_trampoline<P, F: Fn(&P, &gdk::EventKey) -> Inhibit + 'static>(this: *mut gtk_sys::GtkWidget, event: *mut gdk_sys::GdkEventKey, f: glib_sys::gpointer) -> glib_sys::gboolean
@@ -3282,10 +3282,10 @@ where P: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(direction))
 }
 
-unsafe extern "C" fn parent_set_trampoline<P, F: Fn(&P, &Option<Widget>) + 'static>(this: *mut gtk_sys::GtkWidget, old_parent: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
+unsafe extern "C" fn parent_set_trampoline<P, F: Fn(&P, Option<&Widget>) + 'static>(this: *mut gtk_sys::GtkWidget, old_parent: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
 where P: IsA<Widget> {
     let f: &F = &*(f as *const F);
-    f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(old_parent))
+    f(&Widget::from_glib_borrow(this).unsafe_cast(), Option::<Widget>::from_glib_borrow(old_parent).as_ref())
 }
 
 unsafe extern "C" fn popup_menu_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer) -> glib_sys::gboolean
@@ -3324,10 +3324,10 @@ where P: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn screen_changed_trampoline<P, F: Fn(&P, &Option<gdk::Screen>) + 'static>(this: *mut gtk_sys::GtkWidget, previous_screen: *mut gdk_sys::GdkScreen, f: glib_sys::gpointer)
+unsafe extern "C" fn screen_changed_trampoline<P, F: Fn(&P, Option<&gdk::Screen>) + 'static>(this: *mut gtk_sys::GtkWidget, previous_screen: *mut gdk_sys::GdkScreen, f: glib_sys::gpointer)
 where P: IsA<Widget> {
     let f: &F = &*(f as *const F);
-    f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(previous_screen))
+    f(&Widget::from_glib_borrow(this).unsafe_cast(), Option::<gdk::Screen>::from_glib_borrow(previous_screen).as_ref())
 }
 
 unsafe extern "C" fn scroll_event_trampoline<P, F: Fn(&P, &gdk::EventScroll) -> Inhibit + 'static>(this: *mut gtk_sys::GtkWidget, event: *mut gdk_sys::GdkEventScroll, f: glib_sys::gpointer) -> glib_sys::gboolean
