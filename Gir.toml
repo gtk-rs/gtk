@@ -941,6 +941,11 @@ status = "generate"
         [[object.function.parameter]]
         name = "event"
         const = true
+    [[object.function]]
+    name = "set_tabs"
+        [[object.function.parameter]]
+        name = "tabs"
+        const = true
     [[object.property]]
     name = "tabs"
     #value pango::TabArray
@@ -1811,6 +1816,11 @@ status = "generate"
     name = "im_context_filter_keypress"
         [[object.function.parameter]]
         name = "event"
+        const = true
+    [[object.function]]
+    name = "set_tabs"
+        [[object.function.parameter]]
+        name = "tabs"
         const = true
     [[object.signal]]
     name = "extend-selection"
