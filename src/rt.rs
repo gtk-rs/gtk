@@ -95,7 +95,7 @@ pub fn init() -> Result<(), glib::BoolError> {
         panic!("Attempted to initialize GTK from two different threads.");
     }
     unsafe {
-        if pre_init() && from_glib(gtk_sys::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
+        if from_glib(gtk_sys::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
             if !glib::MainContext::default().acquire() {
                 return Err(glib_bool_error!("Failed to acquire default main context"));
             }
@@ -106,45 +106,6 @@ pub fn init() -> Result<(), glib::BoolError> {
         else {
             Err(glib_bool_error!("Failed to initialize GTK"))
         }
-    }
-}
-
-/// Ensures `libgtk-3` was built with safety assertions.
-///
-/// Detects the presence of safety checks by testing if the library handles
-/// the `--gtk-debug` command line argument.
-///
-/// Panics if `enable-debug=no` is detected, which means `g_return_if_fail`
-/// checks are disabled and it's impossible to guarantee memory safety.
-fn pre_init() -> bool {
-    skip_assert_initialized!();
-    // We're going to spoof `--gtk-debug=misc` command line argument so first
-    // check if GTK_DEBUG enables 'misc' to know if we need to unset it later.
-    // See #270 for details.
-    let gtk_debug = env::var_os("GTK_DEBUG")
-        .map_or(String::new(), |s| s.to_string_lossy().to_lowercase());
-    let words = gtk_debug.split(|c| {
-        match c {
-            ':' | ';' | ',' | ' ' | '\t' => true,
-            _ => false,
-        }
-    }).collect::<Vec<_>>();
-    let has_misc = words.contains(&"all") ^ words.contains(&"misc");
-
-    unsafe {
-        let argv = ["", "--gtk-debug=misc"];
-        let mut argc = argv.len() as c_int;
-        let mut argv_stash = argv.to_glib_none();
-        let ret = from_glib(gtk_sys::gtk_parse_args(&mut argc, &mut argv_stash.0));
-        let flags = gtk_sys::gtk_get_debug_flags();
-        if flags == 0 {
-            panic!("libgtk-3 was configured with `--enable-debug=no`. \
-                   See https://github.com/gtk-rs/gtk/issues/270 for details");
-        }
-        if !has_misc {
-            gtk_sys::gtk_set_debug_flags(flags & !gtk_sys::GTK_DEBUG_MISC);
-        }
-        ret
     }
 }
 
