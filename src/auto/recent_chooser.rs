@@ -324,6 +324,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_item_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn item_activated_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"item-activated\0".as_ptr() as *const _,
@@ -332,6 +338,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn selection_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-changed\0".as_ptr() as *const _,
@@ -340,6 +352,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::filter\0".as_ptr() as *const _,
@@ -348,6 +366,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_limit_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::limit\0".as_ptr() as *const _,
@@ -356,6 +380,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_local_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::local-only\0".as_ptr() as *const _,
@@ -364,6 +394,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
@@ -372,6 +408,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_show_icons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_icons_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-icons\0".as_ptr() as *const _,
@@ -380,6 +422,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_show_not_found_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_not_found_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-not-found\0".as_ptr() as *const _,
@@ -388,6 +436,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_show_private_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_private_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-private\0".as_ptr() as *const _,
@@ -396,6 +450,12 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_show_tips_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_tips_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-tips\0".as_ptr() as *const _,
@@ -404,78 +464,18 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn connect_property_sort_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_sort_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<RecentChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::sort-type\0".as_ptr() as *const _,
                 Some(transmute(notify_sort_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn item_activated_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn selection_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_limit_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_local_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_icons_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_not_found_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_private_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_tips_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_sort_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRecentChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<RecentChooser> {
-    let f: &F = &*(f as *const F);
-    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for RecentChooser {

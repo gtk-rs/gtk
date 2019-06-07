@@ -300,6 +300,12 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     fn connect_add<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn add_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkContainer, object: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
+            where P: IsA<Container>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"add\0".as_ptr() as *const _,
@@ -308,6 +314,12 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     fn connect_check_resize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn check_resize_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, f: glib_sys::gpointer)
+            where P: IsA<Container>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Container::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"check-resize\0".as_ptr() as *const _,
@@ -316,6 +328,12 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     fn connect_remove<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn remove_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkContainer, object: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
+            where P: IsA<Container>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"remove\0".as_ptr() as *const _,
@@ -324,6 +342,12 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     fn connect_set_focus_child<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn set_focus_child_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkContainer, object: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
+            where P: IsA<Container>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"set-focus-child\0".as_ptr() as *const _,
@@ -332,6 +356,12 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     fn connect_property_border_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_border_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Container>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Container::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::border-width\0".as_ptr() as *const _,
@@ -340,6 +370,12 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     fn connect_property_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Container>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Container::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::child\0".as_ptr() as *const _,
@@ -348,54 +384,18 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     fn connect_property_resize_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_resize_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Container>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Container::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::resize-mode\0".as_ptr() as *const _,
                 Some(transmute(notify_resize_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn add_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkContainer, object: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
-where P: IsA<Container> {
-    let f: &F = &*(f as *const F);
-    f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn check_resize_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, f: glib_sys::gpointer)
-where P: IsA<Container> {
-    let f: &F = &*(f as *const F);
-    f(&Container::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn remove_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkContainer, object: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
-where P: IsA<Container> {
-    let f: &F = &*(f as *const F);
-    f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn set_focus_child_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkContainer, object: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
-where P: IsA<Container> {
-    let f: &F = &*(f as *const F);
-    f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
-}
-
-unsafe extern "C" fn notify_border_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Container> {
-    let f: &F = &*(f as *const F);
-    f(&Container::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Container> {
-    let f: &F = &*(f as *const F);
-    f(&Container::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_resize_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkContainer, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Container> {
-    let f: &F = &*(f as *const F);
-    f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Container {

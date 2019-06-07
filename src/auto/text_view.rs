@@ -1428,6 +1428,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_backspace<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn backspace_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"backspace\0".as_ptr() as *const _,
@@ -1440,6 +1446,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_copy_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn copy_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"copy-clipboard\0".as_ptr() as *const _,
@@ -1452,6 +1464,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_cut_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn cut_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cut-clipboard\0".as_ptr() as *const _,
@@ -1464,6 +1482,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_delete_from_cursor<F: Fn(&Self, DeleteType, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn delete_from_cursor_trampoline<P, F: Fn(&P, DeleteType, i32) + 'static>(this: *mut gtk_sys::GtkTextView, type_: gtk_sys::GtkDeleteType, count: libc::c_int, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(type_), count)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"delete-from-cursor\0".as_ptr() as *const _,
@@ -1477,6 +1501,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_extend_selection<F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn extend_selection_trampoline<P, F: Fn(&P, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static>(this: *mut gtk_sys::GtkTextView, granularity: gtk_sys::GtkTextExtendSelection, location: *mut gtk_sys::GtkTextIter, start: *mut gtk_sys::GtkTextIter, end: *mut gtk_sys::GtkTextIter, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(granularity), &from_glib_borrow(location), &from_glib_borrow(start), &from_glib_borrow(end)).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"extend-selection\0".as_ptr() as *const _,
@@ -1485,6 +1515,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_insert_at_cursor<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn insert_at_cursor_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkTextView, string: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(string))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"insert-at-cursor\0".as_ptr() as *const _,
@@ -1498,6 +1534,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn connect_insert_emoji<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn insert_emoji_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"insert-emoji\0".as_ptr() as *const _,
@@ -1511,6 +1553,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32, bool) + 'static>(this: *mut gtk_sys::GtkTextView, step: gtk_sys::GtkMovementStep, count: libc::c_int, extend_selection: glib_sys::gboolean, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(step), count, from_glib(extend_selection))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-cursor\0".as_ptr() as *const _,
@@ -1523,6 +1571,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_move_viewport<F: Fn(&Self, ScrollStep, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn move_viewport_trampoline<P, F: Fn(&P, ScrollStep, i32) + 'static>(this: *mut gtk_sys::GtkTextView, step: gtk_sys::GtkScrollStep, count: libc::c_int, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(step), count)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-viewport\0".as_ptr() as *const _,
@@ -1535,6 +1589,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_paste_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn paste_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"paste-clipboard\0".as_ptr() as *const _,
@@ -1547,6 +1607,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_populate_popup<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkTextView, popup: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(popup))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"populate-popup\0".as_ptr() as *const _,
@@ -1555,6 +1621,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_preedit_changed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn preedit_changed_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkTextView, preedit: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(preedit))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"preedit-changed\0".as_ptr() as *const _,
@@ -1567,6 +1639,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_select_all<F: Fn(&Self, bool) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P, bool) + 'static>(this: *mut gtk_sys::GtkTextView, select: glib_sys::gboolean, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(select))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"select-all\0".as_ptr() as *const _,
@@ -1579,6 +1657,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_set_anchor<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn set_anchor_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"set-anchor\0".as_ptr() as *const _,
@@ -1591,6 +1675,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_toggle_cursor_visible<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn toggle_cursor_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"toggle-cursor-visible\0".as_ptr() as *const _,
@@ -1603,6 +1693,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_toggle_overwrite<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn toggle_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"toggle-overwrite\0".as_ptr() as *const _,
@@ -1615,6 +1711,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_accepts_tab_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_accepts_tab_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::accepts-tab\0".as_ptr() as *const _,
@@ -1624,6 +1726,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn connect_property_bottom_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_bottom_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::bottom-margin\0".as_ptr() as *const _,
@@ -1632,6 +1740,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::buffer\0".as_ptr() as *const _,
@@ -1640,6 +1754,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_cursor_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_cursor_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::cursor-visible\0".as_ptr() as *const _,
@@ -1648,6 +1768,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_editable_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::editable\0".as_ptr() as *const _,
@@ -1656,6 +1782,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_im_module_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_im_module_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::im-module\0".as_ptr() as *const _,
@@ -1664,6 +1796,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_indent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_indent_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::indent\0".as_ptr() as *const _,
@@ -1672,6 +1810,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-hints\0".as_ptr() as *const _,
@@ -1680,6 +1824,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-purpose\0".as_ptr() as *const _,
@@ -1688,6 +1838,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_justification_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_justification_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::justification\0".as_ptr() as *const _,
@@ -1696,6 +1852,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_left_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_left_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::left-margin\0".as_ptr() as *const _,
@@ -1704,6 +1866,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_monospace_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_monospace_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::monospace\0".as_ptr() as *const _,
@@ -1712,6 +1880,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_overwrite_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::overwrite\0".as_ptr() as *const _,
@@ -1720,6 +1894,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_pixels_above_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pixels_above_lines_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pixels-above-lines\0".as_ptr() as *const _,
@@ -1728,6 +1908,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_pixels_below_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pixels_below_lines_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pixels-below-lines\0".as_ptr() as *const _,
@@ -1736,6 +1922,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_pixels_inside_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pixels_inside_wrap_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pixels-inside-wrap\0".as_ptr() as *const _,
@@ -1744,6 +1936,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::populate-all\0".as_ptr() as *const _,
@@ -1752,6 +1950,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_right_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_right_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::right-margin\0".as_ptr() as *const _,
@@ -1760,6 +1964,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_tabs_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::tabs\0".as_ptr() as *const _,
@@ -1769,6 +1979,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn connect_property_top_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_top_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::top-margin\0".as_ptr() as *const _,
@@ -1777,238 +1993,18 @@ impl<O: IsA<TextView>> TextViewExt for O {
     }
 
     fn connect_property_wrap_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wrap_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<TextView>
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextView::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::wrap-mode\0".as_ptr() as *const _,
                 Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn backspace_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn copy_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn cut_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn delete_from_cursor_trampoline<P, F: Fn(&P, DeleteType, i32) + 'static>(this: *mut gtk_sys::GtkTextView, type_: gtk_sys::GtkDeleteType, count: libc::c_int, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(type_), count)
-}
-
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn extend_selection_trampoline<P, F: Fn(&P, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static>(this: *mut gtk_sys::GtkTextView, granularity: gtk_sys::GtkTextExtendSelection, location: *mut gtk_sys::GtkTextIter, start: *mut gtk_sys::GtkTextIter, end: *mut gtk_sys::GtkTextIter, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(granularity), &from_glib_borrow(location), &from_glib_borrow(start), &from_glib_borrow(end)).to_glib()
-}
-
-unsafe extern "C" fn insert_at_cursor_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkTextView, string: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(string))
-}
-
-#[cfg(any(feature = "v3_22_26", feature = "dox"))]
-unsafe extern "C" fn insert_emoji_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32, bool) + 'static>(this: *mut gtk_sys::GtkTextView, step: gtk_sys::GtkMovementStep, count: libc::c_int, extend_selection: glib_sys::gboolean, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(step), count, from_glib(extend_selection))
-}
-
-unsafe extern "C" fn move_viewport_trampoline<P, F: Fn(&P, ScrollStep, i32) + 'static>(this: *mut gtk_sys::GtkTextView, step: gtk_sys::GtkScrollStep, count: libc::c_int, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(step), count)
-}
-
-unsafe extern "C" fn paste_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkTextView, popup: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(popup))
-}
-
-unsafe extern "C" fn preedit_changed_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkTextView, preedit: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(preedit))
-}
-
-unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P, bool) + 'static>(this: *mut gtk_sys::GtkTextView, select: glib_sys::gboolean, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast(), from_glib(select))
-}
-
-unsafe extern "C" fn set_anchor_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn toggle_cursor_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn toggle_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_accepts_tab_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_18", feature = "dox"))]
-unsafe extern "C" fn notify_bottom_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_cursor_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_editable_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_im_module_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_indent_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_justification_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_left_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_monospace_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pixels_above_lines_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pixels_below_lines_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pixels_inside_wrap_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_right_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_tabs_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_18", feature = "dox"))]
-unsafe extern "C" fn notify_top_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_wrap_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkTextView, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<TextView> {
-    let f: &F = &*(f as *const F);
-    f(&TextView::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for TextView {

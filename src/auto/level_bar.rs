@@ -571,6 +571,12 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     }
 
     fn connect_offset_changed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn offset_changed_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkLevelBar, name: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<LevelBar>
+        {
+            let f: &F = &*(f as *const F);
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(name))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"offset-changed\0".as_ptr() as *const _,
@@ -579,6 +585,12 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     }
 
     fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<LevelBar>
+        {
+            let f: &F = &*(f as *const F);
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inverted\0".as_ptr() as *const _,
@@ -587,6 +599,12 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     }
 
     fn connect_property_max_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<LevelBar>
+        {
+            let f: &F = &*(f as *const F);
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-value\0".as_ptr() as *const _,
@@ -595,6 +613,12 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     }
 
     fn connect_property_min_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_min_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<LevelBar>
+        {
+            let f: &F = &*(f as *const F);
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::min-value\0".as_ptr() as *const _,
@@ -603,6 +627,12 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     }
 
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<LevelBar>
+        {
+            let f: &F = &*(f as *const F);
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::mode\0".as_ptr() as *const _,
@@ -611,48 +641,18 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     }
 
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<LevelBar>
+        {
+            let f: &F = &*(f as *const F);
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::value\0".as_ptr() as *const _,
                 Some(transmute(notify_value_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn offset_changed_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkLevelBar, name: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<LevelBar> {
-    let f: &F = &*(f as *const F);
-    f(&LevelBar::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(name))
-}
-
-unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<LevelBar> {
-    let f: &F = &*(f as *const F);
-    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_max_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<LevelBar> {
-    let f: &F = &*(f as *const F);
-    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_min_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<LevelBar> {
-    let f: &F = &*(f as *const F);
-    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<LevelBar> {
-    let f: &F = &*(f as *const F);
-    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLevelBar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<LevelBar> {
-    let f: &F = &*(f as *const F);
-    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for LevelBar {

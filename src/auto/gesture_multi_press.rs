@@ -54,6 +54,10 @@ impl GestureMultiPress {
     }
 
     pub fn connect_pressed<F: Fn(&GestureMultiPress, i32, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn pressed_trampoline<F: Fn(&GestureMultiPress, i32, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), n_press, x, y)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pressed\0".as_ptr() as *const _,
@@ -62,6 +66,10 @@ impl GestureMultiPress {
     }
 
     pub fn connect_released<F: Fn(&GestureMultiPress, i32, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn released_trampoline<F: Fn(&GestureMultiPress, i32, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), n_press, x, y)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"released\0".as_ptr() as *const _,
@@ -70,6 +78,10 @@ impl GestureMultiPress {
     }
 
     pub fn connect_stopped<F: Fn(&GestureMultiPress) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn stopped_trampoline<F: Fn(&GestureMultiPress) + 'static>(this: *mut gtk_sys::GtkGestureMultiPress, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"stopped\0".as_ptr() as *const _,
@@ -161,21 +173,6 @@ impl GestureMultiPressBuilder {
         self.widget = Some(widget.clone());
         self
     }
-}
-
-unsafe extern "C" fn pressed_trampoline<F: Fn(&GestureMultiPress, i32, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), n_press, x, y)
-}
-
-unsafe extern "C" fn released_trampoline<F: Fn(&GestureMultiPress, i32, f64, f64) + 'static>(this: *mut gtk_sys::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), n_press, x, y)
-}
-
-unsafe extern "C" fn stopped_trampoline<F: Fn(&GestureMultiPress) + 'static>(this: *mut gtk_sys::GtkGestureMultiPress, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
 }
 
 impl fmt::Display for GestureMultiPress {

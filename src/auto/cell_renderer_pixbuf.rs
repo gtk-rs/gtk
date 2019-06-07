@@ -432,6 +432,12 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_follow_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_follow_state_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::follow-state\0".as_ptr() as *const _,
@@ -440,6 +446,12 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_gicon_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gicon\0".as_ptr() as *const _,
@@ -448,6 +460,12 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::icon-name\0".as_ptr() as *const _,
@@ -456,6 +474,12 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pixbuf_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pixbuf\0".as_ptr() as *const _,
@@ -464,6 +488,12 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_pixbuf_expander_closed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pixbuf_expander_closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pixbuf-expander-closed\0".as_ptr() as *const _,
@@ -472,6 +502,12 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_pixbuf_expander_open_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pixbuf_expander_open_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pixbuf-expander-open\0".as_ptr() as *const _,
@@ -480,6 +516,12 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_stock_detail_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stock_detail_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stock-detail\0".as_ptr() as *const _,
@@ -488,60 +530,18 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
     }
 
     fn connect_property_stock_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_stock_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<CellRendererPixbuf>
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stock-size\0".as_ptr() as *const _,
                 Some(transmute(notify_stock_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_follow_state_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gicon_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pixbuf_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pixbuf_expander_closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pixbuf_expander_open_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_stock_detail_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_stock_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererPixbuf, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<CellRendererPixbuf> {
-    let f: &F = &*(f as *const F);
-    f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for CellRendererPixbuf {
