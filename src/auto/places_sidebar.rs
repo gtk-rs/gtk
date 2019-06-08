@@ -271,6 +271,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_drag_action_ask<F: Fn(&PlacesSidebar, i32) -> i32 + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn drag_action_ask_trampoline<F: Fn(&PlacesSidebar, i32) -> i32 + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, actions: libc::c_int, f: glib_sys::gpointer) -> libc::c_int {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), actions)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-action-ask\0".as_ptr() as *const _,
@@ -280,6 +284,10 @@ impl PlacesSidebar {
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub fn connect_mount<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn mount_trampoline<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, mount_operation: *mut gio_sys::GMountOperation, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(mount_operation))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"mount\0".as_ptr() as *const _,
@@ -288,6 +296,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_open_location<F: Fn(&PlacesSidebar, &gio::File, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn open_location_trampoline<F: Fn(&PlacesSidebar, &gio::File, PlacesOpenFlags) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, location: *mut gio_sys::GFile, open_flags: gtk_sys::GtkPlacesOpenFlags, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(location), from_glib(open_flags))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"open-location\0".as_ptr() as *const _,
@@ -301,6 +313,10 @@ impl PlacesSidebar {
 
     #[cfg_attr(feature = "v3_18", deprecated)]
     pub fn connect_show_connect_to_server<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn show_connect_to_server_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show-connect-to-server\0".as_ptr() as *const _,
@@ -309,6 +325,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_show_enter_location<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn show_enter_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show-enter-location\0".as_ptr() as *const _,
@@ -317,6 +337,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_show_error_message<F: Fn(&PlacesSidebar, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn show_error_message_trampoline<F: Fn(&PlacesSidebar, &str, &str) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, primary: *mut libc::c_char, secondary: *mut libc::c_char, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &GString::from_glib_borrow(primary), &GString::from_glib_borrow(secondary))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show-error-message\0".as_ptr() as *const _,
@@ -327,6 +351,10 @@ impl PlacesSidebar {
     #[cfg_attr(feature = "v3_20", deprecated)]
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     pub fn connect_show_other_locations<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn show_other_locations_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show-other-locations\0".as_ptr() as *const _,
@@ -336,6 +364,10 @@ impl PlacesSidebar {
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub fn connect_show_other_locations_with_flags<F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn show_other_locations_with_flags_trampoline<F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, open_flags: gtk_sys::GtkPlacesOpenFlags, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), from_glib(open_flags))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show-other-locations-with-flags\0".as_ptr() as *const _,
@@ -345,6 +377,10 @@ impl PlacesSidebar {
 
     #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     pub fn connect_show_starred_location<F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn show_starred_location_trampoline<F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, open_flags: gtk_sys::GtkPlacesOpenFlags, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), from_glib(open_flags))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show-starred-location\0".as_ptr() as *const _,
@@ -354,6 +390,10 @@ impl PlacesSidebar {
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub fn connect_unmount<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn unmount_trampoline<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, mount_operation: *mut gio_sys::GMountOperation, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(mount_operation))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unmount\0".as_ptr() as *const _,
@@ -362,6 +402,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_local_only_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_local_only_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::local-only\0".as_ptr() as *const _,
@@ -370,6 +414,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_location_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::location\0".as_ptr() as *const _,
@@ -378,6 +426,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_open_flags_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_open_flags_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::open-flags\0".as_ptr() as *const _,
@@ -387,6 +439,10 @@ impl PlacesSidebar {
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     pub fn connect_property_populate_all_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_populate_all_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::populate-all\0".as_ptr() as *const _,
@@ -395,6 +451,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_show_connect_to_server_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_connect_to_server_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-connect-to-server\0".as_ptr() as *const _,
@@ -403,6 +463,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_show_desktop_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_desktop_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-desktop\0".as_ptr() as *const _,
@@ -411,6 +475,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_show_enter_location_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_enter_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-enter-location\0".as_ptr() as *const _,
@@ -419,6 +487,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_show_other_locations_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_other_locations_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-other-locations\0".as_ptr() as *const _,
@@ -427,6 +499,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_show_recent_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_recent_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-recent\0".as_ptr() as *const _,
@@ -436,6 +512,10 @@ impl PlacesSidebar {
 
     #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     pub fn connect_property_show_starred_location_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_starred_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-starred-location\0".as_ptr() as *const _,
@@ -444,6 +524,10 @@ impl PlacesSidebar {
     }
 
     pub fn connect_property_show_trash_notify<F: Fn(&PlacesSidebar) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_trash_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-trash\0".as_ptr() as *const _,
@@ -1120,118 +1204,6 @@ impl PlacesSidebarBuilder {
         self.width_request = Some(width_request);
         self
     }
-}
-
-unsafe extern "C" fn drag_action_ask_trampoline<F: Fn(&PlacesSidebar, i32) -> i32 + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, actions: libc::c_int, f: glib_sys::gpointer) -> libc::c_int {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), actions)
-}
-
-#[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn mount_trampoline<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, mount_operation: *mut gio_sys::GMountOperation, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(mount_operation))
-}
-
-unsafe extern "C" fn open_location_trampoline<F: Fn(&PlacesSidebar, &gio::File, PlacesOpenFlags) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, location: *mut gio_sys::GFile, open_flags: gtk_sys::GtkPlacesOpenFlags, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(location), from_glib(open_flags))
-}
-
-unsafe extern "C" fn show_connect_to_server_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn show_enter_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn show_error_message_trampoline<F: Fn(&PlacesSidebar, &str, &str) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, primary: *mut libc::c_char, secondary: *mut libc::c_char, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &GString::from_glib_borrow(primary), &GString::from_glib_borrow(secondary))
-}
-
-#[cfg(any(feature = "v3_18", feature = "dox"))]
-unsafe extern "C" fn show_other_locations_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-#[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn show_other_locations_with_flags_trampoline<F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, open_flags: gtk_sys::GtkPlacesOpenFlags, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), from_glib(open_flags))
-}
-
-#[cfg(any(feature = "v3_22_26", feature = "dox"))]
-unsafe extern "C" fn show_starred_location_trampoline<F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, open_flags: gtk_sys::GtkPlacesOpenFlags, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), from_glib(open_flags))
-}
-
-#[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn unmount_trampoline<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, mount_operation: *mut gio_sys::GMountOperation, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), &from_glib_borrow(mount_operation))
-}
-
-unsafe extern "C" fn notify_local_only_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_open_flags_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-#[cfg(any(feature = "v3_18", feature = "dox"))]
-unsafe extern "C" fn notify_populate_all_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_show_connect_to_server_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_show_desktop_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_show_enter_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_show_other_locations_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_show_recent_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-#[cfg(any(feature = "v3_22_26", feature = "dox"))]
-unsafe extern "C" fn notify_show_starred_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
-}
-
-unsafe extern "C" fn notify_show_trash_trampoline<F: Fn(&PlacesSidebar) + 'static>(this: *mut gtk_sys::GtkPlacesSidebar, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
 }
 
 impl fmt::Display for PlacesSidebar {

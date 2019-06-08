@@ -774,6 +774,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_activate_cursor_row<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn activate_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate-cursor-row\0".as_ptr() as *const _,
@@ -786,6 +792,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) + 'static>(this: *mut gtk_sys::GtkListBox, object: gtk_sys::GtkMovementStep, p0: libc::c_int, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast(), from_glib(object), p0)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-cursor\0".as_ptr() as *const _,
@@ -798,6 +810,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_row_activated<F: Fn(&Self, &ListBoxRow) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn row_activated_trampoline<P, F: Fn(&P, &ListBoxRow) + 'static>(this: *mut gtk_sys::GtkListBox, row: *mut gtk_sys::GtkListBoxRow, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(row))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-activated\0".as_ptr() as *const _,
@@ -806,6 +824,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_row_selected<F: Fn(&Self, Option<&ListBoxRow>) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn row_selected_trampoline<P, F: Fn(&P, Option<&ListBoxRow>) + 'static>(this: *mut gtk_sys::GtkListBox, row: *mut gtk_sys::GtkListBoxRow, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast(), Option::<ListBoxRow>::from_glib_borrow(row).as_ref())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-selected\0".as_ptr() as *const _,
@@ -814,6 +838,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"select-all\0".as_ptr() as *const _,
@@ -826,6 +856,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_selected_rows_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn selected_rows_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selected-rows-changed\0".as_ptr() as *const _,
@@ -834,6 +870,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_toggle_cursor_row<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn toggle_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"toggle-cursor-row\0".as_ptr() as *const _,
@@ -846,6 +888,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_unselect_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unselect-all\0".as_ptr() as *const _,
@@ -858,6 +906,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::activate-on-single-click\0".as_ptr() as *const _,
@@ -866,72 +920,18 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     fn connect_property_selection_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ListBox>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::selection-mode\0".as_ptr() as *const _,
                 Some(transmute(notify_selection_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn activate_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) + 'static>(this: *mut gtk_sys::GtkListBox, object: gtk_sys::GtkMovementStep, p0: libc::c_int, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast(), from_glib(object), p0)
-}
-
-unsafe extern "C" fn row_activated_trampoline<P, F: Fn(&P, &ListBoxRow) + 'static>(this: *mut gtk_sys::GtkListBox, row: *mut gtk_sys::GtkListBoxRow, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(row))
-}
-
-unsafe extern "C" fn row_selected_trampoline<P, F: Fn(&P, Option<&ListBoxRow>) + 'static>(this: *mut gtk_sys::GtkListBox, row: *mut gtk_sys::GtkListBoxRow, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast(), Option::<ListBoxRow>::from_glib_borrow(row).as_ref())
-}
-
-unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn selected_rows_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn toggle_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkListBox, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ListBox> {
-    let f: &F = &*(f as *const F);
-    f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ListBox {

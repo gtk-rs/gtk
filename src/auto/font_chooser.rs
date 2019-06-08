@@ -235,6 +235,12 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     }
 
     fn connect_font_activated<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn font_activated_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkFontChooser, fontname: *mut libc::c_char, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(fontname))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"font-activated\0".as_ptr() as *const _,
@@ -243,6 +249,12 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     }
 
     fn connect_property_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_font_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::font\0".as_ptr() as *const _,
@@ -251,6 +263,12 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     }
 
     fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_font_desc_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::font-desc\0".as_ptr() as *const _,
@@ -260,6 +278,12 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
 
     #[cfg(any(feature = "v3_24", feature = "dox"))]
     fn connect_property_font_features_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_font_features_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::font-features\0".as_ptr() as *const _,
@@ -269,6 +293,12 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
 
     #[cfg(any(feature = "v3_24", feature = "dox"))]
     fn connect_property_language_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_language_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::language\0".as_ptr() as *const _,
@@ -278,6 +308,12 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
 
     #[cfg(any(feature = "v3_24", feature = "dox"))]
     fn connect_property_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::level\0".as_ptr() as *const _,
@@ -286,6 +322,12 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     }
 
     fn connect_property_preview_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_preview_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::preview-text\0".as_ptr() as *const _,
@@ -294,63 +336,18 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     }
 
     fn connect_property_show_preview_entry_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_preview_entry_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<FontChooser>
+        {
+            let f: &F = &*(f as *const F);
+            f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-preview-entry\0".as_ptr() as *const _,
                 Some(transmute(notify_show_preview_entry_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn font_activated_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut gtk_sys::GtkFontChooser, fontname: *mut libc::c_char, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(fontname))
-}
-
-unsafe extern "C" fn notify_font_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_font_desc_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_24", feature = "dox"))]
-unsafe extern "C" fn notify_font_features_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_24", feature = "dox"))]
-unsafe extern "C" fn notify_language_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_24", feature = "dox"))]
-unsafe extern "C" fn notify_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_preview_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_preview_entry_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooser, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<FontChooser> {
-    let f: &F = &*(f as *const F);
-    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for FontChooser {

@@ -297,6 +297,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_adjust_bounds<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn adjust_bounds_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut gtk_sys::GtkRange, value: libc::c_double, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast(), value)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"adjust-bounds\0".as_ptr() as *const _,
@@ -305,6 +311,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn change_value_trampoline<P, F: Fn(&P, ScrollType, f64) -> Inhibit + 'static>(this: *mut gtk_sys::GtkRange, scroll: gtk_sys::GtkScrollType, value: libc::c_double, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast(), from_glib(scroll), value).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"change-value\0".as_ptr() as *const _,
@@ -313,6 +325,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_move_slider<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn move_slider_trampoline<P, F: Fn(&P, ScrollType) + 'static>(this: *mut gtk_sys::GtkRange, step: gtk_sys::GtkScrollType, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast(), from_glib(step))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-slider\0".as_ptr() as *const _,
@@ -325,6 +343,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn value_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"value-changed\0".as_ptr() as *const _,
@@ -333,6 +357,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_adjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_adjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::adjustment\0".as_ptr() as *const _,
@@ -341,6 +371,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_fill_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::fill-level\0".as_ptr() as *const _,
@@ -349,6 +385,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inverted\0".as_ptr() as *const _,
@@ -357,6 +399,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_lower_stepper_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_lower_stepper_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::lower-stepper-sensitivity\0".as_ptr() as *const _,
@@ -365,6 +413,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_restrict_to_fill_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_restrict_to_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::restrict-to-fill-level\0".as_ptr() as *const _,
@@ -373,6 +427,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_round_digits_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_round_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::round-digits\0".as_ptr() as *const _,
@@ -381,6 +441,12 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_show_fill_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-fill-level\0".as_ptr() as *const _,
@@ -389,84 +455,18 @@ impl<O: IsA<Range>> RangeExt for O {
     }
 
     fn connect_property_upper_stepper_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_upper_stepper_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<Range>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Range::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::upper-stepper-sensitivity\0".as_ptr() as *const _,
                 Some(transmute(notify_upper_stepper_sensitivity_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn adjust_bounds_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut gtk_sys::GtkRange, value: libc::c_double, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast(), value)
-}
-
-unsafe extern "C" fn change_value_trampoline<P, F: Fn(&P, ScrollType, f64) -> Inhibit + 'static>(this: *mut gtk_sys::GtkRange, scroll: gtk_sys::GtkScrollType, value: libc::c_double, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast(), from_glib(scroll), value).to_glib()
-}
-
-unsafe extern "C" fn move_slider_trampoline<P, F: Fn(&P, ScrollType) + 'static>(this: *mut gtk_sys::GtkRange, step: gtk_sys::GtkScrollType, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast(), from_glib(step))
-}
-
-unsafe extern "C" fn value_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_adjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_lower_stepper_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_restrict_to_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_round_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_upper_stepper_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkRange, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<Range> {
-    let f: &F = &*(f as *const F);
-    f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Range {

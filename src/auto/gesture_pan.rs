@@ -55,6 +55,10 @@ impl GesturePan {
     }
 
     pub fn connect_pan<F: Fn(&GesturePan, PanDirection, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn pan_trampoline<F: Fn(&GesturePan, PanDirection, f64) + 'static>(this: *mut gtk_sys::GtkGesturePan, direction: gtk_sys::GtkPanDirection, offset: libc::c_double, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), from_glib(direction), offset)
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pan\0".as_ptr() as *const _,
@@ -63,6 +67,10 @@ impl GesturePan {
     }
 
     pub fn connect_property_orientation_notify<F: Fn(&GesturePan) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_orientation_trampoline<F: Fn(&GesturePan) + 'static>(this: *mut gtk_sys::GtkGesturePan, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::orientation\0".as_ptr() as *const _,
@@ -164,16 +172,6 @@ impl GesturePanBuilder {
         self.widget = Some(widget.clone());
         self
     }
-}
-
-unsafe extern "C" fn pan_trampoline<F: Fn(&GesturePan, PanDirection, f64) + 'static>(this: *mut gtk_sys::GtkGesturePan, direction: gtk_sys::GtkPanDirection, offset: libc::c_double, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), from_glib(direction), offset)
-}
-
-unsafe extern "C" fn notify_orientation_trampoline<F: Fn(&GesturePan) + 'static>(this: *mut gtk_sys::GtkGesturePan, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this))
 }
 
 impl fmt::Display for GesturePan {

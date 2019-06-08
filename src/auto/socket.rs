@@ -451,6 +451,12 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
     }
 
     fn connect_plug_added<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn plug_added_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer)
+            where P: IsA<Socket>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Socket::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"plug-added\0".as_ptr() as *const _,
@@ -459,24 +465,18 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
     }
 
     fn connect_plug_removed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn plug_removed_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer) -> glib_sys::gboolean
+            where P: IsA<Socket>
+        {
+            let f: &F = &*(f as *const F);
+            f(&Socket::from_glib_borrow(this).unsafe_cast()).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"plug-removed\0".as_ptr() as *const _,
                 Some(transmute(plug_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn plug_added_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer)
-where P: IsA<Socket> {
-    let f: &F = &*(f as *const F);
-    f(&Socket::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn plug_removed_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer) -> glib_sys::gboolean
-where P: IsA<Socket> {
-    let f: &F = &*(f as *const F);
-    f(&Socket::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 impl fmt::Display for Socket {

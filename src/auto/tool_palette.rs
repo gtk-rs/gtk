@@ -656,6 +656,12 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
     }
 
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_icon_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkToolPalette, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ToolPalette>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
@@ -664,6 +670,12 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
     }
 
     fn connect_property_icon_size_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_icon_size_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkToolPalette, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ToolPalette>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::icon-size-set\0".as_ptr() as *const _,
@@ -672,30 +684,18 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
     }
 
     fn connect_property_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_toolbar_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkToolPalette, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
+            where P: IsA<ToolPalette>
+        {
+            let f: &F = &*(f as *const F);
+            f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::toolbar-style\0".as_ptr() as *const _,
                 Some(transmute(notify_toolbar_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_icon_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkToolPalette, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ToolPalette> {
-    let f: &F = &*(f as *const F);
-    f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_icon_size_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkToolPalette, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ToolPalette> {
-    let f: &F = &*(f as *const F);
-    f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_toolbar_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkToolPalette, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-where P: IsA<ToolPalette> {
-    let f: &F = &*(f as *const F);
-    f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ToolPalette {

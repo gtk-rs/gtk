@@ -49,6 +49,30 @@ impl<T: GtkApplicationImpl + ObjectImpl> GtkApplicationImplExt for T {
 
 unsafe impl<T: ObjectSubclass + GtkApplicationImpl> IsSubclassable<T> for ApplicationClass {
     fn override_vfuncs(&mut self) {
+        unsafe extern "C" fn application_window_added<T: ObjectSubclass>(
+            ptr: *mut gtk_sys::GtkApplication,
+            wptr: *mut gtk_sys::GtkWindow,
+        )
+            where T: GtkApplicationImpl
+        {
+            let instance = &*(ptr as *mut T::Instance);
+            let imp = instance.get_impl();
+            let wrap: Application = from_glib_borrow(ptr);
+
+            imp.window_added(&wrap, &from_glib_borrow(wptr))
+        }
+        unsafe extern "C" fn application_window_removed<T: ObjectSubclass>(
+            ptr: *mut gtk_sys::GtkApplication,
+            wptr: *mut gtk_sys::GtkWindow,
+        )
+            where T: GtkApplicationImpl
+        {
+            let instance = &*(ptr as *mut T::Instance);
+            let imp = instance.get_impl();
+            let wrap: Application = from_glib_borrow(ptr);
+
+            imp.window_removed(&wrap, &from_glib_borrow(wptr))
+        }
         <gio::ApplicationClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
             let klass = &mut *(self as *mut Self as *mut gtk_sys::GtkApplicationClass);
@@ -56,26 +80,4 @@ unsafe impl<T: ObjectSubclass + GtkApplicationImpl> IsSubclassable<T> for Applic
             klass.window_removed = Some(application_window_removed::<T>);
         }
     }
-}
-
-unsafe extern "C" fn application_window_added<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkApplication, wptr: *mut gtk_sys::GtkWindow)
-where
-    T: GtkApplicationImpl,
-{
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
-    let wrap: Application = from_glib_borrow(ptr);
-
-    imp.window_added(&wrap, &from_glib_borrow(wptr))
-}
-
-unsafe extern "C" fn application_window_removed<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkApplication, wptr: *mut gtk_sys::GtkWindow)
-where
-    T: GtkApplicationImpl,
-{
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.get_impl();
-    let wrap: Application = from_glib_borrow(ptr);
-
-    imp.window_removed(&wrap, &from_glib_borrow(wptr))
 }
