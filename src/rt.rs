@@ -5,9 +5,8 @@
 use gdk;
 use glib;
 use glib::translate::*;
-use libc::{c_int, c_uint};
+use libc::c_uint;
 use std::cell::Cell;
-use std::env;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering, ATOMIC_BOOL_INIT};
 use gtk_sys;

@@ -113,7 +113,19 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
         }
     }
 
-   fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn event_any_trampoline<T, F: Fn(&T, &Event) -> Inhibit + 'static>(
+            this: *mut gtk_sys::GtkWidget,
+            event: *mut gdk_sys::GdkEventAny,
+            f: &F,
+        ) -> gboolean
+            where T: IsA<Widget>
+        {
+            f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
+        }
         unsafe {
             let f: Box<F> = Box::new(f);
             connect_raw(self.to_glib_none().0 as *mut _, b"map-event\0".as_ptr() as *mut _,
@@ -121,7 +133,19 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
         }
     }
 
-    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn event_any_trampoline<T, F: Fn(&T, &Event) -> Inhibit + 'static>(
+            this: *mut gtk_sys::GtkWidget,
+            event: *mut gdk_sys::GdkEventAny,
+            f: &F,
+        ) -> gboolean
+            where T: IsA<Widget>
+        {
+            f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
+        }
         unsafe {
             let f: Box<F> = Box::new(f);
             connect_raw(self.to_glib_none().0 as *mut _, b"unmap-event\0".as_ptr() as *mut _,
@@ -193,11 +217,4 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             gtk_sys::gtk_widget_set_events(self.as_ref().to_glib_none().0, events.to_glib() as i32);
         }
     }
-}
-
-unsafe extern "C" fn event_any_trampoline<T, F: Fn(&T, &Event) -> Inhibit + 'static>(this: *mut gtk_sys::GtkWidget,
-                                             event: *mut gdk_sys::GdkEventAny,
-                                             f: &F) -> gboolean
-where T: IsA<Widget> {
-    f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }

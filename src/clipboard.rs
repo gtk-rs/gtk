@@ -13,6 +13,21 @@ use TargetEntry;
 
 impl Clipboard {
     pub fn set_with_data<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(&self, targets: &[TargetEntry], f: F) -> bool {
+        unsafe extern "C" fn trampoline<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(
+            clipboard: *mut gtk_sys::GtkClipboard,
+            selection_data: *mut gtk_sys::GtkSelectionData,
+            info: c_uint,
+            user_data: gpointer,
+        ) {
+            let f: &F = &*(user_data as *const F);
+            f(&from_glib_borrow(clipboard), &from_glib_borrow(selection_data), info);
+        }
+        unsafe extern "C" fn cleanup<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(
+            _clipboard: *mut gtk_sys::GtkClipboard,
+            user_data: gpointer,
+        ) {
+            Box_::<F>::from_raw(user_data as *mut _);
+        }
         let stashed_targets: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
         let mut t = Vec::with_capacity(stashed_targets.len());
         for stash in &stashed_targets {
@@ -37,14 +52,4 @@ impl Clipboard {
         }
         success
     }
-}
-
-unsafe extern "C" fn trampoline<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(clipboard: *mut gtk_sys::GtkClipboard, selection_data: *mut gtk_sys::GtkSelectionData, info: c_uint, user_data: gpointer) {
-    let f: &F = &*(user_data as *const F);
-    f(&from_glib_borrow(clipboard), &from_glib_borrow(selection_data), info);
-}
-
-
-unsafe extern "C" fn cleanup<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(_clipboard: *mut gtk_sys::GtkClipboard, user_data: gpointer) {
-    Box_::<F>::from_raw(user_data as *mut _);
 }
