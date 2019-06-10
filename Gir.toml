@@ -198,7 +198,6 @@ generate = [
     "Gtk.Tooltip",
     "Gtk.TreeDragDest",
     "Gtk.TreeDragSource",
-    "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
     "Gtk.TreeViewColumnSizing",
     "Gtk.TreeViewDropPosition",
@@ -1781,6 +1780,9 @@ manual_traits = ["TextBufferExtManual"]
 [[object]]
 name = "Gtk.TextIter"
 status = "generate"
+init_function_expression = "|_ptr| ()"
+clear_function_expression = "|_ptr| ()"
+
     [[object.function]]
     name = "get_attributes"
     ignore = true
@@ -1877,6 +1879,12 @@ child_name = "item"
     [[object.child_prop]]
     name = "new-row"
     type = "gboolean"
+
+[[object]]
+name = "Gtk.TreeIter"
+status = "generate"
+init_function_expression = "|_ptr| ()"
+clear_function_expression = "|_ptr| ()"
 
 [[object]]
 name = "Gtk.TreeModel"
