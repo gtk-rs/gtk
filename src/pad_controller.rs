@@ -17,15 +17,15 @@ impl<O: IsA<PadController>> PadControllerExtManual for O {
         let n_entries = entries.len() as i32;
         let entry_strings = entries
             .iter()
-            .map(|e| (e.label.to_glib_none(), e.action_name.to_glib_none()))
+            .map(|e| (e.get_label().to_glib_none(), e.get_action_name().to_glib_none()))
             .collect::<Vec<(Stash<_, _>, Stash<_, _>)>>();
         let entries = entries
             .iter()
             .zip(entry_strings.iter())
             .map(|(e, (label, action_name))| gtk_sys::GtkPadActionEntry {
-                type_: e.type_.to_glib(),
-                index: e.index,
-                mode: e.mode,
+                type_: e.get_type().to_glib(),
+                index: e.get_index(),
+                mode: e.get_mode(),
                 label: label.0,
                 action_name: action_name.0,
             })
