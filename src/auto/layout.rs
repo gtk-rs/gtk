@@ -2,22 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Adjustment;
-use Align;
-use Buildable;
-use Container;
-use ResizeMode;
-use Scrollable;
-use Widget;
 use gdk;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
 use glib_sys;
 use gobject_sys;
 use gtk_sys;
@@ -25,6 +18,13 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
+use Adjustment;
+use Align;
+use Buildable;
+use Container;
+use ResizeMode;
+use Scrollable;
+use Widget;
 
 glib_wrapper! {
     pub struct Layout(Object<gtk_sys::GtkLayout, gtk_sys::GtkLayoutClass, LayoutClass>) @extends Container, Widget, @implements Buildable, Scrollable;
@@ -35,10 +35,17 @@ glib_wrapper! {
 }
 
 impl Layout {
-    pub fn new<P: IsA<Adjustment>, Q: IsA<Adjustment>>(hadjustment: Option<&P>, vadjustment: Option<&Q>) -> Layout {
+    pub fn new<P: IsA<Adjustment>, Q: IsA<Adjustment>>(
+        hadjustment: Option<&P>,
+        vadjustment: Option<&Q>,
+    ) -> Layout {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_layout_new(hadjustment.map(|p| p.as_ref()).to_glib_none().0, vadjustment.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_layout_new(
+                hadjustment.map(|p| p.as_ref()).to_glib_none().0,
+                vadjustment.map(|p| p.as_ref()).to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 }
@@ -245,7 +252,10 @@ impl LayoutBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Layout::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(Layout::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn height(mut self, height: u32) -> Self {
@@ -472,7 +482,9 @@ pub trait LayoutExt: 'static {
 impl<O: IsA<Layout>> LayoutExt for O {
     fn get_bin_window(&self) -> Option<gdk::Window> {
         unsafe {
-            from_glib_none(gtk_sys::gtk_layout_get_bin_window(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_layout_get_bin_window(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -487,13 +499,23 @@ impl<O: IsA<Layout>> LayoutExt for O {
 
     fn move_<P: IsA<Widget>>(&self, child_widget: &P, x: i32, y: i32) {
         unsafe {
-            gtk_sys::gtk_layout_move(self.as_ref().to_glib_none().0, child_widget.as_ref().to_glib_none().0, x, y);
+            gtk_sys::gtk_layout_move(
+                self.as_ref().to_glib_none().0,
+                child_widget.as_ref().to_glib_none().0,
+                x,
+                y,
+            );
         }
     }
 
     fn put<P: IsA<Widget>>(&self, child_widget: &P, x: i32, y: i32) {
         unsafe {
-            gtk_sys::gtk_layout_put(self.as_ref().to_glib_none().0, child_widget.as_ref().to_glib_none().0, x, y);
+            gtk_sys::gtk_layout_put(
+                self.as_ref().to_glib_none().0,
+                child_widget.as_ref().to_glib_none().0,
+                x,
+                y,
+            );
         }
     }
 
@@ -506,84 +528,136 @@ impl<O: IsA<Layout>> LayoutExt for O {
     fn get_property_height(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"height\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"height\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_height(&self, height: u32) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"height\0".as_ptr() as *const _, Value::from(&height).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"height\0".as_ptr() as *const _,
+                Value::from(&height).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_width(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"width\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"width\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_width(&self, width: u32) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"width\0".as_ptr() as *const _, Value::from(&width).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"width\0".as_ptr() as *const _,
+                Value::from(&width).to_glib_none().0,
+            );
         }
     }
 
     fn get_child_x<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"x\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"x\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_child_x<T: IsA<Widget>>(&self, item: &T, x: i32) {
         unsafe {
-            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"x\0".as_ptr() as *const _, Value::from(&x).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"x\0".as_ptr() as *const _,
+                Value::from(&x).to_glib_none().0,
+            );
         }
     }
 
     fn get_child_y<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"y\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"y\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_child_y<T: IsA<Widget>>(&self, item: &T, y: i32) {
         unsafe {
-            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"y\0".as_ptr() as *const _, Value::from(&y).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"y\0".as_ptr() as *const _,
+                Value::from(&y).to_glib_none().0,
+            );
         }
     }
 
     fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLayout, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Layout>
+        unsafe extern "C" fn notify_height_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLayout,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Layout>,
         {
             let f: &F = &*(f as *const F);
             f(&Layout::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::height\0".as_ptr() as *const _,
-                Some(transmute(notify_height_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::height\0".as_ptr() as *const _,
+                Some(transmute(notify_height_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkLayout, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<Layout>
+        unsafe extern "C" fn notify_width_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLayout,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Layout>,
         {
             let f: &F = &*(f as *const F);
             f(&Layout::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::width\0".as_ptr() as *const _,
-                Some(transmute(notify_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::width\0".as_ptr() as *const _,
+                Some(transmute(notify_width_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

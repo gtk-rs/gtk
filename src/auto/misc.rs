@@ -2,11 +2,11 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Buildable;
-use Widget;
 use glib::translate::*;
 use gtk_sys;
 use std::fmt;
+use Buildable;
+use Widget;
 
 glib_wrapper! {
     pub struct Misc(Object<gtk_sys::GtkMisc, gtk_sys::GtkMiscClass, MiscClass>) @extends Widget, @implements Buildable;

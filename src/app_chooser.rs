@@ -24,13 +24,18 @@ pub trait AppChooserExt: 'static {
 
 impl<O: IsA<AppChooser>> AppChooserExt for O {
     fn get_app_info(&self) -> Option<AppInfo> {
-        unsafe { from_glib_full(gtk_sys::gtk_app_chooser_get_app_info(self.as_ref().to_glib_none().0)) }
+        unsafe {
+            from_glib_full(gtk_sys::gtk_app_chooser_get_app_info(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     fn get_content_type(&self) -> Option<String> {
         unsafe {
-            from_glib_full(
-                gtk_sys::gtk_app_chooser_get_content_type(self.as_ref().to_glib_none().0))
+            from_glib_full(gtk_sys::gtk_app_chooser_get_content_type(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 

@@ -2,8 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use IconSize;
-use Widget;
 use gdk;
 use gdk_pixbuf;
 use gio;
@@ -11,6 +9,8 @@ use glib::object::IsA;
 use glib::translate::*;
 use gtk_sys;
 use std::fmt;
+use IconSize;
+use Widget;
 
 glib_wrapper! {
     pub struct Tooltip(Object<gtk_sys::GtkTooltip, TooltipClass>);
@@ -23,7 +23,10 @@ glib_wrapper! {
 impl Tooltip {
     pub fn set_custom<P: IsA<Widget>>(&self, custom_widget: Option<&P>) {
         unsafe {
-            gtk_sys::gtk_tooltip_set_custom(self.to_glib_none().0, custom_widget.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_tooltip_set_custom(
+                self.to_glib_none().0,
+                custom_widget.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
@@ -35,13 +38,21 @@ impl Tooltip {
 
     pub fn set_icon_from_gicon<P: IsA<gio::Icon>>(&self, gicon: Option<&P>, size: IconSize) {
         unsafe {
-            gtk_sys::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.map(|p| p.as_ref()).to_glib_none().0, size.to_glib());
+            gtk_sys::gtk_tooltip_set_icon_from_gicon(
+                self.to_glib_none().0,
+                gicon.map(|p| p.as_ref()).to_glib_none().0,
+                size.to_glib(),
+            );
         }
     }
 
     pub fn set_icon_from_icon_name(&self, icon_name: Option<&str>, size: IconSize) {
         unsafe {
-            gtk_sys::gtk_tooltip_set_icon_from_icon_name(self.to_glib_none().0, icon_name.to_glib_none().0, size.to_glib());
+            gtk_sys::gtk_tooltip_set_icon_from_icon_name(
+                self.to_glib_none().0,
+                icon_name.to_glib_none().0,
+                size.to_glib(),
+            );
         }
     }
 

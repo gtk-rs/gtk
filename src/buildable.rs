@@ -16,7 +16,9 @@ pub trait BuildableExtManual: 'static {
 impl<O: IsA<Buildable>> BuildableExtManual for O {
     fn get_name(&self) -> Option<String> {
         unsafe {
-            from_glib_none(gtk_sys::gtk_buildable_get_name(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_buildable_get_name(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 

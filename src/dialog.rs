@@ -5,8 +5,8 @@
 use auto::DialogExt;
 use glib::object::Cast;
 use glib::translate::*;
-use std::ptr;
 use gtk_sys;
+use std::ptr;
 use Dialog;
 use DialogFlags;
 use IsA;
@@ -23,10 +23,13 @@ impl Dialog {
     ) -> Dialog {
         assert_initialized_main_thread!();
         let ret: Dialog = unsafe {
-            Widget::from_glib_none(
-                gtk_sys::gtk_dialog_new_with_buttons(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
-                    flags.to_glib(), ptr::null_mut()))
-                .unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_dialog_new_with_buttons(
+                title.to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+                flags.to_glib(),
+                ptr::null_mut(),
+            ))
+            .unsafe_cast()
         };
 
         ret.add_buttons(buttons);

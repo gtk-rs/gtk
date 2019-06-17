@@ -2,9 +2,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
+use glib::GString;
 use gtk_sys;
 use std::fmt;
 use std::mem;
@@ -74,35 +74,52 @@ impl<O: IsA<Editable>> EditableExt for O {
 
     fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<GString> {
         unsafe {
-            from_glib_full(gtk_sys::gtk_editable_get_chars(self.as_ref().to_glib_none().0, start_pos, end_pos))
+            from_glib_full(gtk_sys::gtk_editable_get_chars(
+                self.as_ref().to_glib_none().0,
+                start_pos,
+                end_pos,
+            ))
         }
     }
 
     fn get_editable(&self) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_editable_get_editable(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_editable_get_editable(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_position(&self) -> i32 {
-        unsafe {
-            gtk_sys::gtk_editable_get_position(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_editable_get_position(self.as_ref().to_glib_none().0) }
     }
 
     fn get_selection_bounds(&self) -> Option<(i32, i32)> {
         unsafe {
             let mut start_pos = mem::uninitialized();
             let mut end_pos = mem::uninitialized();
-            let ret = from_glib(gtk_sys::gtk_editable_get_selection_bounds(self.as_ref().to_glib_none().0, &mut start_pos, &mut end_pos));
-            if ret { Some((start_pos, end_pos)) } else { None }
+            let ret = from_glib(gtk_sys::gtk_editable_get_selection_bounds(
+                self.as_ref().to_glib_none().0,
+                &mut start_pos,
+                &mut end_pos,
+            ));
+            if ret {
+                Some((start_pos, end_pos))
+            } else {
+                None
+            }
         }
     }
 
     fn insert_text(&self, new_text: &str, position: &mut i32) {
         let new_text_length = new_text.len() as i32;
         unsafe {
-            gtk_sys::gtk_editable_insert_text(self.as_ref().to_glib_none().0, new_text.to_glib_none().0, new_text_length, position);
+            gtk_sys::gtk_editable_insert_text(
+                self.as_ref().to_glib_none().0,
+                new_text.to_glib_none().0,
+                new_text_length,
+                position,
+            );
         }
     }
 
@@ -120,7 +137,10 @@ impl<O: IsA<Editable>> EditableExt for O {
 
     fn set_editable(&self, is_editable: bool) {
         unsafe {
-            gtk_sys::gtk_editable_set_editable(self.as_ref().to_glib_none().0, is_editable.to_glib());
+            gtk_sys::gtk_editable_set_editable(
+                self.as_ref().to_glib_none().0,
+                is_editable.to_glib(),
+            );
         }
     }
 

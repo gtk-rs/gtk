@@ -10,9 +10,10 @@ use TextIter;
 impl TextIter {
     pub fn get_attributes(&self, values: &TextAttributes) -> bool {
         unsafe {
-            from_glib(
-                gtk_sys::gtk_text_iter_get_attributes(self.to_glib_none().0,
-                    mut_override(values.to_glib_none().0)))
+            from_glib(gtk_sys::gtk_text_iter_get_attributes(
+                self.to_glib_none().0,
+                mut_override(values.to_glib_none().0),
+            ))
         }
     }
 }

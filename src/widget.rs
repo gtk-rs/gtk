@@ -10,19 +10,12 @@ use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
 use glib::ObjectExt;
 use glib_sys::gboolean;
+use gtk_sys;
 use pango;
 use std::mem::transmute;
 use std::ptr;
-use gtk_sys;
 
-use {
-    Continue,
-    DestDefaults,
-    Inhibit,
-    Rectangle,
-    TargetEntry,
-    Widget,
-};
+use {Continue, DestDefaults, Inhibit, Rectangle, TargetEntry, Widget};
 
 pub struct TickCallbackId {
     id: u32,
@@ -42,19 +35,24 @@ impl TickCallbackId {
 pub trait WidgetExtManual: 'static {
     fn drag_dest_set(&self, flags: DestDefaults, targets: &[TargetEntry], actions: DragAction);
 
-    fn drag_source_set(&self, start_button_mask: ModifierType, targets: &[TargetEntry], actions: DragAction);
-
-    fn intersect(
+    fn drag_source_set(
         &self,
-        area: &Rectangle,
-        intersection: Option<&mut Rectangle>,
-    ) -> bool;
+        start_button_mask: ModifierType,
+        targets: &[TargetEntry],
+        actions: DragAction,
+    );
+
+    fn intersect(&self, area: &Rectangle, intersection: Option<&mut Rectangle>) -> bool;
 
     fn override_font(&self, font: &pango::FontDescription);
 
-    fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn add_tick_callback<P: Fn(&Self, &gdk::FrameClock) -> Continue + 'static>(
         &self,
@@ -75,14 +73,23 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
         } else {
             ptr::null_mut()
         };
-        unsafe { gtk_sys::gtk_drag_dest_set(self.as_ref().to_glib_none().0,
-                                        flags.to_glib(),
-                                        t_ptr,
-                                        t.len() as i32,
-                                        actions.to_glib())};
+        unsafe {
+            gtk_sys::gtk_drag_dest_set(
+                self.as_ref().to_glib_none().0,
+                flags.to_glib(),
+                t_ptr,
+                t.len() as i32,
+                actions.to_glib(),
+            )
+        };
     }
 
-    fn drag_source_set(&self, start_button_mask: ModifierType, targets: &[TargetEntry], actions: DragAction) {
+    fn drag_source_set(
+        &self,
+        start_button_mask: ModifierType,
+        targets: &[TargetEntry],
+        actions: DragAction,
+    ) {
         let stashes: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
         let t: Vec<_> = stashes.iter().map(|stash| unsafe { *stash.0 }).collect();
         let t_ptr: *mut gtk_sys::GtkTargetEntry = if !t.is_empty() {
@@ -90,20 +97,24 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
         } else {
             ptr::null_mut()
         };
-        unsafe { gtk_sys::gtk_drag_source_set(self.as_ref().to_glib_none().0,
-                                          start_button_mask.to_glib(),
-                                          t_ptr,
-                                          t.len() as i32,
-                                          actions.to_glib())};
+        unsafe {
+            gtk_sys::gtk_drag_source_set(
+                self.as_ref().to_glib_none().0,
+                start_button_mask.to_glib(),
+                t_ptr,
+                t.len() as i32,
+                actions.to_glib(),
+            )
+        };
     }
 
-    fn intersect(
-        &self,
-        area: &Rectangle,
-        mut intersection: Option<&mut Rectangle>,
-    ) -> bool {
+    fn intersect(&self, area: &Rectangle, mut intersection: Option<&mut Rectangle>) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_widget_intersect(self.as_ref().to_glib_none().0, area.to_glib_none().0, intersection.to_glib_none_mut().0))
+            from_glib(gtk_sys::gtk_widget_intersect(
+                self.as_ref().to_glib_none().0,
+                area.to_glib_none().0,
+                intersection.to_glib_none_mut().0,
+            ))
         }
     }
 
@@ -122,14 +133,23 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             event: *mut gdk_sys::GdkEventAny,
             f: &F,
         ) -> gboolean
-            where T: IsA<Widget>
+        where
+            T: IsA<Widget>,
         {
-            f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
+            f(
+                &Widget::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(event),
+            )
+            .to_glib()
         }
         unsafe {
             let f: Box<F> = Box::new(f);
-            connect_raw(self.to_glib_none().0 as *mut _, b"map-event\0".as_ptr() as *mut _,
-                Some(transmute(event_any_trampoline::<Self, F> as usize)), Box::into_raw(f))
+            connect_raw(
+                self.to_glib_none().0 as *mut _,
+                b"map-event\0".as_ptr() as *mut _,
+                Some(transmute(event_any_trampoline::<Self, F> as usize)),
+                Box::into_raw(f),
+            )
         }
     }
 
@@ -142,14 +162,23 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             event: *mut gdk_sys::GdkEventAny,
             f: &F,
         ) -> gboolean
-            where T: IsA<Widget>
+        where
+            T: IsA<Widget>,
         {
-            f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
+            f(
+                &Widget::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(event),
+            )
+            .to_glib()
         }
         unsafe {
             let f: Box<F> = Box::new(f);
-            connect_raw(self.to_glib_none().0 as *mut _, b"unmap-event\0".as_ptr() as *mut _,
-                Some(transmute(event_any_trampoline::<Self, F> as usize)), Box::into_raw(f))
+            connect_raw(
+                self.to_glib_none().0 as *mut _,
+                b"unmap-event\0".as_ptr() as *mut _,
+                Some(transmute(event_any_trampoline::<Self, F> as usize)),
+                Box::into_raw(f),
+            )
         }
     }
 
@@ -207,9 +236,7 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     }
 
     fn get_events(&self) -> gdk::EventMask {
-        unsafe {
-            from_glib(gtk_sys::gtk_widget_get_events(self.as_ref().to_glib_none().0) as u32)
-        }
+        unsafe { from_glib(gtk_sys::gtk_widget_get_events(self.as_ref().to_glib_none().0) as u32) }
     }
 
     fn set_events(&self, events: gdk::EventMask) {

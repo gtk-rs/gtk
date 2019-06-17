@@ -1,6 +1,6 @@
 use glib::translate::*;
-use std::ptr;
 use gtk_sys;
+use std::ptr;
 use TargetEntry;
 use TargetList;
 
@@ -14,8 +14,6 @@ impl TargetList {
         } else {
             ptr::null_mut()
         };
-        unsafe {
-            from_glib_full(gtk_sys::gtk_target_list_new(t_ptr, t.len() as u32))
-        }
+        unsafe { from_glib_full(gtk_sys::gtk_target_list_new(t_ptr, t.len() as u32)) }
     }
 }

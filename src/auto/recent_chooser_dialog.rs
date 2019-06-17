@@ -2,6 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use gdk_pixbuf;
+use glib::object::Cast;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use gtk_sys;
+use std::fmt;
 use Align;
 use Application;
 use Bin;
@@ -14,14 +22,6 @@ use Widget;
 use Window;
 use WindowPosition;
 use WindowType;
-use gdk;
-use gdk_pixbuf;
-use glib::StaticType;
-use glib::ToValue;
-use glib::object::Cast;
-use glib::translate::*;
-use gtk_sys;
-use std::fmt;
 
 glib_wrapper! {
     pub struct RecentChooserDialog(Object<gtk_sys::GtkRecentChooserDialog, gtk_sys::GtkRecentChooserDialogClass, RecentChooserDialogClass>) @extends Dialog, Window, Bin, Container, Widget, @implements Buildable, RecentChooser;
@@ -378,7 +378,10 @@ impl RecentChooserDialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(RecentChooserDialog::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(RecentChooserDialog::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn use_header_bar(mut self, use_header_bar: i32) -> Self {

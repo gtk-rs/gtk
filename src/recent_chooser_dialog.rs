@@ -4,24 +4,23 @@
 
 use glib::object::{Cast, IsA};
 use glib::translate::*;
-use std::ptr;
 use gtk_sys;
+use std::ptr;
 use RecentChooserDialog;
 use RecentManager;
 use Widget;
 use Window;
 
 impl RecentChooserDialog {
-    pub fn new<T: IsA<Window>>(
-        title: Option<&str>,
-        parent: Option<&T>,
-    ) -> RecentChooserDialog {
+    pub fn new<T: IsA<Window>>(title: Option<&str>, parent: Option<&T>) -> RecentChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(
-                gtk_sys::gtk_recent_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
-                    ptr::null_mut()))
-                .unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_recent_chooser_dialog_new(
+                title.to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+                ptr::null_mut(),
+            ))
+            .unsafe_cast()
         }
     }
 
@@ -32,10 +31,13 @@ impl RecentChooserDialog {
     ) -> RecentChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(
-                gtk_sys::gtk_recent_chooser_dialog_new_for_manager(title.to_glib_none().0,
-                    parent.map(|p| p.as_ref()).to_glib_none().0, manager.to_glib_none().0, ptr::null_mut()))
-                .unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_recent_chooser_dialog_new_for_manager(
+                title.to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+                manager.to_glib_none().0,
+                ptr::null_mut(),
+            ))
+            .unsafe_cast()
         }
     }
 }

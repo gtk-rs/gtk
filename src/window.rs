@@ -23,6 +23,8 @@ impl<O: IsA<Window>> GtkWindowExtManual for O {
         }
         // This is a super wonderful hack to actually make this function work as expected.
         #[cfg(target_os = "macos")]
-        unsafe { macos_force_foreground_level(); }
+        unsafe {
+            macos_force_foreground_level();
+        }
     }
 }

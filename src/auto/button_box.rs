@@ -2,6 +2,21 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
+use std::boxed::Box as Box_;
+use std::fmt;
+use std::mem::transmute;
 use Align;
 use BaselinePosition;
 use Box;
@@ -12,21 +27,6 @@ use Orientable;
 use Orientation;
 use ResizeMode;
 use Widget;
-use gdk;
-use glib::StaticType;
-use glib::ToValue;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_sys;
-use gobject_sys;
-use gtk_sys;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct ButtonBox(Object<gtk_sys::GtkButtonBox, gtk_sys::GtkButtonBoxClass, ButtonBoxClass>) @extends Box, Container, Widget, @implements Buildable, Orientable;
@@ -257,7 +257,10 @@ impl ButtonBoxBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(ButtonBox::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(ButtonBox::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn layout_style(mut self, layout_style: ButtonBoxStyle) -> Self {
@@ -476,71 +479,112 @@ pub trait ButtonBoxExt: 'static {
 
     fn set_property_layout_style(&self, layout_style: ButtonBoxStyle);
 
-    fn connect_property_layout_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_layout_style_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 }
 
 impl<O: IsA<ButtonBox>> ButtonBoxExt for O {
     fn get_child_non_homogeneous<P: IsA<Widget>>(&self, child: &P) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_button_box_get_child_non_homogeneous(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_button_box_get_child_non_homogeneous(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_child_secondary<P: IsA<Widget>>(&self, child: &P) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_button_box_get_child_secondary(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_button_box_get_child_secondary(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_layout(&self) -> ButtonBoxStyle {
         unsafe {
-            from_glib(gtk_sys::gtk_button_box_get_layout(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_button_box_get_layout(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn set_child_non_homogeneous<P: IsA<Widget>>(&self, child: &P, non_homogeneous: bool) {
         unsafe {
-            gtk_sys::gtk_button_box_set_child_non_homogeneous(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, non_homogeneous.to_glib());
+            gtk_sys::gtk_button_box_set_child_non_homogeneous(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                non_homogeneous.to_glib(),
+            );
         }
     }
 
     fn set_child_secondary<P: IsA<Widget>>(&self, child: &P, is_secondary: bool) {
         unsafe {
-            gtk_sys::gtk_button_box_set_child_secondary(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, is_secondary.to_glib());
+            gtk_sys::gtk_button_box_set_child_secondary(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                is_secondary.to_glib(),
+            );
         }
     }
 
     fn set_layout(&self, layout_style: ButtonBoxStyle) {
         unsafe {
-            gtk_sys::gtk_button_box_set_layout(self.as_ref().to_glib_none().0, layout_style.to_glib());
+            gtk_sys::gtk_button_box_set_layout(
+                self.as_ref().to_glib_none().0,
+                layout_style.to_glib(),
+            );
         }
     }
 
     fn get_property_layout_style(&self) -> ButtonBoxStyle {
         unsafe {
             let mut value = Value::from_type(<ButtonBoxStyle as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"layout-style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"layout-style\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_layout_style(&self, layout_style: ButtonBoxStyle) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"layout-style\0".as_ptr() as *const _, Value::from(&layout_style).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"layout-style\0".as_ptr() as *const _,
+                Value::from(&layout_style).to_glib_none().0,
+            );
         }
     }
 
-    fn connect_property_layout_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_layout_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkButtonBox, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<ButtonBox>
+    fn connect_property_layout_style_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_layout_style_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkButtonBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ButtonBox>,
         {
             let f: &F = &*(f as *const F);
             f(&ButtonBox::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::layout-style\0".as_ptr() as *const _,
-                Some(transmute(notify_layout_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::layout-style\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_layout_style_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

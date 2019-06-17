@@ -2,25 +2,25 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Align;
-use Buildable;
-use Container;
-use ResizeMode;
-use Widget;
 use gdk;
-use glib::StaticType;
-use glib::ToValue;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
 use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use xlib;
+use Align;
+use Buildable;
+use Container;
+use ResizeMode;
+use Widget;
 
 glib_wrapper! {
     pub struct Socket(Object<gtk_sys::GtkSocket, gtk_sys::GtkSocketClass, SocketClass>) @extends Container, Widget, @implements Buildable;
@@ -33,9 +33,7 @@ glib_wrapper! {
 impl Socket {
     pub fn new() -> Socket {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_socket_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_socket_new()).unsafe_cast() }
     }
 }
 
@@ -237,7 +235,10 @@ impl SocketBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Socket::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(Socket::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn border_width(mut self, border_width: u32) -> Self {
@@ -439,42 +440,57 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
     }
 
     fn get_id(&self) -> xlib::Window {
-        unsafe {
-            gtk_sys::gtk_socket_get_id(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_socket_get_id(self.as_ref().to_glib_none().0) }
     }
 
     fn get_plug_window(&self) -> Option<gdk::Window> {
         unsafe {
-            from_glib_none(gtk_sys::gtk_socket_get_plug_window(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_socket_get_plug_window(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn connect_plug_added<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn plug_added_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer)
-            where P: IsA<Socket>
+        unsafe extern "C" fn plug_added_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSocket,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Socket>,
         {
             let f: &F = &*(f as *const F);
             f(&Socket::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"plug-added\0".as_ptr() as *const _,
-                Some(transmute(plug_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"plug-added\0".as_ptr() as *const _,
+                Some(transmute(plug_added_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_plug_removed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn plug_removed_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut gtk_sys::GtkSocket, f: glib_sys::gpointer) -> glib_sys::gboolean
-            where P: IsA<Socket>
+        unsafe extern "C" fn plug_removed_trampoline<P, F: Fn(&P) -> bool + 'static>(
+            this: *mut gtk_sys::GtkSocket,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<Socket>,
         {
             let f: &F = &*(f as *const F);
             f(&Socket::from_glib_borrow(this).unsafe_cast()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"plug-removed\0".as_ptr() as *const _,
-                Some(transmute(plug_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"plug-removed\0".as_ptr() as *const _,
+                Some(transmute(plug_removed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

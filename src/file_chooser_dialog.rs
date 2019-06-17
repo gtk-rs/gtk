@@ -2,8 +2,8 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::*;
 use glib::object::{Cast, IsA};
+use glib::translate::*;
 use gtk_sys;
 use libc::c_char;
 use std::ptr;
@@ -27,8 +27,9 @@ impl FileChooserDialog {
                 title.to_glib_none().0,
                 parent.map(|p| p.as_ref()).to_glib_none().0,
                 action.to_glib(),
-                ptr::null::<c_char>()
-            )).unsafe_cast()
+                ptr::null::<c_char>(),
+            ))
+            .unsafe_cast()
         }
     }
 
@@ -36,7 +37,7 @@ impl FileChooserDialog {
         title: Option<&str>,
         parent: Option<&T>,
         action: FileChooserAction,
-        buttons: &[(&str, ResponseType)]
+        buttons: &[(&str, ResponseType)],
     ) -> FileChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
