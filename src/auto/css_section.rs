@@ -2,10 +2,10 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use CssSectionType;
 use gio;
 use glib::translate::*;
 use gtk_sys;
+use CssSectionType;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -20,44 +20,34 @@ glib_wrapper! {
 
 impl CssSection {
     pub fn get_end_line(&self) -> u32 {
-        unsafe {
-            gtk_sys::gtk_css_section_get_end_line(self.to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_css_section_get_end_line(self.to_glib_none().0) }
     }
 
     pub fn get_end_position(&self) -> u32 {
-        unsafe {
-            gtk_sys::gtk_css_section_get_end_position(self.to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_css_section_get_end_position(self.to_glib_none().0) }
     }
 
     pub fn get_file(&self) -> Option<gio::File> {
-        unsafe {
-            from_glib_none(gtk_sys::gtk_css_section_get_file(self.to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_css_section_get_file(self.to_glib_none().0)) }
     }
 
     pub fn get_parent(&self) -> Option<CssSection> {
-        unsafe {
-            from_glib_none(gtk_sys::gtk_css_section_get_parent(self.to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_css_section_get_parent(self.to_glib_none().0)) }
     }
 
     pub fn get_section_type(&self) -> CssSectionType {
         unsafe {
-            from_glib(gtk_sys::gtk_css_section_get_section_type(self.to_glib_none().0))
+            from_glib(gtk_sys::gtk_css_section_get_section_type(
+                self.to_glib_none().0,
+            ))
         }
     }
 
     pub fn get_start_line(&self) -> u32 {
-        unsafe {
-            gtk_sys::gtk_css_section_get_start_line(self.to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_css_section_get_start_line(self.to_glib_none().0) }
     }
 
     pub fn get_start_position(&self) -> u32 {
-        unsafe {
-            gtk_sys::gtk_css_section_get_start_position(self.to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_css_section_get_start_position(self.to_glib_none().0) }
     }
 }

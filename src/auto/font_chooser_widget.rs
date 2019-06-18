@@ -2,6 +2,19 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use glib_sys;
+use gtk_sys;
+use std::boxed::Box as Box_;
+use std::fmt;
+use std::mem::transmute;
 use Align;
 use BaselinePosition;
 use Box;
@@ -11,19 +24,6 @@ use FontChooser;
 use Orientable;
 use ResizeMode;
 use Widget;
-use gdk;
-use glib::StaticType;
-use glib::ToValue;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_sys;
-use gtk_sys;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct FontChooserWidget(Object<gtk_sys::GtkFontChooserWidget, gtk_sys::GtkFontChooserWidgetClass, FontChooserWidgetClass>) @extends Box, Container, Widget, @implements Buildable, Orientable, FontChooser;
@@ -36,9 +36,7 @@ glib_wrapper! {
 impl FontChooserWidget {
     pub fn new() -> FontChooserWidget {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_font_chooser_widget_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_font_chooser_widget_new()).unsafe_cast() }
     }
 }
 
@@ -255,7 +253,10 @@ impl FontChooserWidgetBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(FontChooserWidget::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(FontChooserWidget::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn baseline_position(mut self, baseline_position: BaselinePosition) -> Self {
@@ -455,7 +456,8 @@ pub const NONE_FONT_CHOOSER_WIDGET: Option<&FontChooserWidget> = None;
 pub trait FontChooserWidgetExt: 'static {
     //fn get_property_tweak_action(&self) -> /*Ignored*/Option<gio::Action>;
 
-    fn connect_property_tweak_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_tweak_action_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 }
 
 impl<O: IsA<FontChooserWidget>> FontChooserWidgetExt for O {
@@ -467,17 +469,30 @@ impl<O: IsA<FontChooserWidget>> FontChooserWidgetExt for O {
     //    }
     //}
 
-    fn connect_property_tweak_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_tweak_action_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkFontChooserWidget, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<FontChooserWidget>
+    fn connect_property_tweak_action_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_tweak_action_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkFontChooserWidget,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<FontChooserWidget>,
         {
             let f: &F = &*(f as *const F);
             f(&FontChooserWidget::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::tweak-action\0".as_ptr() as *const _,
-                Some(transmute(notify_tweak_action_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::tweak-action\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_tweak_action_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

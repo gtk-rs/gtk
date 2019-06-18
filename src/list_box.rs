@@ -4,8 +4,8 @@
 
 use glib::object::IsA;
 use glib::translate::*;
-use std::ptr;
 use gtk_sys;
+use std::ptr;
 use ListBox;
 
 pub trait ListBoxExtManual: 'static {

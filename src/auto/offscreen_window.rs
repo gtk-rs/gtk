@@ -2,6 +2,16 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use cairo;
+use gdk;
+use gdk_pixbuf;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use gtk_sys;
+use std::fmt;
 use Align;
 use Application;
 use Bin;
@@ -12,16 +22,6 @@ use Widget;
 use Window;
 use WindowPosition;
 use WindowType;
-use cairo;
-use gdk;
-use gdk_pixbuf;
-use glib::StaticType;
-use glib::ToValue;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::translate::*;
-use gtk_sys;
-use std::fmt;
 
 glib_wrapper! {
     pub struct OffscreenWindow(Object<gtk_sys::GtkOffscreenWindow, gtk_sys::GtkOffscreenWindowClass, OffscreenWindowClass>) @extends Window, Bin, Container, Widget, @implements Buildable;
@@ -34,9 +34,7 @@ glib_wrapper! {
 impl OffscreenWindow {
     pub fn new() -> OffscreenWindow {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_offscreen_window_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_offscreen_window_new()).unsafe_cast() }
     }
 }
 
@@ -378,7 +376,10 @@ impl OffscreenWindowBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(OffscreenWindow::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(OffscreenWindow::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn accept_focus(mut self, accept_focus: bool) -> Self {
@@ -709,13 +710,17 @@ pub trait OffscreenWindowExt: 'static {
 impl<O: IsA<OffscreenWindow>> OffscreenWindowExt for O {
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
-            from_glib_full(gtk_sys::gtk_offscreen_window_get_pixbuf(self.as_ref().to_glib_none().0))
+            from_glib_full(gtk_sys::gtk_offscreen_window_get_pixbuf(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_surface(&self) -> Option<cairo::Surface> {
         unsafe {
-            from_glib_none(gtk_sys::gtk_offscreen_window_get_surface(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_offscreen_window_get_surface(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

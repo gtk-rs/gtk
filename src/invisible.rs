@@ -16,7 +16,9 @@ pub trait InvisibleExtManual: 'static {
 impl<T: IsA<Invisible>> InvisibleExtManual for T {
     fn get_screen(&self) -> Option<gdk::Screen> {
         unsafe {
-            from_glib_none(gtk_sys::gtk_invisible_get_screen(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_invisible_get_screen(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 }

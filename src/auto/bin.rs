@@ -2,13 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Buildable;
-use Container;
-use Widget;
 use glib::object::IsA;
 use glib::translate::*;
 use gtk_sys;
 use std::fmt;
+use Buildable;
+use Container;
+use Widget;
 
 glib_wrapper! {
     pub struct Bin(Object<gtk_sys::GtkBin, gtk_sys::GtkBinClass, BinClass>) @extends Container, Widget, @implements Buildable;
@@ -26,9 +26,7 @@ pub trait BinExt: 'static {
 
 impl<O: IsA<Bin>> BinExt for O {
     fn get_child(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(gtk_sys::gtk_bin_get_child(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_bin_get_child(self.as_ref().to_glib_none().0)) }
     }
 }
 

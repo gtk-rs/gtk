@@ -2,15 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::Cast;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use gtk_sys;
+use std::fmt;
 use IMContext;
 use InputHints;
 use InputPurpose;
-use glib::StaticType;
-use glib::ToValue;
-use glib::object::Cast;
-use glib::translate::*;
-use gtk_sys;
-use std::fmt;
 
 glib_wrapper! {
     pub struct IMContextSimple(Object<gtk_sys::GtkIMContextSimple, gtk_sys::GtkIMContextSimpleClass, IMContextSimpleClass>) @extends IMContext;
@@ -23,9 +23,7 @@ glib_wrapper! {
 impl IMContextSimple {
     pub fn new() -> IMContextSimple {
         assert_initialized_main_thread!();
-        unsafe {
-            IMContext::from_glib_full(gtk_sys::gtk_im_context_simple_new()).unsafe_cast()
-        }
+        unsafe { IMContext::from_glib_full(gtk_sys::gtk_im_context_simple_new()).unsafe_cast() }
     }
 }
 
@@ -56,7 +54,10 @@ impl IMContextSimpleBuilder {
         if let Some(ref input_purpose) = self.input_purpose {
             properties.push(("input-purpose", input_purpose));
         }
-        glib::Object::new(IMContextSimple::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(IMContextSimple::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn input_hints(mut self, input_hints: InputHints) -> Self {

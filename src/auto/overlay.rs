@@ -2,21 +2,21 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use gtk_sys;
+use std::fmt;
 use Align;
 use Bin;
 use Buildable;
 use Container;
 use ResizeMode;
 use Widget;
-use gdk;
-use glib::StaticType;
-use glib::ToValue;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::translate::*;
-use gtk_sys;
-use std::fmt;
 
 glib_wrapper! {
     pub struct Overlay(Object<gtk_sys::GtkOverlay, gtk_sys::GtkOverlayClass, OverlayClass>) @extends Bin, Container, Widget, @implements Buildable;
@@ -29,9 +29,7 @@ glib_wrapper! {
 impl Overlay {
     pub fn new() -> Overlay {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_overlay_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_overlay_new()).unsafe_cast() }
     }
 }
 
@@ -233,7 +231,10 @@ impl OverlayBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Overlay::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(Overlay::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn border_width(mut self, border_width: u32) -> Self {
@@ -437,42 +438,66 @@ pub trait OverlayExt: 'static {
 impl<O: IsA<Overlay>> OverlayExt for O {
     fn add_overlay<P: IsA<Widget>>(&self, widget: &P) {
         unsafe {
-            gtk_sys::gtk_overlay_add_overlay(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0);
+            gtk_sys::gtk_overlay_add_overlay(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            );
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_overlay_get_overlay_pass_through(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_overlay_get_overlay_pass_through(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, position: i32) {
         unsafe {
-            gtk_sys::gtk_overlay_reorder_overlay(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, position);
+            gtk_sys::gtk_overlay_reorder_overlay(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                position,
+            );
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P, pass_through: bool) {
         unsafe {
-            gtk_sys::gtk_overlay_set_overlay_pass_through(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, pass_through.to_glib());
+            gtk_sys::gtk_overlay_set_overlay_pass_through(
+                self.as_ref().to_glib_none().0,
+                widget.as_ref().to_glib_none().0,
+                pass_through.to_glib(),
+            );
         }
     }
 
     fn get_child_index<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"index\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"index\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_child_index<T: IsA<Widget>>(&self, item: &T, index: i32) {
         unsafe {
-            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"index\0".as_ptr() as *const _, Value::from(&index).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"index\0".as_ptr() as *const _,
+                Value::from(&index).to_glib_none().0,
+            );
         }
     }
 

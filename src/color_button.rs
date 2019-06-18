@@ -6,8 +6,8 @@ use gdk;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
-use std::mem;
 use gtk_sys;
+use std::mem;
 use ColorButton;
 use Widget;
 

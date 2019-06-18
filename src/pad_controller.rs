@@ -17,7 +17,12 @@ impl<O: IsA<PadController>> PadControllerExtManual for O {
         let n_entries = entries.len() as i32;
         let entry_strings = entries
             .iter()
-            .map(|e| (e.get_label().to_glib_none(), e.get_action_name().to_glib_none()))
+            .map(|e| {
+                (
+                    e.get_label().to_glib_none(),
+                    e.get_action_name().to_glib_none(),
+                )
+            })
             .collect::<Vec<(Stash<_, _>, Stash<_, _>)>>();
         let entries = entries
             .iter()

@@ -2,12 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Buildable;
-use RecentFilterFlags;
-use glib::GString;
 use glib::translate::*;
+use glib::GString;
 use gtk_sys;
 use std::fmt;
+use Buildable;
+use RecentFilterFlags;
 
 glib_wrapper! {
     pub struct RecentFilter(Object<gtk_sys::GtkRecentFilter, RecentFilterClass>) @implements Buildable;
@@ -20,9 +20,7 @@ glib_wrapper! {
 impl RecentFilter {
     pub fn new() -> RecentFilter {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(gtk_sys::gtk_recent_filter_new())
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_recent_filter_new()) }
     }
 
     pub fn add_age(&self, days: i32) {
@@ -33,7 +31,10 @@ impl RecentFilter {
 
     pub fn add_application(&self, application: &str) {
         unsafe {
-            gtk_sys::gtk_recent_filter_add_application(self.to_glib_none().0, application.to_glib_none().0);
+            gtk_sys::gtk_recent_filter_add_application(
+                self.to_glib_none().0,
+                application.to_glib_none().0,
+            );
         }
     }
 
@@ -49,7 +50,10 @@ impl RecentFilter {
 
     pub fn add_mime_type(&self, mime_type: &str) {
         unsafe {
-            gtk_sys::gtk_recent_filter_add_mime_type(self.to_glib_none().0, mime_type.to_glib_none().0);
+            gtk_sys::gtk_recent_filter_add_mime_type(
+                self.to_glib_none().0,
+                mime_type.to_glib_none().0,
+            );
         }
     }
 
@@ -70,15 +74,11 @@ impl RecentFilter {
     //}
 
     pub fn get_name(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(gtk_sys::gtk_recent_filter_get_name(self.to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_recent_filter_get_name(self.to_glib_none().0)) }
     }
 
     pub fn get_needed(&self) -> RecentFilterFlags {
-        unsafe {
-            from_glib(gtk_sys::gtk_recent_filter_get_needed(self.to_glib_none().0))
-        }
+        unsafe { from_glib(gtk_sys::gtk_recent_filter_get_needed(self.to_glib_none().0)) }
     }
 
     pub fn set_name(&self, name: &str) {

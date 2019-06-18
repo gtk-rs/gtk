@@ -2,17 +2,17 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use glib::object::Cast;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use gtk_sys;
+use std::fmt;
 use Align;
 use Buildable;
 use Container;
 use Widget;
-use gdk;
-use glib::StaticType;
-use glib::ToValue;
-use glib::object::Cast;
-use glib::translate::*;
-use gtk_sys;
-use std::fmt;
 
 glib_wrapper! {
     pub struct DrawingArea(Object<gtk_sys::GtkDrawingArea, gtk_sys::GtkDrawingAreaClass, DrawingAreaClass>) @extends Widget, @implements Buildable;
@@ -25,9 +25,7 @@ glib_wrapper! {
 impl DrawingArea {
     pub fn new() -> DrawingArea {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_drawing_area_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_drawing_area_new()).unsafe_cast() }
     }
 }
 
@@ -214,7 +212,10 @@ impl DrawingAreaBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(DrawingArea::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(DrawingArea::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn app_paintable(mut self, app_paintable: bool) -> Self {

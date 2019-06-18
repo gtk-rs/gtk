@@ -162,49 +162,40 @@ extern crate bitflags;
 #[macro_use]
 extern crate lazy_static;
 
-extern crate glib_sys;
-extern crate gio_sys;
-extern crate gdk_sys;
+extern crate cairo_sys;
 extern crate gdk_pixbuf_sys;
+extern crate gdk_sys;
+extern crate gio_sys;
+extern crate glib_sys;
 extern crate gobject_sys;
 extern crate gtk_sys;
-extern crate cairo_sys;
 extern crate pango_sys;
 #[macro_use]
 extern crate glib;
-extern crate gio;
+extern crate atk;
+extern crate cairo;
 extern crate gdk;
 extern crate gdk_pixbuf;
-extern crate cairo;
+extern crate gio;
 extern crate pango;
-extern crate atk;
 
 #[cfg(feature = "futures")]
 extern crate fragile;
 #[cfg(feature = "futures")]
 extern crate futures;
 
-pub use glib::{
-    Cast,
-    Continue,
-    Error,
-    IsA,
-    Object,
-    StaticType,
-    ToValue,
-    Type,
-    TypedValue,
-    Value,
-};
+pub use glib::{Cast, Continue, Error, IsA, Object, StaticType, ToValue, Type, TypedValue, Value};
 
 pub mod xlib;
 
-pub const STYLE_PROVIDER_PRIORITY_FALLBACK: u32 = gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK as u32;
+pub const STYLE_PROVIDER_PRIORITY_FALLBACK: u32 =
+    gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK as u32;
 pub const STYLE_PROVIDER_PRIORITY_THEME: u32 = gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_THEME as u32;
-pub const STYLE_PROVIDER_PRIORITY_SETTINGS: u32 = gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS as u32;
-pub const STYLE_PROVIDER_PRIORITY_APPLICATION: u32 = gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_APPLICATION as u32;
+pub const STYLE_PROVIDER_PRIORITY_SETTINGS: u32 =
+    gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS as u32;
+pub const STYLE_PROVIDER_PRIORITY_APPLICATION: u32 =
+    gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_APPLICATION as u32;
 pub const STYLE_PROVIDER_PRIORITY_USER: u32 = gtk_sys::GTK_STYLE_PROVIDER_PRIORITY_USER as u32;
-
 
 #[macro_use]
 mod rt;
@@ -219,9 +210,9 @@ mod auto;
 mod app_chooser;
 mod application;
 mod application_window;
+mod border;
 mod buildable;
 mod builder;
-mod border;
 mod cell_renderer_pixbuf;
 mod clipboard;
 mod color_button;
@@ -266,9 +257,9 @@ mod text_buffer;
 mod text_iter;
 mod tree_model_filter;
 mod tree_model_sort;
+mod tree_path;
 mod tree_row_reference;
 mod tree_sortable;
-mod tree_path;
 mod tree_store;
 mod widget;
 mod window;
@@ -279,11 +270,11 @@ pub mod subclass;
 
 pub mod prelude;
 
-pub use auto::*;
 pub use auto::functions::*;
+pub use auto::*;
+pub use prelude::*;
 pub use rt::*;
 pub use signal::*;
-pub use prelude::*;
 
 pub use gdk::Rectangle as Allocation;
 pub use gdk::Rectangle;

@@ -2,18 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use CellRenderer;
-use CellRendererMode;
-use TreePath;
 use gdk;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
 use glib_sys;
 use gobject_sys;
 use gtk_sys;
@@ -21,6 +18,9 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use CellRenderer;
+use CellRendererMode;
+use TreePath;
 
 glib_wrapper! {
     pub struct CellRendererToggle(Object<gtk_sys::GtkCellRendererToggle, gtk_sys::GtkCellRendererToggleClass, CellRendererToggleClass>) @extends CellRenderer;
@@ -151,7 +151,10 @@ impl CellRendererToggleBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererToggle::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(CellRendererToggle::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn activatable(mut self, activatable: bool) -> Self {
@@ -279,9 +282,13 @@ pub trait CellRendererToggleExt: 'static {
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_property_indicator_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_indicator_size_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_radio_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -289,150 +296,242 @@ pub trait CellRendererToggleExt: 'static {
 impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
     fn get_activatable(&self) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_cell_renderer_toggle_get_activatable(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_cell_renderer_toggle_get_activatable(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_active(&self) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_cell_renderer_toggle_get_active(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_cell_renderer_toggle_get_active(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_radio(&self) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_cell_renderer_toggle_get_radio(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_cell_renderer_toggle_get_radio(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn set_activatable(&self, setting: bool) {
         unsafe {
-            gtk_sys::gtk_cell_renderer_toggle_set_activatable(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_cell_renderer_toggle_set_activatable(
+                self.as_ref().to_glib_none().0,
+                setting.to_glib(),
+            );
         }
     }
 
     fn set_active(&self, setting: bool) {
         unsafe {
-            gtk_sys::gtk_cell_renderer_toggle_set_active(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_cell_renderer_toggle_set_active(
+                self.as_ref().to_glib_none().0,
+                setting.to_glib(),
+            );
         }
     }
 
     fn set_radio(&self, radio: bool) {
         unsafe {
-            gtk_sys::gtk_cell_renderer_toggle_set_radio(self.as_ref().to_glib_none().0, radio.to_glib());
+            gtk_sys::gtk_cell_renderer_toggle_set_radio(
+                self.as_ref().to_glib_none().0,
+                radio.to_glib(),
+            );
         }
     }
 
     fn get_property_inconsistent(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"inconsistent\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"inconsistent\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_inconsistent(&self, inconsistent: bool) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"inconsistent\0".as_ptr() as *const _, Value::from(&inconsistent).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"inconsistent\0".as_ptr() as *const _,
+                Value::from(&inconsistent).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_indicator_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"indicator-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"indicator-size\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_indicator_size(&self, indicator_size: i32) {
         unsafe {
-            gobject_sys::g_object_set_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"indicator-size\0".as_ptr() as *const _, Value::from(&indicator_size).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"indicator-size\0".as_ptr() as *const _,
+                Value::from(&indicator_size).to_glib_none().0,
+            );
         }
     }
 
     fn connect_toggled<F: Fn(&Self, TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn toggled_trampoline<P, F: Fn(&P, TreePath) + 'static>(this: *mut gtk_sys::GtkCellRendererToggle, path: *mut libc::c_char, f: glib_sys::gpointer)
-            where P: IsA<CellRendererToggle>
+        unsafe extern "C" fn toggled_trampoline<P, F: Fn(&P, TreePath) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererToggle,
+            path: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path));
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast(), path)
+            f(
+                &CellRendererToggle::from_glib_borrow(this).unsafe_cast(),
+                path,
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"toggled\0".as_ptr() as *const _,
-                Some(transmute(toggled_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"toggled\0".as_ptr() as *const _,
+                Some(transmute(toggled_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_activatable_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererToggle, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<CellRendererToggle>
+        unsafe extern "C" fn notify_activatable_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererToggle,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
             f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::activatable\0".as_ptr() as *const _,
-                Some(transmute(notify_activatable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::activatable\0".as_ptr() as *const _,
+                Some(transmute(notify_activatable_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererToggle, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<CellRendererToggle>
+        unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererToggle,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
             f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::active\0".as_ptr() as *const _,
+                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_inconsistent_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererToggle, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<CellRendererToggle>
+    fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_inconsistent_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererToggle,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
             f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::inconsistent\0".as_ptr() as *const _,
-                Some(transmute(notify_inconsistent_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::inconsistent\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_inconsistent_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_indicator_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_indicator_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererToggle, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<CellRendererToggle>
+    fn connect_property_indicator_size_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_indicator_size_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererToggle,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
             f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::indicator-size\0".as_ptr() as *const _,
-                Some(transmute(notify_indicator_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::indicator-size\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_indicator_size_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_radio_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_radio_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkCellRendererToggle, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<CellRendererToggle>
+        unsafe extern "C" fn notify_radio_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererToggle,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
             f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::radio\0".as_ptr() as *const _,
-                Some(transmute(notify_radio_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::radio\0".as_ptr() as *const _,
+                Some(transmute(notify_radio_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }

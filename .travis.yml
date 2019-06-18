@@ -52,6 +52,7 @@ before_install:
 script:
   - rustc --version
   - if [ "$TRAVIS_RUST_VERSION" == "nightly" ] && [ "$GTK" == "3.14" ]; then
+    rustup component add rustfmt;
     make regen_check;
     fi
   - ./check_init_asserts

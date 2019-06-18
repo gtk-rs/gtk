@@ -2,6 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use gio;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::object::ObjectType as ObjectType_;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use gobject_sys;
+use gtk_sys;
+use std::fmt;
 use EventController;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 use PadActionType;
@@ -9,18 +21,6 @@ use PropagationPhase;
 use Widget;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 use Window;
-use gdk;
-use gio;
-use glib::StaticType;
-use glib::ToValue;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::object::ObjectType as ObjectType_;
-use glib::translate::*;
-use gobject_sys;
-use gtk_sys;
-use std::fmt;
 
 glib_wrapper! {
     pub struct PadController(Object<gtk_sys::GtkPadController, gtk_sys::GtkPadControllerClass, PadControllerClass>) @extends EventController;
@@ -32,24 +32,50 @@ glib_wrapper! {
 
 impl PadController {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    pub fn new<P: IsA<Window>, Q: IsA<gio::ActionGroup>>(window: &P, group: &Q, pad: Option<&gdk::Device>) -> PadController {
+    pub fn new<P: IsA<Window>, Q: IsA<gio::ActionGroup>>(
+        window: &P,
+        group: &Q,
+        pad: Option<&gdk::Device>,
+    ) -> PadController {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(gtk_sys::gtk_pad_controller_new(window.as_ref().to_glib_none().0, group.as_ref().to_glib_none().0, pad.to_glib_none().0))
+            from_glib_full(gtk_sys::gtk_pad_controller_new(
+                window.as_ref().to_glib_none().0,
+                group.as_ref().to_glib_none().0,
+                pad.to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    pub fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str) {
+    pub fn set_action(
+        &self,
+        type_: PadActionType,
+        index: i32,
+        mode: i32,
+        label: &str,
+        action_name: &str,
+    ) {
         unsafe {
-            gtk_sys::gtk_pad_controller_set_action(self.to_glib_none().0, type_.to_glib(), index, mode, label.to_glib_none().0, action_name.to_glib_none().0);
+            gtk_sys::gtk_pad_controller_set_action(
+                self.to_glib_none().0,
+                type_.to_glib(),
+                index,
+                mode,
+                label.to_glib_none().0,
+                action_name.to_glib_none().0,
+            );
         }
     }
 
     pub fn get_property_action_group(&self) -> Option<gio::ActionGroup> {
         unsafe {
             let mut value = Value::from_type(<gio::ActionGroup as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"action-group\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"action-group\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
@@ -57,7 +83,11 @@ impl PadController {
     pub fn get_property_pad(&self) -> Option<gdk::Device> {
         unsafe {
             let mut value = Value::from_type(<gdk::Device as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.as_ptr() as *mut gobject_sys::GObject, b"pad\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"pad\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
@@ -94,7 +124,10 @@ impl PadControllerBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(PadController::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(PadController::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn action_group(mut self, action_group: &gio::ActionGroup) -> Self {

@@ -2,6 +2,13 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use glib::object::Cast;
+use glib::translate::*;
+use glib::StaticType;
+use glib::ToValue;
+use gtk_sys;
+use std::fmt;
 use Actionable;
 use Align;
 use Bin;
@@ -13,13 +20,6 @@ use ReliefStyle;
 use ResizeMode;
 use ToggleButton;
 use Widget;
-use gdk;
-use glib::StaticType;
-use glib::ToValue;
-use glib::object::Cast;
-use glib::translate::*;
-use gtk_sys;
-use std::fmt;
 
 glib_wrapper! {
     pub struct CheckButton(Object<gtk_sys::GtkCheckButton, gtk_sys::GtkCheckButtonClass, CheckButtonClass>) @extends ToggleButton, Button, Bin, Container, Widget, @implements Buildable, Actionable;
@@ -32,22 +32,26 @@ glib_wrapper! {
 impl CheckButton {
     pub fn new() -> CheckButton {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_check_button_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_check_button_new()).unsafe_cast() }
     }
 
     pub fn new_with_label(label: &str) -> CheckButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_check_button_new_with_label(label.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_check_button_new_with_label(
+                label.to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 
     pub fn new_with_mnemonic(label: &str) -> CheckButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_check_button_new_with_mnemonic(label.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_check_button_new_with_mnemonic(
+                label.to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 }
@@ -295,7 +299,10 @@ impl CheckButtonBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(CheckButton::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(CheckButton::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn active(mut self, active: bool) -> Self {

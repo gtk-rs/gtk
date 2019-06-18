@@ -2,6 +2,25 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use gdk_pixbuf;
+use glib;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::object::ObjectExt;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
+use std::boxed::Box as Box_;
+use std::fmt;
+use std::mem::transmute;
 use Align;
 use Application;
 use AssistantPageType;
@@ -13,25 +32,6 @@ use Widget;
 use Window;
 use WindowPosition;
 use WindowType;
-use gdk;
-use gdk_pixbuf;
-use glib;
-use glib::GString;
-use glib::StaticType;
-use glib::ToValue;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::object::ObjectExt;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_sys;
-use gobject_sys;
-use gtk_sys;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct Assistant(Object<gtk_sys::GtkAssistant, gtk_sys::GtkAssistantClass, AssistantClass>) @extends Window, Bin, Container, Widget, @implements Buildable;
@@ -44,9 +44,7 @@ glib_wrapper! {
 impl Assistant {
     pub fn new() -> Assistant {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(gtk_sys::gtk_assistant_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_assistant_new()).unsafe_cast() }
     }
 }
 
@@ -393,7 +391,10 @@ impl AssistantBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Assistant::static_type(), &properties).expect("object new").downcast().expect("downcast")
+        glib::Object::new(Assistant::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
     }
 
     pub fn use_header_bar(mut self, use_header_bar: i32) -> Self {
@@ -803,13 +804,19 @@ pub trait AssistantExt: 'static {
 impl<O: IsA<Assistant>> AssistantExt for O {
     fn add_action_widget<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
-            gtk_sys::gtk_assistant_add_action_widget(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
+            gtk_sys::gtk_assistant_add_action_widget(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn append_page<P: IsA<Widget>>(&self, page: &P) -> i32 {
         unsafe {
-            gtk_sys::gtk_assistant_append_page(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0)
+            gtk_sys::gtk_assistant_append_page(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+            )
         }
     }
 
@@ -820,51 +827,66 @@ impl<O: IsA<Assistant>> AssistantExt for O {
     }
 
     fn get_current_page(&self) -> i32 {
-        unsafe {
-            gtk_sys::gtk_assistant_get_current_page(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_assistant_get_current_page(self.as_ref().to_glib_none().0) }
     }
 
     fn get_n_pages(&self) -> i32 {
-        unsafe {
-            gtk_sys::gtk_assistant_get_n_pages(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_assistant_get_n_pages(self.as_ref().to_glib_none().0) }
     }
 
     fn get_nth_page(&self, page_num: i32) -> Option<Widget> {
         unsafe {
-            from_glib_none(gtk_sys::gtk_assistant_get_nth_page(self.as_ref().to_glib_none().0, page_num))
+            from_glib_none(gtk_sys::gtk_assistant_get_nth_page(
+                self.as_ref().to_glib_none().0,
+                page_num,
+            ))
         }
     }
 
     fn get_page_complete<P: IsA<Widget>>(&self, page: &P) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_assistant_get_page_complete(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_assistant_get_page_complete(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_page_has_padding<P: IsA<Widget>>(&self, page: &P) -> bool {
         unsafe {
-            from_glib(gtk_sys::gtk_assistant_get_page_has_padding(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_assistant_get_page_has_padding(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_page_title<P: IsA<Widget>>(&self, page: &P) -> Option<GString> {
         unsafe {
-            from_glib_none(gtk_sys::gtk_assistant_get_page_title(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_assistant_get_page_title(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_page_type<P: IsA<Widget>>(&self, page: &P) -> AssistantPageType {
         unsafe {
-            from_glib(gtk_sys::gtk_assistant_get_page_type(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_assistant_get_page_type(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn insert_page<P: IsA<Widget>>(&self, page: &P, position: i32) -> i32 {
         unsafe {
-            gtk_sys::gtk_assistant_insert_page(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0, position)
+            gtk_sys::gtk_assistant_insert_page(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+                position,
+            )
         }
     }
 
@@ -876,7 +898,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
 
     fn prepend_page<P: IsA<Widget>>(&self, page: &P) -> i32 {
         unsafe {
-            gtk_sys::gtk_assistant_prepend_page(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0)
+            gtk_sys::gtk_assistant_prepend_page(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+            )
         }
     }
 
@@ -888,7 +913,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
 
     fn remove_action_widget<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
-            gtk_sys::gtk_assistant_remove_action_widget(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
+            gtk_sys::gtk_assistant_remove_action_widget(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+            );
         }
     }
 
@@ -906,7 +934,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
 
     fn set_forward_page_func(&self, page_func: Option<Box<dyn Fn(i32) -> i32 + 'static>>) {
         let page_func_data: Box_<Option<Box<dyn Fn(i32) -> i32 + 'static>>> = Box::new(page_func);
-        unsafe extern "C" fn page_func_func(current_page: libc::c_int, data: glib_sys::gpointer) -> libc::c_int {
+        unsafe extern "C" fn page_func_func(
+            current_page: libc::c_int,
+            data: glib_sys::gpointer,
+        ) -> libc::c_int {
             let callback: &Option<Box<dyn Fn(i32) -> i32 + 'static>> = &*(data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(current_page)
@@ -915,39 +946,65 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             };
             res
         }
-        let page_func = if page_func_data.is_some() { Some(page_func_func as _) } else { None };
+        let page_func = if page_func_data.is_some() {
+            Some(page_func_func as _)
+        } else {
+            None
+        };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
-            let _callback: Box_<Option<Box<dyn Fn(i32) -> i32 + 'static>>> = Box_::from_raw(data as *mut _);
+            let _callback: Box_<Option<Box<dyn Fn(i32) -> i32 + 'static>>> =
+                Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
         let super_callback0: Box_<Option<Box<dyn Fn(i32) -> i32 + 'static>>> = page_func_data;
         unsafe {
-            gtk_sys::gtk_assistant_set_forward_page_func(self.as_ref().to_glib_none().0, page_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+            gtk_sys::gtk_assistant_set_forward_page_func(
+                self.as_ref().to_glib_none().0,
+                page_func,
+                Box::into_raw(super_callback0) as *mut _,
+                destroy_call3,
+            );
         }
     }
 
     fn set_page_complete<P: IsA<Widget>>(&self, page: &P, complete: bool) {
         unsafe {
-            gtk_sys::gtk_assistant_set_page_complete(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0, complete.to_glib());
+            gtk_sys::gtk_assistant_set_page_complete(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+                complete.to_glib(),
+            );
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_page_has_padding<P: IsA<Widget>>(&self, page: &P, has_padding: bool) {
         unsafe {
-            gtk_sys::gtk_assistant_set_page_has_padding(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0, has_padding.to_glib());
+            gtk_sys::gtk_assistant_set_page_has_padding(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+                has_padding.to_glib(),
+            );
         }
     }
 
     fn set_page_title<P: IsA<Widget>>(&self, page: &P, title: &str) {
         unsafe {
-            gtk_sys::gtk_assistant_set_page_title(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0, title.to_glib_none().0);
+            gtk_sys::gtk_assistant_set_page_title(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+                title.to_glib_none().0,
+            );
         }
     }
 
     fn set_page_type<P: IsA<Widget>>(&self, page: &P, type_: AssistantPageType) {
         unsafe {
-            gtk_sys::gtk_assistant_set_page_type(self.as_ref().to_glib_none().0, page.as_ref().to_glib_none().0, type_.to_glib());
+            gtk_sys::gtk_assistant_set_page_type(
+                self.as_ref().to_glib_none().0,
+                page.as_ref().to_glib_none().0,
+                type_.to_glib(),
+            );
         }
     }
 
@@ -960,7 +1017,11 @@ impl<O: IsA<Assistant>> AssistantExt for O {
     fn get_property_use_header_bar(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"use-header-bar\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"use-header-bar\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -968,130 +1029,213 @@ impl<O: IsA<Assistant>> AssistantExt for O {
     fn get_child_complete<T: IsA<Widget>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"complete\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"complete\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_child_complete<T: IsA<Widget>>(&self, item: &T, complete: bool) {
         unsafe {
-            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"complete\0".as_ptr() as *const _, Value::from(&complete).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"complete\0".as_ptr() as *const _,
+                Value::from(&complete).to_glib_none().0,
+            );
         }
     }
 
     fn get_child_has_padding<T: IsA<Widget>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"has-padding\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"has-padding\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_child_has_padding<T: IsA<Widget>>(&self, item: &T, has_padding: bool) {
         unsafe {
-            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"has-padding\0".as_ptr() as *const _, Value::from(&has_padding).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"has-padding\0".as_ptr() as *const _,
+                Value::from(&has_padding).to_glib_none().0,
+            );
         }
     }
 
     fn get_child_page_type<T: IsA<Widget>>(&self, item: &T) -> AssistantPageType {
         unsafe {
             let mut value = Value::from_type(<AssistantPageType as StaticType>::static_type());
-            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"page-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"page-type\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_child_page_type<T: IsA<Widget>>(&self, item: &T, page_type: AssistantPageType) {
         unsafe {
-            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"page-type\0".as_ptr() as *const _, Value::from(&page_type).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"page-type\0".as_ptr() as *const _,
+                Value::from(&page_type).to_glib_none().0,
+            );
         }
     }
 
     fn get_child_title<T: IsA<Widget>>(&self, item: &T) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gtk_sys::gtk_container_child_get_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gtk_sys::gtk_container_child_get_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"title\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
     fn set_child_title<T: IsA<Widget>>(&self, item: &T, title: Option<&str>) {
         unsafe {
-            gtk_sys::gtk_container_child_set_property(self.to_glib_none().0 as *mut gtk_sys::GtkContainer, item.to_glib_none().0 as *mut _, b"title\0".as_ptr() as *const _, Value::from(title).to_glib_none().0);
+            gtk_sys::gtk_container_child_set_property(
+                self.to_glib_none().0 as *mut gtk_sys::GtkContainer,
+                item.to_glib_none().0 as *mut _,
+                b"title\0".as_ptr() as *const _,
+                Value::from(title).to_glib_none().0,
+            );
         }
     }
 
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAssistant, f: glib_sys::gpointer)
-            where P: IsA<Assistant>
+        unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkAssistant,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
             f(&Assistant::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"apply\0".as_ptr() as *const _,
-                Some(transmute(apply_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"apply\0".as_ptr() as *const _,
+                Some(transmute(apply_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_cancel<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAssistant, f: glib_sys::gpointer)
-            where P: IsA<Assistant>
+        unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkAssistant,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
             f(&Assistant::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"cancel\0".as_ptr() as *const _,
-                Some(transmute(cancel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"cancel\0".as_ptr() as *const _,
+                Some(transmute(cancel_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAssistant, f: glib_sys::gpointer)
-            where P: IsA<Assistant>
+        unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkAssistant,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
             f(&Assistant::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"close\0".as_ptr() as *const _,
-                Some(transmute(close_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"close\0".as_ptr() as *const _,
+                Some(transmute(close_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_escape<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn escape_trampoline<P, F: Fn(&P) + 'static>(this: *mut gtk_sys::GtkAssistant, f: glib_sys::gpointer)
-            where P: IsA<Assistant>
+        unsafe extern "C" fn escape_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkAssistant,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
             f(&Assistant::from_glib_borrow(this).unsafe_cast())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"escape\0".as_ptr() as *const _,
-                Some(transmute(escape_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"escape\0".as_ptr() as *const _,
+                Some(transmute(escape_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_escape(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject).emit("escape", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("escape", &[])
+                .unwrap()
+        };
     }
 
     fn connect_prepare<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn prepare_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut gtk_sys::GtkAssistant, page: *mut gtk_sys::GtkWidget, f: glib_sys::gpointer)
-            where P: IsA<Assistant>
+        unsafe extern "C" fn prepare_trampoline<P, F: Fn(&P, &Widget) + 'static>(
+            this: *mut gtk_sys::GtkAssistant,
+            page: *mut gtk_sys::GtkWidget,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page))
+            f(
+                &Assistant::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(page),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"prepare\0".as_ptr() as *const _,
-                Some(transmute(prepare_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"prepare\0".as_ptr() as *const _,
+                Some(transmute(prepare_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }
