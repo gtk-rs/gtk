@@ -9,27 +9,25 @@ use PadActionEntry;
 use PadController;
 
 pub trait PadControllerExtManual: 'static {
-    #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_action_entries(&self, entries: &[PadActionEntry]);
 }
 
 impl<O: IsA<PadController>> PadControllerExtManual for O {
-    #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_action_entries(&self, entries: &[PadActionEntry]) {
         let n_entries = entries.len() as i32;
         let entry_strings = entries
             .iter()
-            .map(|e| (CString::new(&e.label), CString::new(&e.action_name)))
-            .collect::<Vec<_>>();
+            .map(|e| (e.get_label().to_glib_none(), e.get_action_name().to_glib_none()))
+            .collect::<Vec<(Stash<_, _>, Stash<_, _>)>>();
         let entries = entries
             .iter()
             .zip(entry_strings.iter())
             .map(|(e, (label, action_name))| gtk_sys::GtkPadActionEntry {
-                type_: e.type_.to_glib(),
-                index: e.index,
-                mode: e.mode,
-                label: label.as_ptr() as *mut _,
-                action_name: action_name.as_ptr() as *mut _,
+                type_: e.get_type().to_glib(),
+                index: e.get_index(),
+                mode: e.get_mode(),
+                label: label.0,
+                action_name: action_name.0,
             })
             .collect::<Vec<_>>();
         unsafe {
