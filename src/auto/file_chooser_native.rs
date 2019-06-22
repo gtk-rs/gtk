@@ -2,46 +2,157 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
+use std::boxed::Box as Box_;
+use std::fmt;
+use std::mem::transmute;
 use FileChooser;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use FileChooserAction;
 use NativeDialog;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use Window;
-use ffi;
-use glib::GString;
-use glib::StaticType;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct FileChooserNative(Object<ffi::GtkFileChooserNative, ffi::GtkFileChooserNativeClass, FileChooserNativeClass>) @extends NativeDialog, @implements FileChooser;
+    pub struct FileChooserNative(Object<gtk_sys::GtkFileChooserNative, gtk_sys::GtkFileChooserNativeClass, FileChooserNativeClass>) @extends NativeDialog, @implements FileChooser;
 
     match fn {
-        get_type => || ffi::gtk_file_chooser_native_get_type(),
+        get_type => || gtk_sys::gtk_file_chooser_native_get_type(),
     }
 }
 
 impl FileChooserNative {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    pub fn new<'a, 'b, 'c, 'd, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>, S: Into<Option<&'c str>>, T: Into<Option<&'d str>>>(title: P, parent: R, action: FileChooserAction, accept_label: S, cancel_label: T) -> FileChooserNative {
+    pub fn new<P: IsA<Window>>(
+        title: Option<&str>,
+        parent: Option<&P>,
+        action: FileChooserAction,
+        accept_label: Option<&str>,
+        cancel_label: Option<&str>,
+    ) -> FileChooserNative {
         assert_initialized_main_thread!();
-        let title = title.into();
-        let parent = parent.into();
-        let accept_label = accept_label.into();
-        let cancel_label = cancel_label.into();
         unsafe {
-            from_glib_full(ffi::gtk_file_chooser_native_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0, action.to_glib(), accept_label.to_glib_none().0, cancel_label.to_glib_none().0))
+            from_glib_full(gtk_sys::gtk_file_chooser_native_new(
+                title.to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+                action.to_glib(),
+                accept_label.to_glib_none().0,
+                cancel_label.to_glib_none().0,
+            ))
         }
+    }
+}
+
+pub struct FileChooserNativeBuilder {
+    accept_label: Option<String>,
+    cancel_label: Option<String>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    modal: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    title: Option<String>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    transient_for: Option<Window>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    visible: Option<bool>,
+}
+
+impl FileChooserNativeBuilder {
+    pub fn new() -> Self {
+        Self {
+            accept_label: None,
+            cancel_label: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            modal: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            title: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            transient_for: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            visible: None,
+        }
+    }
+
+    pub fn build(self) -> FileChooserNative {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref accept_label) = self.accept_label {
+            properties.push(("accept-label", accept_label));
+        }
+        if let Some(ref cancel_label) = self.cancel_label {
+            properties.push(("cancel-label", cancel_label));
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref modal) = self.modal {
+                properties.push(("modal", modal));
+            }
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref title) = self.title {
+                properties.push(("title", title));
+            }
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref transient_for) = self.transient_for {
+                properties.push(("transient-for", transient_for));
+            }
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref visible) = self.visible {
+                properties.push(("visible", visible));
+            }
+        }
+        glib::Object::new(FileChooserNative::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
+
+    pub fn accept_label(mut self, accept_label: &str) -> Self {
+        self.accept_label = Some(accept_label.to_string());
+        self
+    }
+
+    pub fn cancel_label(mut self, cancel_label: &str) -> Self {
+        self.cancel_label = Some(cancel_label.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn modal(mut self, modal: bool) -> Self {
+        self.modal = Some(modal);
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn title(mut self, title: &str) -> Self {
+        self.title = Some(title.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn transient_for(mut self, transient_for: &Window) -> Self {
+        self.transient_for = Some(transient_for.clone());
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
     }
 }
 
@@ -55,112 +166,162 @@ pub trait FileChooserNativeExt: 'static {
     fn get_cancel_label(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P);
+    fn set_accept_label(&self, accept_label: Option<&str>);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P);
+    fn set_cancel_label(&self, cancel_label: Option<&str>);
 
     fn get_property_accept_label(&self) -> Option<GString>;
 
-    fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P);
+    fn set_property_accept_label(&self, accept_label: Option<&str>);
 
     fn get_property_cancel_label(&self) -> Option<GString>;
 
-    fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P);
+    fn set_property_cancel_label(&self, cancel_label: Option<&str>);
 
-    fn connect_property_accept_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_accept_label_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_property_cancel_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_cancel_label_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 }
 
 impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_accept_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_file_chooser_native_get_accept_label(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_file_chooser_native_get_accept_label(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_cancel_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_file_chooser_native_get_cancel_label(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_file_chooser_native_get_cancel_label(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P) {
-        let accept_label = accept_label.into();
+    fn set_accept_label(&self, accept_label: Option<&str>) {
         unsafe {
-            ffi::gtk_file_chooser_native_set_accept_label(self.as_ref().to_glib_none().0, accept_label.to_glib_none().0);
+            gtk_sys::gtk_file_chooser_native_set_accept_label(
+                self.as_ref().to_glib_none().0,
+                accept_label.to_glib_none().0,
+            );
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P) {
-        let cancel_label = cancel_label.into();
+    fn set_cancel_label(&self, cancel_label: Option<&str>) {
         unsafe {
-            ffi::gtk_file_chooser_native_set_cancel_label(self.as_ref().to_glib_none().0, cancel_label.to_glib_none().0);
+            gtk_sys::gtk_file_chooser_native_set_cancel_label(
+                self.as_ref().to_glib_none().0,
+                cancel_label.to_glib_none().0,
+            );
         }
     }
 
     fn get_property_accept_label(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accept-label\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"accept-label\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P) {
-        let accept_label = accept_label.into();
+    fn set_property_accept_label(&self, accept_label: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accept-label\0".as_ptr() as *const _, Value::from(accept_label).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"accept-label\0".as_ptr() as *const _,
+                Value::from(accept_label).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_cancel_label(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cancel-label\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"cancel-label\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P) {
-        let cancel_label = cancel_label.into();
+    fn set_property_cancel_label(&self, cancel_label: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cancel-label\0".as_ptr() as *const _, Value::from(cancel_label).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"cancel-label\0".as_ptr() as *const _,
+                Value::from(cancel_label).to_glib_none().0,
+            );
         }
     }
 
-    fn connect_property_accept_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_accept_label_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_accept_label_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkFileChooserNative,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<FileChooserNative>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::accept-label\0".as_ptr() as *const _,
-                Some(transmute(notify_accept_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::accept-label\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_accept_label_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_cancel_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_cancel_label_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_cancel_label_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkFileChooserNative,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<FileChooserNative>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::cancel-label\0".as_ptr() as *const _,
-                Some(transmute(notify_cancel_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::cancel-label\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_cancel_label_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
-}
-
-unsafe extern "C" fn notify_accept_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserNative, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<FileChooserNative> {
-    let f: &F = transmute(f);
-    f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_cancel_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserNative, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<FileChooserNative> {
-    let f: &F = transmute(f);
-    f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for FileChooserNative {

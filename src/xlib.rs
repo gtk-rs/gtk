@@ -2,6 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use ffi;
+use gtk_sys;
 
-pub type Window = ffi::xlib::Window;
+pub type Window = gtk_sys::xlib::Window;

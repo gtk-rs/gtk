@@ -2,9 +2,35 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use gdk;
+use gdk_pixbuf;
+use gdk_sys;
+use gio;
+use glib;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::object::ObjectExt;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
+use libc;
+use pango;
+use std::boxed::Box as Box_;
+use std::fmt;
+use std::mem;
+use std::mem::transmute;
 use Adjustment;
+use Align;
 use Buildable;
 use CellEditable;
+use Container;
 use DeleteType;
 use Editable;
 use EntryBuffer;
@@ -17,50 +43,28 @@ use MovementStep;
 use ShadowType;
 use TargetList;
 use Widget;
-use ffi;
-use gdk;
-use gdk_ffi;
-use gdk_pixbuf;
-use gio;
-use glib;
-use glib::GString;
-use glib::StaticType;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::object::ObjectExt;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use libc;
-use pango;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem;
-use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Entry(Object<ffi::GtkEntry, ffi::GtkEntryClass, EntryClass>) @extends Widget, @implements Buildable, CellEditable, Editable;
+    pub struct Entry(Object<gtk_sys::GtkEntry, gtk_sys::GtkEntryClass, EntryClass>) @extends Widget, @implements Buildable, CellEditable, Editable;
 
     match fn {
-        get_type => || ffi::gtk_entry_get_type(),
+        get_type => || gtk_sys::gtk_entry_get_type(),
     }
 }
 
 impl Entry {
     pub fn new() -> Entry {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_entry_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_entry_new()).unsafe_cast() }
     }
 
     pub fn new_with_buffer<P: IsA<EntryBuffer>>(buffer: &P) -> Entry {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_entry_new_with_buffer(buffer.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_entry_new_with_buffer(
+                buffer.as_ref().to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 }
@@ -68,6 +72,764 @@ impl Entry {
 impl Default for Entry {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct EntryBuilder {
+    activates_default: Option<bool>,
+    attributes: Option<pango::AttrList>,
+    buffer: Option<EntryBuffer>,
+    caps_lock_warning: Option<bool>,
+    completion: Option<EntryCompletion>,
+    editable: Option<bool>,
+    enable_emoji_completion: Option<bool>,
+    has_frame: Option<bool>,
+    im_module: Option<String>,
+    input_hints: Option<InputHints>,
+    input_purpose: Option<InputPurpose>,
+    invisible_char: Option<u32>,
+    invisible_char_set: Option<bool>,
+    max_length: Option<i32>,
+    max_width_chars: Option<i32>,
+    overwrite_mode: Option<bool>,
+    placeholder_text: Option<String>,
+    populate_all: Option<bool>,
+    primary_icon_activatable: Option<bool>,
+    primary_icon_gicon: Option<gio::Icon>,
+    primary_icon_name: Option<String>,
+    primary_icon_pixbuf: Option<gdk_pixbuf::Pixbuf>,
+    primary_icon_sensitive: Option<bool>,
+    primary_icon_tooltip_markup: Option<String>,
+    primary_icon_tooltip_text: Option<String>,
+    progress_fraction: Option<f64>,
+    progress_pulse_step: Option<f64>,
+    secondary_icon_activatable: Option<bool>,
+    secondary_icon_gicon: Option<gio::Icon>,
+    secondary_icon_name: Option<String>,
+    secondary_icon_pixbuf: Option<gdk_pixbuf::Pixbuf>,
+    secondary_icon_sensitive: Option<bool>,
+    secondary_icon_tooltip_markup: Option<String>,
+    secondary_icon_tooltip_text: Option<String>,
+    shadow_type: Option<ShadowType>,
+    show_emoji_icon: Option<bool>,
+    text: Option<String>,
+    truncate_multiline: Option<bool>,
+    visibility: Option<bool>,
+    width_chars: Option<i32>,
+    xalign: Option<f32>,
+    app_paintable: Option<bool>,
+    can_default: Option<bool>,
+    can_focus: Option<bool>,
+    events: Option<gdk::EventMask>,
+    expand: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    focus_on_click: Option<bool>,
+    halign: Option<Align>,
+    has_default: Option<bool>,
+    has_focus: Option<bool>,
+    has_tooltip: Option<bool>,
+    height_request: Option<i32>,
+    hexpand: Option<bool>,
+    hexpand_set: Option<bool>,
+    is_focus: Option<bool>,
+    margin: Option<i32>,
+    margin_bottom: Option<i32>,
+    margin_end: Option<i32>,
+    margin_start: Option<i32>,
+    margin_top: Option<i32>,
+    name: Option<String>,
+    no_show_all: Option<bool>,
+    opacity: Option<f64>,
+    parent: Option<Container>,
+    receives_default: Option<bool>,
+    sensitive: Option<bool>,
+    //style: /*Unknown type*/,
+    tooltip_markup: Option<String>,
+    tooltip_text: Option<String>,
+    valign: Option<Align>,
+    vexpand: Option<bool>,
+    vexpand_set: Option<bool>,
+    visible: Option<bool>,
+    width_request: Option<i32>,
+}
+
+impl EntryBuilder {
+    pub fn new() -> Self {
+        Self {
+            activates_default: None,
+            attributes: None,
+            buffer: None,
+            caps_lock_warning: None,
+            completion: None,
+            editable: None,
+            enable_emoji_completion: None,
+            has_frame: None,
+            im_module: None,
+            input_hints: None,
+            input_purpose: None,
+            invisible_char: None,
+            invisible_char_set: None,
+            max_length: None,
+            max_width_chars: None,
+            overwrite_mode: None,
+            placeholder_text: None,
+            populate_all: None,
+            primary_icon_activatable: None,
+            primary_icon_gicon: None,
+            primary_icon_name: None,
+            primary_icon_pixbuf: None,
+            primary_icon_sensitive: None,
+            primary_icon_tooltip_markup: None,
+            primary_icon_tooltip_text: None,
+            progress_fraction: None,
+            progress_pulse_step: None,
+            secondary_icon_activatable: None,
+            secondary_icon_gicon: None,
+            secondary_icon_name: None,
+            secondary_icon_pixbuf: None,
+            secondary_icon_sensitive: None,
+            secondary_icon_tooltip_markup: None,
+            secondary_icon_tooltip_text: None,
+            shadow_type: None,
+            show_emoji_icon: None,
+            text: None,
+            truncate_multiline: None,
+            visibility: None,
+            width_chars: None,
+            xalign: None,
+            app_paintable: None,
+            can_default: None,
+            can_focus: None,
+            events: None,
+            expand: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            focus_on_click: None,
+            halign: None,
+            has_default: None,
+            has_focus: None,
+            has_tooltip: None,
+            height_request: None,
+            hexpand: None,
+            hexpand_set: None,
+            is_focus: None,
+            margin: None,
+            margin_bottom: None,
+            margin_end: None,
+            margin_start: None,
+            margin_top: None,
+            name: None,
+            no_show_all: None,
+            opacity: None,
+            parent: None,
+            receives_default: None,
+            sensitive: None,
+            tooltip_markup: None,
+            tooltip_text: None,
+            valign: None,
+            vexpand: None,
+            vexpand_set: None,
+            visible: None,
+            width_request: None,
+        }
+    }
+
+    pub fn build(self) -> Entry {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref activates_default) = self.activates_default {
+            properties.push(("activates-default", activates_default));
+        }
+        if let Some(ref attributes) = self.attributes {
+            properties.push(("attributes", attributes));
+        }
+        if let Some(ref buffer) = self.buffer {
+            properties.push(("buffer", buffer));
+        }
+        if let Some(ref caps_lock_warning) = self.caps_lock_warning {
+            properties.push(("caps-lock-warning", caps_lock_warning));
+        }
+        if let Some(ref completion) = self.completion {
+            properties.push(("completion", completion));
+        }
+        if let Some(ref editable) = self.editable {
+            properties.push(("editable", editable));
+        }
+        if let Some(ref enable_emoji_completion) = self.enable_emoji_completion {
+            properties.push(("enable-emoji-completion", enable_emoji_completion));
+        }
+        if let Some(ref has_frame) = self.has_frame {
+            properties.push(("has-frame", has_frame));
+        }
+        if let Some(ref im_module) = self.im_module {
+            properties.push(("im-module", im_module));
+        }
+        if let Some(ref input_hints) = self.input_hints {
+            properties.push(("input-hints", input_hints));
+        }
+        if let Some(ref input_purpose) = self.input_purpose {
+            properties.push(("input-purpose", input_purpose));
+        }
+        if let Some(ref invisible_char) = self.invisible_char {
+            properties.push(("invisible-char", invisible_char));
+        }
+        if let Some(ref invisible_char_set) = self.invisible_char_set {
+            properties.push(("invisible-char-set", invisible_char_set));
+        }
+        if let Some(ref max_length) = self.max_length {
+            properties.push(("max-length", max_length));
+        }
+        if let Some(ref max_width_chars) = self.max_width_chars {
+            properties.push(("max-width-chars", max_width_chars));
+        }
+        if let Some(ref overwrite_mode) = self.overwrite_mode {
+            properties.push(("overwrite-mode", overwrite_mode));
+        }
+        if let Some(ref placeholder_text) = self.placeholder_text {
+            properties.push(("placeholder-text", placeholder_text));
+        }
+        if let Some(ref populate_all) = self.populate_all {
+            properties.push(("populate-all", populate_all));
+        }
+        if let Some(ref primary_icon_activatable) = self.primary_icon_activatable {
+            properties.push(("primary-icon-activatable", primary_icon_activatable));
+        }
+        if let Some(ref primary_icon_gicon) = self.primary_icon_gicon {
+            properties.push(("primary-icon-gicon", primary_icon_gicon));
+        }
+        if let Some(ref primary_icon_name) = self.primary_icon_name {
+            properties.push(("primary-icon-name", primary_icon_name));
+        }
+        if let Some(ref primary_icon_pixbuf) = self.primary_icon_pixbuf {
+            properties.push(("primary-icon-pixbuf", primary_icon_pixbuf));
+        }
+        if let Some(ref primary_icon_sensitive) = self.primary_icon_sensitive {
+            properties.push(("primary-icon-sensitive", primary_icon_sensitive));
+        }
+        if let Some(ref primary_icon_tooltip_markup) = self.primary_icon_tooltip_markup {
+            properties.push(("primary-icon-tooltip-markup", primary_icon_tooltip_markup));
+        }
+        if let Some(ref primary_icon_tooltip_text) = self.primary_icon_tooltip_text {
+            properties.push(("primary-icon-tooltip-text", primary_icon_tooltip_text));
+        }
+        if let Some(ref progress_fraction) = self.progress_fraction {
+            properties.push(("progress-fraction", progress_fraction));
+        }
+        if let Some(ref progress_pulse_step) = self.progress_pulse_step {
+            properties.push(("progress-pulse-step", progress_pulse_step));
+        }
+        if let Some(ref secondary_icon_activatable) = self.secondary_icon_activatable {
+            properties.push(("secondary-icon-activatable", secondary_icon_activatable));
+        }
+        if let Some(ref secondary_icon_gicon) = self.secondary_icon_gicon {
+            properties.push(("secondary-icon-gicon", secondary_icon_gicon));
+        }
+        if let Some(ref secondary_icon_name) = self.secondary_icon_name {
+            properties.push(("secondary-icon-name", secondary_icon_name));
+        }
+        if let Some(ref secondary_icon_pixbuf) = self.secondary_icon_pixbuf {
+            properties.push(("secondary-icon-pixbuf", secondary_icon_pixbuf));
+        }
+        if let Some(ref secondary_icon_sensitive) = self.secondary_icon_sensitive {
+            properties.push(("secondary-icon-sensitive", secondary_icon_sensitive));
+        }
+        if let Some(ref secondary_icon_tooltip_markup) = self.secondary_icon_tooltip_markup {
+            properties.push((
+                "secondary-icon-tooltip-markup",
+                secondary_icon_tooltip_markup,
+            ));
+        }
+        if let Some(ref secondary_icon_tooltip_text) = self.secondary_icon_tooltip_text {
+            properties.push(("secondary-icon-tooltip-text", secondary_icon_tooltip_text));
+        }
+        if let Some(ref shadow_type) = self.shadow_type {
+            properties.push(("shadow-type", shadow_type));
+        }
+        if let Some(ref show_emoji_icon) = self.show_emoji_icon {
+            properties.push(("show-emoji-icon", show_emoji_icon));
+        }
+        if let Some(ref text) = self.text {
+            properties.push(("text", text));
+        }
+        if let Some(ref truncate_multiline) = self.truncate_multiline {
+            properties.push(("truncate-multiline", truncate_multiline));
+        }
+        if let Some(ref visibility) = self.visibility {
+            properties.push(("visibility", visibility));
+        }
+        if let Some(ref width_chars) = self.width_chars {
+            properties.push(("width-chars", width_chars));
+        }
+        if let Some(ref xalign) = self.xalign {
+            properties.push(("xalign", xalign));
+        }
+        if let Some(ref app_paintable) = self.app_paintable {
+            properties.push(("app-paintable", app_paintable));
+        }
+        if let Some(ref can_default) = self.can_default {
+            properties.push(("can-default", can_default));
+        }
+        if let Some(ref can_focus) = self.can_focus {
+            properties.push(("can-focus", can_focus));
+        }
+        if let Some(ref events) = self.events {
+            properties.push(("events", events));
+        }
+        if let Some(ref expand) = self.expand {
+            properties.push(("expand", expand));
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref focus_on_click) = self.focus_on_click {
+                properties.push(("focus-on-click", focus_on_click));
+            }
+        }
+        if let Some(ref halign) = self.halign {
+            properties.push(("halign", halign));
+        }
+        if let Some(ref has_default) = self.has_default {
+            properties.push(("has-default", has_default));
+        }
+        if let Some(ref has_focus) = self.has_focus {
+            properties.push(("has-focus", has_focus));
+        }
+        if let Some(ref has_tooltip) = self.has_tooltip {
+            properties.push(("has-tooltip", has_tooltip));
+        }
+        if let Some(ref height_request) = self.height_request {
+            properties.push(("height-request", height_request));
+        }
+        if let Some(ref hexpand) = self.hexpand {
+            properties.push(("hexpand", hexpand));
+        }
+        if let Some(ref hexpand_set) = self.hexpand_set {
+            properties.push(("hexpand-set", hexpand_set));
+        }
+        if let Some(ref is_focus) = self.is_focus {
+            properties.push(("is-focus", is_focus));
+        }
+        if let Some(ref margin) = self.margin {
+            properties.push(("margin", margin));
+        }
+        if let Some(ref margin_bottom) = self.margin_bottom {
+            properties.push(("margin-bottom", margin_bottom));
+        }
+        if let Some(ref margin_end) = self.margin_end {
+            properties.push(("margin-end", margin_end));
+        }
+        if let Some(ref margin_start) = self.margin_start {
+            properties.push(("margin-start", margin_start));
+        }
+        if let Some(ref margin_top) = self.margin_top {
+            properties.push(("margin-top", margin_top));
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+        if let Some(ref no_show_all) = self.no_show_all {
+            properties.push(("no-show-all", no_show_all));
+        }
+        if let Some(ref opacity) = self.opacity {
+            properties.push(("opacity", opacity));
+        }
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref receives_default) = self.receives_default {
+            properties.push(("receives-default", receives_default));
+        }
+        if let Some(ref sensitive) = self.sensitive {
+            properties.push(("sensitive", sensitive));
+        }
+        if let Some(ref tooltip_markup) = self.tooltip_markup {
+            properties.push(("tooltip-markup", tooltip_markup));
+        }
+        if let Some(ref tooltip_text) = self.tooltip_text {
+            properties.push(("tooltip-text", tooltip_text));
+        }
+        if let Some(ref valign) = self.valign {
+            properties.push(("valign", valign));
+        }
+        if let Some(ref vexpand) = self.vexpand {
+            properties.push(("vexpand", vexpand));
+        }
+        if let Some(ref vexpand_set) = self.vexpand_set {
+            properties.push(("vexpand-set", vexpand_set));
+        }
+        if let Some(ref visible) = self.visible {
+            properties.push(("visible", visible));
+        }
+        if let Some(ref width_request) = self.width_request {
+            properties.push(("width-request", width_request));
+        }
+        glib::Object::new(Entry::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
+
+    pub fn activates_default(mut self, activates_default: bool) -> Self {
+        self.activates_default = Some(activates_default);
+        self
+    }
+
+    pub fn attributes(mut self, attributes: &pango::AttrList) -> Self {
+        self.attributes = Some(attributes.clone());
+        self
+    }
+
+    pub fn buffer(mut self, buffer: &EntryBuffer) -> Self {
+        self.buffer = Some(buffer.clone());
+        self
+    }
+
+    pub fn caps_lock_warning(mut self, caps_lock_warning: bool) -> Self {
+        self.caps_lock_warning = Some(caps_lock_warning);
+        self
+    }
+
+    pub fn completion(mut self, completion: &EntryCompletion) -> Self {
+        self.completion = Some(completion.clone());
+        self
+    }
+
+    pub fn editable(mut self, editable: bool) -> Self {
+        self.editable = Some(editable);
+        self
+    }
+
+    pub fn enable_emoji_completion(mut self, enable_emoji_completion: bool) -> Self {
+        self.enable_emoji_completion = Some(enable_emoji_completion);
+        self
+    }
+
+    pub fn has_frame(mut self, has_frame: bool) -> Self {
+        self.has_frame = Some(has_frame);
+        self
+    }
+
+    pub fn im_module(mut self, im_module: &str) -> Self {
+        self.im_module = Some(im_module.to_string());
+        self
+    }
+
+    pub fn input_hints(mut self, input_hints: InputHints) -> Self {
+        self.input_hints = Some(input_hints);
+        self
+    }
+
+    pub fn input_purpose(mut self, input_purpose: InputPurpose) -> Self {
+        self.input_purpose = Some(input_purpose);
+        self
+    }
+
+    pub fn invisible_char(mut self, invisible_char: u32) -> Self {
+        self.invisible_char = Some(invisible_char);
+        self
+    }
+
+    pub fn invisible_char_set(mut self, invisible_char_set: bool) -> Self {
+        self.invisible_char_set = Some(invisible_char_set);
+        self
+    }
+
+    pub fn max_length(mut self, max_length: i32) -> Self {
+        self.max_length = Some(max_length);
+        self
+    }
+
+    pub fn max_width_chars(mut self, max_width_chars: i32) -> Self {
+        self.max_width_chars = Some(max_width_chars);
+        self
+    }
+
+    pub fn overwrite_mode(mut self, overwrite_mode: bool) -> Self {
+        self.overwrite_mode = Some(overwrite_mode);
+        self
+    }
+
+    pub fn placeholder_text(mut self, placeholder_text: &str) -> Self {
+        self.placeholder_text = Some(placeholder_text.to_string());
+        self
+    }
+
+    pub fn populate_all(mut self, populate_all: bool) -> Self {
+        self.populate_all = Some(populate_all);
+        self
+    }
+
+    pub fn primary_icon_activatable(mut self, primary_icon_activatable: bool) -> Self {
+        self.primary_icon_activatable = Some(primary_icon_activatable);
+        self
+    }
+
+    pub fn primary_icon_gicon(mut self, primary_icon_gicon: &gio::Icon) -> Self {
+        self.primary_icon_gicon = Some(primary_icon_gicon.clone());
+        self
+    }
+
+    pub fn primary_icon_name(mut self, primary_icon_name: &str) -> Self {
+        self.primary_icon_name = Some(primary_icon_name.to_string());
+        self
+    }
+
+    pub fn primary_icon_pixbuf(mut self, primary_icon_pixbuf: &gdk_pixbuf::Pixbuf) -> Self {
+        self.primary_icon_pixbuf = Some(primary_icon_pixbuf.clone());
+        self
+    }
+
+    pub fn primary_icon_sensitive(mut self, primary_icon_sensitive: bool) -> Self {
+        self.primary_icon_sensitive = Some(primary_icon_sensitive);
+        self
+    }
+
+    pub fn primary_icon_tooltip_markup(mut self, primary_icon_tooltip_markup: &str) -> Self {
+        self.primary_icon_tooltip_markup = Some(primary_icon_tooltip_markup.to_string());
+        self
+    }
+
+    pub fn primary_icon_tooltip_text(mut self, primary_icon_tooltip_text: &str) -> Self {
+        self.primary_icon_tooltip_text = Some(primary_icon_tooltip_text.to_string());
+        self
+    }
+
+    pub fn progress_fraction(mut self, progress_fraction: f64) -> Self {
+        self.progress_fraction = Some(progress_fraction);
+        self
+    }
+
+    pub fn progress_pulse_step(mut self, progress_pulse_step: f64) -> Self {
+        self.progress_pulse_step = Some(progress_pulse_step);
+        self
+    }
+
+    pub fn secondary_icon_activatable(mut self, secondary_icon_activatable: bool) -> Self {
+        self.secondary_icon_activatable = Some(secondary_icon_activatable);
+        self
+    }
+
+    pub fn secondary_icon_gicon(mut self, secondary_icon_gicon: &gio::Icon) -> Self {
+        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone());
+        self
+    }
+
+    pub fn secondary_icon_name(mut self, secondary_icon_name: &str) -> Self {
+        self.secondary_icon_name = Some(secondary_icon_name.to_string());
+        self
+    }
+
+    pub fn secondary_icon_pixbuf(mut self, secondary_icon_pixbuf: &gdk_pixbuf::Pixbuf) -> Self {
+        self.secondary_icon_pixbuf = Some(secondary_icon_pixbuf.clone());
+        self
+    }
+
+    pub fn secondary_icon_sensitive(mut self, secondary_icon_sensitive: bool) -> Self {
+        self.secondary_icon_sensitive = Some(secondary_icon_sensitive);
+        self
+    }
+
+    pub fn secondary_icon_tooltip_markup(mut self, secondary_icon_tooltip_markup: &str) -> Self {
+        self.secondary_icon_tooltip_markup = Some(secondary_icon_tooltip_markup.to_string());
+        self
+    }
+
+    pub fn secondary_icon_tooltip_text(mut self, secondary_icon_tooltip_text: &str) -> Self {
+        self.secondary_icon_tooltip_text = Some(secondary_icon_tooltip_text.to_string());
+        self
+    }
+
+    pub fn shadow_type(mut self, shadow_type: ShadowType) -> Self {
+        self.shadow_type = Some(shadow_type);
+        self
+    }
+
+    pub fn show_emoji_icon(mut self, show_emoji_icon: bool) -> Self {
+        self.show_emoji_icon = Some(show_emoji_icon);
+        self
+    }
+
+    pub fn text(mut self, text: &str) -> Self {
+        self.text = Some(text.to_string());
+        self
+    }
+
+    pub fn truncate_multiline(mut self, truncate_multiline: bool) -> Self {
+        self.truncate_multiline = Some(truncate_multiline);
+        self
+    }
+
+    pub fn visibility(mut self, visibility: bool) -> Self {
+        self.visibility = Some(visibility);
+        self
+    }
+
+    pub fn width_chars(mut self, width_chars: i32) -> Self {
+        self.width_chars = Some(width_chars);
+        self
+    }
+
+    pub fn xalign(mut self, xalign: f32) -> Self {
+        self.xalign = Some(xalign);
+        self
+    }
+
+    pub fn app_paintable(mut self, app_paintable: bool) -> Self {
+        self.app_paintable = Some(app_paintable);
+        self
+    }
+
+    pub fn can_default(mut self, can_default: bool) -> Self {
+        self.can_default = Some(can_default);
+        self
+    }
+
+    pub fn can_focus(mut self, can_focus: bool) -> Self {
+        self.can_focus = Some(can_focus);
+        self
+    }
+
+    pub fn events(mut self, events: gdk::EventMask) -> Self {
+        self.events = Some(events);
+        self
+    }
+
+    pub fn expand(mut self, expand: bool) -> Self {
+        self.expand = Some(expand);
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn focus_on_click(mut self, focus_on_click: bool) -> Self {
+        self.focus_on_click = Some(focus_on_click);
+        self
+    }
+
+    pub fn halign(mut self, halign: Align) -> Self {
+        self.halign = Some(halign);
+        self
+    }
+
+    pub fn has_default(mut self, has_default: bool) -> Self {
+        self.has_default = Some(has_default);
+        self
+    }
+
+    pub fn has_focus(mut self, has_focus: bool) -> Self {
+        self.has_focus = Some(has_focus);
+        self
+    }
+
+    pub fn has_tooltip(mut self, has_tooltip: bool) -> Self {
+        self.has_tooltip = Some(has_tooltip);
+        self
+    }
+
+    pub fn height_request(mut self, height_request: i32) -> Self {
+        self.height_request = Some(height_request);
+        self
+    }
+
+    pub fn hexpand(mut self, hexpand: bool) -> Self {
+        self.hexpand = Some(hexpand);
+        self
+    }
+
+    pub fn hexpand_set(mut self, hexpand_set: bool) -> Self {
+        self.hexpand_set = Some(hexpand_set);
+        self
+    }
+
+    pub fn is_focus(mut self, is_focus: bool) -> Self {
+        self.is_focus = Some(is_focus);
+        self
+    }
+
+    pub fn margin(mut self, margin: i32) -> Self {
+        self.margin = Some(margin);
+        self
+    }
+
+    pub fn margin_bottom(mut self, margin_bottom: i32) -> Self {
+        self.margin_bottom = Some(margin_bottom);
+        self
+    }
+
+    pub fn margin_end(mut self, margin_end: i32) -> Self {
+        self.margin_end = Some(margin_end);
+        self
+    }
+
+    pub fn margin_start(mut self, margin_start: i32) -> Self {
+        self.margin_start = Some(margin_start);
+        self
+    }
+
+    pub fn margin_top(mut self, margin_top: i32) -> Self {
+        self.margin_top = Some(margin_top);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
+    }
+
+    pub fn no_show_all(mut self, no_show_all: bool) -> Self {
+        self.no_show_all = Some(no_show_all);
+        self
+    }
+
+    pub fn opacity(mut self, opacity: f64) -> Self {
+        self.opacity = Some(opacity);
+        self
+    }
+
+    pub fn parent(mut self, parent: &Container) -> Self {
+        self.parent = Some(parent.clone());
+        self
+    }
+
+    pub fn receives_default(mut self, receives_default: bool) -> Self {
+        self.receives_default = Some(receives_default);
+        self
+    }
+
+    pub fn sensitive(mut self, sensitive: bool) -> Self {
+        self.sensitive = Some(sensitive);
+        self
+    }
+
+    pub fn tooltip_markup(mut self, tooltip_markup: &str) -> Self {
+        self.tooltip_markup = Some(tooltip_markup.to_string());
+        self
+    }
+
+    pub fn tooltip_text(mut self, tooltip_text: &str) -> Self {
+        self.tooltip_text = Some(tooltip_text.to_string());
+        self
+    }
+
+    pub fn valign(mut self, valign: Align) -> Self {
+        self.valign = Some(valign);
+        self
+    }
+
+    pub fn vexpand(mut self, vexpand: bool) -> Self {
+        self.vexpand = Some(vexpand);
+        self
+    }
+
+    pub fn vexpand_set(mut self, vexpand_set: bool) -> Self {
+        self.vexpand_set = Some(vexpand_set);
+        self
+    }
+
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
+    }
+
+    pub fn width_request(mut self, width_request: i32) -> Self {
+        self.width_request = Some(width_request);
+        self
     }
 }
 
@@ -163,33 +925,42 @@ pub trait EntryExt: 'static {
 
     fn set_buffer<P: IsA<EntryBuffer>>(&self, buffer: &P);
 
-    fn set_completion<'a, P: IsA<EntryCompletion> + 'a, Q: Into<Option<&'a P>>>(&self, completion: Q);
+    fn set_completion<P: IsA<EntryCompletion>>(&self, completion: Option<&P>);
 
-    fn set_cursor_hadjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q);
+    fn set_cursor_hadjustment<P: IsA<Adjustment>>(&self, adjustment: Option<&P>);
 
     fn set_has_frame(&self, setting: bool);
 
     fn set_icon_activatable(&self, icon_pos: EntryIconPosition, activatable: bool);
 
-    fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: &TargetList, actions: gdk::DragAction);
+    fn set_icon_drag_source(
+        &self,
+        icon_pos: EntryIconPosition,
+        target_list: &TargetList,
+        actions: gdk::DragAction,
+    );
 
-    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, icon: Q);
+    fn set_icon_from_gicon<P: IsA<gio::Icon>>(&self, icon_pos: EntryIconPosition, icon: Option<&P>);
 
-    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, icon_name: P);
+    fn set_icon_from_icon_name(&self, icon_pos: EntryIconPosition, icon_name: Option<&str>);
 
-    fn set_icon_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, icon_pos: EntryIconPosition, pixbuf: P);
+    fn set_icon_from_pixbuf(
+        &self,
+        icon_pos: EntryIconPosition,
+        pixbuf: Option<&gdk_pixbuf::Pixbuf>,
+    );
 
     fn set_icon_sensitive(&self, icon_pos: EntryIconPosition, sensitive: bool);
 
-    fn set_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, tooltip: P);
+    fn set_icon_tooltip_markup(&self, icon_pos: EntryIconPosition, tooltip: Option<&str>);
 
-    fn set_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, tooltip: P);
+    fn set_icon_tooltip_text(&self, icon_pos: EntryIconPosition, tooltip: Option<&str>);
 
     fn set_input_hints(&self, hints: InputHints);
 
     fn set_input_purpose(&self, purpose: InputPurpose);
 
-    fn set_invisible_char<P: Into<Option<char>>>(&self, ch: P);
+    fn set_invisible_char(&self, ch: Option<char>);
 
     fn set_max_length(&self, max: i32);
 
@@ -197,13 +968,13 @@ pub trait EntryExt: 'static {
 
     fn set_overwrite_mode(&self, overwrite: bool);
 
-    fn set_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
+    fn set_placeholder_text(&self, text: Option<&str>);
 
     fn set_progress_fraction(&self, fraction: f64);
 
     fn set_progress_pulse_step(&self, fraction: f64);
 
-    fn set_tabs(&self, tabs: &mut pango::TabArray);
+    fn set_tabs(&self, tabs: &pango::TabArray);
 
     fn set_text(&self, text: &str);
 
@@ -227,7 +998,7 @@ pub trait EntryExt: 'static {
 
     fn get_property_im_module(&self) -> Option<GString>;
 
-    fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P);
+    fn set_property_im_module(&self, im_module: Option<&str>);
 
     fn get_property_invisible_char_set(&self) -> bool;
 
@@ -243,11 +1014,11 @@ pub trait EntryExt: 'static {
 
     fn get_property_primary_icon_gicon(&self) -> Option<gio::Icon>;
 
-    fn set_property_primary_icon_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, primary_icon_gicon: Option<&P>);
+    fn set_property_primary_icon_gicon(&self, primary_icon_gicon: Option<&gio::Icon>);
 
     fn get_property_primary_icon_name(&self) -> Option<GString>;
 
-    fn set_property_primary_icon_name<'a, P: Into<Option<&'a str>>>(&self, primary_icon_name: P);
+    fn set_property_primary_icon_name(&self, primary_icon_name: Option<&str>);
 
     fn get_property_primary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
@@ -261,11 +1032,11 @@ pub trait EntryExt: 'static {
 
     fn get_property_primary_icon_tooltip_markup(&self) -> Option<GString>;
 
-    fn set_property_primary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_markup: P);
+    fn set_property_primary_icon_tooltip_markup(&self, primary_icon_tooltip_markup: Option<&str>);
 
     fn get_property_primary_icon_tooltip_text(&self) -> Option<GString>;
 
-    fn set_property_primary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_text: P);
+    fn set_property_primary_icon_tooltip_text(&self, primary_icon_tooltip_text: Option<&str>);
 
     fn get_property_scroll_offset(&self) -> i32;
 
@@ -275,15 +1046,18 @@ pub trait EntryExt: 'static {
 
     fn get_property_secondary_icon_gicon(&self) -> Option<gio::Icon>;
 
-    fn set_property_secondary_icon_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, secondary_icon_gicon: Option<&P>);
+    fn set_property_secondary_icon_gicon(&self, secondary_icon_gicon: Option<&gio::Icon>);
 
     fn get_property_secondary_icon_name(&self) -> Option<GString>;
 
-    fn set_property_secondary_icon_name<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_name: P);
+    fn set_property_secondary_icon_name(&self, secondary_icon_name: Option<&str>);
 
     fn get_property_secondary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
-    fn set_property_secondary_icon_pixbuf(&self, secondary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>);
+    fn set_property_secondary_icon_pixbuf(
+        &self,
+        secondary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>,
+    );
 
     fn get_property_secondary_icon_sensitive(&self) -> bool;
 
@@ -293,11 +1067,14 @@ pub trait EntryExt: 'static {
 
     fn get_property_secondary_icon_tooltip_markup(&self) -> Option<GString>;
 
-    fn set_property_secondary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_markup: P);
+    fn set_property_secondary_icon_tooltip_markup(
+        &self,
+        secondary_icon_tooltip_markup: Option<&str>,
+    );
 
     fn get_property_secondary_icon_tooltip_text(&self) -> Option<GString>;
 
-    fn set_property_secondary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_text: P);
+    fn set_property_secondary_icon_tooltip_text(&self, secondary_icon_tooltip_text: Option<&str>);
 
     fn get_property_selection_bound(&self) -> i32;
 
@@ -335,13 +1112,22 @@ pub trait EntryExt: 'static {
 
     fn emit_cut_clipboard(&self);
 
-    fn connect_delete_from_cursor<F: Fn(&Self, DeleteType, i32) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_delete_from_cursor<F: Fn(&Self, DeleteType, i32) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn emit_delete_from_cursor(&self, type_: DeleteType, count: i32);
 
-    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_insert_at_cursor<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -353,7 +1139,10 @@ pub trait EntryExt: 'static {
     #[cfg(any(feature = "v3_22_27", feature = "dox"))]
     fn emit_insert_emoji(&self);
 
-    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool);
 
@@ -371,21 +1160,33 @@ pub trait EntryExt: 'static {
 
     fn emit_toggle_overwrite(&self);
 
-    fn connect_property_activates_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_activates_default_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_caps_lock_warning_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_caps_lock_warning_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_enable_emoji_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_enable_emoji_completion_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -393,72 +1194,157 @@ pub trait EntryExt: 'static {
 
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_invisible_char_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_invisible_char_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_invisible_char_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_invisible_char_set_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_max_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_overwrite_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_overwrite_mode_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_placeholder_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_placeholder_text_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_property_primary_icon_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_activatable_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_primary_icon_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_gicon_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_primary_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_name_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_primary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_primary_icon_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_sensitive_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_primary_icon_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_storage_type_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_primary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_primary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_primary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_progress_fraction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_progress_fraction_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_progress_pulse_step_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_progress_pulse_step_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_scroll_offset_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_scroll_offset_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_activatable_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_gicon_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_name_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_sensitive_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_storage_type_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_secondary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_secondary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v3_20", deprecated)]
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_show_emoji_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_show_emoji_icon_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_text_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_truncate_multiline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_truncate_multiline_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_visibility_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -470,135 +1356,177 @@ pub trait EntryExt: 'static {
 impl<O: IsA<Entry>> EntryExt for O {
     fn get_activates_default(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_entry_get_activates_default(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_entry_get_activates_default(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_alignment(&self) -> f32 {
-        unsafe {
-            ffi::gtk_entry_get_alignment(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_alignment(self.as_ref().to_glib_none().0) }
     }
 
     fn get_attributes(&self) -> Option<pango::AttrList> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_attributes(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_entry_get_attributes(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_buffer(&self) -> EntryBuffer {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_buffer(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_entry_get_buffer(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_completion(&self) -> Option<EntryCompletion> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_completion(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_entry_get_completion(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_current_icon_drag_source(&self) -> i32 {
-        unsafe {
-            ffi::gtk_entry_get_current_icon_drag_source(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_current_icon_drag_source(self.as_ref().to_glib_none().0) }
     }
 
     fn get_cursor_hadjustment(&self) -> Option<Adjustment> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_cursor_hadjustment(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_entry_get_cursor_hadjustment(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_has_frame(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_entry_get_has_frame(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_entry_get_has_frame(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_icon_activatable(&self, icon_pos: EntryIconPosition) -> bool {
         unsafe {
-            from_glib(ffi::gtk_entry_get_icon_activatable(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib(gtk_sys::gtk_entry_get_icon_activatable(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_icon_area(&self, icon_pos: EntryIconPosition) -> gdk::Rectangle {
         unsafe {
             let mut icon_area = gdk::Rectangle::uninitialized();
-            ffi::gtk_entry_get_icon_area(self.as_ref().to_glib_none().0, icon_pos.to_glib(), icon_area.to_glib_none_mut().0);
+            gtk_sys::gtk_entry_get_icon_area(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                icon_area.to_glib_none_mut().0,
+            );
             icon_area
         }
     }
 
     fn get_icon_at_pos(&self, x: i32, y: i32) -> i32 {
-        unsafe {
-            ffi::gtk_entry_get_icon_at_pos(self.as_ref().to_glib_none().0, x, y)
-        }
+        unsafe { gtk_sys::gtk_entry_get_icon_at_pos(self.as_ref().to_glib_none().0, x, y) }
     }
 
     fn get_icon_gicon(&self, icon_pos: EntryIconPosition) -> Option<gio::Icon> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_icon_gicon(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib_none(gtk_sys::gtk_entry_get_icon_gicon(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_icon_name(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib_none(gtk_sys::gtk_entry_get_icon_name(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_icon_pixbuf(&self, icon_pos: EntryIconPosition) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_icon_pixbuf(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib_none(gtk_sys::gtk_entry_get_icon_pixbuf(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_icon_sensitive(&self, icon_pos: EntryIconPosition) -> bool {
         unsafe {
-            from_glib(ffi::gtk_entry_get_icon_sensitive(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib(gtk_sys::gtk_entry_get_icon_sensitive(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_icon_storage_type(&self, icon_pos: EntryIconPosition) -> ImageType {
         unsafe {
-            from_glib(ffi::gtk_entry_get_icon_storage_type(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib(gtk_sys::gtk_entry_get_icon_storage_type(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_icon_tooltip_markup(&self, icon_pos: EntryIconPosition) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gtk_entry_get_icon_tooltip_markup(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib_full(gtk_sys::gtk_entry_get_icon_tooltip_markup(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gtk_entry_get_icon_tooltip_text(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
+            from_glib_full(gtk_sys::gtk_entry_get_icon_tooltip_text(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+            ))
         }
     }
 
     fn get_input_hints(&self) -> InputHints {
         unsafe {
-            from_glib(ffi::gtk_entry_get_input_hints(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_entry_get_input_hints(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_input_purpose(&self) -> InputPurpose {
         unsafe {
-            from_glib(ffi::gtk_entry_get_input_purpose(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_entry_get_input_purpose(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_invisible_char(&self) -> Option<char> {
         unsafe {
-            from_glib(ffi::gtk_entry_get_invisible_char(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_entry_get_invisible_char(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_layout(&self) -> Option<pango::Layout> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_layout(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_entry_get_layout(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -606,322 +1534,398 @@ impl<O: IsA<Entry>> EntryExt for O {
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
-            ffi::gtk_entry_get_layout_offsets(self.as_ref().to_glib_none().0, &mut x, &mut y);
+            gtk_sys::gtk_entry_get_layout_offsets(self.as_ref().to_glib_none().0, &mut x, &mut y);
             (x, y)
         }
     }
 
     fn get_max_length(&self) -> i32 {
-        unsafe {
-            ffi::gtk_entry_get_max_length(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_max_length(self.as_ref().to_glib_none().0) }
     }
 
     fn get_max_width_chars(&self) -> i32 {
-        unsafe {
-            ffi::gtk_entry_get_max_width_chars(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_max_width_chars(self.as_ref().to_glib_none().0) }
     }
 
     fn get_overwrite_mode(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_entry_get_overwrite_mode(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_entry_get_overwrite_mode(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_placeholder_text(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_entry_get_placeholder_text(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_entry_get_placeholder_text(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_progress_fraction(&self) -> f64 {
-        unsafe {
-            ffi::gtk_entry_get_progress_fraction(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_progress_fraction(self.as_ref().to_glib_none().0) }
     }
 
     fn get_progress_pulse_step(&self) -> f64 {
-        unsafe {
-            ffi::gtk_entry_get_progress_pulse_step(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_progress_pulse_step(self.as_ref().to_glib_none().0) }
     }
 
     fn get_tabs(&self) -> Option<pango::TabArray> {
-        unsafe {
-            from_glib_none(ffi::gtk_entry_get_tabs(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_entry_get_tabs(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_text(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_entry_get_text(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_entry_get_text(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_text_area(&self) -> gdk::Rectangle {
         unsafe {
             let mut text_area = gdk::Rectangle::uninitialized();
-            ffi::gtk_entry_get_text_area(self.as_ref().to_glib_none().0, text_area.to_glib_none_mut().0);
+            gtk_sys::gtk_entry_get_text_area(
+                self.as_ref().to_glib_none().0,
+                text_area.to_glib_none_mut().0,
+            );
             text_area
         }
     }
 
     fn get_text_length(&self) -> u16 {
-        unsafe {
-            ffi::gtk_entry_get_text_length(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_text_length(self.as_ref().to_glib_none().0) }
     }
 
     fn get_visibility(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_entry_get_visibility(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_entry_get_visibility(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_width_chars(&self) -> i32 {
-        unsafe {
-            ffi::gtk_entry_get_width_chars(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_entry_get_width_chars(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn grab_focus_without_selecting(&self) {
         unsafe {
-            ffi::gtk_entry_grab_focus_without_selecting(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_entry_grab_focus_without_selecting(self.as_ref().to_glib_none().0);
         }
     }
 
     fn im_context_filter_keypress(&self, event: &gdk::EventKey) -> bool {
         unsafe {
-            from_glib(ffi::gtk_entry_im_context_filter_keypress(self.as_ref().to_glib_none().0, mut_override(event.to_glib_none().0)))
+            from_glib(gtk_sys::gtk_entry_im_context_filter_keypress(
+                self.as_ref().to_glib_none().0,
+                mut_override(event.to_glib_none().0),
+            ))
         }
     }
 
     fn layout_index_to_text_index(&self, layout_index: i32) -> i32 {
         unsafe {
-            ffi::gtk_entry_layout_index_to_text_index(self.as_ref().to_glib_none().0, layout_index)
+            gtk_sys::gtk_entry_layout_index_to_text_index(
+                self.as_ref().to_glib_none().0,
+                layout_index,
+            )
         }
     }
 
     fn progress_pulse(&self) {
         unsafe {
-            ffi::gtk_entry_progress_pulse(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_entry_progress_pulse(self.as_ref().to_glib_none().0);
         }
     }
 
     fn reset_im_context(&self) {
         unsafe {
-            ffi::gtk_entry_reset_im_context(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_entry_reset_im_context(self.as_ref().to_glib_none().0);
         }
     }
 
     fn set_activates_default(&self, setting: bool) {
         unsafe {
-            ffi::gtk_entry_set_activates_default(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_entry_set_activates_default(
+                self.as_ref().to_glib_none().0,
+                setting.to_glib(),
+            );
         }
     }
 
     fn set_alignment(&self, xalign: f32) {
         unsafe {
-            ffi::gtk_entry_set_alignment(self.as_ref().to_glib_none().0, xalign);
+            gtk_sys::gtk_entry_set_alignment(self.as_ref().to_glib_none().0, xalign);
         }
     }
 
     fn set_attributes(&self, attrs: &pango::AttrList) {
         unsafe {
-            ffi::gtk_entry_set_attributes(self.as_ref().to_glib_none().0, attrs.to_glib_none().0);
+            gtk_sys::gtk_entry_set_attributes(
+                self.as_ref().to_glib_none().0,
+                attrs.to_glib_none().0,
+            );
         }
     }
 
     fn set_buffer<P: IsA<EntryBuffer>>(&self, buffer: &P) {
         unsafe {
-            ffi::gtk_entry_set_buffer(self.as_ref().to_glib_none().0, buffer.as_ref().to_glib_none().0);
+            gtk_sys::gtk_entry_set_buffer(
+                self.as_ref().to_glib_none().0,
+                buffer.as_ref().to_glib_none().0,
+            );
         }
     }
 
-    fn set_completion<'a, P: IsA<EntryCompletion> + 'a, Q: Into<Option<&'a P>>>(&self, completion: Q) {
-        let completion = completion.into();
+    fn set_completion<P: IsA<EntryCompletion>>(&self, completion: Option<&P>) {
         unsafe {
-            ffi::gtk_entry_set_completion(self.as_ref().to_glib_none().0, completion.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_entry_set_completion(
+                self.as_ref().to_glib_none().0,
+                completion.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
-    fn set_cursor_hadjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q) {
-        let adjustment = adjustment.into();
+    fn set_cursor_hadjustment<P: IsA<Adjustment>>(&self, adjustment: Option<&P>) {
         unsafe {
-            ffi::gtk_entry_set_cursor_hadjustment(self.as_ref().to_glib_none().0, adjustment.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_entry_set_cursor_hadjustment(
+                self.as_ref().to_glib_none().0,
+                adjustment.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
     fn set_has_frame(&self, setting: bool) {
         unsafe {
-            ffi::gtk_entry_set_has_frame(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_entry_set_has_frame(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
     fn set_icon_activatable(&self, icon_pos: EntryIconPosition, activatable: bool) {
         unsafe {
-            ffi::gtk_entry_set_icon_activatable(self.as_ref().to_glib_none().0, icon_pos.to_glib(), activatable.to_glib());
+            gtk_sys::gtk_entry_set_icon_activatable(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                activatable.to_glib(),
+            );
         }
     }
 
-    fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: &TargetList, actions: gdk::DragAction) {
+    fn set_icon_drag_source(
+        &self,
+        icon_pos: EntryIconPosition,
+        target_list: &TargetList,
+        actions: gdk::DragAction,
+    ) {
         unsafe {
-            ffi::gtk_entry_set_icon_drag_source(self.as_ref().to_glib_none().0, icon_pos.to_glib(), target_list.to_glib_none().0, actions.to_glib());
+            gtk_sys::gtk_entry_set_icon_drag_source(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                target_list.to_glib_none().0,
+                actions.to_glib(),
+            );
         }
     }
 
-    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, icon: Q) {
-        let icon = icon.into();
+    fn set_icon_from_gicon<P: IsA<gio::Icon>>(
+        &self,
+        icon_pos: EntryIconPosition,
+        icon: Option<&P>,
+    ) {
         unsafe {
-            ffi::gtk_entry_set_icon_from_gicon(self.as_ref().to_glib_none().0, icon_pos.to_glib(), icon.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_entry_set_icon_from_gicon(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                icon.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
-    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, icon_name: P) {
-        let icon_name = icon_name.into();
+    fn set_icon_from_icon_name(&self, icon_pos: EntryIconPosition, icon_name: Option<&str>) {
         unsafe {
-            ffi::gtk_entry_set_icon_from_icon_name(self.as_ref().to_glib_none().0, icon_pos.to_glib(), icon_name.to_glib_none().0);
+            gtk_sys::gtk_entry_set_icon_from_icon_name(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                icon_name.to_glib_none().0,
+            );
         }
     }
 
-    fn set_icon_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, icon_pos: EntryIconPosition, pixbuf: P) {
-        let pixbuf = pixbuf.into();
+    fn set_icon_from_pixbuf(
+        &self,
+        icon_pos: EntryIconPosition,
+        pixbuf: Option<&gdk_pixbuf::Pixbuf>,
+    ) {
         unsafe {
-            ffi::gtk_entry_set_icon_from_pixbuf(self.as_ref().to_glib_none().0, icon_pos.to_glib(), pixbuf.to_glib_none().0);
+            gtk_sys::gtk_entry_set_icon_from_pixbuf(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                pixbuf.to_glib_none().0,
+            );
         }
     }
 
     fn set_icon_sensitive(&self, icon_pos: EntryIconPosition, sensitive: bool) {
         unsafe {
-            ffi::gtk_entry_set_icon_sensitive(self.as_ref().to_glib_none().0, icon_pos.to_glib(), sensitive.to_glib());
+            gtk_sys::gtk_entry_set_icon_sensitive(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                sensitive.to_glib(),
+            );
         }
     }
 
-    fn set_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, tooltip: P) {
-        let tooltip = tooltip.into();
+    fn set_icon_tooltip_markup(&self, icon_pos: EntryIconPosition, tooltip: Option<&str>) {
         unsafe {
-            ffi::gtk_entry_set_icon_tooltip_markup(self.as_ref().to_glib_none().0, icon_pos.to_glib(), tooltip.to_glib_none().0);
+            gtk_sys::gtk_entry_set_icon_tooltip_markup(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                tooltip.to_glib_none().0,
+            );
         }
     }
 
-    fn set_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, tooltip: P) {
-        let tooltip = tooltip.into();
+    fn set_icon_tooltip_text(&self, icon_pos: EntryIconPosition, tooltip: Option<&str>) {
         unsafe {
-            ffi::gtk_entry_set_icon_tooltip_text(self.as_ref().to_glib_none().0, icon_pos.to_glib(), tooltip.to_glib_none().0);
+            gtk_sys::gtk_entry_set_icon_tooltip_text(
+                self.as_ref().to_glib_none().0,
+                icon_pos.to_glib(),
+                tooltip.to_glib_none().0,
+            );
         }
     }
 
     fn set_input_hints(&self, hints: InputHints) {
         unsafe {
-            ffi::gtk_entry_set_input_hints(self.as_ref().to_glib_none().0, hints.to_glib());
+            gtk_sys::gtk_entry_set_input_hints(self.as_ref().to_glib_none().0, hints.to_glib());
         }
     }
 
     fn set_input_purpose(&self, purpose: InputPurpose) {
         unsafe {
-            ffi::gtk_entry_set_input_purpose(self.as_ref().to_glib_none().0, purpose.to_glib());
+            gtk_sys::gtk_entry_set_input_purpose(self.as_ref().to_glib_none().0, purpose.to_glib());
         }
     }
 
-    fn set_invisible_char<P: Into<Option<char>>>(&self, ch: P) {
+    fn set_invisible_char(&self, ch: Option<char>) {
         unsafe {
-            ffi::gtk_entry_set_invisible_char(self.as_ref().to_glib_none().0, ch.into().to_glib());
+            gtk_sys::gtk_entry_set_invisible_char(self.as_ref().to_glib_none().0, ch.to_glib());
         }
     }
 
     fn set_max_length(&self, max: i32) {
         unsafe {
-            ffi::gtk_entry_set_max_length(self.as_ref().to_glib_none().0, max);
+            gtk_sys::gtk_entry_set_max_length(self.as_ref().to_glib_none().0, max);
         }
     }
 
     fn set_max_width_chars(&self, n_chars: i32) {
         unsafe {
-            ffi::gtk_entry_set_max_width_chars(self.as_ref().to_glib_none().0, n_chars);
+            gtk_sys::gtk_entry_set_max_width_chars(self.as_ref().to_glib_none().0, n_chars);
         }
     }
 
     fn set_overwrite_mode(&self, overwrite: bool) {
         unsafe {
-            ffi::gtk_entry_set_overwrite_mode(self.as_ref().to_glib_none().0, overwrite.to_glib());
+            gtk_sys::gtk_entry_set_overwrite_mode(
+                self.as_ref().to_glib_none().0,
+                overwrite.to_glib(),
+            );
         }
     }
 
-    fn set_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    fn set_placeholder_text(&self, text: Option<&str>) {
         unsafe {
-            ffi::gtk_entry_set_placeholder_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
+            gtk_sys::gtk_entry_set_placeholder_text(
+                self.as_ref().to_glib_none().0,
+                text.to_glib_none().0,
+            );
         }
     }
 
     fn set_progress_fraction(&self, fraction: f64) {
         unsafe {
-            ffi::gtk_entry_set_progress_fraction(self.as_ref().to_glib_none().0, fraction);
+            gtk_sys::gtk_entry_set_progress_fraction(self.as_ref().to_glib_none().0, fraction);
         }
     }
 
     fn set_progress_pulse_step(&self, fraction: f64) {
         unsafe {
-            ffi::gtk_entry_set_progress_pulse_step(self.as_ref().to_glib_none().0, fraction);
+            gtk_sys::gtk_entry_set_progress_pulse_step(self.as_ref().to_glib_none().0, fraction);
         }
     }
 
-    fn set_tabs(&self, tabs: &mut pango::TabArray) {
+    fn set_tabs(&self, tabs: &pango::TabArray) {
         unsafe {
-            ffi::gtk_entry_set_tabs(self.as_ref().to_glib_none().0, tabs.to_glib_none_mut().0);
+            gtk_sys::gtk_entry_set_tabs(
+                self.as_ref().to_glib_none().0,
+                mut_override(tabs.to_glib_none().0),
+            );
         }
     }
 
     fn set_text(&self, text: &str) {
         unsafe {
-            ffi::gtk_entry_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
+            gtk_sys::gtk_entry_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
         }
     }
 
     fn set_visibility(&self, visible: bool) {
         unsafe {
-            ffi::gtk_entry_set_visibility(self.as_ref().to_glib_none().0, visible.to_glib());
+            gtk_sys::gtk_entry_set_visibility(self.as_ref().to_glib_none().0, visible.to_glib());
         }
     }
 
     fn set_width_chars(&self, n_chars: i32) {
         unsafe {
-            ffi::gtk_entry_set_width_chars(self.as_ref().to_glib_none().0, n_chars);
+            gtk_sys::gtk_entry_set_width_chars(self.as_ref().to_glib_none().0, n_chars);
         }
     }
 
     fn text_index_to_layout_index(&self, text_index: i32) -> i32 {
         unsafe {
-            ffi::gtk_entry_text_index_to_layout_index(self.as_ref().to_glib_none().0, text_index)
+            gtk_sys::gtk_entry_text_index_to_layout_index(
+                self.as_ref().to_glib_none().0,
+                text_index,
+            )
         }
     }
 
     fn unset_invisible_char(&self) {
         unsafe {
-            ffi::gtk_entry_unset_invisible_char(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_entry_unset_invisible_char(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_property_caps_lock_warning(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"caps-lock-warning\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"caps-lock-warning\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_caps_lock_warning(&self, caps_lock_warning: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"caps-lock-warning\0".as_ptr() as *const _, Value::from(&caps_lock_warning).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"caps-lock-warning\0".as_ptr() as *const _,
+                Value::from(&caps_lock_warning).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_cursor_position(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cursor-position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"cursor-position\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -929,135 +1933,209 @@ impl<O: IsA<Entry>> EntryExt for O {
     fn get_property_enable_emoji_completion(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-emoji-completion\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"enable-emoji-completion\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_enable_emoji_completion(&self, enable_emoji_completion: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-emoji-completion\0".as_ptr() as *const _, Value::from(&enable_emoji_completion).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"enable-emoji-completion\0".as_ptr() as *const _,
+                Value::from(&enable_emoji_completion).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_im_module(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"im-module\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"im-module\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P) {
-        let im_module = im_module.into();
+    fn set_property_im_module(&self, im_module: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"im-module\0".as_ptr() as *const _, Value::from(im_module).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"im-module\0".as_ptr() as *const _,
+                Value::from(im_module).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_invisible_char_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"invisible-char-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"invisible-char-set\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_invisible_char_set(&self, invisible_char_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"invisible-char-set\0".as_ptr() as *const _, Value::from(&invisible_char_set).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"invisible-char-set\0".as_ptr() as *const _,
+                Value::from(&invisible_char_set).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_populate_all(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"populate-all\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_populate_all(&self, populate_all: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, Value::from(&populate_all).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"populate-all\0".as_ptr() as *const _,
+                Value::from(&populate_all).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_primary_icon_activatable(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-activatable\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-activatable\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_primary_icon_activatable(&self, primary_icon_activatable: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-activatable\0".as_ptr() as *const _, Value::from(&primary_icon_activatable).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-activatable\0".as_ptr() as *const _,
+                Value::from(&primary_icon_activatable).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_primary_icon_gicon(&self) -> Option<gio::Icon> {
         unsafe {
             let mut value = Value::from_type(<gio::Icon as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-gicon\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-gicon\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_primary_icon_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, primary_icon_gicon: Option<&P>) {
+    fn set_property_primary_icon_gicon(&self, primary_icon_gicon: Option<&gio::Icon>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-gicon\0".as_ptr() as *const _, Value::from(primary_icon_gicon).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-gicon\0".as_ptr() as *const _,
+                Value::from(primary_icon_gicon).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_primary_icon_name(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-name\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_primary_icon_name<'a, P: Into<Option<&'a str>>>(&self, primary_icon_name: P) {
-        let primary_icon_name = primary_icon_name.into();
+    fn set_property_primary_icon_name(&self, primary_icon_name: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-name\0".as_ptr() as *const _, Value::from(primary_icon_name).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-name\0".as_ptr() as *const _,
+                Value::from(primary_icon_name).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_primary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
             let mut value = Value::from_type(<gdk_pixbuf::Pixbuf as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-pixbuf\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-pixbuf\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
     fn set_property_primary_icon_pixbuf(&self, primary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-pixbuf\0".as_ptr() as *const _, Value::from(primary_icon_pixbuf).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-pixbuf\0".as_ptr() as *const _,
+                Value::from(primary_icon_pixbuf).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_primary_icon_sensitive(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-sensitive\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-sensitive\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_primary_icon_sensitive(&self, primary_icon_sensitive: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-sensitive\0".as_ptr() as *const _, Value::from(&primary_icon_sensitive).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-sensitive\0".as_ptr() as *const _,
+                Value::from(&primary_icon_sensitive).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_primary_icon_storage_type(&self) -> ImageType {
         unsafe {
             let mut value = Value::from_type(<ImageType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-storage-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-storage-type\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -1065,37 +2143,55 @@ impl<O: IsA<Entry>> EntryExt for O {
     fn get_property_primary_icon_tooltip_markup(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-tooltip-markup\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-tooltip-markup\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_primary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_markup: P) {
-        let primary_icon_tooltip_markup = primary_icon_tooltip_markup.into();
+    fn set_property_primary_icon_tooltip_markup(&self, primary_icon_tooltip_markup: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-tooltip-markup\0".as_ptr() as *const _, Value::from(primary_icon_tooltip_markup).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-tooltip-markup\0".as_ptr() as *const _,
+                Value::from(primary_icon_tooltip_markup).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_primary_icon_tooltip_text(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-tooltip-text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-tooltip-text\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_primary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_text: P) {
-        let primary_icon_tooltip_text = primary_icon_tooltip_text.into();
+    fn set_property_primary_icon_tooltip_text(&self, primary_icon_tooltip_text: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-tooltip-text\0".as_ptr() as *const _, Value::from(primary_icon_tooltip_text).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"primary-icon-tooltip-text\0".as_ptr() as *const _,
+                Value::from(primary_icon_tooltip_text).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_scroll_offset(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"scroll-offset\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"scroll-offset\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -1103,78 +2199,124 @@ impl<O: IsA<Entry>> EntryExt for O {
     fn get_property_secondary_icon_activatable(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-activatable\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-activatable\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_secondary_icon_activatable(&self, secondary_icon_activatable: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-activatable\0".as_ptr() as *const _, Value::from(&secondary_icon_activatable).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-activatable\0".as_ptr() as *const _,
+                Value::from(&secondary_icon_activatable).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_secondary_icon_gicon(&self) -> Option<gio::Icon> {
         unsafe {
             let mut value = Value::from_type(<gio::Icon as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-gicon\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-gicon\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_secondary_icon_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, secondary_icon_gicon: Option<&P>) {
+    fn set_property_secondary_icon_gicon(&self, secondary_icon_gicon: Option<&gio::Icon>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-gicon\0".as_ptr() as *const _, Value::from(secondary_icon_gicon).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-gicon\0".as_ptr() as *const _,
+                Value::from(secondary_icon_gicon).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_secondary_icon_name(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-name\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_secondary_icon_name<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_name: P) {
-        let secondary_icon_name = secondary_icon_name.into();
+    fn set_property_secondary_icon_name(&self, secondary_icon_name: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-name\0".as_ptr() as *const _, Value::from(secondary_icon_name).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-name\0".as_ptr() as *const _,
+                Value::from(secondary_icon_name).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_secondary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
             let mut value = Value::from_type(<gdk_pixbuf::Pixbuf as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-pixbuf\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-pixbuf\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_secondary_icon_pixbuf(&self, secondary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
+    fn set_property_secondary_icon_pixbuf(
+        &self,
+        secondary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>,
+    ) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-pixbuf\0".as_ptr() as *const _, Value::from(secondary_icon_pixbuf).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-pixbuf\0".as_ptr() as *const _,
+                Value::from(secondary_icon_pixbuf).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_secondary_icon_sensitive(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-sensitive\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-sensitive\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_secondary_icon_sensitive(&self, secondary_icon_sensitive: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-sensitive\0".as_ptr() as *const _, Value::from(&secondary_icon_sensitive).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-sensitive\0".as_ptr() as *const _,
+                Value::from(&secondary_icon_sensitive).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_secondary_icon_storage_type(&self) -> ImageType {
         unsafe {
             let mut value = Value::from_type(<ImageType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-storage-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-storage-type\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -1182,37 +2324,58 @@ impl<O: IsA<Entry>> EntryExt for O {
     fn get_property_secondary_icon_tooltip_markup(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-tooltip-markup\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-tooltip-markup\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_secondary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_markup: P) {
-        let secondary_icon_tooltip_markup = secondary_icon_tooltip_markup.into();
+    fn set_property_secondary_icon_tooltip_markup(
+        &self,
+        secondary_icon_tooltip_markup: Option<&str>,
+    ) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-tooltip-markup\0".as_ptr() as *const _, Value::from(secondary_icon_tooltip_markup).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-tooltip-markup\0".as_ptr() as *const _,
+                Value::from(secondary_icon_tooltip_markup).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_secondary_icon_tooltip_text(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-tooltip-text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-tooltip-text\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
 
-    fn set_property_secondary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_text: P) {
-        let secondary_icon_tooltip_text = secondary_icon_tooltip_text.into();
+    fn set_property_secondary_icon_tooltip_text(&self, secondary_icon_tooltip_text: Option<&str>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-tooltip-text\0".as_ptr() as *const _, Value::from(secondary_icon_tooltip_text).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"secondary-icon-tooltip-text\0".as_ptr() as *const _,
+                Value::from(secondary_icon_tooltip_text).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_selection_bound(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"selection-bound\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"selection-bound\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -1220,959 +2383,1738 @@ impl<O: IsA<Entry>> EntryExt for O {
     fn get_property_shadow_type(&self) -> ShadowType {
         unsafe {
             let mut value = Value::from_type(<ShadowType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"shadow-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"shadow-type\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_shadow_type(&self, shadow_type: ShadowType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"shadow-type\0".as_ptr() as *const _, Value::from(&shadow_type).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"shadow-type\0".as_ptr() as *const _,
+                Value::from(&shadow_type).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_show_emoji_icon(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-emoji-icon\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"show-emoji-icon\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_show_emoji_icon(&self, show_emoji_icon: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-emoji-icon\0".as_ptr() as *const _, Value::from(&show_emoji_icon).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"show-emoji-icon\0".as_ptr() as *const _,
+                Value::from(&show_emoji_icon).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_truncate_multiline(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"truncate-multiline\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"truncate-multiline\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_truncate_multiline(&self, truncate_multiline: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"truncate-multiline\0".as_ptr() as *const _, Value::from(&truncate_multiline).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"truncate-multiline\0".as_ptr() as *const _,
+                Value::from(&truncate_multiline).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_xalign(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"xalign\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_xalign(&self, xalign: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, Value::from(&xalign).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"xalign\0".as_ptr() as *const _,
+                Value::from(&xalign).to_glib_none().0,
+            );
         }
     }
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"activate\0".as_ptr() as *const _,
-                Some(transmute(activate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"activate\0".as_ptr() as *const _,
+                Some(transmute(activate_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_activate(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("activate", &[])
+                .unwrap()
+        };
     }
 
     fn connect_backspace<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn backspace_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"backspace\0".as_ptr() as *const _,
-                Some(transmute(backspace_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"backspace\0".as_ptr() as *const _,
+                Some(transmute(backspace_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_backspace(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("backspace", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("backspace", &[])
+                .unwrap()
+        };
     }
 
     fn connect_copy_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn copy_clipboard_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"copy-clipboard\0".as_ptr() as *const _,
-                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"copy-clipboard\0".as_ptr() as *const _,
+                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_copy_clipboard(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("copy-clipboard", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("copy-clipboard", &[])
+                .unwrap()
+        };
     }
 
     fn connect_cut_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn cut_clipboard_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"cut-clipboard\0".as_ptr() as *const _,
-                Some(transmute(cut_clipboard_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"cut-clipboard\0".as_ptr() as *const _,
+                Some(transmute(cut_clipboard_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_cut_clipboard(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("cut-clipboard", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("cut-clipboard", &[])
+                .unwrap()
+        };
     }
 
-    fn connect_delete_from_cursor<F: Fn(&Self, DeleteType, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_delete_from_cursor<F: Fn(&Self, DeleteType, i32) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn delete_from_cursor_trampoline<
+            P,
+            F: Fn(&P, DeleteType, i32) + 'static,
+        >(
+            this: *mut gtk_sys::GtkEntry,
+            type_: gtk_sys::GtkDeleteType,
+            count: libc::c_int,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Entry::from_glib_borrow(this).unsafe_cast(),
+                from_glib(type_),
+                count,
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"delete-from-cursor\0".as_ptr() as *const _,
-                Some(transmute(delete_from_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"delete-from-cursor\0".as_ptr() as *const _,
+                Some(transmute(delete_from_cursor_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_delete_from_cursor(&self, type_: DeleteType, count: i32) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("delete-from-cursor", &[&type_, &count]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("delete-from-cursor", &[&type_, &count])
+                .unwrap()
+        };
     }
 
-    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn icon_press_trampoline<
+            P,
+            F: Fn(&P, EntryIconPosition, &gdk::EventButton) + 'static,
+        >(
+            this: *mut gtk_sys::GtkEntry,
+            icon_pos: gtk_sys::GtkEntryIconPosition,
+            event: *mut gdk_sys::GdkEventButton,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Entry::from_glib_borrow(this).unsafe_cast(),
+                from_glib(icon_pos),
+                &from_glib_borrow(event),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"icon-press\0".as_ptr() as *const _,
-                Some(transmute(icon_press_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"icon-press\0".as_ptr() as *const _,
+                Some(transmute(icon_press_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn icon_release_trampoline<
+            P,
+            F: Fn(&P, EntryIconPosition, &gdk::EventButton) + 'static,
+        >(
+            this: *mut gtk_sys::GtkEntry,
+            icon_pos: gtk_sys::GtkEntryIconPosition,
+            event: *mut gdk_sys::GdkEventButton,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Entry::from_glib_borrow(this).unsafe_cast(),
+                from_glib(icon_pos),
+                &from_glib_borrow(event),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"icon-release\0".as_ptr() as *const _,
-                Some(transmute(icon_release_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"icon-release\0".as_ptr() as *const _,
+                Some(transmute(icon_release_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_insert_at_cursor<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn insert_at_cursor_trampoline<P, F: Fn(&P, &str) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            string: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(string),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"insert-at-cursor\0".as_ptr() as *const _,
-                Some(transmute(insert_at_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"insert-at-cursor\0".as_ptr() as *const _,
+                Some(transmute(insert_at_cursor_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_insert_at_cursor(&self, string: &str) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("insert-at-cursor", &[&string]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("insert-at-cursor", &[&string])
+                .unwrap()
+        };
     }
 
     #[cfg(any(feature = "v3_22_27", feature = "dox"))]
     fn connect_insert_emoji<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn insert_emoji_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"insert-emoji\0".as_ptr() as *const _,
-                Some(transmute(insert_emoji_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"insert-emoji\0".as_ptr() as *const _,
+                Some(transmute(insert_emoji_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v3_22_27", feature = "dox"))]
     fn emit_insert_emoji(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("insert-emoji", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("insert-emoji", &[])
+                .unwrap()
+        };
     }
 
-    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn move_cursor_trampoline<
+            P,
+            F: Fn(&P, MovementStep, i32, bool) + 'static,
+        >(
+            this: *mut gtk_sys::GtkEntry,
+            step: gtk_sys::GtkMovementStep,
+            count: libc::c_int,
+            extend_selection: glib_sys::gboolean,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Entry::from_glib_borrow(this).unsafe_cast(),
+                from_glib(step),
+                count,
+                from_glib(extend_selection),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"move-cursor\0".as_ptr() as *const _,
+                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-cursor", &[&step, &count, &extend_selection]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("move-cursor", &[&step, &count, &extend_selection])
+                .unwrap()
+        };
     }
 
     fn connect_paste_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn paste_clipboard_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"paste-clipboard\0".as_ptr() as *const _,
-                Some(transmute(paste_clipboard_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"paste-clipboard\0".as_ptr() as *const _,
+                Some(transmute(paste_clipboard_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_paste_clipboard(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("paste-clipboard", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("paste-clipboard", &[])
+                .unwrap()
+        };
     }
 
     fn connect_populate_popup<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Widget) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            widget: *mut gtk_sys::GtkWidget,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(widget),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"populate-popup\0".as_ptr() as *const _,
-                Some(transmute(populate_popup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"populate-popup\0".as_ptr() as *const _,
+                Some(transmute(populate_popup_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_preedit_changed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn preedit_changed_trampoline<P, F: Fn(&P, &str) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            preedit: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(preedit),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"preedit-changed\0".as_ptr() as *const _,
-                Some(transmute(preedit_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"preedit-changed\0".as_ptr() as *const _,
+                Some(transmute(preedit_changed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_preedit_changed(&self, preedit: &str) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("preedit-changed", &[&preedit]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("preedit-changed", &[&preedit])
+                .unwrap()
+        };
     }
 
     fn connect_toggle_overwrite<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn toggle_overwrite_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"toggle-overwrite\0".as_ptr() as *const _,
-                Some(transmute(toggle_overwrite_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"toggle-overwrite\0".as_ptr() as *const _,
+                Some(transmute(toggle_overwrite_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_toggle_overwrite(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("toggle-overwrite", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("toggle-overwrite", &[])
+                .unwrap()
+        };
     }
 
-    fn connect_property_activates_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_activates_default_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_activates_default_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::activates-default\0".as_ptr() as *const _,
-                Some(transmute(notify_activates_default_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::activates-default\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_activates_default_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::attributes\0".as_ptr() as *const _,
-                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::attributes\0".as_ptr() as *const _,
+                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_buffer_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::buffer\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::buffer\0".as_ptr() as *const _,
+                Some(transmute(notify_buffer_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_caps_lock_warning_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_caps_lock_warning_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_caps_lock_warning_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::caps-lock-warning\0".as_ptr() as *const _,
-                Some(transmute(notify_caps_lock_warning_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::caps-lock-warning\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_caps_lock_warning_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_completion_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::completion\0".as_ptr() as *const _,
-                Some(transmute(notify_completion_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::completion\0".as_ptr() as *const _,
+                Some(transmute(notify_completion_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_cursor_position_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::cursor-position\0".as_ptr() as *const _,
-                Some(transmute(notify_cursor_position_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::cursor-position\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_cursor_position_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_editable_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::editable\0".as_ptr() as *const _,
-                Some(transmute(notify_editable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::editable\0".as_ptr() as *const _,
+                Some(transmute(notify_editable_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_enable_emoji_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_enable_emoji_completion_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_emoji_completion_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::enable-emoji-completion\0".as_ptr() as *const _,
-                Some(transmute(notify_enable_emoji_completion_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::enable-emoji-completion\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_enable_emoji_completion_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_has_frame_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::has-frame\0".as_ptr() as *const _,
-                Some(transmute(notify_has_frame_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::has-frame\0".as_ptr() as *const _,
+                Some(transmute(notify_has_frame_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_im_module_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_im_module_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::im-module\0".as_ptr() as *const _,
-                Some(transmute(notify_im_module_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::im-module\0".as_ptr() as *const _,
+                Some(transmute(notify_im_module_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::input-hints\0".as_ptr() as *const _,
-                Some(transmute(notify_input_hints_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::input-hints\0".as_ptr() as *const _,
+                Some(transmute(notify_input_hints_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::input-purpose\0".as_ptr() as *const _,
-                Some(transmute(notify_input_purpose_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::input-purpose\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_input_purpose_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_invisible_char_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_invisible_char_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_invisible_char_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::invisible-char\0".as_ptr() as *const _,
-                Some(transmute(notify_invisible_char_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::invisible-char\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_invisible_char_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_invisible_char_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_invisible_char_set_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_invisible_char_set_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::invisible-char-set\0".as_ptr() as *const _,
-                Some(transmute(notify_invisible_char_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::invisible-char-set\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_invisible_char_set_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_max_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_length_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::max-length\0".as_ptr() as *const _,
-                Some(transmute(notify_max_length_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-length\0".as_ptr() as *const _,
+                Some(transmute(notify_max_length_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::max-width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_max_width_chars_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-width-chars\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_max_width_chars_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_overwrite_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_overwrite_mode_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_overwrite_mode_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::overwrite-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_overwrite_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::overwrite-mode\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_overwrite_mode_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_placeholder_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_placeholder_text_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_placeholder_text_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::placeholder-text\0".as_ptr() as *const _,
-                Some(transmute(notify_placeholder_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::placeholder-text\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_placeholder_text_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::populate-all\0".as_ptr() as *const _,
-                Some(transmute(notify_populate_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::populate-all\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_populate_all_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_activatable_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_activatable_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-activatable\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_activatable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-activatable\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_activatable_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_gicon_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_gicon_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-gicon\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_gicon_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-gicon\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_gicon_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_name_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_name_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-name\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-name\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_name_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_pixbuf_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-pixbuf\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_pixbuf_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-pixbuf\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_pixbuf_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_sensitive_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_sensitive_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-sensitive\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_sensitive_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-sensitive\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_sensitive_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_storage_type_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_storage_type_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-storage-type\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_storage_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-storage-type\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_storage_type_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_tooltip_markup_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-tooltip-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_tooltip_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-tooltip-markup\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_tooltip_markup_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_primary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_primary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_primary_icon_tooltip_text_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-tooltip-text\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_tooltip_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::primary-icon-tooltip-text\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_primary_icon_tooltip_text_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_progress_fraction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_progress_fraction_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_progress_fraction_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::progress-fraction\0".as_ptr() as *const _,
-                Some(transmute(notify_progress_fraction_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::progress-fraction\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_progress_fraction_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_progress_pulse_step_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_progress_pulse_step_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_progress_pulse_step_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::progress-pulse-step\0".as_ptr() as *const _,
-                Some(transmute(notify_progress_pulse_step_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::progress-pulse-step\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_progress_pulse_step_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_scroll_offset_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_scroll_offset_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_scroll_offset_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::scroll-offset\0".as_ptr() as *const _,
-                Some(transmute(notify_scroll_offset_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::scroll-offset\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_scroll_offset_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_activatable_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_activatable_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-activatable\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_activatable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-activatable\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_activatable_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_gicon_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_gicon_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-gicon\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_gicon_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-gicon\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_gicon_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_name_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_name_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-name\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-name\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_name_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_pixbuf_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-pixbuf\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_pixbuf_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-pixbuf\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_pixbuf_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_sensitive_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_sensitive_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-sensitive\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_sensitive_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-sensitive\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_sensitive_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_storage_type_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_storage_type_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-storage-type\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_storage_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-storage-type\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_storage_type_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_tooltip_markup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_tooltip_markup_trampoline<
+            P,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-tooltip-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_tooltip_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-tooltip-markup\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_tooltip_markup_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_secondary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_secondary_icon_tooltip_text_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_secondary_icon_tooltip_text_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-tooltip-text\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_tooltip_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::secondary-icon-tooltip-text\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_secondary_icon_tooltip_text_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_selection_bound_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::selection-bound\0".as_ptr() as *const _,
-                Some(transmute(notify_selection_bound_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::selection-bound\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_selection_bound_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_shadow_type_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::shadow-type\0".as_ptr() as *const _,
-                Some(transmute(notify_shadow_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::shadow-type\0".as_ptr() as *const _,
+                Some(transmute(notify_shadow_type_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_show_emoji_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_show_emoji_icon_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_emoji_icon_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-emoji-icon\0".as_ptr() as *const _,
-                Some(transmute(notify_show_emoji_icon_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-emoji-icon\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_show_emoji_icon_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::text\0".as_ptr() as *const _,
+                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_text_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_text_length_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::text-length\0".as_ptr() as *const _,
-                Some(transmute(notify_text_length_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::text-length\0".as_ptr() as *const _,
+                Some(transmute(notify_text_length_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_truncate_multiline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_truncate_multiline_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_truncate_multiline_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::truncate-multiline\0".as_ptr() as *const _,
-                Some(transmute(notify_truncate_multiline_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::truncate-multiline\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_truncate_multiline_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_visibility_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_visibility_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::visibility\0".as_ptr() as *const _,
-                Some(transmute(notify_visibility_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::visibility\0".as_ptr() as *const _,
+                Some(transmute(notify_visibility_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::width-chars\0".as_ptr() as *const _,
+                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::xalign\0".as_ptr() as *const _,
+                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
-}
-
-unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn backspace_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn copy_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn cut_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn delete_from_cursor_trampoline<P, F: Fn(&P, DeleteType, i32) + 'static>(this: *mut ffi::GtkEntry, type_: ffi::GtkDeleteType, count: libc::c_int, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast(), from_glib(type_), count)
-}
-
-unsafe extern "C" fn icon_press_trampoline<P, F: Fn(&P, EntryIconPosition, &gdk::EventButton) + 'static>(this: *mut ffi::GtkEntry, icon_pos: ffi::GtkEntryIconPosition, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast(), from_glib(icon_pos), &from_glib_borrow(event))
-}
-
-unsafe extern "C" fn icon_release_trampoline<P, F: Fn(&P, EntryIconPosition, &gdk::EventButton) + 'static>(this: *mut ffi::GtkEntry, icon_pos: ffi::GtkEntryIconPosition, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast(), from_glib(icon_pos), &from_glib_borrow(event))
-}
-
-unsafe extern "C" fn insert_at_cursor_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkEntry, string: *mut libc::c_char, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(string))
-}
-
-#[cfg(any(feature = "v3_22_27", feature = "dox"))]
-unsafe extern "C" fn insert_emoji_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32, bool) + 'static>(this: *mut ffi::GtkEntry, step: ffi::GtkMovementStep, count: libc::c_int, extend_selection: glib_ffi::gboolean, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast(), from_glib(step), count, from_glib(extend_selection))
-}
-
-unsafe extern "C" fn paste_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkEntry, widget: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(widget))
-}
-
-unsafe extern "C" fn preedit_changed_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkEntry, preedit: *mut libc::c_char, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(preedit))
-}
-
-unsafe extern "C" fn toggle_overwrite_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_activates_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_caps_lock_warning_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_completion_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_cursor_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_editable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_enable_emoji_completion_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_has_frame_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_im_module_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_invisible_char_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_invisible_char_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_max_length_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_overwrite_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_placeholder_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_activatable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_gicon_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_pixbuf_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_sensitive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_storage_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_tooltip_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_tooltip_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_progress_fraction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_progress_pulse_step_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_scroll_offset_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_activatable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_gicon_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_pixbuf_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_sensitive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_storage_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_tooltip_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_tooltip_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_selection_bound_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_shadow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_emoji_icon_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_text_length_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_truncate_multiline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_visibility_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Entry {

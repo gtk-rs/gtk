@@ -2,25 +2,21 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Buildable;
-use Justification;
-use Menu;
-use Misc;
-use MovementStep;
-use Widget;
-use ffi;
+use gdk;
 use glib;
-use glib::GString;
-use glib::StaticType;
-use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectExt;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
 use libc;
 use pango;
 use signal::Inhibit;
@@ -28,30 +24,584 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
+use Align;
+use Buildable;
+use Container;
+use Justification;
+use Menu;
+use Misc;
+use MovementStep;
+use Widget;
 
 glib_wrapper! {
-    pub struct Label(Object<ffi::GtkLabel, ffi::GtkLabelClass, LabelClass>) @extends Misc, Widget, @implements Buildable;
+    pub struct Label(Object<gtk_sys::GtkLabel, gtk_sys::GtkLabelClass, LabelClass>) @extends Misc, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_label_get_type(),
+        get_type => || gtk_sys::gtk_label_get_type(),
     }
 }
 
 impl Label {
-    pub fn new<'a, P: Into<Option<&'a str>>>(str: P) -> Label {
+    pub fn new(str: Option<&str>) -> Label {
         assert_initialized_main_thread!();
-        let str = str.into();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_label_new(str.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_label_new(str.to_glib_none().0)).unsafe_cast()
         }
     }
 
-    pub fn new_with_mnemonic<'a, P: Into<Option<&'a str>>>(str: P) -> Label {
+    pub fn new_with_mnemonic(str: Option<&str>) -> Label {
         assert_initialized_main_thread!();
-        let str = str.into();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_label_new_with_mnemonic(str.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_label_new_with_mnemonic(str.to_glib_none().0))
+                .unsafe_cast()
         }
+    }
+}
+
+pub struct LabelBuilder {
+    angle: Option<f64>,
+    attributes: Option<pango::AttrList>,
+    ellipsize: Option<pango::EllipsizeMode>,
+    justify: Option<Justification>,
+    label: Option<String>,
+    lines: Option<i32>,
+    max_width_chars: Option<i32>,
+    mnemonic_widget: Option<Widget>,
+    pattern: Option<String>,
+    selectable: Option<bool>,
+    single_line_mode: Option<bool>,
+    track_visited_links: Option<bool>,
+    use_markup: Option<bool>,
+    use_underline: Option<bool>,
+    width_chars: Option<i32>,
+    wrap: Option<bool>,
+    wrap_mode: Option<pango::WrapMode>,
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    xalign: Option<f32>,
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    yalign: Option<f32>,
+    app_paintable: Option<bool>,
+    can_default: Option<bool>,
+    can_focus: Option<bool>,
+    events: Option<gdk::EventMask>,
+    expand: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    focus_on_click: Option<bool>,
+    halign: Option<Align>,
+    has_default: Option<bool>,
+    has_focus: Option<bool>,
+    has_tooltip: Option<bool>,
+    height_request: Option<i32>,
+    hexpand: Option<bool>,
+    hexpand_set: Option<bool>,
+    is_focus: Option<bool>,
+    margin: Option<i32>,
+    margin_bottom: Option<i32>,
+    margin_end: Option<i32>,
+    margin_start: Option<i32>,
+    margin_top: Option<i32>,
+    name: Option<String>,
+    no_show_all: Option<bool>,
+    opacity: Option<f64>,
+    parent: Option<Container>,
+    receives_default: Option<bool>,
+    sensitive: Option<bool>,
+    //style: /*Unknown type*/,
+    tooltip_markup: Option<String>,
+    tooltip_text: Option<String>,
+    valign: Option<Align>,
+    vexpand: Option<bool>,
+    vexpand_set: Option<bool>,
+    visible: Option<bool>,
+    width_request: Option<i32>,
+}
+
+impl LabelBuilder {
+    pub fn new() -> Self {
+        Self {
+            angle: None,
+            attributes: None,
+            ellipsize: None,
+            justify: None,
+            label: None,
+            lines: None,
+            max_width_chars: None,
+            mnemonic_widget: None,
+            pattern: None,
+            selectable: None,
+            single_line_mode: None,
+            track_visited_links: None,
+            use_markup: None,
+            use_underline: None,
+            width_chars: None,
+            wrap: None,
+            wrap_mode: None,
+            #[cfg(any(feature = "v3_16", feature = "dox"))]
+            xalign: None,
+            #[cfg(any(feature = "v3_16", feature = "dox"))]
+            yalign: None,
+            app_paintable: None,
+            can_default: None,
+            can_focus: None,
+            events: None,
+            expand: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            focus_on_click: None,
+            halign: None,
+            has_default: None,
+            has_focus: None,
+            has_tooltip: None,
+            height_request: None,
+            hexpand: None,
+            hexpand_set: None,
+            is_focus: None,
+            margin: None,
+            margin_bottom: None,
+            margin_end: None,
+            margin_start: None,
+            margin_top: None,
+            name: None,
+            no_show_all: None,
+            opacity: None,
+            parent: None,
+            receives_default: None,
+            sensitive: None,
+            tooltip_markup: None,
+            tooltip_text: None,
+            valign: None,
+            vexpand: None,
+            vexpand_set: None,
+            visible: None,
+            width_request: None,
+        }
+    }
+
+    pub fn build(self) -> Label {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref angle) = self.angle {
+            properties.push(("angle", angle));
+        }
+        if let Some(ref attributes) = self.attributes {
+            properties.push(("attributes", attributes));
+        }
+        if let Some(ref ellipsize) = self.ellipsize {
+            properties.push(("ellipsize", ellipsize));
+        }
+        if let Some(ref justify) = self.justify {
+            properties.push(("justify", justify));
+        }
+        if let Some(ref label) = self.label {
+            properties.push(("label", label));
+        }
+        if let Some(ref lines) = self.lines {
+            properties.push(("lines", lines));
+        }
+        if let Some(ref max_width_chars) = self.max_width_chars {
+            properties.push(("max-width-chars", max_width_chars));
+        }
+        if let Some(ref mnemonic_widget) = self.mnemonic_widget {
+            properties.push(("mnemonic-widget", mnemonic_widget));
+        }
+        if let Some(ref pattern) = self.pattern {
+            properties.push(("pattern", pattern));
+        }
+        if let Some(ref selectable) = self.selectable {
+            properties.push(("selectable", selectable));
+        }
+        if let Some(ref single_line_mode) = self.single_line_mode {
+            properties.push(("single-line-mode", single_line_mode));
+        }
+        if let Some(ref track_visited_links) = self.track_visited_links {
+            properties.push(("track-visited-links", track_visited_links));
+        }
+        if let Some(ref use_markup) = self.use_markup {
+            properties.push(("use-markup", use_markup));
+        }
+        if let Some(ref use_underline) = self.use_underline {
+            properties.push(("use-underline", use_underline));
+        }
+        if let Some(ref width_chars) = self.width_chars {
+            properties.push(("width-chars", width_chars));
+        }
+        if let Some(ref wrap) = self.wrap {
+            properties.push(("wrap", wrap));
+        }
+        if let Some(ref wrap_mode) = self.wrap_mode {
+            properties.push(("wrap-mode", wrap_mode));
+        }
+        #[cfg(any(feature = "v3_16", feature = "dox"))]
+        {
+            if let Some(ref xalign) = self.xalign {
+                properties.push(("xalign", xalign));
+            }
+        }
+        #[cfg(any(feature = "v3_16", feature = "dox"))]
+        {
+            if let Some(ref yalign) = self.yalign {
+                properties.push(("yalign", yalign));
+            }
+        }
+        if let Some(ref app_paintable) = self.app_paintable {
+            properties.push(("app-paintable", app_paintable));
+        }
+        if let Some(ref can_default) = self.can_default {
+            properties.push(("can-default", can_default));
+        }
+        if let Some(ref can_focus) = self.can_focus {
+            properties.push(("can-focus", can_focus));
+        }
+        if let Some(ref events) = self.events {
+            properties.push(("events", events));
+        }
+        if let Some(ref expand) = self.expand {
+            properties.push(("expand", expand));
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref focus_on_click) = self.focus_on_click {
+                properties.push(("focus-on-click", focus_on_click));
+            }
+        }
+        if let Some(ref halign) = self.halign {
+            properties.push(("halign", halign));
+        }
+        if let Some(ref has_default) = self.has_default {
+            properties.push(("has-default", has_default));
+        }
+        if let Some(ref has_focus) = self.has_focus {
+            properties.push(("has-focus", has_focus));
+        }
+        if let Some(ref has_tooltip) = self.has_tooltip {
+            properties.push(("has-tooltip", has_tooltip));
+        }
+        if let Some(ref height_request) = self.height_request {
+            properties.push(("height-request", height_request));
+        }
+        if let Some(ref hexpand) = self.hexpand {
+            properties.push(("hexpand", hexpand));
+        }
+        if let Some(ref hexpand_set) = self.hexpand_set {
+            properties.push(("hexpand-set", hexpand_set));
+        }
+        if let Some(ref is_focus) = self.is_focus {
+            properties.push(("is-focus", is_focus));
+        }
+        if let Some(ref margin) = self.margin {
+            properties.push(("margin", margin));
+        }
+        if let Some(ref margin_bottom) = self.margin_bottom {
+            properties.push(("margin-bottom", margin_bottom));
+        }
+        if let Some(ref margin_end) = self.margin_end {
+            properties.push(("margin-end", margin_end));
+        }
+        if let Some(ref margin_start) = self.margin_start {
+            properties.push(("margin-start", margin_start));
+        }
+        if let Some(ref margin_top) = self.margin_top {
+            properties.push(("margin-top", margin_top));
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+        if let Some(ref no_show_all) = self.no_show_all {
+            properties.push(("no-show-all", no_show_all));
+        }
+        if let Some(ref opacity) = self.opacity {
+            properties.push(("opacity", opacity));
+        }
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref receives_default) = self.receives_default {
+            properties.push(("receives-default", receives_default));
+        }
+        if let Some(ref sensitive) = self.sensitive {
+            properties.push(("sensitive", sensitive));
+        }
+        if let Some(ref tooltip_markup) = self.tooltip_markup {
+            properties.push(("tooltip-markup", tooltip_markup));
+        }
+        if let Some(ref tooltip_text) = self.tooltip_text {
+            properties.push(("tooltip-text", tooltip_text));
+        }
+        if let Some(ref valign) = self.valign {
+            properties.push(("valign", valign));
+        }
+        if let Some(ref vexpand) = self.vexpand {
+            properties.push(("vexpand", vexpand));
+        }
+        if let Some(ref vexpand_set) = self.vexpand_set {
+            properties.push(("vexpand-set", vexpand_set));
+        }
+        if let Some(ref visible) = self.visible {
+            properties.push(("visible", visible));
+        }
+        if let Some(ref width_request) = self.width_request {
+            properties.push(("width-request", width_request));
+        }
+        glib::Object::new(Label::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
+
+    pub fn angle(mut self, angle: f64) -> Self {
+        self.angle = Some(angle);
+        self
+    }
+
+    pub fn attributes(mut self, attributes: &pango::AttrList) -> Self {
+        self.attributes = Some(attributes.clone());
+        self
+    }
+
+    pub fn ellipsize(mut self, ellipsize: pango::EllipsizeMode) -> Self {
+        self.ellipsize = Some(ellipsize);
+        self
+    }
+
+    pub fn justify(mut self, justify: Justification) -> Self {
+        self.justify = Some(justify);
+        self
+    }
+
+    pub fn label(mut self, label: &str) -> Self {
+        self.label = Some(label.to_string());
+        self
+    }
+
+    pub fn lines(mut self, lines: i32) -> Self {
+        self.lines = Some(lines);
+        self
+    }
+
+    pub fn max_width_chars(mut self, max_width_chars: i32) -> Self {
+        self.max_width_chars = Some(max_width_chars);
+        self
+    }
+
+    pub fn mnemonic_widget(mut self, mnemonic_widget: &Widget) -> Self {
+        self.mnemonic_widget = Some(mnemonic_widget.clone());
+        self
+    }
+
+    pub fn pattern(mut self, pattern: &str) -> Self {
+        self.pattern = Some(pattern.to_string());
+        self
+    }
+
+    pub fn selectable(mut self, selectable: bool) -> Self {
+        self.selectable = Some(selectable);
+        self
+    }
+
+    pub fn single_line_mode(mut self, single_line_mode: bool) -> Self {
+        self.single_line_mode = Some(single_line_mode);
+        self
+    }
+
+    pub fn track_visited_links(mut self, track_visited_links: bool) -> Self {
+        self.track_visited_links = Some(track_visited_links);
+        self
+    }
+
+    pub fn use_markup(mut self, use_markup: bool) -> Self {
+        self.use_markup = Some(use_markup);
+        self
+    }
+
+    pub fn use_underline(mut self, use_underline: bool) -> Self {
+        self.use_underline = Some(use_underline);
+        self
+    }
+
+    pub fn width_chars(mut self, width_chars: i32) -> Self {
+        self.width_chars = Some(width_chars);
+        self
+    }
+
+    pub fn wrap(mut self, wrap: bool) -> Self {
+        self.wrap = Some(wrap);
+        self
+    }
+
+    pub fn wrap_mode(mut self, wrap_mode: pango::WrapMode) -> Self {
+        self.wrap_mode = Some(wrap_mode);
+        self
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn xalign(mut self, xalign: f32) -> Self {
+        self.xalign = Some(xalign);
+        self
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn yalign(mut self, yalign: f32) -> Self {
+        self.yalign = Some(yalign);
+        self
+    }
+
+    pub fn app_paintable(mut self, app_paintable: bool) -> Self {
+        self.app_paintable = Some(app_paintable);
+        self
+    }
+
+    pub fn can_default(mut self, can_default: bool) -> Self {
+        self.can_default = Some(can_default);
+        self
+    }
+
+    pub fn can_focus(mut self, can_focus: bool) -> Self {
+        self.can_focus = Some(can_focus);
+        self
+    }
+
+    pub fn events(mut self, events: gdk::EventMask) -> Self {
+        self.events = Some(events);
+        self
+    }
+
+    pub fn expand(mut self, expand: bool) -> Self {
+        self.expand = Some(expand);
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn focus_on_click(mut self, focus_on_click: bool) -> Self {
+        self.focus_on_click = Some(focus_on_click);
+        self
+    }
+
+    pub fn halign(mut self, halign: Align) -> Self {
+        self.halign = Some(halign);
+        self
+    }
+
+    pub fn has_default(mut self, has_default: bool) -> Self {
+        self.has_default = Some(has_default);
+        self
+    }
+
+    pub fn has_focus(mut self, has_focus: bool) -> Self {
+        self.has_focus = Some(has_focus);
+        self
+    }
+
+    pub fn has_tooltip(mut self, has_tooltip: bool) -> Self {
+        self.has_tooltip = Some(has_tooltip);
+        self
+    }
+
+    pub fn height_request(mut self, height_request: i32) -> Self {
+        self.height_request = Some(height_request);
+        self
+    }
+
+    pub fn hexpand(mut self, hexpand: bool) -> Self {
+        self.hexpand = Some(hexpand);
+        self
+    }
+
+    pub fn hexpand_set(mut self, hexpand_set: bool) -> Self {
+        self.hexpand_set = Some(hexpand_set);
+        self
+    }
+
+    pub fn is_focus(mut self, is_focus: bool) -> Self {
+        self.is_focus = Some(is_focus);
+        self
+    }
+
+    pub fn margin(mut self, margin: i32) -> Self {
+        self.margin = Some(margin);
+        self
+    }
+
+    pub fn margin_bottom(mut self, margin_bottom: i32) -> Self {
+        self.margin_bottom = Some(margin_bottom);
+        self
+    }
+
+    pub fn margin_end(mut self, margin_end: i32) -> Self {
+        self.margin_end = Some(margin_end);
+        self
+    }
+
+    pub fn margin_start(mut self, margin_start: i32) -> Self {
+        self.margin_start = Some(margin_start);
+        self
+    }
+
+    pub fn margin_top(mut self, margin_top: i32) -> Self {
+        self.margin_top = Some(margin_top);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
+    }
+
+    pub fn no_show_all(mut self, no_show_all: bool) -> Self {
+        self.no_show_all = Some(no_show_all);
+        self
+    }
+
+    pub fn opacity(mut self, opacity: f64) -> Self {
+        self.opacity = Some(opacity);
+        self
+    }
+
+    pub fn parent(mut self, parent: &Container) -> Self {
+        self.parent = Some(parent.clone());
+        self
+    }
+
+    pub fn receives_default(mut self, receives_default: bool) -> Self {
+        self.receives_default = Some(receives_default);
+        self
+    }
+
+    pub fn sensitive(mut self, sensitive: bool) -> Self {
+        self.sensitive = Some(sensitive);
+        self
+    }
+
+    pub fn tooltip_markup(mut self, tooltip_markup: &str) -> Self {
+        self.tooltip_markup = Some(tooltip_markup.to_string());
+        self
+    }
+
+    pub fn tooltip_text(mut self, tooltip_text: &str) -> Self {
+        self.tooltip_text = Some(tooltip_text.to_string());
+        self
+    }
+
+    pub fn valign(mut self, valign: Align) -> Self {
+        self.valign = Some(valign);
+        self
+    }
+
+    pub fn vexpand(mut self, vexpand: bool) -> Self {
+        self.vexpand = Some(vexpand);
+        self
+    }
+
+    pub fn vexpand_set(mut self, vexpand_set: bool) -> Self {
+        self.vexpand_set = Some(vexpand_set);
+        self
+    }
+
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
+    }
+
+    pub fn width_request(mut self, width_request: i32) -> Self {
+        self.width_request = Some(width_request);
+        self
     }
 }
 
@@ -112,7 +662,7 @@ pub trait LabelExt: 'static {
 
     fn set_angle(&self, angle: f64);
 
-    fn set_attributes<'a, P: Into<Option<&'a pango::AttrList>>>(&self, attrs: P);
+    fn set_attributes(&self, attrs: Option<&pango::AttrList>);
 
     fn set_ellipsize(&self, mode: pango::EllipsizeMode);
 
@@ -132,7 +682,7 @@ pub trait LabelExt: 'static {
 
     fn set_max_width_chars(&self, n_chars: i32);
 
-    fn set_mnemonic_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q);
+    fn set_mnemonic_widget<P: IsA<Widget>>(&self, widget: Option<&P>);
 
     fn set_pattern(&self, pattern: &str);
 
@@ -174,13 +724,19 @@ pub trait LabelExt: 'static {
 
     fn emit_activate_current_link(&self);
 
-    fn connect_activate_link<F: Fn(&Self, &str) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_activate_link<F: Fn(&Self, &str) -> Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_copy_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn emit_copy_clipboard(&self);
 
-    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool);
 
@@ -190,7 +746,10 @@ pub trait LabelExt: 'static {
 
     fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -200,25 +759,46 @@ pub trait LabelExt: 'static {
 
     fn connect_property_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_mnemonic_keyval_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_mnemonic_keyval_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_mnemonic_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_mnemonic_widget_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_pattern_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_selectable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_single_line_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_single_line_mode_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_track_visited_links_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_track_visited_links_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -235,44 +815,50 @@ pub trait LabelExt: 'static {
 
 impl<O: IsA<Label>> LabelExt for O {
     fn get_angle(&self) -> f64 {
-        unsafe {
-            ffi::gtk_label_get_angle(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_label_get_angle(self.as_ref().to_glib_none().0) }
     }
 
     fn get_attributes(&self) -> Option<pango::AttrList> {
         unsafe {
-            from_glib_none(ffi::gtk_label_get_attributes(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_label_get_attributes(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_current_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_label_get_current_uri(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_label_get_current_uri(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_ellipsize(&self) -> pango::EllipsizeMode {
         unsafe {
-            from_glib(ffi::gtk_label_get_ellipsize(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_ellipsize(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_justify(&self) -> Justification {
         unsafe {
-            from_glib(ffi::gtk_label_get_justify(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_justify(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_label(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_label_get_label(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_label_get_label(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_layout(&self) -> Option<pango::Layout> {
         unsafe {
-            from_glib_none(ffi::gtk_label_get_layout(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_label_get_layout(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -280,50 +866,52 @@ impl<O: IsA<Label>> LabelExt for O {
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
-            ffi::gtk_label_get_layout_offsets(self.as_ref().to_glib_none().0, &mut x, &mut y);
+            gtk_sys::gtk_label_get_layout_offsets(self.as_ref().to_glib_none().0, &mut x, &mut y);
             (x, y)
         }
     }
 
     fn get_line_wrap(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_label_get_line_wrap(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_line_wrap(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_line_wrap_mode(&self) -> pango::WrapMode {
         unsafe {
-            from_glib(ffi::gtk_label_get_line_wrap_mode(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_line_wrap_mode(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_lines(&self) -> i32 {
-        unsafe {
-            ffi::gtk_label_get_lines(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_label_get_lines(self.as_ref().to_glib_none().0) }
     }
 
     fn get_max_width_chars(&self) -> i32 {
-        unsafe {
-            ffi::gtk_label_get_max_width_chars(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_label_get_max_width_chars(self.as_ref().to_glib_none().0) }
     }
 
     fn get_mnemonic_keyval(&self) -> u32 {
-        unsafe {
-            ffi::gtk_label_get_mnemonic_keyval(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_label_get_mnemonic_keyval(self.as_ref().to_glib_none().0) }
     }
 
     fn get_mnemonic_widget(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_label_get_mnemonic_widget(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_label_get_mnemonic_widget(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_selectable(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_label_get_selectable(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_selectable(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -331,213 +919,251 @@ impl<O: IsA<Label>> LabelExt for O {
         unsafe {
             let mut start = mem::uninitialized();
             let mut end = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_label_get_selection_bounds(self.as_ref().to_glib_none().0, &mut start, &mut end));
-            if ret { Some((start, end)) } else { None }
+            let ret = from_glib(gtk_sys::gtk_label_get_selection_bounds(
+                self.as_ref().to_glib_none().0,
+                &mut start,
+                &mut end,
+            ));
+            if ret {
+                Some((start, end))
+            } else {
+                None
+            }
         }
     }
 
     fn get_single_line_mode(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_label_get_single_line_mode(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_single_line_mode(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_text(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_label_get_text(self.as_ref().to_glib_none().0))
-        }
+        unsafe { from_glib_none(gtk_sys::gtk_label_get_text(self.as_ref().to_glib_none().0)) }
     }
 
     fn get_track_visited_links(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_label_get_track_visited_links(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_track_visited_links(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_use_markup(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_label_get_use_markup(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_use_markup(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_use_underline(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_label_get_use_underline(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_label_get_use_underline(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_width_chars(&self) -> i32 {
-        unsafe {
-            ffi::gtk_label_get_width_chars(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_label_get_width_chars(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_xalign(&self) -> f32 {
-        unsafe {
-            ffi::gtk_label_get_xalign(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_label_get_xalign(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_yalign(&self) -> f32 {
-        unsafe {
-            ffi::gtk_label_get_yalign(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_label_get_yalign(self.as_ref().to_glib_none().0) }
     }
 
     fn select_region(&self, start_offset: i32, end_offset: i32) {
         unsafe {
-            ffi::gtk_label_select_region(self.as_ref().to_glib_none().0, start_offset, end_offset);
+            gtk_sys::gtk_label_select_region(
+                self.as_ref().to_glib_none().0,
+                start_offset,
+                end_offset,
+            );
         }
     }
 
     fn set_angle(&self, angle: f64) {
         unsafe {
-            ffi::gtk_label_set_angle(self.as_ref().to_glib_none().0, angle);
+            gtk_sys::gtk_label_set_angle(self.as_ref().to_glib_none().0, angle);
         }
     }
 
-    fn set_attributes<'a, P: Into<Option<&'a pango::AttrList>>>(&self, attrs: P) {
-        let attrs = attrs.into();
+    fn set_attributes(&self, attrs: Option<&pango::AttrList>) {
         unsafe {
-            ffi::gtk_label_set_attributes(self.as_ref().to_glib_none().0, attrs.to_glib_none().0);
+            gtk_sys::gtk_label_set_attributes(
+                self.as_ref().to_glib_none().0,
+                attrs.to_glib_none().0,
+            );
         }
     }
 
     fn set_ellipsize(&self, mode: pango::EllipsizeMode) {
         unsafe {
-            ffi::gtk_label_set_ellipsize(self.as_ref().to_glib_none().0, mode.to_glib());
+            gtk_sys::gtk_label_set_ellipsize(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
     fn set_justify(&self, jtype: Justification) {
         unsafe {
-            ffi::gtk_label_set_justify(self.as_ref().to_glib_none().0, jtype.to_glib());
+            gtk_sys::gtk_label_set_justify(self.as_ref().to_glib_none().0, jtype.to_glib());
         }
     }
 
     fn set_label(&self, str: &str) {
         unsafe {
-            ffi::gtk_label_set_label(self.as_ref().to_glib_none().0, str.to_glib_none().0);
+            gtk_sys::gtk_label_set_label(self.as_ref().to_glib_none().0, str.to_glib_none().0);
         }
     }
 
     fn set_line_wrap(&self, wrap: bool) {
         unsafe {
-            ffi::gtk_label_set_line_wrap(self.as_ref().to_glib_none().0, wrap.to_glib());
+            gtk_sys::gtk_label_set_line_wrap(self.as_ref().to_glib_none().0, wrap.to_glib());
         }
     }
 
     fn set_line_wrap_mode(&self, wrap_mode: pango::WrapMode) {
         unsafe {
-            ffi::gtk_label_set_line_wrap_mode(self.as_ref().to_glib_none().0, wrap_mode.to_glib());
+            gtk_sys::gtk_label_set_line_wrap_mode(
+                self.as_ref().to_glib_none().0,
+                wrap_mode.to_glib(),
+            );
         }
     }
 
     fn set_lines(&self, lines: i32) {
         unsafe {
-            ffi::gtk_label_set_lines(self.as_ref().to_glib_none().0, lines);
+            gtk_sys::gtk_label_set_lines(self.as_ref().to_glib_none().0, lines);
         }
     }
 
     fn set_markup(&self, str: &str) {
         unsafe {
-            ffi::gtk_label_set_markup(self.as_ref().to_glib_none().0, str.to_glib_none().0);
+            gtk_sys::gtk_label_set_markup(self.as_ref().to_glib_none().0, str.to_glib_none().0);
         }
     }
 
     fn set_markup_with_mnemonic(&self, str: &str) {
         unsafe {
-            ffi::gtk_label_set_markup_with_mnemonic(self.as_ref().to_glib_none().0, str.to_glib_none().0);
+            gtk_sys::gtk_label_set_markup_with_mnemonic(
+                self.as_ref().to_glib_none().0,
+                str.to_glib_none().0,
+            );
         }
     }
 
     fn set_max_width_chars(&self, n_chars: i32) {
         unsafe {
-            ffi::gtk_label_set_max_width_chars(self.as_ref().to_glib_none().0, n_chars);
+            gtk_sys::gtk_label_set_max_width_chars(self.as_ref().to_glib_none().0, n_chars);
         }
     }
 
-    fn set_mnemonic_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q) {
-        let widget = widget.into();
+    fn set_mnemonic_widget<P: IsA<Widget>>(&self, widget: Option<&P>) {
         unsafe {
-            ffi::gtk_label_set_mnemonic_widget(self.as_ref().to_glib_none().0, widget.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_label_set_mnemonic_widget(
+                self.as_ref().to_glib_none().0,
+                widget.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
     fn set_pattern(&self, pattern: &str) {
         unsafe {
-            ffi::gtk_label_set_pattern(self.as_ref().to_glib_none().0, pattern.to_glib_none().0);
+            gtk_sys::gtk_label_set_pattern(
+                self.as_ref().to_glib_none().0,
+                pattern.to_glib_none().0,
+            );
         }
     }
 
     fn set_selectable(&self, setting: bool) {
         unsafe {
-            ffi::gtk_label_set_selectable(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_label_set_selectable(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
     fn set_single_line_mode(&self, single_line_mode: bool) {
         unsafe {
-            ffi::gtk_label_set_single_line_mode(self.as_ref().to_glib_none().0, single_line_mode.to_glib());
+            gtk_sys::gtk_label_set_single_line_mode(
+                self.as_ref().to_glib_none().0,
+                single_line_mode.to_glib(),
+            );
         }
     }
 
     fn set_text(&self, str: &str) {
         unsafe {
-            ffi::gtk_label_set_text(self.as_ref().to_glib_none().0, str.to_glib_none().0);
+            gtk_sys::gtk_label_set_text(self.as_ref().to_glib_none().0, str.to_glib_none().0);
         }
     }
 
     fn set_text_with_mnemonic(&self, str: &str) {
         unsafe {
-            ffi::gtk_label_set_text_with_mnemonic(self.as_ref().to_glib_none().0, str.to_glib_none().0);
+            gtk_sys::gtk_label_set_text_with_mnemonic(
+                self.as_ref().to_glib_none().0,
+                str.to_glib_none().0,
+            );
         }
     }
 
     fn set_track_visited_links(&self, track_links: bool) {
         unsafe {
-            ffi::gtk_label_set_track_visited_links(self.as_ref().to_glib_none().0, track_links.to_glib());
+            gtk_sys::gtk_label_set_track_visited_links(
+                self.as_ref().to_glib_none().0,
+                track_links.to_glib(),
+            );
         }
     }
 
     fn set_use_markup(&self, setting: bool) {
         unsafe {
-            ffi::gtk_label_set_use_markup(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_label_set_use_markup(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
     fn set_use_underline(&self, setting: bool) {
         unsafe {
-            ffi::gtk_label_set_use_underline(self.as_ref().to_glib_none().0, setting.to_glib());
+            gtk_sys::gtk_label_set_use_underline(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
     fn set_width_chars(&self, n_chars: i32) {
         unsafe {
-            ffi::gtk_label_set_width_chars(self.as_ref().to_glib_none().0, n_chars);
+            gtk_sys::gtk_label_set_width_chars(self.as_ref().to_glib_none().0, n_chars);
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_xalign(&self, xalign: f32) {
         unsafe {
-            ffi::gtk_label_set_xalign(self.as_ref().to_glib_none().0, xalign);
+            gtk_sys::gtk_label_set_xalign(self.as_ref().to_glib_none().0, xalign);
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_yalign(&self, yalign: f32) {
         unsafe {
-            ffi::gtk_label_set_yalign(self.as_ref().to_glib_none().0, yalign);
+            gtk_sys::gtk_label_set_yalign(self.as_ref().to_glib_none().0, yalign);
         }
     }
 
     fn get_property_cursor_position(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cursor-position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"cursor-position\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -545,7 +1171,11 @@ impl<O: IsA<Label>> LabelExt for O {
     fn get_property_selection_bound(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"selection-bound\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"selection-bound\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -553,424 +1183,730 @@ impl<O: IsA<Label>> LabelExt for O {
     fn get_property_wrap(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"wrap\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_wrap(&self, wrap: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap\0".as_ptr() as *const _, Value::from(&wrap).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"wrap\0".as_ptr() as *const _,
+                Value::from(&wrap).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_wrap_mode(&self) -> pango::WrapMode {
         unsafe {
             let mut value = Value::from_type(<pango::WrapMode as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"wrap-mode\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_wrap_mode(&self, wrap_mode: pango::WrapMode) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-mode\0".as_ptr() as *const _, Value::from(&wrap_mode).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"wrap-mode\0".as_ptr() as *const _,
+                Value::from(&wrap_mode).to_glib_none().0,
+            );
         }
     }
 
     fn connect_activate_current_link<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn activate_current_link_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"activate-current-link\0".as_ptr() as *const _,
-                Some(transmute(activate_current_link_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"activate-current-link\0".as_ptr() as *const _,
+                Some(transmute(
+                    activate_current_link_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_activate_current_link(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate-current-link", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("activate-current-link", &[])
+                .unwrap()
+        };
     }
 
-    fn connect_activate_link<F: Fn(&Self, &str) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_activate_link<F: Fn(&Self, &str) -> Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P, &str) -> Inhibit + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            uri: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Label::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(uri),
+            )
+            .to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"activate-link\0".as_ptr() as *const _,
-                Some(transmute(activate_link_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"activate-link\0".as_ptr() as *const _,
+                Some(transmute(activate_link_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_copy_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn copy_clipboard_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"copy-clipboard\0".as_ptr() as *const _,
-                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"copy-clipboard\0".as_ptr() as *const _,
+                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_copy_clipboard(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("copy-clipboard", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("copy-clipboard", &[])
+                .unwrap()
+        };
     }
 
-    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn move_cursor_trampoline<
+            P,
+            F: Fn(&P, MovementStep, i32, bool) + 'static,
+        >(
+            this: *mut gtk_sys::GtkLabel,
+            step: gtk_sys::GtkMovementStep,
+            count: libc::c_int,
+            extend_selection: glib_sys::gboolean,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Label::from_glib_borrow(this).unsafe_cast(),
+                from_glib(step),
+                count,
+                from_glib(extend_selection),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"move-cursor\0".as_ptr() as *const _,
+                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-cursor", &[&step, &count, &extend_selection]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("move-cursor", &[&step, &count, &extend_selection])
+                .unwrap()
+        };
     }
 
     fn connect_populate_popup<F: Fn(&Self, &Menu) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Menu) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            menu: *mut gtk_sys::GtkMenu,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Label::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(menu),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"populate-popup\0".as_ptr() as *const _,
-                Some(transmute(populate_popup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"populate-popup\0".as_ptr() as *const _,
+                Some(transmute(populate_popup_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_angle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_angle_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::angle\0".as_ptr() as *const _,
-                Some(transmute(notify_angle_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::angle\0".as_ptr() as *const _,
+                Some(transmute(notify_angle_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::attributes\0".as_ptr() as *const _,
-                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::attributes\0".as_ptr() as *const _,
+                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_cursor_position_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::cursor-position\0".as_ptr() as *const _,
-                Some(transmute(notify_cursor_position_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::cursor-position\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_cursor_position_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::ellipsize\0".as_ptr() as *const _,
-                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::ellipsize\0".as_ptr() as *const _,
+                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_justify_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_justify_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::justify\0".as_ptr() as *const _,
-                Some(transmute(notify_justify_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::justify\0".as_ptr() as *const _,
+                Some(transmute(notify_justify_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::label\0".as_ptr() as *const _,
+                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_lines_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::lines\0".as_ptr() as *const _,
-                Some(transmute(notify_lines_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::lines\0".as_ptr() as *const _,
+                Some(transmute(notify_lines_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::max-width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_max_width_chars_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-width-chars\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_max_width_chars_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_mnemonic_keyval_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_mnemonic_keyval_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mnemonic_keyval_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::mnemonic-keyval\0".as_ptr() as *const _,
-                Some(transmute(notify_mnemonic_keyval_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::mnemonic-keyval\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_mnemonic_keyval_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_mnemonic_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_mnemonic_widget_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_mnemonic_widget_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::mnemonic-widget\0".as_ptr() as *const _,
-                Some(transmute(notify_mnemonic_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::mnemonic-widget\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_mnemonic_widget_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_pattern_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_pattern_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::pattern\0".as_ptr() as *const _,
-                Some(transmute(notify_pattern_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::pattern\0".as_ptr() as *const _,
+                Some(transmute(notify_pattern_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_selectable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_selectable_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::selectable\0".as_ptr() as *const _,
-                Some(transmute(notify_selectable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::selectable\0".as_ptr() as *const _,
+                Some(transmute(notify_selectable_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_selection_bound_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::selection-bound\0".as_ptr() as *const _,
-                Some(transmute(notify_selection_bound_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::selection-bound\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_selection_bound_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_single_line_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_single_line_mode_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_single_line_mode_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::single-line-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_single_line_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::single-line-mode\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_single_line_mode_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_track_visited_links_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_track_visited_links_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_track_visited_links_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::track-visited-links\0".as_ptr() as *const _,
-                Some(transmute(notify_track_visited_links_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::track-visited-links\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_track_visited_links_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_use_markup_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::use-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::use-markup\0".as_ptr() as *const _,
+                Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(notify_use_underline_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::use-underline\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_use_underline_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::width-chars\0".as_ptr() as *const _,
+                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wrap_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::wrap\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::wrap\0".as_ptr() as *const _,
+                Some(transmute(notify_wrap_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_wrap_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wrap_mode_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::wrap-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::wrap-mode\0".as_ptr() as *const _,
+                Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::xalign\0".as_ptr() as *const _,
+                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_yalign_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkLabel,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Label>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Label::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::yalign\0".as_ptr() as *const _,
-                Some(transmute(notify_yalign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::yalign\0".as_ptr() as *const _,
+                Some(transmute(notify_yalign_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
-}
-
-unsafe extern "C" fn activate_current_link_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P, &str) -> Inhibit + 'static>(this: *mut ffi::GtkLabel, uri: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(uri)).to_glib()
-}
-
-unsafe extern "C" fn copy_clipboard_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32, bool) + 'static>(this: *mut ffi::GtkLabel, step: ffi::GtkMovementStep, count: libc::c_int, extend_selection: glib_ffi::gboolean, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast(), from_glib(step), count, from_glib(extend_selection))
-}
-
-unsafe extern "C" fn populate_popup_trampoline<P, F: Fn(&P, &Menu) + 'static>(this: *mut ffi::GtkLabel, menu: *mut ffi::GtkMenu, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(menu))
-}
-
-unsafe extern "C" fn notify_angle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_cursor_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_justify_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_lines_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_mnemonic_keyval_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_mnemonic_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_pattern_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_selectable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_selection_bound_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_single_line_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_track_visited_links_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_use_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_wrap_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_wrap_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_yalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Label> {
-    let f: &F = transmute(f);
-    f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Label {

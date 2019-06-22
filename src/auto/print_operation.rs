@@ -2,6 +2,25 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
+use libc;
+use std;
+use std::boxed::Box as Box_;
+use std::fmt;
+use std::mem::transmute;
+use std::ptr;
 use Error;
 use PageSetup;
 use PrintContext;
@@ -13,45 +32,193 @@ use PrintStatus;
 use Unit;
 use Widget;
 use Window;
-use ffi;
-use glib;
-use glib::GString;
-use glib::StaticType;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use libc;
-use std;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct PrintOperation(Object<ffi::GtkPrintOperation, ffi::GtkPrintOperationClass, PrintOperationClass>) @implements PrintOperationPreview;
+    pub struct PrintOperation(Object<gtk_sys::GtkPrintOperation, gtk_sys::GtkPrintOperationClass, PrintOperationClass>) @implements PrintOperationPreview;
 
     match fn {
-        get_type => || ffi::gtk_print_operation_get_type(),
+        get_type => || gtk_sys::gtk_print_operation_get_type(),
     }
 }
 
 impl PrintOperation {
     pub fn new() -> PrintOperation {
         assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_print_operation_new())
-        }
+        unsafe { from_glib_full(gtk_sys::gtk_print_operation_new()) }
     }
 }
 
 impl Default for PrintOperation {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct PrintOperationBuilder {
+    allow_async: Option<bool>,
+    current_page: Option<i32>,
+    custom_tab_label: Option<String>,
+    default_page_setup: Option<PageSetup>,
+    embed_page_setup: Option<bool>,
+    export_filename: Option<String>,
+    has_selection: Option<bool>,
+    job_name: Option<String>,
+    n_pages: Option<i32>,
+    print_settings: Option<PrintSettings>,
+    show_progress: Option<bool>,
+    support_selection: Option<bool>,
+    track_print_status: Option<bool>,
+    unit: Option<Unit>,
+    use_full_page: Option<bool>,
+}
+
+impl PrintOperationBuilder {
+    pub fn new() -> Self {
+        Self {
+            allow_async: None,
+            current_page: None,
+            custom_tab_label: None,
+            default_page_setup: None,
+            embed_page_setup: None,
+            export_filename: None,
+            has_selection: None,
+            job_name: None,
+            n_pages: None,
+            print_settings: None,
+            show_progress: None,
+            support_selection: None,
+            track_print_status: None,
+            unit: None,
+            use_full_page: None,
+        }
+    }
+
+    pub fn build(self) -> PrintOperation {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref allow_async) = self.allow_async {
+            properties.push(("allow-async", allow_async));
+        }
+        if let Some(ref current_page) = self.current_page {
+            properties.push(("current-page", current_page));
+        }
+        if let Some(ref custom_tab_label) = self.custom_tab_label {
+            properties.push(("custom-tab-label", custom_tab_label));
+        }
+        if let Some(ref default_page_setup) = self.default_page_setup {
+            properties.push(("default-page-setup", default_page_setup));
+        }
+        if let Some(ref embed_page_setup) = self.embed_page_setup {
+            properties.push(("embed-page-setup", embed_page_setup));
+        }
+        if let Some(ref export_filename) = self.export_filename {
+            properties.push(("export-filename", export_filename));
+        }
+        if let Some(ref has_selection) = self.has_selection {
+            properties.push(("has-selection", has_selection));
+        }
+        if let Some(ref job_name) = self.job_name {
+            properties.push(("job-name", job_name));
+        }
+        if let Some(ref n_pages) = self.n_pages {
+            properties.push(("n-pages", n_pages));
+        }
+        if let Some(ref print_settings) = self.print_settings {
+            properties.push(("print-settings", print_settings));
+        }
+        if let Some(ref show_progress) = self.show_progress {
+            properties.push(("show-progress", show_progress));
+        }
+        if let Some(ref support_selection) = self.support_selection {
+            properties.push(("support-selection", support_selection));
+        }
+        if let Some(ref track_print_status) = self.track_print_status {
+            properties.push(("track-print-status", track_print_status));
+        }
+        if let Some(ref unit) = self.unit {
+            properties.push(("unit", unit));
+        }
+        if let Some(ref use_full_page) = self.use_full_page {
+            properties.push(("use-full-page", use_full_page));
+        }
+        glib::Object::new(PrintOperation::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
+
+    pub fn allow_async(mut self, allow_async: bool) -> Self {
+        self.allow_async = Some(allow_async);
+        self
+    }
+
+    pub fn current_page(mut self, current_page: i32) -> Self {
+        self.current_page = Some(current_page);
+        self
+    }
+
+    pub fn custom_tab_label(mut self, custom_tab_label: &str) -> Self {
+        self.custom_tab_label = Some(custom_tab_label.to_string());
+        self
+    }
+
+    pub fn default_page_setup(mut self, default_page_setup: &PageSetup) -> Self {
+        self.default_page_setup = Some(default_page_setup.clone());
+        self
+    }
+
+    pub fn embed_page_setup(mut self, embed_page_setup: bool) -> Self {
+        self.embed_page_setup = Some(embed_page_setup);
+        self
+    }
+
+    pub fn export_filename(mut self, export_filename: &str) -> Self {
+        self.export_filename = Some(export_filename.to_string());
+        self
+    }
+
+    pub fn has_selection(mut self, has_selection: bool) -> Self {
+        self.has_selection = Some(has_selection);
+        self
+    }
+
+    pub fn job_name(mut self, job_name: &str) -> Self {
+        self.job_name = Some(job_name.to_string());
+        self
+    }
+
+    pub fn n_pages(mut self, n_pages: i32) -> Self {
+        self.n_pages = Some(n_pages);
+        self
+    }
+
+    pub fn print_settings(mut self, print_settings: &PrintSettings) -> Self {
+        self.print_settings = Some(print_settings.clone());
+        self
+    }
+
+    pub fn show_progress(mut self, show_progress: bool) -> Self {
+        self.show_progress = Some(show_progress);
+        self
+    }
+
+    pub fn support_selection(mut self, support_selection: bool) -> Self {
+        self.support_selection = Some(support_selection);
+        self
+    }
+
+    pub fn track_print_status(mut self, track_print_status: bool) -> Self {
+        self.track_print_status = Some(track_print_status);
+        self
+    }
+
+    pub fn unit(mut self, unit: Unit) -> Self {
+        self.unit = Some(unit);
+        self
+    }
+
+    pub fn use_full_page(mut self, use_full_page: bool) -> Self {
+        self.use_full_page = Some(use_full_page);
+        self
     }
 }
 
@@ -82,15 +249,19 @@ pub trait PrintOperationExt: 'static {
 
     fn is_finished(&self) -> bool;
 
-    fn run<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, action: PrintOperationAction, parent: Q) -> Result<PrintOperationResult, Error>;
+    fn run<P: IsA<Window>>(
+        &self,
+        action: PrintOperationAction,
+        parent: Option<&P>,
+    ) -> Result<PrintOperationResult, Error>;
 
     fn set_allow_async(&self, allow_async: bool);
 
     fn set_current_page(&self, current_page: i32);
 
-    fn set_custom_tab_label<'a, P: Into<Option<&'a str>>>(&self, label: P);
+    fn set_custom_tab_label(&self, label: Option<&str>);
 
-    fn set_default_page_setup<'a, P: Into<Option<&'a PageSetup>>>(&self, default_page_setup: P);
+    fn set_default_page_setup(&self, default_page_setup: Option<&PageSetup>);
 
     fn set_defer_drawing(&self);
 
@@ -104,7 +275,7 @@ pub trait PrintOperationExt: 'static {
 
     fn set_n_pages(&self, n_pages: i32);
 
-    fn set_print_settings<'a, P: Into<Option<&'a PrintSettings>>>(&self, print_settings: P);
+    fn set_print_settings(&self, print_settings: Option<&PrintSettings>);
 
     fn set_show_progress(&self, show_progress: bool);
 
@@ -138,250 +309,379 @@ pub trait PrintOperationExt: 'static {
 
     fn connect_begin_print<F: Fn(&Self, &PrintContext) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_create_custom_widget<F: Fn(&Self) -> glib::Object + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_create_custom_widget<F: Fn(&Self) -> glib::Object + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_custom_widget_apply<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_custom_widget_apply<F: Fn(&Self, &Widget) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
     fn connect_done<F: Fn(&Self, PrintOperationResult) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_draw_page<F: Fn(&Self, &PrintContext, i32) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_draw_page<F: Fn(&Self, &PrintContext, i32) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_end_print<F: Fn(&Self, &PrintContext) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_paginate<F: Fn(&Self, &PrintContext) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_paginate<F: Fn(&Self, &PrintContext) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_preview<F: Fn(&Self, &PrintOperationPreview, &PrintContext, &Option<Window>) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_preview<
+        F: Fn(&Self, &PrintOperationPreview, &PrintContext, Option<&Window>) -> bool + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_request_page_setup<F: Fn(&Self, &PrintContext, i32, &PageSetup) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_request_page_setup<F: Fn(&Self, &PrintContext, i32, &PageSetup) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_status_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_update_custom_widget<F: Fn(&Self, &Widget, &PageSetup, &PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_update_custom_widget<F: Fn(&Self, &Widget, &PageSetup, &PrintSettings) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_allow_async_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_current_page_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_current_page_notify<F: Fn(&Self) + 'static>(&self, f: F)
+        -> SignalHandlerId;
 
-    fn connect_property_custom_tab_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_custom_tab_label_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_default_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_default_page_setup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_embed_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_embed_page_setup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_export_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_export_filename_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_has_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_has_selection_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_job_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_n_pages_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_n_pages_to_print_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_n_pages_to_print_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_print_settings_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_print_settings_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_show_progress_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_show_progress_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_status_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_status_string_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_status_string_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_support_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_support_selection_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_track_print_status_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_track_print_status_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_unit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_use_full_page_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_use_full_page_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn cancel(&self) {
         unsafe {
-            ffi::gtk_print_operation_cancel(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_print_operation_cancel(self.as_ref().to_glib_none().0);
         }
     }
 
     fn draw_page_finish(&self) {
         unsafe {
-            ffi::gtk_print_operation_draw_page_finish(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_print_operation_draw_page_finish(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_default_page_setup(&self) -> Option<PageSetup> {
         unsafe {
-            from_glib_none(ffi::gtk_print_operation_get_default_page_setup(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_print_operation_get_default_page_setup(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_embed_page_setup(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_print_operation_get_embed_page_setup(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_print_operation_get_embed_page_setup(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_error(&self) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_print_operation_get_error(self.as_ref().to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ =
+                gtk_sys::gtk_print_operation_get_error(self.as_ref().to_glib_none().0, &mut error);
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn get_has_selection(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_print_operation_get_has_selection(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_print_operation_get_has_selection(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_n_pages_to_print(&self) -> i32 {
-        unsafe {
-            ffi::gtk_print_operation_get_n_pages_to_print(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_print_operation_get_n_pages_to_print(self.as_ref().to_glib_none().0) }
     }
 
     fn get_print_settings(&self) -> Option<PrintSettings> {
         unsafe {
-            from_glib_none(ffi::gtk_print_operation_get_print_settings(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_print_operation_get_print_settings(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_status(&self) -> PrintStatus {
         unsafe {
-            from_glib(ffi::gtk_print_operation_get_status(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_print_operation_get_status(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_status_string(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_print_operation_get_status_string(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_print_operation_get_status_string(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_support_selection(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_print_operation_get_support_selection(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_print_operation_get_support_selection(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn is_finished(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_print_operation_is_finished(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_print_operation_is_finished(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
-    fn run<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, action: PrintOperationAction, parent: Q) -> Result<PrintOperationResult, Error> {
-        let parent = parent.into();
+    fn run<P: IsA<Window>>(
+        &self,
+        action: PrintOperationAction,
+        parent: Option<&P>,
+    ) -> Result<PrintOperationResult, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gtk_print_operation_run(self.as_ref().to_glib_none().0, action.to_glib(), parent.map(|p| p.as_ref()).to_glib_none().0, &mut error);
-            if error.is_null() { Ok(from_glib(ret)) } else { Err(from_glib_full(error)) }
+            let ret = gtk_sys::gtk_print_operation_run(
+                self.as_ref().to_glib_none().0,
+                action.to_glib(),
+                parent.map(|p| p.as_ref()).to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn set_allow_async(&self, allow_async: bool) {
         unsafe {
-            ffi::gtk_print_operation_set_allow_async(self.as_ref().to_glib_none().0, allow_async.to_glib());
+            gtk_sys::gtk_print_operation_set_allow_async(
+                self.as_ref().to_glib_none().0,
+                allow_async.to_glib(),
+            );
         }
     }
 
     fn set_current_page(&self, current_page: i32) {
         unsafe {
-            ffi::gtk_print_operation_set_current_page(self.as_ref().to_glib_none().0, current_page);
+            gtk_sys::gtk_print_operation_set_current_page(
+                self.as_ref().to_glib_none().0,
+                current_page,
+            );
         }
     }
 
-    fn set_custom_tab_label<'a, P: Into<Option<&'a str>>>(&self, label: P) {
-        let label = label.into();
+    fn set_custom_tab_label(&self, label: Option<&str>) {
         unsafe {
-            ffi::gtk_print_operation_set_custom_tab_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
+            gtk_sys::gtk_print_operation_set_custom_tab_label(
+                self.as_ref().to_glib_none().0,
+                label.to_glib_none().0,
+            );
         }
     }
 
-    fn set_default_page_setup<'a, P: Into<Option<&'a PageSetup>>>(&self, default_page_setup: P) {
-        let default_page_setup = default_page_setup.into();
+    fn set_default_page_setup(&self, default_page_setup: Option<&PageSetup>) {
         unsafe {
-            ffi::gtk_print_operation_set_default_page_setup(self.as_ref().to_glib_none().0, default_page_setup.to_glib_none().0);
+            gtk_sys::gtk_print_operation_set_default_page_setup(
+                self.as_ref().to_glib_none().0,
+                default_page_setup.to_glib_none().0,
+            );
         }
     }
 
     fn set_defer_drawing(&self) {
         unsafe {
-            ffi::gtk_print_operation_set_defer_drawing(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_print_operation_set_defer_drawing(self.as_ref().to_glib_none().0);
         }
     }
 
     fn set_embed_page_setup(&self, embed: bool) {
         unsafe {
-            ffi::gtk_print_operation_set_embed_page_setup(self.as_ref().to_glib_none().0, embed.to_glib());
+            gtk_sys::gtk_print_operation_set_embed_page_setup(
+                self.as_ref().to_glib_none().0,
+                embed.to_glib(),
+            );
         }
     }
 
     fn set_export_filename<P: AsRef<std::path::Path>>(&self, filename: P) {
         unsafe {
-            ffi::gtk_print_operation_set_export_filename(self.as_ref().to_glib_none().0, filename.as_ref().to_glib_none().0);
+            gtk_sys::gtk_print_operation_set_export_filename(
+                self.as_ref().to_glib_none().0,
+                filename.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn set_has_selection(&self, has_selection: bool) {
         unsafe {
-            ffi::gtk_print_operation_set_has_selection(self.as_ref().to_glib_none().0, has_selection.to_glib());
+            gtk_sys::gtk_print_operation_set_has_selection(
+                self.as_ref().to_glib_none().0,
+                has_selection.to_glib(),
+            );
         }
     }
 
     fn set_job_name(&self, job_name: &str) {
         unsafe {
-            ffi::gtk_print_operation_set_job_name(self.as_ref().to_glib_none().0, job_name.to_glib_none().0);
+            gtk_sys::gtk_print_operation_set_job_name(
+                self.as_ref().to_glib_none().0,
+                job_name.to_glib_none().0,
+            );
         }
     }
 
     fn set_n_pages(&self, n_pages: i32) {
         unsafe {
-            ffi::gtk_print_operation_set_n_pages(self.as_ref().to_glib_none().0, n_pages);
+            gtk_sys::gtk_print_operation_set_n_pages(self.as_ref().to_glib_none().0, n_pages);
         }
     }
 
-    fn set_print_settings<'a, P: Into<Option<&'a PrintSettings>>>(&self, print_settings: P) {
-        let print_settings = print_settings.into();
+    fn set_print_settings(&self, print_settings: Option<&PrintSettings>) {
         unsafe {
-            ffi::gtk_print_operation_set_print_settings(self.as_ref().to_glib_none().0, print_settings.to_glib_none().0);
+            gtk_sys::gtk_print_operation_set_print_settings(
+                self.as_ref().to_glib_none().0,
+                print_settings.to_glib_none().0,
+            );
         }
     }
 
     fn set_show_progress(&self, show_progress: bool) {
         unsafe {
-            ffi::gtk_print_operation_set_show_progress(self.as_ref().to_glib_none().0, show_progress.to_glib());
+            gtk_sys::gtk_print_operation_set_show_progress(
+                self.as_ref().to_glib_none().0,
+                show_progress.to_glib(),
+            );
         }
     }
 
     fn set_support_selection(&self, support_selection: bool) {
         unsafe {
-            ffi::gtk_print_operation_set_support_selection(self.as_ref().to_glib_none().0, support_selection.to_glib());
+            gtk_sys::gtk_print_operation_set_support_selection(
+                self.as_ref().to_glib_none().0,
+                support_selection.to_glib(),
+            );
         }
     }
 
     fn set_track_print_status(&self, track_status: bool) {
         unsafe {
-            ffi::gtk_print_operation_set_track_print_status(self.as_ref().to_glib_none().0, track_status.to_glib());
+            gtk_sys::gtk_print_operation_set_track_print_status(
+                self.as_ref().to_glib_none().0,
+                track_status.to_glib(),
+            );
         }
     }
 
     fn set_unit(&self, unit: Unit) {
         unsafe {
-            ffi::gtk_print_operation_set_unit(self.as_ref().to_glib_none().0, unit.to_glib());
+            gtk_sys::gtk_print_operation_set_unit(self.as_ref().to_glib_none().0, unit.to_glib());
         }
     }
 
     fn set_use_full_page(&self, full_page: bool) {
         unsafe {
-            ffi::gtk_print_operation_set_use_full_page(self.as_ref().to_glib_none().0, full_page.to_glib());
+            gtk_sys::gtk_print_operation_set_use_full_page(
+                self.as_ref().to_glib_none().0,
+                full_page.to_glib(),
+            );
         }
     }
 
     fn get_property_allow_async(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"allow-async\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"allow-async\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -389,7 +689,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_current_page(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"current-page\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"current-page\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -397,7 +701,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_custom_tab_label(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"custom-tab-label\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"custom-tab-label\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
@@ -405,7 +713,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_export_filename(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"export-filename\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"export-filename\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
@@ -413,7 +725,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_job_name(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"job-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"job-name\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
@@ -421,7 +737,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_n_pages(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"n-pages\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"n-pages\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -429,7 +749,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_show_progress(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-progress\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"show-progress\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -437,7 +761,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_track_print_status(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"track-print-status\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"track-print-status\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -445,7 +773,11 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_unit(&self) -> Unit {
         unsafe {
             let mut value = Value::from_type(<Unit as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"unit\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"unit\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
@@ -453,416 +785,804 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
     fn get_property_use_full_page(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-full-page\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"use-full-page\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn connect_begin_print<F: Fn(&Self, &PrintContext) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn begin_print_trampoline<P, F: Fn(&P, &PrintContext) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            context: *mut gtk_sys::GtkPrintContext,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(context),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"begin-print\0".as_ptr() as *const _,
-                Some(transmute(begin_print_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"begin-print\0".as_ptr() as *const _,
+                Some(transmute(begin_print_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_create_custom_widget<F: Fn(&Self) -> glib::Object + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_create_custom_widget<F: Fn(&Self) -> glib::Object + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn create_custom_widget_trampoline<
+            P,
+            F: Fn(&P) -> glib::Object + 'static,
+        >(
+            this: *mut gtk_sys::GtkPrintOperation,
+            f: glib_sys::gpointer,
+        ) -> *mut gobject_sys::GObject
+        where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast()) /*Not checked*/
+                .to_glib_none()
+                .0
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"create-custom-widget\0".as_ptr() as *const _,
-                Some(transmute(create_custom_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"create-custom-widget\0".as_ptr() as *const _,
+                Some(transmute(
+                    create_custom_widget_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_custom_widget_apply<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_custom_widget_apply<F: Fn(&Self, &Widget) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn custom_widget_apply_trampoline<P, F: Fn(&P, &Widget) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            widget: *mut gtk_sys::GtkWidget,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(widget),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"custom-widget-apply\0".as_ptr() as *const _,
-                Some(transmute(custom_widget_apply_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"custom-widget-apply\0".as_ptr() as *const _,
+                Some(transmute(
+                    custom_widget_apply_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_done<F: Fn(&Self, PrintOperationResult) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn done_trampoline<P, F: Fn(&P, PrintOperationResult) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            result: gtk_sys::GtkPrintOperationResult,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                from_glib(result),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"done\0".as_ptr() as *const _,
-                Some(transmute(done_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"done\0".as_ptr() as *const _,
+                Some(transmute(done_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_draw_page<F: Fn(&Self, &PrintContext, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_draw_page<F: Fn(&Self, &PrintContext, i32) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn draw_page_trampoline<P, F: Fn(&P, &PrintContext, i32) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            context: *mut gtk_sys::GtkPrintContext,
+            page_nr: libc::c_int,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(context),
+                page_nr,
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"draw-page\0".as_ptr() as *const _,
-                Some(transmute(draw_page_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"draw-page\0".as_ptr() as *const _,
+                Some(transmute(draw_page_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_end_print<F: Fn(&Self, &PrintContext) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn end_print_trampoline<P, F: Fn(&P, &PrintContext) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            context: *mut gtk_sys::GtkPrintContext,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(context),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"end-print\0".as_ptr() as *const _,
-                Some(transmute(end_print_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"end-print\0".as_ptr() as *const _,
+                Some(transmute(end_print_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_paginate<F: Fn(&Self, &PrintContext) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_paginate<F: Fn(&Self, &PrintContext) -> bool + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn paginate_trampoline<P, F: Fn(&P, &PrintContext) -> bool + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            context: *mut gtk_sys::GtkPrintContext,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(context),
+            )
+            .to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"paginate\0".as_ptr() as *const _,
-                Some(transmute(paginate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"paginate\0".as_ptr() as *const _,
+                Some(transmute(paginate_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_preview<F: Fn(&Self, &PrintOperationPreview, &PrintContext, &Option<Window>) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_preview<
+        F: Fn(&Self, &PrintOperationPreview, &PrintContext, Option<&Window>) -> bool + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn preview_trampoline<
+            P,
+            F: Fn(&P, &PrintOperationPreview, &PrintContext, Option<&Window>) -> bool + 'static,
+        >(
+            this: *mut gtk_sys::GtkPrintOperation,
+            preview: *mut gtk_sys::GtkPrintOperationPreview,
+            context: *mut gtk_sys::GtkPrintContext,
+            parent: *mut gtk_sys::GtkWindow,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(preview),
+                &from_glib_borrow(context),
+                Option::<Window>::from_glib_borrow(parent).as_ref(),
+            )
+            .to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"preview\0".as_ptr() as *const _,
-                Some(transmute(preview_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"preview\0".as_ptr() as *const _,
+                Some(transmute(preview_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_request_page_setup<F: Fn(&Self, &PrintContext, i32, &PageSetup) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_request_page_setup<F: Fn(&Self, &PrintContext, i32, &PageSetup) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn request_page_setup_trampoline<
+            P,
+            F: Fn(&P, &PrintContext, i32, &PageSetup) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPrintOperation,
+            context: *mut gtk_sys::GtkPrintContext,
+            page_nr: libc::c_int,
+            setup: *mut gtk_sys::GtkPageSetup,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(context),
+                page_nr,
+                &from_glib_borrow(setup),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"request-page-setup\0".as_ptr() as *const _,
-                Some(transmute(request_page_setup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"request-page-setup\0".as_ptr() as *const _,
+                Some(transmute(request_page_setup_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_status_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn status_changed_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"status-changed\0".as_ptr() as *const _,
-                Some(transmute(status_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"status-changed\0".as_ptr() as *const _,
+                Some(transmute(status_changed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_update_custom_widget<F: Fn(&Self, &Widget, &PageSetup, &PrintSettings) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_update_custom_widget<F: Fn(&Self, &Widget, &PageSetup, &PrintSettings) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn update_custom_widget_trampoline<
+            P,
+            F: Fn(&P, &Widget, &PageSetup, &PrintSettings) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPrintOperation,
+            widget: *mut gtk_sys::GtkWidget,
+            setup: *mut gtk_sys::GtkPageSetup,
+            settings: *mut gtk_sys::GtkPrintSettings,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(widget),
+                &from_glib_borrow(setup),
+                &from_glib_borrow(settings),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"update-custom-widget\0".as_ptr() as *const _,
-                Some(transmute(update_custom_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"update-custom-widget\0".as_ptr() as *const _,
+                Some(transmute(
+                    update_custom_widget_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_allow_async_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allow_async_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::allow-async\0".as_ptr() as *const _,
-                Some(transmute(notify_allow_async_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::allow-async\0".as_ptr() as *const _,
+                Some(transmute(notify_allow_async_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_current_page_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_current_page_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_page_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::current-page\0".as_ptr() as *const _,
-                Some(transmute(notify_current_page_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::current-page\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_current_page_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_custom_tab_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_custom_tab_label_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_custom_tab_label_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::custom-tab-label\0".as_ptr() as *const _,
-                Some(transmute(notify_custom_tab_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::custom-tab-label\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_custom_tab_label_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_default_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_default_page_setup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_default_page_setup_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::default-page-setup\0".as_ptr() as *const _,
-                Some(transmute(notify_default_page_setup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::default-page-setup\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_default_page_setup_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_embed_page_setup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_embed_page_setup_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_embed_page_setup_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::embed-page-setup\0".as_ptr() as *const _,
-                Some(transmute(notify_embed_page_setup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::embed-page-setup\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_embed_page_setup_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_export_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_export_filename_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_export_filename_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::export-filename\0".as_ptr() as *const _,
-                Some(transmute(notify_export_filename_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::export-filename\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_export_filename_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_has_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_has_selection_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_has_selection_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::has-selection\0".as_ptr() as *const _,
-                Some(transmute(notify_has_selection_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::has-selection\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_has_selection_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_job_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_job_name_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::job-name\0".as_ptr() as *const _,
-                Some(transmute(notify_job_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::job-name\0".as_ptr() as *const _,
+                Some(transmute(notify_job_name_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_n_pages_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_n_pages_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::n-pages\0".as_ptr() as *const _,
-                Some(transmute(notify_n_pages_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::n-pages\0".as_ptr() as *const _,
+                Some(transmute(notify_n_pages_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_n_pages_to_print_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_n_pages_to_print_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_n_pages_to_print_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::n-pages-to-print\0".as_ptr() as *const _,
-                Some(transmute(notify_n_pages_to_print_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::n-pages-to-print\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_n_pages_to_print_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_print_settings_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_print_settings_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_print_settings_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::print-settings\0".as_ptr() as *const _,
-                Some(transmute(notify_print_settings_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::print-settings\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_print_settings_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_show_progress_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_show_progress_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_progress_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-progress\0".as_ptr() as *const _,
-                Some(transmute(notify_show_progress_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-progress\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_show_progress_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_status_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_status_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::status\0".as_ptr() as *const _,
-                Some(transmute(notify_status_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::status\0".as_ptr() as *const _,
+                Some(transmute(notify_status_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_status_string_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_status_string_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_status_string_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::status-string\0".as_ptr() as *const _,
-                Some(transmute(notify_status_string_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::status-string\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_status_string_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_support_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_support_selection_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_support_selection_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::support-selection\0".as_ptr() as *const _,
-                Some(transmute(notify_support_selection_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::support-selection\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_support_selection_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_track_print_status_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_track_print_status_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_track_print_status_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::track-print-status\0".as_ptr() as *const _,
-                Some(transmute(notify_track_print_status_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::track-print-status\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_track_print_status_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_unit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_unit_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::unit\0".as_ptr() as *const _,
-                Some(transmute(notify_unit_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::unit\0".as_ptr() as *const _,
+                Some(transmute(notify_unit_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_use_full_page_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_use_full_page_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_use_full_page_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkPrintOperation,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<PrintOperation>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::use-full-page\0".as_ptr() as *const _,
-                Some(transmute(notify_use_full_page_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::use-full-page\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_use_full_page_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
-}
-
-unsafe extern "C" fn begin_print_trampoline<P, F: Fn(&P, &PrintContext) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
-}
-
-unsafe extern "C" fn create_custom_widget_trampoline<P, F: Fn(&P) -> glib::Object + 'static>(this: *mut ffi::GtkPrintOperation, f: glib_ffi::gpointer) -> *mut gobject_ffi::GObject
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())/*Not checked*/.to_glib_none().0
-}
-
-unsafe extern "C" fn custom_widget_apply_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkPrintOperation, widget: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(widget))
-}
-
-unsafe extern "C" fn done_trampoline<P, F: Fn(&P, PrintOperationResult) + 'static>(this: *mut ffi::GtkPrintOperation, result: ffi::GtkPrintOperationResult, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), from_glib(result))
-}
-
-unsafe extern "C" fn draw_page_trampoline<P, F: Fn(&P, &PrintContext, i32) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, page_nr: libc::c_int, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), page_nr)
-}
-
-unsafe extern "C" fn end_print_trampoline<P, F: Fn(&P, &PrintContext) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
-}
-
-unsafe extern "C" fn paginate_trampoline<P, F: Fn(&P, &PrintContext) -> bool + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib()
-}
-
-unsafe extern "C" fn preview_trampoline<P, F: Fn(&P, &PrintOperationPreview, &PrintContext, &Option<Window>) -> bool + 'static>(this: *mut ffi::GtkPrintOperation, preview: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, parent: *mut ffi::GtkWindow, f: glib_ffi::gpointer) -> glib_ffi::gboolean
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(preview), &from_glib_borrow(context), &from_glib_borrow(parent)).to_glib()
-}
-
-unsafe extern "C" fn request_page_setup_trampoline<P, F: Fn(&P, &PrintContext, i32, &PageSetup) + 'static>(this: *mut ffi::GtkPrintOperation, context: *mut ffi::GtkPrintContext, page_nr: libc::c_int, setup: *mut ffi::GtkPageSetup, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), page_nr, &from_glib_borrow(setup))
-}
-
-unsafe extern "C" fn status_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn update_custom_widget_trampoline<P, F: Fn(&P, &Widget, &PageSetup, &PrintSettings) + 'static>(this: *mut ffi::GtkPrintOperation, widget: *mut ffi::GtkWidget, setup: *mut ffi::GtkPageSetup, settings: *mut ffi::GtkPrintSettings, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(widget), &from_glib_borrow(setup), &from_glib_borrow(settings))
-}
-
-unsafe extern "C" fn notify_allow_async_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_current_page_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_custom_tab_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_default_page_setup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_embed_page_setup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_export_filename_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_has_selection_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_job_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_n_pages_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_n_pages_to_print_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_print_settings_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_progress_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_status_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_status_string_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_support_selection_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_track_print_status_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_unit_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_use_full_page_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPrintOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PrintOperation> {
-    let f: &F = transmute(f);
-    f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for PrintOperation {

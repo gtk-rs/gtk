@@ -2,28 +2,32 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use EventController;
-use Gesture;
-use GestureSingle;
-use Widget;
-use ffi;
+use gdk;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_ffi;
+use glib::StaticType;
+use glib::ToValue;
+use glib_sys;
+use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
+use EventController;
+use Gesture;
+use GestureSingle;
+use PropagationPhase;
+use Widget;
 
 glib_wrapper! {
-    pub struct GestureDrag(Object<ffi::GtkGestureDrag, ffi::GtkGestureDragClass, GestureDragClass>) @extends GestureSingle, Gesture, EventController;
+    pub struct GestureDrag(Object<gtk_sys::GtkGestureDrag, gtk_sys::GtkGestureDragClass, GestureDragClass>) @extends GestureSingle, Gesture, EventController;
 
     match fn {
-        get_type => || ffi::gtk_gesture_drag_get_type(),
+        get_type => || gtk_sys::gtk_gesture_drag_get_type(),
     }
 }
 
@@ -31,8 +35,99 @@ impl GestureDrag {
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureDrag {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_drag_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
+            Gesture::from_glib_full(gtk_sys::gtk_gesture_drag_new(
+                widget.as_ref().to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
+    }
+}
+
+pub struct GestureDragBuilder {
+    button: Option<u32>,
+    exclusive: Option<bool>,
+    touch_only: Option<bool>,
+    n_points: Option<u32>,
+    window: Option<gdk::Window>,
+    propagation_phase: Option<PropagationPhase>,
+    widget: Option<Widget>,
+}
+
+impl GestureDragBuilder {
+    pub fn new() -> Self {
+        Self {
+            button: None,
+            exclusive: None,
+            touch_only: None,
+            n_points: None,
+            window: None,
+            propagation_phase: None,
+            widget: None,
+        }
+    }
+
+    pub fn build(self) -> GestureDrag {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref button) = self.button {
+            properties.push(("button", button));
+        }
+        if let Some(ref exclusive) = self.exclusive {
+            properties.push(("exclusive", exclusive));
+        }
+        if let Some(ref touch_only) = self.touch_only {
+            properties.push(("touch-only", touch_only));
+        }
+        if let Some(ref n_points) = self.n_points {
+            properties.push(("n-points", n_points));
+        }
+        if let Some(ref window) = self.window {
+            properties.push(("window", window));
+        }
+        if let Some(ref propagation_phase) = self.propagation_phase {
+            properties.push(("propagation-phase", propagation_phase));
+        }
+        if let Some(ref widget) = self.widget {
+            properties.push(("widget", widget));
+        }
+        glib::Object::new(GestureDrag::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
+
+    pub fn button(mut self, button: u32) -> Self {
+        self.button = Some(button);
+        self
+    }
+
+    pub fn exclusive(mut self, exclusive: bool) -> Self {
+        self.exclusive = Some(exclusive);
+        self
+    }
+
+    pub fn touch_only(mut self, touch_only: bool) -> Self {
+        self.touch_only = Some(touch_only);
+        self
+    }
+
+    pub fn n_points(mut self, n_points: u32) -> Self {
+        self.n_points = Some(n_points);
+        self
+    }
+
+    pub fn window(mut self, window: &gdk::Window) -> Self {
+        self.window = Some(window.clone());
+        self
+    }
+
+    pub fn propagation_phase(mut self, propagation_phase: PropagationPhase) -> Self {
+        self.propagation_phase = Some(propagation_phase);
+        self
+    }
+
+    pub fn widget(mut self, widget: &Widget) -> Self {
+        self.widget = Some(widget.clone());
+        self
     }
 }
 
@@ -55,8 +150,16 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_gesture_drag_get_offset(self.as_ref().to_glib_none().0, &mut x, &mut y));
-            if ret { Some((x, y)) } else { None }
+            let ret = from_glib(gtk_sys::gtk_gesture_drag_get_offset(
+                self.as_ref().to_glib_none().0,
+                &mut x,
+                &mut y,
+            ));
+            if ret {
+                Some((x, y))
+            } else {
+                None
+            }
         }
     }
 
@@ -64,52 +167,99 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_gesture_drag_get_start_point(self.as_ref().to_glib_none().0, &mut x, &mut y));
-            if ret { Some((x, y)) } else { None }
+            let ret = from_glib(gtk_sys::gtk_gesture_drag_get_start_point(
+                self.as_ref().to_glib_none().0,
+                &mut x,
+                &mut y,
+            ));
+            if ret {
+                Some((x, y))
+            } else {
+                None
+            }
         }
     }
 
     fn connect_drag_begin<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn drag_begin_trampoline<P, F: Fn(&P, f64, f64) + 'static>(
+            this: *mut gtk_sys::GtkGestureDrag,
+            start_x: libc::c_double,
+            start_y: libc::c_double,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<GestureDrag>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                start_x,
+                start_y,
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"drag-begin\0".as_ptr() as *const _,
-                Some(transmute(drag_begin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"drag-begin\0".as_ptr() as *const _,
+                Some(transmute(drag_begin_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_drag_end<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn drag_end_trampoline<P, F: Fn(&P, f64, f64) + 'static>(
+            this: *mut gtk_sys::GtkGestureDrag,
+            offset_x: libc::c_double,
+            offset_y: libc::c_double,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<GestureDrag>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                offset_x,
+                offset_y,
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"drag-end\0".as_ptr() as *const _,
-                Some(transmute(drag_end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"drag-end\0".as_ptr() as *const _,
+                Some(transmute(drag_end_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_drag_update<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn drag_update_trampoline<P, F: Fn(&P, f64, f64) + 'static>(
+            this: *mut gtk_sys::GtkGestureDrag,
+            offset_x: libc::c_double,
+            offset_y: libc::c_double,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<GestureDrag>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                offset_x,
+                offset_y,
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"drag-update\0".as_ptr() as *const _,
-                Some(transmute(drag_update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"drag-update\0".as_ptr() as *const _,
+                Some(transmute(drag_update_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
-}
-
-unsafe extern "C" fn drag_begin_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, start_x: libc::c_double, start_y: libc::c_double, f: glib_ffi::gpointer)
-where P: IsA<GestureDrag> {
-    let f: &F = transmute(f);
-    f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), start_x, start_y)
-}
-
-unsafe extern "C" fn drag_end_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
-where P: IsA<GestureDrag> {
-    let f: &F = transmute(f);
-    f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), offset_x, offset_y)
-}
-
-unsafe extern "C" fn drag_update_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
-where P: IsA<GestureDrag> {
-    let f: &F = transmute(f);
-    f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), offset_x, offset_y)
 }
 
 impl fmt::Display for GestureDrag {

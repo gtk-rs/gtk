@@ -2,85 +2,96 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use atk;
+use gdk;
+use glib;
+use glib::object::Cast;
+use glib::object::IsA;
+use glib::object::ObjectExt;
+use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
+use glib::translate::*;
+use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
+use libc;
+use std::boxed::Box as Box_;
+use std::fmt;
+use std::mem::transmute;
+use Align;
 use Bin;
 use Buildable;
 use CellArea;
 use CellEditable;
 use CellLayout;
 use Container;
+use ResizeMode;
 use ScrollType;
 use SensitivityType;
 use TreeIter;
 use TreeModel;
 use Widget;
-use atk;
-use ffi;
-use gdk;
-use glib;
-use glib::GString;
-use glib::StaticType;
-use glib::Value;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::object::ObjectExt;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
-use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use libc;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct ComboBox(Object<ffi::GtkComboBox, ffi::GtkComboBoxClass, ComboBoxClass>) @extends Bin, Container, Widget, @implements Buildable, CellEditable, CellLayout;
+    pub struct ComboBox(Object<gtk_sys::GtkComboBox, gtk_sys::GtkComboBoxClass, ComboBoxClass>) @extends Bin, Container, Widget, @implements Buildable, CellEditable, CellLayout;
 
     match fn {
-        get_type => || ffi::gtk_combo_box_get_type(),
+        get_type => || gtk_sys::gtk_combo_box_get_type(),
     }
 }
 
 impl ComboBox {
     pub fn new() -> ComboBox {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_combo_box_new()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_combo_box_new()).unsafe_cast() }
     }
 
     pub fn new_with_area<P: IsA<CellArea>>(area: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_combo_box_new_with_area(area.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_area(
+                area.as_ref().to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 
     pub fn new_with_area_and_entry<P: IsA<CellArea>>(area: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_combo_box_new_with_area_and_entry(area.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_area_and_entry(
+                area.as_ref().to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 
     pub fn new_with_entry() -> ComboBox {
         assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_combo_box_new_with_entry()).unsafe_cast()
-        }
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_entry()).unsafe_cast() }
     }
 
     pub fn new_with_model<P: IsA<TreeModel>>(model: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_combo_box_new_with_model(model.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_model(
+                model.as_ref().to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 
     pub fn new_with_model_and_entry<P: IsA<TreeModel>>(model: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_combo_box_new_with_model_and_entry(model.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_model_and_entry(
+                model.as_ref().to_glib_none().0,
+            ))
+            .unsafe_cast()
         }
     }
 }
@@ -88,6 +99,511 @@ impl ComboBox {
 impl Default for ComboBox {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct ComboBoxBuilder {
+    active: Option<i32>,
+    active_id: Option<String>,
+    button_sensitivity: Option<SensitivityType>,
+    cell_area: Option<CellArea>,
+    column_span_column: Option<i32>,
+    entry_text_column: Option<i32>,
+    has_entry: Option<bool>,
+    has_frame: Option<bool>,
+    id_column: Option<i32>,
+    model: Option<TreeModel>,
+    popup_fixed_width: Option<bool>,
+    row_span_column: Option<i32>,
+    wrap_width: Option<i32>,
+    border_width: Option<u32>,
+    child: Option<Widget>,
+    resize_mode: Option<ResizeMode>,
+    app_paintable: Option<bool>,
+    can_default: Option<bool>,
+    can_focus: Option<bool>,
+    events: Option<gdk::EventMask>,
+    expand: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    focus_on_click: Option<bool>,
+    halign: Option<Align>,
+    has_default: Option<bool>,
+    has_focus: Option<bool>,
+    has_tooltip: Option<bool>,
+    height_request: Option<i32>,
+    hexpand: Option<bool>,
+    hexpand_set: Option<bool>,
+    is_focus: Option<bool>,
+    margin: Option<i32>,
+    margin_bottom: Option<i32>,
+    margin_end: Option<i32>,
+    margin_start: Option<i32>,
+    margin_top: Option<i32>,
+    name: Option<String>,
+    no_show_all: Option<bool>,
+    opacity: Option<f64>,
+    parent: Option<Container>,
+    receives_default: Option<bool>,
+    sensitive: Option<bool>,
+    //style: /*Unknown type*/,
+    tooltip_markup: Option<String>,
+    tooltip_text: Option<String>,
+    valign: Option<Align>,
+    vexpand: Option<bool>,
+    vexpand_set: Option<bool>,
+    visible: Option<bool>,
+    width_request: Option<i32>,
+}
+
+impl ComboBoxBuilder {
+    pub fn new() -> Self {
+        Self {
+            active: None,
+            active_id: None,
+            button_sensitivity: None,
+            cell_area: None,
+            column_span_column: None,
+            entry_text_column: None,
+            has_entry: None,
+            has_frame: None,
+            id_column: None,
+            model: None,
+            popup_fixed_width: None,
+            row_span_column: None,
+            wrap_width: None,
+            border_width: None,
+            child: None,
+            resize_mode: None,
+            app_paintable: None,
+            can_default: None,
+            can_focus: None,
+            events: None,
+            expand: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            focus_on_click: None,
+            halign: None,
+            has_default: None,
+            has_focus: None,
+            has_tooltip: None,
+            height_request: None,
+            hexpand: None,
+            hexpand_set: None,
+            is_focus: None,
+            margin: None,
+            margin_bottom: None,
+            margin_end: None,
+            margin_start: None,
+            margin_top: None,
+            name: None,
+            no_show_all: None,
+            opacity: None,
+            parent: None,
+            receives_default: None,
+            sensitive: None,
+            tooltip_markup: None,
+            tooltip_text: None,
+            valign: None,
+            vexpand: None,
+            vexpand_set: None,
+            visible: None,
+            width_request: None,
+        }
+    }
+
+    pub fn build(self) -> ComboBox {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref active) = self.active {
+            properties.push(("active", active));
+        }
+        if let Some(ref active_id) = self.active_id {
+            properties.push(("active-id", active_id));
+        }
+        if let Some(ref button_sensitivity) = self.button_sensitivity {
+            properties.push(("button-sensitivity", button_sensitivity));
+        }
+        if let Some(ref cell_area) = self.cell_area {
+            properties.push(("cell-area", cell_area));
+        }
+        if let Some(ref column_span_column) = self.column_span_column {
+            properties.push(("column-span-column", column_span_column));
+        }
+        if let Some(ref entry_text_column) = self.entry_text_column {
+            properties.push(("entry-text-column", entry_text_column));
+        }
+        if let Some(ref has_entry) = self.has_entry {
+            properties.push(("has-entry", has_entry));
+        }
+        if let Some(ref has_frame) = self.has_frame {
+            properties.push(("has-frame", has_frame));
+        }
+        if let Some(ref id_column) = self.id_column {
+            properties.push(("id-column", id_column));
+        }
+        if let Some(ref model) = self.model {
+            properties.push(("model", model));
+        }
+        if let Some(ref popup_fixed_width) = self.popup_fixed_width {
+            properties.push(("popup-fixed-width", popup_fixed_width));
+        }
+        if let Some(ref row_span_column) = self.row_span_column {
+            properties.push(("row-span-column", row_span_column));
+        }
+        if let Some(ref wrap_width) = self.wrap_width {
+            properties.push(("wrap-width", wrap_width));
+        }
+        if let Some(ref border_width) = self.border_width {
+            properties.push(("border-width", border_width));
+        }
+        if let Some(ref child) = self.child {
+            properties.push(("child", child));
+        }
+        if let Some(ref resize_mode) = self.resize_mode {
+            properties.push(("resize-mode", resize_mode));
+        }
+        if let Some(ref app_paintable) = self.app_paintable {
+            properties.push(("app-paintable", app_paintable));
+        }
+        if let Some(ref can_default) = self.can_default {
+            properties.push(("can-default", can_default));
+        }
+        if let Some(ref can_focus) = self.can_focus {
+            properties.push(("can-focus", can_focus));
+        }
+        if let Some(ref events) = self.events {
+            properties.push(("events", events));
+        }
+        if let Some(ref expand) = self.expand {
+            properties.push(("expand", expand));
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref focus_on_click) = self.focus_on_click {
+                properties.push(("focus-on-click", focus_on_click));
+            }
+        }
+        if let Some(ref halign) = self.halign {
+            properties.push(("halign", halign));
+        }
+        if let Some(ref has_default) = self.has_default {
+            properties.push(("has-default", has_default));
+        }
+        if let Some(ref has_focus) = self.has_focus {
+            properties.push(("has-focus", has_focus));
+        }
+        if let Some(ref has_tooltip) = self.has_tooltip {
+            properties.push(("has-tooltip", has_tooltip));
+        }
+        if let Some(ref height_request) = self.height_request {
+            properties.push(("height-request", height_request));
+        }
+        if let Some(ref hexpand) = self.hexpand {
+            properties.push(("hexpand", hexpand));
+        }
+        if let Some(ref hexpand_set) = self.hexpand_set {
+            properties.push(("hexpand-set", hexpand_set));
+        }
+        if let Some(ref is_focus) = self.is_focus {
+            properties.push(("is-focus", is_focus));
+        }
+        if let Some(ref margin) = self.margin {
+            properties.push(("margin", margin));
+        }
+        if let Some(ref margin_bottom) = self.margin_bottom {
+            properties.push(("margin-bottom", margin_bottom));
+        }
+        if let Some(ref margin_end) = self.margin_end {
+            properties.push(("margin-end", margin_end));
+        }
+        if let Some(ref margin_start) = self.margin_start {
+            properties.push(("margin-start", margin_start));
+        }
+        if let Some(ref margin_top) = self.margin_top {
+            properties.push(("margin-top", margin_top));
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+        if let Some(ref no_show_all) = self.no_show_all {
+            properties.push(("no-show-all", no_show_all));
+        }
+        if let Some(ref opacity) = self.opacity {
+            properties.push(("opacity", opacity));
+        }
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref receives_default) = self.receives_default {
+            properties.push(("receives-default", receives_default));
+        }
+        if let Some(ref sensitive) = self.sensitive {
+            properties.push(("sensitive", sensitive));
+        }
+        if let Some(ref tooltip_markup) = self.tooltip_markup {
+            properties.push(("tooltip-markup", tooltip_markup));
+        }
+        if let Some(ref tooltip_text) = self.tooltip_text {
+            properties.push(("tooltip-text", tooltip_text));
+        }
+        if let Some(ref valign) = self.valign {
+            properties.push(("valign", valign));
+        }
+        if let Some(ref vexpand) = self.vexpand {
+            properties.push(("vexpand", vexpand));
+        }
+        if let Some(ref vexpand_set) = self.vexpand_set {
+            properties.push(("vexpand-set", vexpand_set));
+        }
+        if let Some(ref visible) = self.visible {
+            properties.push(("visible", visible));
+        }
+        if let Some(ref width_request) = self.width_request {
+            properties.push(("width-request", width_request));
+        }
+        glib::Object::new(ComboBox::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
+
+    pub fn active(mut self, active: i32) -> Self {
+        self.active = Some(active);
+        self
+    }
+
+    pub fn active_id(mut self, active_id: &str) -> Self {
+        self.active_id = Some(active_id.to_string());
+        self
+    }
+
+    pub fn button_sensitivity(mut self, button_sensitivity: SensitivityType) -> Self {
+        self.button_sensitivity = Some(button_sensitivity);
+        self
+    }
+
+    pub fn cell_area(mut self, cell_area: &CellArea) -> Self {
+        self.cell_area = Some(cell_area.clone());
+        self
+    }
+
+    pub fn column_span_column(mut self, column_span_column: i32) -> Self {
+        self.column_span_column = Some(column_span_column);
+        self
+    }
+
+    pub fn entry_text_column(mut self, entry_text_column: i32) -> Self {
+        self.entry_text_column = Some(entry_text_column);
+        self
+    }
+
+    pub fn has_entry(mut self, has_entry: bool) -> Self {
+        self.has_entry = Some(has_entry);
+        self
+    }
+
+    pub fn has_frame(mut self, has_frame: bool) -> Self {
+        self.has_frame = Some(has_frame);
+        self
+    }
+
+    pub fn id_column(mut self, id_column: i32) -> Self {
+        self.id_column = Some(id_column);
+        self
+    }
+
+    pub fn model(mut self, model: &TreeModel) -> Self {
+        self.model = Some(model.clone());
+        self
+    }
+
+    pub fn popup_fixed_width(mut self, popup_fixed_width: bool) -> Self {
+        self.popup_fixed_width = Some(popup_fixed_width);
+        self
+    }
+
+    pub fn row_span_column(mut self, row_span_column: i32) -> Self {
+        self.row_span_column = Some(row_span_column);
+        self
+    }
+
+    pub fn wrap_width(mut self, wrap_width: i32) -> Self {
+        self.wrap_width = Some(wrap_width);
+        self
+    }
+
+    pub fn border_width(mut self, border_width: u32) -> Self {
+        self.border_width = Some(border_width);
+        self
+    }
+
+    pub fn child(mut self, child: &Widget) -> Self {
+        self.child = Some(child.clone());
+        self
+    }
+
+    pub fn resize_mode(mut self, resize_mode: ResizeMode) -> Self {
+        self.resize_mode = Some(resize_mode);
+        self
+    }
+
+    pub fn app_paintable(mut self, app_paintable: bool) -> Self {
+        self.app_paintable = Some(app_paintable);
+        self
+    }
+
+    pub fn can_default(mut self, can_default: bool) -> Self {
+        self.can_default = Some(can_default);
+        self
+    }
+
+    pub fn can_focus(mut self, can_focus: bool) -> Self {
+        self.can_focus = Some(can_focus);
+        self
+    }
+
+    pub fn events(mut self, events: gdk::EventMask) -> Self {
+        self.events = Some(events);
+        self
+    }
+
+    pub fn expand(mut self, expand: bool) -> Self {
+        self.expand = Some(expand);
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn focus_on_click(mut self, focus_on_click: bool) -> Self {
+        self.focus_on_click = Some(focus_on_click);
+        self
+    }
+
+    pub fn halign(mut self, halign: Align) -> Self {
+        self.halign = Some(halign);
+        self
+    }
+
+    pub fn has_default(mut self, has_default: bool) -> Self {
+        self.has_default = Some(has_default);
+        self
+    }
+
+    pub fn has_focus(mut self, has_focus: bool) -> Self {
+        self.has_focus = Some(has_focus);
+        self
+    }
+
+    pub fn has_tooltip(mut self, has_tooltip: bool) -> Self {
+        self.has_tooltip = Some(has_tooltip);
+        self
+    }
+
+    pub fn height_request(mut self, height_request: i32) -> Self {
+        self.height_request = Some(height_request);
+        self
+    }
+
+    pub fn hexpand(mut self, hexpand: bool) -> Self {
+        self.hexpand = Some(hexpand);
+        self
+    }
+
+    pub fn hexpand_set(mut self, hexpand_set: bool) -> Self {
+        self.hexpand_set = Some(hexpand_set);
+        self
+    }
+
+    pub fn is_focus(mut self, is_focus: bool) -> Self {
+        self.is_focus = Some(is_focus);
+        self
+    }
+
+    pub fn margin(mut self, margin: i32) -> Self {
+        self.margin = Some(margin);
+        self
+    }
+
+    pub fn margin_bottom(mut self, margin_bottom: i32) -> Self {
+        self.margin_bottom = Some(margin_bottom);
+        self
+    }
+
+    pub fn margin_end(mut self, margin_end: i32) -> Self {
+        self.margin_end = Some(margin_end);
+        self
+    }
+
+    pub fn margin_start(mut self, margin_start: i32) -> Self {
+        self.margin_start = Some(margin_start);
+        self
+    }
+
+    pub fn margin_top(mut self, margin_top: i32) -> Self {
+        self.margin_top = Some(margin_top);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
+    }
+
+    pub fn no_show_all(mut self, no_show_all: bool) -> Self {
+        self.no_show_all = Some(no_show_all);
+        self
+    }
+
+    pub fn opacity(mut self, opacity: f64) -> Self {
+        self.opacity = Some(opacity);
+        self
+    }
+
+    pub fn parent(mut self, parent: &Container) -> Self {
+        self.parent = Some(parent.clone());
+        self
+    }
+
+    pub fn receives_default(mut self, receives_default: bool) -> Self {
+        self.receives_default = Some(receives_default);
+        self
+    }
+
+    pub fn sensitive(mut self, sensitive: bool) -> Self {
+        self.sensitive = Some(sensitive);
+        self
+    }
+
+    pub fn tooltip_markup(mut self, tooltip_markup: &str) -> Self {
+        self.tooltip_markup = Some(tooltip_markup.to_string());
+        self
+    }
+
+    pub fn tooltip_text(mut self, tooltip_text: &str) -> Self {
+        self.tooltip_text = Some(tooltip_text.to_string());
+        self
+    }
+
+    pub fn valign(mut self, valign: Align) -> Self {
+        self.valign = Some(valign);
+        self
+    }
+
+    pub fn vexpand(mut self, vexpand: bool) -> Self {
+        self.vexpand = Some(vexpand);
+        self
+    }
+
+    pub fn vexpand_set(mut self, vexpand_set: bool) -> Self {
+        self.vexpand_set = Some(vexpand_set);
+        self
+    }
+
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
+    }
+
+    pub fn width_request(mut self, width_request: i32) -> Self {
+        self.width_request = Some(width_request);
+        self
     }
 }
 
@@ -130,9 +646,9 @@ pub trait ComboBoxExt: 'static {
 
     fn popup_for_device(&self, device: &gdk::Device);
 
-    fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool;
+    fn set_active_id(&self, active_id: Option<&str>) -> bool;
 
-    fn set_active_iter<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: P);
+    fn set_active_iter(&self, iter: Option<&TreeIter>);
 
     fn set_button_sensitivity(&self, sensitivity: SensitivityType);
 
@@ -146,7 +662,7 @@ pub trait ComboBoxExt: 'static {
 
     fn set_id_column(&self, id_column: i32);
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q);
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>);
 
     fn set_popup_fixed_width(&self, fixed: bool);
 
@@ -166,7 +682,10 @@ pub trait ComboBoxExt: 'static {
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_format_entry_text<F: Fn(&Self, &str) -> String + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_format_entry_text<F: Fn(&Self, &str) -> String + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_move_active<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -184,11 +703,20 @@ pub trait ComboBoxExt: 'static {
 
     fn connect_property_active_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_button_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_button_sensitivity_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_entry_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_entry_text_column_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -196,11 +724,17 @@ pub trait ComboBoxExt: 'static {
 
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_popup_fixed_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_popup_fixed_width_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_popup_shown_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_row_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_row_span_column_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -208,168 +742,207 @@ pub trait ComboBoxExt: 'static {
 impl<O: IsA<ComboBox>> ComboBoxExt for O {
     fn get_active_id(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_combo_box_get_active_id(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_combo_box_get_active_id(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_active_iter(&self) -> Option<TreeIter> {
         unsafe {
             let mut iter = TreeIter::uninitialized();
-            let ret = from_glib(ffi::gtk_combo_box_get_active_iter(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0));
-            if ret { Some(iter) } else { None }
+            let ret = from_glib(gtk_sys::gtk_combo_box_get_active_iter(
+                self.as_ref().to_glib_none().0,
+                iter.to_glib_none_mut().0,
+            ));
+            if ret {
+                Some(iter)
+            } else {
+                None
+            }
         }
     }
 
     fn get_button_sensitivity(&self) -> SensitivityType {
         unsafe {
-            from_glib(ffi::gtk_combo_box_get_button_sensitivity(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_combo_box_get_button_sensitivity(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_column_span_column(&self) -> i32 {
-        unsafe {
-            ffi::gtk_combo_box_get_column_span_column(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_combo_box_get_column_span_column(self.as_ref().to_glib_none().0) }
     }
 
     fn get_entry_text_column(&self) -> i32 {
-        unsafe {
-            ffi::gtk_combo_box_get_entry_text_column(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_combo_box_get_entry_text_column(self.as_ref().to_glib_none().0) }
     }
 
     #[cfg(any(not(feature = "v3_20"), feature = "dox"))]
     fn get_focus_on_click(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_combo_box_get_focus_on_click(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_combo_box_get_focus_on_click(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_has_entry(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_combo_box_get_has_entry(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_combo_box_get_has_entry(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_id_column(&self) -> i32 {
-        unsafe {
-            ffi::gtk_combo_box_get_id_column(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_combo_box_get_id_column(self.as_ref().to_glib_none().0) }
     }
 
     fn get_model(&self) -> Option<TreeModel> {
         unsafe {
-            from_glib_none(ffi::gtk_combo_box_get_model(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_combo_box_get_model(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_popup_accessible(&self) -> Option<atk::Object> {
         unsafe {
-            from_glib_none(ffi::gtk_combo_box_get_popup_accessible(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_combo_box_get_popup_accessible(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_popup_fixed_width(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_combo_box_get_popup_fixed_width(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_combo_box_get_popup_fixed_width(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     //fn get_row_separator_func(&self) -> Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> {
-    //    unsafe { TODO: call ffi::gtk_combo_box_get_row_separator_func() }
+    //    unsafe { TODO: call gtk_sys:gtk_combo_box_get_row_separator_func() }
     //}
 
     fn get_row_span_column(&self) -> i32 {
-        unsafe {
-            ffi::gtk_combo_box_get_row_span_column(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_combo_box_get_row_span_column(self.as_ref().to_glib_none().0) }
     }
 
     fn get_wrap_width(&self) -> i32 {
-        unsafe {
-            ffi::gtk_combo_box_get_wrap_width(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_combo_box_get_wrap_width(self.as_ref().to_glib_none().0) }
     }
 
     fn popdown(&self) {
         unsafe {
-            ffi::gtk_combo_box_popdown(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_combo_box_popdown(self.as_ref().to_glib_none().0);
         }
     }
 
     fn popup(&self) {
         unsafe {
-            ffi::gtk_combo_box_popup(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_combo_box_popup(self.as_ref().to_glib_none().0);
         }
     }
 
     fn popup_for_device(&self, device: &gdk::Device) {
         unsafe {
-            ffi::gtk_combo_box_popup_for_device(self.as_ref().to_glib_none().0, device.to_glib_none().0);
+            gtk_sys::gtk_combo_box_popup_for_device(
+                self.as_ref().to_glib_none().0,
+                device.to_glib_none().0,
+            );
         }
     }
 
-    fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool {
-        let active_id = active_id.into();
+    fn set_active_id(&self, active_id: Option<&str>) -> bool {
         unsafe {
-            from_glib(ffi::gtk_combo_box_set_active_id(self.as_ref().to_glib_none().0, active_id.to_glib_none().0))
+            from_glib(gtk_sys::gtk_combo_box_set_active_id(
+                self.as_ref().to_glib_none().0,
+                active_id.to_glib_none().0,
+            ))
         }
     }
 
-    fn set_active_iter<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: P) {
-        let iter = iter.into();
+    fn set_active_iter(&self, iter: Option<&TreeIter>) {
         unsafe {
-            ffi::gtk_combo_box_set_active_iter(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0));
+            gtk_sys::gtk_combo_box_set_active_iter(
+                self.as_ref().to_glib_none().0,
+                mut_override(iter.to_glib_none().0),
+            );
         }
     }
 
     fn set_button_sensitivity(&self, sensitivity: SensitivityType) {
         unsafe {
-            ffi::gtk_combo_box_set_button_sensitivity(self.as_ref().to_glib_none().0, sensitivity.to_glib());
+            gtk_sys::gtk_combo_box_set_button_sensitivity(
+                self.as_ref().to_glib_none().0,
+                sensitivity.to_glib(),
+            );
         }
     }
 
     fn set_column_span_column(&self, column_span: i32) {
         unsafe {
-            ffi::gtk_combo_box_set_column_span_column(self.as_ref().to_glib_none().0, column_span);
+            gtk_sys::gtk_combo_box_set_column_span_column(
+                self.as_ref().to_glib_none().0,
+                column_span,
+            );
         }
     }
 
     fn set_entry_text_column(&self, text_column: i32) {
         unsafe {
-            ffi::gtk_combo_box_set_entry_text_column(self.as_ref().to_glib_none().0, text_column);
+            gtk_sys::gtk_combo_box_set_entry_text_column(
+                self.as_ref().to_glib_none().0,
+                text_column,
+            );
         }
     }
 
     #[cfg(any(not(feature = "v3_20"), feature = "dox"))]
     fn set_focus_on_click(&self, focus_on_click: bool) {
         unsafe {
-            ffi::gtk_combo_box_set_focus_on_click(self.as_ref().to_glib_none().0, focus_on_click.to_glib());
+            gtk_sys::gtk_combo_box_set_focus_on_click(
+                self.as_ref().to_glib_none().0,
+                focus_on_click.to_glib(),
+            );
         }
     }
 
     fn set_id_column(&self, id_column: i32) {
         unsafe {
-            ffi::gtk_combo_box_set_id_column(self.as_ref().to_glib_none().0, id_column);
+            gtk_sys::gtk_combo_box_set_id_column(self.as_ref().to_glib_none().0, id_column);
         }
     }
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q) {
-        let model = model.into();
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>) {
         unsafe {
-            ffi::gtk_combo_box_set_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0);
+            gtk_sys::gtk_combo_box_set_model(
+                self.as_ref().to_glib_none().0,
+                model.map(|p| p.as_ref()).to_glib_none().0,
+            );
         }
     }
 
     fn set_popup_fixed_width(&self, fixed: bool) {
         unsafe {
-            ffi::gtk_combo_box_set_popup_fixed_width(self.as_ref().to_glib_none().0, fixed.to_glib());
+            gtk_sys::gtk_combo_box_set_popup_fixed_width(
+                self.as_ref().to_glib_none().0,
+                fixed.to_glib(),
+            );
         }
     }
 
     fn set_row_separator_func<P: Fn(&TreeModel, &TreeIter) -> bool + 'static>(&self, func: P) {
         let func_data: Box_<P> = Box::new(func);
-        unsafe extern "C" fn func_func<P: Fn(&TreeModel, &TreeIter) -> bool + 'static>(model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+        unsafe extern "C" fn func_func<P: Fn(&TreeModel, &TreeIter) -> bool + 'static>(
+            model: *mut gtk_sys::GtkTreeModel,
+            iter: *mut gtk_sys::GtkTreeIter,
+            data: glib_sys::gpointer,
+        ) -> glib_sys::gboolean {
             let model = from_glib_borrow(model);
             let iter = from_glib_borrow(iter);
             let callback: &P = &*(data as *mut _);
@@ -377,32 +950,43 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             res.to_glib()
         }
         let func = Some(func_func::<P> as _);
-        unsafe extern "C" fn destroy_func<P: Fn(&TreeModel, &TreeIter) -> bool + 'static>(data: glib_ffi::gpointer) {
+        unsafe extern "C" fn destroy_func<P: Fn(&TreeModel, &TreeIter) -> bool + 'static>(
+            data: glib_sys::gpointer,
+        ) {
             let _callback: Box_<P> = Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func::<P> as _);
         let super_callback0: Box_<P> = func_data;
         unsafe {
-            ffi::gtk_combo_box_set_row_separator_func(self.as_ref().to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+            gtk_sys::gtk_combo_box_set_row_separator_func(
+                self.as_ref().to_glib_none().0,
+                func,
+                Box::into_raw(super_callback0) as *mut _,
+                destroy_call3,
+            );
         }
     }
 
     fn set_row_span_column(&self, row_span: i32) {
         unsafe {
-            ffi::gtk_combo_box_set_row_span_column(self.as_ref().to_glib_none().0, row_span);
+            gtk_sys::gtk_combo_box_set_row_span_column(self.as_ref().to_glib_none().0, row_span);
         }
     }
 
     fn set_wrap_width(&self, width: i32) {
         unsafe {
-            ffi::gtk_combo_box_set_wrap_width(self.as_ref().to_glib_none().0, width);
+            gtk_sys::gtk_combo_box_set_wrap_width(self.as_ref().to_glib_none().0, width);
         }
     }
 
     fn get_property_cell_area(&self) -> Option<CellArea> {
         unsafe {
             let mut value = Value::from_type(<CellArea as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cell-area\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"cell-area\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get()
         }
     }
@@ -410,275 +994,469 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
     fn get_property_has_frame(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-frame\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"has-frame\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_has_frame(&self, has_frame: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-frame\0".as_ptr() as *const _, Value::from(&has_frame).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"has-frame\0".as_ptr() as *const _,
+                Value::from(&has_frame).to_glib_none().0,
+            );
         }
     }
 
     fn get_property_popup_shown(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"popup-shown\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"popup-shown\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"changed\0".as_ptr() as *const _,
-                Some(transmute(changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"changed\0".as_ptr() as *const _,
+                Some(transmute(changed_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_format_entry_text<F: Fn(&Self, &str) -> String + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_format_entry_text<F: Fn(&Self, &str) -> String + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn format_entry_text_trampoline<P, F: Fn(&P, &str) -> String + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            path: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) -> *mut libc::c_char
+        where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &ComboBox::from_glib_borrow(this).unsafe_cast(),
+                &GString::from_glib_borrow(path),
+            )
+            .to_glib_full()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"format-entry-text\0".as_ptr() as *const _,
-                Some(transmute(format_entry_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"format-entry-text\0".as_ptr() as *const _,
+                Some(transmute(format_entry_text_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_move_active<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn move_active_trampoline<P, F: Fn(&P, ScrollType) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            scroll_type: gtk_sys::GtkScrollType,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &ComboBox::from_glib_borrow(this).unsafe_cast(),
+                from_glib(scroll_type),
+            )
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"move-active\0".as_ptr() as *const _,
-                Some(transmute(move_active_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"move-active\0".as_ptr() as *const _,
+                Some(transmute(move_active_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_move_active(&self, scroll_type: ScrollType) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-active", &[&scroll_type]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("move-active", &[&scroll_type])
+                .unwrap()
+        };
     }
 
     fn connect_popdown<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn popdown_trampoline<P, F: Fn(&P) -> bool + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            f: glib_sys::gpointer,
+        ) -> glib_sys::gboolean
+        where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast()).to_glib()
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"popdown\0".as_ptr() as *const _,
-                Some(transmute(popdown_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"popdown\0".as_ptr() as *const _,
+                Some(transmute(popdown_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_popdown(&self) -> bool {
-        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("popdown", &[]).unwrap() };
+        let res = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("popdown", &[])
+                .unwrap()
+        };
         res.unwrap().get().unwrap()
     }
 
     fn connect_popup<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn popup_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"popup\0".as_ptr() as *const _,
-                Some(transmute(popup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"popup\0".as_ptr() as *const _,
+                Some(transmute(popup_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn emit_popup(&self) {
-        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("popup", &[]).unwrap() };
+        let _ = unsafe {
+            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+                .emit("popup", &[])
+                .unwrap()
+        };
     }
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::active\0".as_ptr() as *const _,
+                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_active_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_active_id_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::active-id\0".as_ptr() as *const _,
-                Some(transmute(notify_active_id_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::active-id\0".as_ptr() as *const _,
+                Some(transmute(notify_active_id_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_button_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_button_sensitivity_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_button_sensitivity_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::button-sensitivity\0".as_ptr() as *const _,
-                Some(transmute(notify_button_sensitivity_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::button-sensitivity\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_button_sensitivity_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_column_span_column_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::column-span-column\0".as_ptr() as *const _,
-                Some(transmute(notify_column_span_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::column-span-column\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_column_span_column_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_entry_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_entry_text_column_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_entry_text_column_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::entry-text-column\0".as_ptr() as *const _,
-                Some(transmute(notify_entry_text_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::entry-text-column\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_entry_text_column_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_has_frame_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::has-frame\0".as_ptr() as *const _,
-                Some(transmute(notify_has_frame_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::has-frame\0".as_ptr() as *const _,
+                Some(transmute(notify_has_frame_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_id_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_id_column_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::id-column\0".as_ptr() as *const _,
-                Some(transmute(notify_id_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::id-column\0".as_ptr() as *const _,
+                Some(transmute(notify_id_column_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::model\0".as_ptr() as *const _,
+                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_popup_fixed_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_popup_fixed_width_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_popup_fixed_width_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::popup-fixed-width\0".as_ptr() as *const _,
-                Some(transmute(notify_popup_fixed_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::popup-fixed-width\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_popup_fixed_width_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_popup_shown_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_popup_shown_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::popup-shown\0".as_ptr() as *const _,
-                Some(transmute(notify_popup_shown_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::popup-shown\0".as_ptr() as *const _,
+                Some(transmute(notify_popup_shown_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_row_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_row_span_column_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_row_span_column_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::row-span-column\0".as_ptr() as *const _,
-                Some(transmute(notify_row_span_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::row-span-column\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_row_span_column_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wrap_width_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkComboBox,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<ComboBox>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&ComboBox::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::wrap-width\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::wrap-width\0".as_ptr() as *const _,
+                Some(transmute(notify_wrap_width_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
-}
-
-unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn format_entry_text_trampoline<P, F: Fn(&P, &str) -> String + 'static>(this: *mut ffi::GtkComboBox, path: *mut libc::c_char, f: glib_ffi::gpointer) -> *mut libc::c_char
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(path)).to_glib_full()
-}
-
-unsafe extern "C" fn move_active_trampoline<P, F: Fn(&P, ScrollType) + 'static>(this: *mut ffi::GtkComboBox, scroll_type: ffi::GtkScrollType, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast(), from_glib(scroll_type))
-}
-
-unsafe extern "C" fn popdown_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkComboBox, f: glib_ffi::gpointer) -> glib_ffi::gboolean
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast()).to_glib()
-}
-
-unsafe extern "C" fn popup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_active_id_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_button_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_column_span_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_entry_text_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_has_frame_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_id_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_popup_fixed_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_popup_shown_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_row_span_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_wrap_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ComboBox {
