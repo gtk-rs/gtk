@@ -2,35 +2,44 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Builder;
-use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
+use gtk_sys;
 use std::fmt;
+use Builder;
 
 glib_wrapper! {
-    pub struct Buildable(Interface<ffi::GtkBuildable>);
+    pub struct Buildable(Interface<gtk_sys::GtkBuildable>);
 
     match fn {
-        get_type => || ffi::gtk_buildable_get_type(),
+        get_type => || gtk_sys::gtk_buildable_get_type(),
     }
 }
 
 pub const NONE_BUILDABLE: Option<&Buildable> = None;
 
 pub trait BuildableExt: 'static {
-    fn add_child<'a, P: IsA<Builder>, Q: IsA<glib::Object>, R: Into<Option<&'a str>>>(&self, builder: &P, child: &Q, type_: R);
+    fn add_child<P: IsA<Builder>, Q: IsA<glib::Object>>(
+        &self,
+        builder: &P,
+        child: &Q,
+        type_: Option<&str>,
+    );
 
     fn construct_child<P: IsA<Builder>>(&self, builder: &P, name: &str) -> Option<glib::Object>;
 
-    //fn custom_finished<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>);
+    //fn custom_finished<P: IsA<Builder>, Q: IsA<glib::Object>>(&self, builder: &P, child: Option<&Q>, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    //fn custom_tag_end<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>);
+    //fn custom_tag_end<P: IsA<Builder>, Q: IsA<glib::Object>>(&self, builder: &P, child: Option<&Q>, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    //fn custom_tag_start<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, parser: /*Ignored*/glib::MarkupParser, data: /*Unimplemented*/&mut Option<Fundamental: Pointer>) -> bool;
+    //fn custom_tag_start<P: IsA<Builder>, Q: IsA<glib::Object>>(&self, builder: &P, child: Option<&Q>, tagname: &str, parser: /*Ignored*/glib::MarkupParser, data: /*Unimplemented*/&mut Option<Fundamental: Pointer>) -> bool;
 
-    fn get_internal_child<P: IsA<Builder>>(&self, builder: &P, childname: &str) -> Option<glib::Object>;
+    fn get_internal_child<P: IsA<Builder>>(
+        &self,
+        builder: &P,
+        childname: &str,
+    ) -> Option<glib::Object>;
 
     fn parser_finished<P: IsA<Builder>>(&self, builder: &P);
 
@@ -38,46 +47,80 @@ pub trait BuildableExt: 'static {
 }
 
 impl<O: IsA<Buildable>> BuildableExt for O {
-    fn add_child<'a, P: IsA<Builder>, Q: IsA<glib::Object>, R: Into<Option<&'a str>>>(&self, builder: &P, child: &Q, type_: R) {
-        let type_ = type_.into();
+    fn add_child<P: IsA<Builder>, Q: IsA<glib::Object>>(
+        &self,
+        builder: &P,
+        child: &Q,
+        type_: Option<&str>,
+    ) {
         unsafe {
-            ffi::gtk_buildable_add_child(self.as_ref().to_glib_none().0, builder.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, type_.to_glib_none().0);
+            gtk_sys::gtk_buildable_add_child(
+                self.as_ref().to_glib_none().0,
+                builder.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                type_.to_glib_none().0,
+            );
         }
     }
 
     fn construct_child<P: IsA<Builder>>(&self, builder: &P, name: &str) -> Option<glib::Object> {
         unsafe {
-            from_glib_full(ffi::gtk_buildable_construct_child(self.as_ref().to_glib_none().0, builder.as_ref().to_glib_none().0, name.to_glib_none().0))
+            from_glib_full(gtk_sys::gtk_buildable_construct_child(
+                self.as_ref().to_glib_none().0,
+                builder.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+            ))
         }
     }
 
-    //fn custom_finished<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call ffi::gtk_buildable_custom_finished() }
+    //fn custom_finished<P: IsA<Builder>, Q: IsA<glib::Object>>(&self, builder: &P, child: Option<&Q>, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //    unsafe { TODO: call gtk_sys:gtk_buildable_custom_finished() }
     //}
 
-    //fn custom_tag_end<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call ffi::gtk_buildable_custom_tag_end() }
+    //fn custom_tag_end<P: IsA<Builder>, Q: IsA<glib::Object>>(&self, builder: &P, child: Option<&Q>, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //    unsafe { TODO: call gtk_sys:gtk_buildable_custom_tag_end() }
     //}
 
-    //fn custom_tag_start<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, parser: /*Ignored*/glib::MarkupParser, data: /*Unimplemented*/&mut Option<Fundamental: Pointer>) -> bool {
-    //    unsafe { TODO: call ffi::gtk_buildable_custom_tag_start() }
+    //fn custom_tag_start<P: IsA<Builder>, Q: IsA<glib::Object>>(&self, builder: &P, child: Option<&Q>, tagname: &str, parser: /*Ignored*/glib::MarkupParser, data: /*Unimplemented*/&mut Option<Fundamental: Pointer>) -> bool {
+    //    unsafe { TODO: call gtk_sys:gtk_buildable_custom_tag_start() }
     //}
 
-    fn get_internal_child<P: IsA<Builder>>(&self, builder: &P, childname: &str) -> Option<glib::Object> {
+    fn get_internal_child<P: IsA<Builder>>(
+        &self,
+        builder: &P,
+        childname: &str,
+    ) -> Option<glib::Object> {
         unsafe {
-            from_glib_none(ffi::gtk_buildable_get_internal_child(self.as_ref().to_glib_none().0, builder.as_ref().to_glib_none().0, childname.to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_buildable_get_internal_child(
+                self.as_ref().to_glib_none().0,
+                builder.as_ref().to_glib_none().0,
+                childname.to_glib_none().0,
+            ))
         }
     }
 
     fn parser_finished<P: IsA<Builder>>(&self, builder: &P) {
         unsafe {
-            ffi::gtk_buildable_parser_finished(self.as_ref().to_glib_none().0, builder.as_ref().to_glib_none().0);
+            gtk_sys::gtk_buildable_parser_finished(
+                self.as_ref().to_glib_none().0,
+                builder.as_ref().to_glib_none().0,
+            );
         }
     }
 
-    fn set_buildable_property<P: IsA<Builder>>(&self, builder: &P, name: &str, value: &glib::Value) {
+    fn set_buildable_property<P: IsA<Builder>>(
+        &self,
+        builder: &P,
+        name: &str,
+        value: &glib::Value,
+    ) {
         unsafe {
-            ffi::gtk_buildable_set_buildable_property(self.as_ref().to_glib_none().0, builder.as_ref().to_glib_none().0, name.to_glib_none().0, value.to_glib_none().0);
+            gtk_sys::gtk_buildable_set_buildable_property(
+                self.as_ref().to_glib_none().0,
+                builder.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
+                value.to_glib_none().0,
+            );
         }
     }
 }

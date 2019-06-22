@@ -2,59 +2,928 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Adjustment;
-use Buildable;
-use CellEditable;
-use Editable;
-use Entry;
-use Orientable;
-use SpinButtonUpdatePolicy;
-use SpinType;
-use Widget;
-use ffi;
-use glib::StaticType;
-use glib::Value;
+use gdk;
+use gdk_pixbuf;
+use gio;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
+use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
+use Adjustment;
+use Align;
+use Buildable;
+use CellEditable;
+use Container;
+use Editable;
+use Entry;
+use EntryBuffer;
+use EntryCompletion;
+use InputHints;
+use InputPurpose;
+use Orientable;
+use ShadowType;
+use SpinButtonUpdatePolicy;
+use SpinType;
+use Widget;
 
 glib_wrapper! {
-    pub struct SpinButton(Object<ffi::GtkSpinButton, ffi::GtkSpinButtonClass, SpinButtonClass>) @extends Entry, Widget, @implements Buildable, CellEditable, Editable, Orientable;
+    pub struct SpinButton(Object<gtk_sys::GtkSpinButton, gtk_sys::GtkSpinButtonClass, SpinButtonClass>) @extends Entry, Widget, @implements Buildable, CellEditable, Editable, Orientable;
 
     match fn {
-        get_type => || ffi::gtk_spin_button_get_type(),
+        get_type => || gtk_sys::gtk_spin_button_get_type(),
     }
 }
 
 impl SpinButton {
-    pub fn new<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(adjustment: Q, climb_rate: f64, digits: u32) -> SpinButton {
+    pub fn new<P: IsA<Adjustment>>(
+        adjustment: Option<&P>,
+        climb_rate: f64,
+        digits: u32,
+    ) -> SpinButton {
         assert_initialized_main_thread!();
-        let adjustment = adjustment.into();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_spin_button_new(adjustment.map(|p| p.as_ref()).to_glib_none().0, climb_rate, digits)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_spin_button_new(
+                adjustment.map(|p| p.as_ref()).to_glib_none().0,
+                climb_rate,
+                digits,
+            ))
+            .unsafe_cast()
         }
     }
 
     pub fn new_with_range(min: f64, max: f64, step: f64) -> SpinButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_spin_button_new_with_range(min, max, step)).unsafe_cast()
+            Widget::from_glib_none(gtk_sys::gtk_spin_button_new_with_range(min, max, step))
+                .unsafe_cast()
         }
+    }
+}
+
+pub struct SpinButtonBuilder {
+    adjustment: Option<Adjustment>,
+    climb_rate: Option<f64>,
+    digits: Option<u32>,
+    numeric: Option<bool>,
+    snap_to_ticks: Option<bool>,
+    update_policy: Option<SpinButtonUpdatePolicy>,
+    value: Option<f64>,
+    wrap: Option<bool>,
+    activates_default: Option<bool>,
+    attributes: Option<pango::AttrList>,
+    buffer: Option<EntryBuffer>,
+    caps_lock_warning: Option<bool>,
+    completion: Option<EntryCompletion>,
+    editable: Option<bool>,
+    enable_emoji_completion: Option<bool>,
+    has_frame: Option<bool>,
+    im_module: Option<String>,
+    input_hints: Option<InputHints>,
+    input_purpose: Option<InputPurpose>,
+    invisible_char: Option<u32>,
+    invisible_char_set: Option<bool>,
+    max_length: Option<i32>,
+    max_width_chars: Option<i32>,
+    overwrite_mode: Option<bool>,
+    placeholder_text: Option<String>,
+    populate_all: Option<bool>,
+    primary_icon_activatable: Option<bool>,
+    primary_icon_gicon: Option<gio::Icon>,
+    primary_icon_name: Option<String>,
+    primary_icon_pixbuf: Option<gdk_pixbuf::Pixbuf>,
+    primary_icon_sensitive: Option<bool>,
+    primary_icon_tooltip_markup: Option<String>,
+    primary_icon_tooltip_text: Option<String>,
+    progress_fraction: Option<f64>,
+    progress_pulse_step: Option<f64>,
+    secondary_icon_activatable: Option<bool>,
+    secondary_icon_gicon: Option<gio::Icon>,
+    secondary_icon_name: Option<String>,
+    secondary_icon_pixbuf: Option<gdk_pixbuf::Pixbuf>,
+    secondary_icon_sensitive: Option<bool>,
+    secondary_icon_tooltip_markup: Option<String>,
+    secondary_icon_tooltip_text: Option<String>,
+    shadow_type: Option<ShadowType>,
+    show_emoji_icon: Option<bool>,
+    tabs: Option<pango::TabArray>,
+    text: Option<String>,
+    truncate_multiline: Option<bool>,
+    visibility: Option<bool>,
+    width_chars: Option<i32>,
+    xalign: Option<f32>,
+    app_paintable: Option<bool>,
+    can_default: Option<bool>,
+    can_focus: Option<bool>,
+    events: Option<gdk::EventMask>,
+    expand: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    focus_on_click: Option<bool>,
+    halign: Option<Align>,
+    has_default: Option<bool>,
+    has_focus: Option<bool>,
+    has_tooltip: Option<bool>,
+    height_request: Option<i32>,
+    hexpand: Option<bool>,
+    hexpand_set: Option<bool>,
+    is_focus: Option<bool>,
+    margin: Option<i32>,
+    margin_bottom: Option<i32>,
+    margin_end: Option<i32>,
+    margin_start: Option<i32>,
+    margin_top: Option<i32>,
+    name: Option<String>,
+    no_show_all: Option<bool>,
+    opacity: Option<f64>,
+    parent: Option<Container>,
+    receives_default: Option<bool>,
+    sensitive: Option<bool>,
+    //style: /*Unknown type*/,
+    tooltip_markup: Option<String>,
+    tooltip_text: Option<String>,
+    valign: Option<Align>,
+    vexpand: Option<bool>,
+    vexpand_set: Option<bool>,
+    visible: Option<bool>,
+    width_request: Option<i32>,
+}
+
+impl SpinButtonBuilder {
+    pub fn new() -> Self {
+        Self {
+            adjustment: None,
+            climb_rate: None,
+            digits: None,
+            numeric: None,
+            snap_to_ticks: None,
+            update_policy: None,
+            value: None,
+            wrap: None,
+            activates_default: None,
+            attributes: None,
+            buffer: None,
+            caps_lock_warning: None,
+            completion: None,
+            editable: None,
+            enable_emoji_completion: None,
+            has_frame: None,
+            im_module: None,
+            input_hints: None,
+            input_purpose: None,
+            invisible_char: None,
+            invisible_char_set: None,
+            max_length: None,
+            max_width_chars: None,
+            overwrite_mode: None,
+            placeholder_text: None,
+            populate_all: None,
+            primary_icon_activatable: None,
+            primary_icon_gicon: None,
+            primary_icon_name: None,
+            primary_icon_pixbuf: None,
+            primary_icon_sensitive: None,
+            primary_icon_tooltip_markup: None,
+            primary_icon_tooltip_text: None,
+            progress_fraction: None,
+            progress_pulse_step: None,
+            secondary_icon_activatable: None,
+            secondary_icon_gicon: None,
+            secondary_icon_name: None,
+            secondary_icon_pixbuf: None,
+            secondary_icon_sensitive: None,
+            secondary_icon_tooltip_markup: None,
+            secondary_icon_tooltip_text: None,
+            shadow_type: None,
+            show_emoji_icon: None,
+            tabs: None,
+            text: None,
+            truncate_multiline: None,
+            visibility: None,
+            width_chars: None,
+            xalign: None,
+            app_paintable: None,
+            can_default: None,
+            can_focus: None,
+            events: None,
+            expand: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            focus_on_click: None,
+            halign: None,
+            has_default: None,
+            has_focus: None,
+            has_tooltip: None,
+            height_request: None,
+            hexpand: None,
+            hexpand_set: None,
+            is_focus: None,
+            margin: None,
+            margin_bottom: None,
+            margin_end: None,
+            margin_start: None,
+            margin_top: None,
+            name: None,
+            no_show_all: None,
+            opacity: None,
+            parent: None,
+            receives_default: None,
+            sensitive: None,
+            tooltip_markup: None,
+            tooltip_text: None,
+            valign: None,
+            vexpand: None,
+            vexpand_set: None,
+            visible: None,
+            width_request: None,
+        }
+    }
+
+    pub fn build(self) -> SpinButton {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref adjustment) = self.adjustment {
+            properties.push(("adjustment", adjustment));
+        }
+        if let Some(ref climb_rate) = self.climb_rate {
+            properties.push(("climb-rate", climb_rate));
+        }
+        if let Some(ref digits) = self.digits {
+            properties.push(("digits", digits));
+        }
+        if let Some(ref numeric) = self.numeric {
+            properties.push(("numeric", numeric));
+        }
+        if let Some(ref snap_to_ticks) = self.snap_to_ticks {
+            properties.push(("snap-to-ticks", snap_to_ticks));
+        }
+        if let Some(ref update_policy) = self.update_policy {
+            properties.push(("update-policy", update_policy));
+        }
+        if let Some(ref value) = self.value {
+            properties.push(("value", value));
+        }
+        if let Some(ref wrap) = self.wrap {
+            properties.push(("wrap", wrap));
+        }
+        if let Some(ref activates_default) = self.activates_default {
+            properties.push(("activates-default", activates_default));
+        }
+        if let Some(ref attributes) = self.attributes {
+            properties.push(("attributes", attributes));
+        }
+        if let Some(ref buffer) = self.buffer {
+            properties.push(("buffer", buffer));
+        }
+        if let Some(ref caps_lock_warning) = self.caps_lock_warning {
+            properties.push(("caps-lock-warning", caps_lock_warning));
+        }
+        if let Some(ref completion) = self.completion {
+            properties.push(("completion", completion));
+        }
+        if let Some(ref editable) = self.editable {
+            properties.push(("editable", editable));
+        }
+        if let Some(ref enable_emoji_completion) = self.enable_emoji_completion {
+            properties.push(("enable-emoji-completion", enable_emoji_completion));
+        }
+        if let Some(ref has_frame) = self.has_frame {
+            properties.push(("has-frame", has_frame));
+        }
+        if let Some(ref im_module) = self.im_module {
+            properties.push(("im-module", im_module));
+        }
+        if let Some(ref input_hints) = self.input_hints {
+            properties.push(("input-hints", input_hints));
+        }
+        if let Some(ref input_purpose) = self.input_purpose {
+            properties.push(("input-purpose", input_purpose));
+        }
+        if let Some(ref invisible_char) = self.invisible_char {
+            properties.push(("invisible-char", invisible_char));
+        }
+        if let Some(ref invisible_char_set) = self.invisible_char_set {
+            properties.push(("invisible-char-set", invisible_char_set));
+        }
+        if let Some(ref max_length) = self.max_length {
+            properties.push(("max-length", max_length));
+        }
+        if let Some(ref max_width_chars) = self.max_width_chars {
+            properties.push(("max-width-chars", max_width_chars));
+        }
+        if let Some(ref overwrite_mode) = self.overwrite_mode {
+            properties.push(("overwrite-mode", overwrite_mode));
+        }
+        if let Some(ref placeholder_text) = self.placeholder_text {
+            properties.push(("placeholder-text", placeholder_text));
+        }
+        if let Some(ref populate_all) = self.populate_all {
+            properties.push(("populate-all", populate_all));
+        }
+        if let Some(ref primary_icon_activatable) = self.primary_icon_activatable {
+            properties.push(("primary-icon-activatable", primary_icon_activatable));
+        }
+        if let Some(ref primary_icon_gicon) = self.primary_icon_gicon {
+            properties.push(("primary-icon-gicon", primary_icon_gicon));
+        }
+        if let Some(ref primary_icon_name) = self.primary_icon_name {
+            properties.push(("primary-icon-name", primary_icon_name));
+        }
+        if let Some(ref primary_icon_pixbuf) = self.primary_icon_pixbuf {
+            properties.push(("primary-icon-pixbuf", primary_icon_pixbuf));
+        }
+        if let Some(ref primary_icon_sensitive) = self.primary_icon_sensitive {
+            properties.push(("primary-icon-sensitive", primary_icon_sensitive));
+        }
+        if let Some(ref primary_icon_tooltip_markup) = self.primary_icon_tooltip_markup {
+            properties.push(("primary-icon-tooltip-markup", primary_icon_tooltip_markup));
+        }
+        if let Some(ref primary_icon_tooltip_text) = self.primary_icon_tooltip_text {
+            properties.push(("primary-icon-tooltip-text", primary_icon_tooltip_text));
+        }
+        if let Some(ref progress_fraction) = self.progress_fraction {
+            properties.push(("progress-fraction", progress_fraction));
+        }
+        if let Some(ref progress_pulse_step) = self.progress_pulse_step {
+            properties.push(("progress-pulse-step", progress_pulse_step));
+        }
+        if let Some(ref secondary_icon_activatable) = self.secondary_icon_activatable {
+            properties.push(("secondary-icon-activatable", secondary_icon_activatable));
+        }
+        if let Some(ref secondary_icon_gicon) = self.secondary_icon_gicon {
+            properties.push(("secondary-icon-gicon", secondary_icon_gicon));
+        }
+        if let Some(ref secondary_icon_name) = self.secondary_icon_name {
+            properties.push(("secondary-icon-name", secondary_icon_name));
+        }
+        if let Some(ref secondary_icon_pixbuf) = self.secondary_icon_pixbuf {
+            properties.push(("secondary-icon-pixbuf", secondary_icon_pixbuf));
+        }
+        if let Some(ref secondary_icon_sensitive) = self.secondary_icon_sensitive {
+            properties.push(("secondary-icon-sensitive", secondary_icon_sensitive));
+        }
+        if let Some(ref secondary_icon_tooltip_markup) = self.secondary_icon_tooltip_markup {
+            properties.push((
+                "secondary-icon-tooltip-markup",
+                secondary_icon_tooltip_markup,
+            ));
+        }
+        if let Some(ref secondary_icon_tooltip_text) = self.secondary_icon_tooltip_text {
+            properties.push(("secondary-icon-tooltip-text", secondary_icon_tooltip_text));
+        }
+        if let Some(ref shadow_type) = self.shadow_type {
+            properties.push(("shadow-type", shadow_type));
+        }
+        if let Some(ref show_emoji_icon) = self.show_emoji_icon {
+            properties.push(("show-emoji-icon", show_emoji_icon));
+        }
+        if let Some(ref tabs) = self.tabs {
+            properties.push(("tabs", tabs));
+        }
+        if let Some(ref text) = self.text {
+            properties.push(("text", text));
+        }
+        if let Some(ref truncate_multiline) = self.truncate_multiline {
+            properties.push(("truncate-multiline", truncate_multiline));
+        }
+        if let Some(ref visibility) = self.visibility {
+            properties.push(("visibility", visibility));
+        }
+        if let Some(ref width_chars) = self.width_chars {
+            properties.push(("width-chars", width_chars));
+        }
+        if let Some(ref xalign) = self.xalign {
+            properties.push(("xalign", xalign));
+        }
+        if let Some(ref app_paintable) = self.app_paintable {
+            properties.push(("app-paintable", app_paintable));
+        }
+        if let Some(ref can_default) = self.can_default {
+            properties.push(("can-default", can_default));
+        }
+        if let Some(ref can_focus) = self.can_focus {
+            properties.push(("can-focus", can_focus));
+        }
+        if let Some(ref events) = self.events {
+            properties.push(("events", events));
+        }
+        if let Some(ref expand) = self.expand {
+            properties.push(("expand", expand));
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref focus_on_click) = self.focus_on_click {
+                properties.push(("focus-on-click", focus_on_click));
+            }
+        }
+        if let Some(ref halign) = self.halign {
+            properties.push(("halign", halign));
+        }
+        if let Some(ref has_default) = self.has_default {
+            properties.push(("has-default", has_default));
+        }
+        if let Some(ref has_focus) = self.has_focus {
+            properties.push(("has-focus", has_focus));
+        }
+        if let Some(ref has_tooltip) = self.has_tooltip {
+            properties.push(("has-tooltip", has_tooltip));
+        }
+        if let Some(ref height_request) = self.height_request {
+            properties.push(("height-request", height_request));
+        }
+        if let Some(ref hexpand) = self.hexpand {
+            properties.push(("hexpand", hexpand));
+        }
+        if let Some(ref hexpand_set) = self.hexpand_set {
+            properties.push(("hexpand-set", hexpand_set));
+        }
+        if let Some(ref is_focus) = self.is_focus {
+            properties.push(("is-focus", is_focus));
+        }
+        if let Some(ref margin) = self.margin {
+            properties.push(("margin", margin));
+        }
+        if let Some(ref margin_bottom) = self.margin_bottom {
+            properties.push(("margin-bottom", margin_bottom));
+        }
+        if let Some(ref margin_end) = self.margin_end {
+            properties.push(("margin-end", margin_end));
+        }
+        if let Some(ref margin_start) = self.margin_start {
+            properties.push(("margin-start", margin_start));
+        }
+        if let Some(ref margin_top) = self.margin_top {
+            properties.push(("margin-top", margin_top));
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+        if let Some(ref no_show_all) = self.no_show_all {
+            properties.push(("no-show-all", no_show_all));
+        }
+        if let Some(ref opacity) = self.opacity {
+            properties.push(("opacity", opacity));
+        }
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref receives_default) = self.receives_default {
+            properties.push(("receives-default", receives_default));
+        }
+        if let Some(ref sensitive) = self.sensitive {
+            properties.push(("sensitive", sensitive));
+        }
+        if let Some(ref tooltip_markup) = self.tooltip_markup {
+            properties.push(("tooltip-markup", tooltip_markup));
+        }
+        if let Some(ref tooltip_text) = self.tooltip_text {
+            properties.push(("tooltip-text", tooltip_text));
+        }
+        if let Some(ref valign) = self.valign {
+            properties.push(("valign", valign));
+        }
+        if let Some(ref vexpand) = self.vexpand {
+            properties.push(("vexpand", vexpand));
+        }
+        if let Some(ref vexpand_set) = self.vexpand_set {
+            properties.push(("vexpand-set", vexpand_set));
+        }
+        if let Some(ref visible) = self.visible {
+            properties.push(("visible", visible));
+        }
+        if let Some(ref width_request) = self.width_request {
+            properties.push(("width-request", width_request));
+        }
+        glib::Object::new(SpinButton::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
+
+    pub fn adjustment(mut self, adjustment: &Adjustment) -> Self {
+        self.adjustment = Some(adjustment.clone());
+        self
+    }
+
+    pub fn climb_rate(mut self, climb_rate: f64) -> Self {
+        self.climb_rate = Some(climb_rate);
+        self
+    }
+
+    pub fn digits(mut self, digits: u32) -> Self {
+        self.digits = Some(digits);
+        self
+    }
+
+    pub fn numeric(mut self, numeric: bool) -> Self {
+        self.numeric = Some(numeric);
+        self
+    }
+
+    pub fn snap_to_ticks(mut self, snap_to_ticks: bool) -> Self {
+        self.snap_to_ticks = Some(snap_to_ticks);
+        self
+    }
+
+    pub fn update_policy(mut self, update_policy: SpinButtonUpdatePolicy) -> Self {
+        self.update_policy = Some(update_policy);
+        self
+    }
+
+    pub fn value(mut self, value: f64) -> Self {
+        self.value = Some(value);
+        self
+    }
+
+    pub fn wrap(mut self, wrap: bool) -> Self {
+        self.wrap = Some(wrap);
+        self
+    }
+
+    pub fn activates_default(mut self, activates_default: bool) -> Self {
+        self.activates_default = Some(activates_default);
+        self
+    }
+
+    pub fn attributes(mut self, attributes: &pango::AttrList) -> Self {
+        self.attributes = Some(attributes.clone());
+        self
+    }
+
+    pub fn buffer(mut self, buffer: &EntryBuffer) -> Self {
+        self.buffer = Some(buffer.clone());
+        self
+    }
+
+    pub fn caps_lock_warning(mut self, caps_lock_warning: bool) -> Self {
+        self.caps_lock_warning = Some(caps_lock_warning);
+        self
+    }
+
+    pub fn completion(mut self, completion: &EntryCompletion) -> Self {
+        self.completion = Some(completion.clone());
+        self
+    }
+
+    pub fn editable(mut self, editable: bool) -> Self {
+        self.editable = Some(editable);
+        self
+    }
+
+    pub fn enable_emoji_completion(mut self, enable_emoji_completion: bool) -> Self {
+        self.enable_emoji_completion = Some(enable_emoji_completion);
+        self
+    }
+
+    pub fn has_frame(mut self, has_frame: bool) -> Self {
+        self.has_frame = Some(has_frame);
+        self
+    }
+
+    pub fn im_module(mut self, im_module: &str) -> Self {
+        self.im_module = Some(im_module.to_string());
+        self
+    }
+
+    pub fn input_hints(mut self, input_hints: InputHints) -> Self {
+        self.input_hints = Some(input_hints);
+        self
+    }
+
+    pub fn input_purpose(mut self, input_purpose: InputPurpose) -> Self {
+        self.input_purpose = Some(input_purpose);
+        self
+    }
+
+    pub fn invisible_char(mut self, invisible_char: u32) -> Self {
+        self.invisible_char = Some(invisible_char);
+        self
+    }
+
+    pub fn invisible_char_set(mut self, invisible_char_set: bool) -> Self {
+        self.invisible_char_set = Some(invisible_char_set);
+        self
+    }
+
+    pub fn max_length(mut self, max_length: i32) -> Self {
+        self.max_length = Some(max_length);
+        self
+    }
+
+    pub fn max_width_chars(mut self, max_width_chars: i32) -> Self {
+        self.max_width_chars = Some(max_width_chars);
+        self
+    }
+
+    pub fn overwrite_mode(mut self, overwrite_mode: bool) -> Self {
+        self.overwrite_mode = Some(overwrite_mode);
+        self
+    }
+
+    pub fn placeholder_text(mut self, placeholder_text: &str) -> Self {
+        self.placeholder_text = Some(placeholder_text.to_string());
+        self
+    }
+
+    pub fn populate_all(mut self, populate_all: bool) -> Self {
+        self.populate_all = Some(populate_all);
+        self
+    }
+
+    pub fn primary_icon_activatable(mut self, primary_icon_activatable: bool) -> Self {
+        self.primary_icon_activatable = Some(primary_icon_activatable);
+        self
+    }
+
+    pub fn primary_icon_gicon(mut self, primary_icon_gicon: &gio::Icon) -> Self {
+        self.primary_icon_gicon = Some(primary_icon_gicon.clone());
+        self
+    }
+
+    pub fn primary_icon_name(mut self, primary_icon_name: &str) -> Self {
+        self.primary_icon_name = Some(primary_icon_name.to_string());
+        self
+    }
+
+    pub fn primary_icon_pixbuf(mut self, primary_icon_pixbuf: &gdk_pixbuf::Pixbuf) -> Self {
+        self.primary_icon_pixbuf = Some(primary_icon_pixbuf.clone());
+        self
+    }
+
+    pub fn primary_icon_sensitive(mut self, primary_icon_sensitive: bool) -> Self {
+        self.primary_icon_sensitive = Some(primary_icon_sensitive);
+        self
+    }
+
+    pub fn primary_icon_tooltip_markup(mut self, primary_icon_tooltip_markup: &str) -> Self {
+        self.primary_icon_tooltip_markup = Some(primary_icon_tooltip_markup.to_string());
+        self
+    }
+
+    pub fn primary_icon_tooltip_text(mut self, primary_icon_tooltip_text: &str) -> Self {
+        self.primary_icon_tooltip_text = Some(primary_icon_tooltip_text.to_string());
+        self
+    }
+
+    pub fn progress_fraction(mut self, progress_fraction: f64) -> Self {
+        self.progress_fraction = Some(progress_fraction);
+        self
+    }
+
+    pub fn progress_pulse_step(mut self, progress_pulse_step: f64) -> Self {
+        self.progress_pulse_step = Some(progress_pulse_step);
+        self
+    }
+
+    pub fn secondary_icon_activatable(mut self, secondary_icon_activatable: bool) -> Self {
+        self.secondary_icon_activatable = Some(secondary_icon_activatable);
+        self
+    }
+
+    pub fn secondary_icon_gicon(mut self, secondary_icon_gicon: &gio::Icon) -> Self {
+        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone());
+        self
+    }
+
+    pub fn secondary_icon_name(mut self, secondary_icon_name: &str) -> Self {
+        self.secondary_icon_name = Some(secondary_icon_name.to_string());
+        self
+    }
+
+    pub fn secondary_icon_pixbuf(mut self, secondary_icon_pixbuf: &gdk_pixbuf::Pixbuf) -> Self {
+        self.secondary_icon_pixbuf = Some(secondary_icon_pixbuf.clone());
+        self
+    }
+
+    pub fn secondary_icon_sensitive(mut self, secondary_icon_sensitive: bool) -> Self {
+        self.secondary_icon_sensitive = Some(secondary_icon_sensitive);
+        self
+    }
+
+    pub fn secondary_icon_tooltip_markup(mut self, secondary_icon_tooltip_markup: &str) -> Self {
+        self.secondary_icon_tooltip_markup = Some(secondary_icon_tooltip_markup.to_string());
+        self
+    }
+
+    pub fn secondary_icon_tooltip_text(mut self, secondary_icon_tooltip_text: &str) -> Self {
+        self.secondary_icon_tooltip_text = Some(secondary_icon_tooltip_text.to_string());
+        self
+    }
+
+    pub fn shadow_type(mut self, shadow_type: ShadowType) -> Self {
+        self.shadow_type = Some(shadow_type);
+        self
+    }
+
+    pub fn show_emoji_icon(mut self, show_emoji_icon: bool) -> Self {
+        self.show_emoji_icon = Some(show_emoji_icon);
+        self
+    }
+
+    pub fn tabs(mut self, tabs: &pango::TabArray) -> Self {
+        self.tabs = Some(tabs.clone());
+        self
+    }
+
+    pub fn text(mut self, text: &str) -> Self {
+        self.text = Some(text.to_string());
+        self
+    }
+
+    pub fn truncate_multiline(mut self, truncate_multiline: bool) -> Self {
+        self.truncate_multiline = Some(truncate_multiline);
+        self
+    }
+
+    pub fn visibility(mut self, visibility: bool) -> Self {
+        self.visibility = Some(visibility);
+        self
+    }
+
+    pub fn width_chars(mut self, width_chars: i32) -> Self {
+        self.width_chars = Some(width_chars);
+        self
+    }
+
+    pub fn xalign(mut self, xalign: f32) -> Self {
+        self.xalign = Some(xalign);
+        self
+    }
+
+    pub fn app_paintable(mut self, app_paintable: bool) -> Self {
+        self.app_paintable = Some(app_paintable);
+        self
+    }
+
+    pub fn can_default(mut self, can_default: bool) -> Self {
+        self.can_default = Some(can_default);
+        self
+    }
+
+    pub fn can_focus(mut self, can_focus: bool) -> Self {
+        self.can_focus = Some(can_focus);
+        self
+    }
+
+    pub fn events(mut self, events: gdk::EventMask) -> Self {
+        self.events = Some(events);
+        self
+    }
+
+    pub fn expand(mut self, expand: bool) -> Self {
+        self.expand = Some(expand);
+        self
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn focus_on_click(mut self, focus_on_click: bool) -> Self {
+        self.focus_on_click = Some(focus_on_click);
+        self
+    }
+
+    pub fn halign(mut self, halign: Align) -> Self {
+        self.halign = Some(halign);
+        self
+    }
+
+    pub fn has_default(mut self, has_default: bool) -> Self {
+        self.has_default = Some(has_default);
+        self
+    }
+
+    pub fn has_focus(mut self, has_focus: bool) -> Self {
+        self.has_focus = Some(has_focus);
+        self
+    }
+
+    pub fn has_tooltip(mut self, has_tooltip: bool) -> Self {
+        self.has_tooltip = Some(has_tooltip);
+        self
+    }
+
+    pub fn height_request(mut self, height_request: i32) -> Self {
+        self.height_request = Some(height_request);
+        self
+    }
+
+    pub fn hexpand(mut self, hexpand: bool) -> Self {
+        self.hexpand = Some(hexpand);
+        self
+    }
+
+    pub fn hexpand_set(mut self, hexpand_set: bool) -> Self {
+        self.hexpand_set = Some(hexpand_set);
+        self
+    }
+
+    pub fn is_focus(mut self, is_focus: bool) -> Self {
+        self.is_focus = Some(is_focus);
+        self
+    }
+
+    pub fn margin(mut self, margin: i32) -> Self {
+        self.margin = Some(margin);
+        self
+    }
+
+    pub fn margin_bottom(mut self, margin_bottom: i32) -> Self {
+        self.margin_bottom = Some(margin_bottom);
+        self
+    }
+
+    pub fn margin_end(mut self, margin_end: i32) -> Self {
+        self.margin_end = Some(margin_end);
+        self
+    }
+
+    pub fn margin_start(mut self, margin_start: i32) -> Self {
+        self.margin_start = Some(margin_start);
+        self
+    }
+
+    pub fn margin_top(mut self, margin_top: i32) -> Self {
+        self.margin_top = Some(margin_top);
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
+    }
+
+    pub fn no_show_all(mut self, no_show_all: bool) -> Self {
+        self.no_show_all = Some(no_show_all);
+        self
+    }
+
+    pub fn opacity(mut self, opacity: f64) -> Self {
+        self.opacity = Some(opacity);
+        self
+    }
+
+    pub fn parent(mut self, parent: &Container) -> Self {
+        self.parent = Some(parent.clone());
+        self
+    }
+
+    pub fn receives_default(mut self, receives_default: bool) -> Self {
+        self.receives_default = Some(receives_default);
+        self
+    }
+
+    pub fn sensitive(mut self, sensitive: bool) -> Self {
+        self.sensitive = Some(sensitive);
+        self
+    }
+
+    pub fn tooltip_markup(mut self, tooltip_markup: &str) -> Self {
+        self.tooltip_markup = Some(tooltip_markup.to_string());
+        self
+    }
+
+    pub fn tooltip_text(mut self, tooltip_text: &str) -> Self {
+        self.tooltip_text = Some(tooltip_text.to_string());
+        self
+    }
+
+    pub fn valign(mut self, valign: Align) -> Self {
+        self.valign = Some(valign);
+        self
+    }
+
+    pub fn vexpand(mut self, vexpand: bool) -> Self {
+        self.vexpand = Some(vexpand);
+        self
+    }
+
+    pub fn vexpand_set(mut self, vexpand_set: bool) -> Self {
+        self.vexpand_set = Some(vexpand_set);
+        self
+    }
+
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
+    }
+
+    pub fn width_request(mut self, width_request: i32) -> Self {
+        self.width_request = Some(width_request);
+        self
     }
 }
 
 pub const NONE_SPIN_BUTTON: Option<&SpinButton> = None;
 
 pub trait SpinButtonExt: 'static {
-    fn configure<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q, climb_rate: f64, digits: u32);
+    fn configure<P: IsA<Adjustment>>(&self, adjustment: Option<&P>, climb_rate: f64, digits: u32);
 
     fn get_adjustment(&self) -> Adjustment;
 
@@ -110,9 +979,15 @@ pub trait SpinButtonExt: 'static {
 
     fn connect_property_numeric_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_snap_to_ticks_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_snap_to_ticks_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_update_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_property_update_policy_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -120,37 +995,47 @@ pub trait SpinButtonExt: 'static {
 }
 
 impl<O: IsA<SpinButton>> SpinButtonExt for O {
-    fn configure<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q, climb_rate: f64, digits: u32) {
-        let adjustment = adjustment.into();
+    fn configure<P: IsA<Adjustment>>(&self, adjustment: Option<&P>, climb_rate: f64, digits: u32) {
         unsafe {
-            ffi::gtk_spin_button_configure(self.as_ref().to_glib_none().0, adjustment.map(|p| p.as_ref()).to_glib_none().0, climb_rate, digits);
+            gtk_sys::gtk_spin_button_configure(
+                self.as_ref().to_glib_none().0,
+                adjustment.map(|p| p.as_ref()).to_glib_none().0,
+                climb_rate,
+                digits,
+            );
         }
     }
 
     fn get_adjustment(&self) -> Adjustment {
         unsafe {
-            from_glib_none(ffi::gtk_spin_button_get_adjustment(self.as_ref().to_glib_none().0))
+            from_glib_none(gtk_sys::gtk_spin_button_get_adjustment(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_digits(&self) -> u32 {
-        unsafe {
-            ffi::gtk_spin_button_get_digits(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_spin_button_get_digits(self.as_ref().to_glib_none().0) }
     }
 
     fn get_increments(&self) -> (f64, f64) {
         unsafe {
             let mut step = mem::uninitialized();
             let mut page = mem::uninitialized();
-            ffi::gtk_spin_button_get_increments(self.as_ref().to_glib_none().0, &mut step, &mut page);
+            gtk_sys::gtk_spin_button_get_increments(
+                self.as_ref().to_glib_none().0,
+                &mut step,
+                &mut page,
+            );
             (step, page)
         }
     }
 
     fn get_numeric(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_spin_button_get_numeric(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_spin_button_get_numeric(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
@@ -158,232 +1043,329 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
         unsafe {
             let mut min = mem::uninitialized();
             let mut max = mem::uninitialized();
-            ffi::gtk_spin_button_get_range(self.as_ref().to_glib_none().0, &mut min, &mut max);
+            gtk_sys::gtk_spin_button_get_range(self.as_ref().to_glib_none().0, &mut min, &mut max);
             (min, max)
         }
     }
 
     fn get_snap_to_ticks(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_spin_button_get_snap_to_ticks(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_spin_button_get_snap_to_ticks(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_update_policy(&self) -> SpinButtonUpdatePolicy {
         unsafe {
-            from_glib(ffi::gtk_spin_button_get_update_policy(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_spin_button_get_update_policy(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn get_value(&self) -> f64 {
-        unsafe {
-            ffi::gtk_spin_button_get_value(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_spin_button_get_value(self.as_ref().to_glib_none().0) }
     }
 
     fn get_value_as_int(&self) -> i32 {
-        unsafe {
-            ffi::gtk_spin_button_get_value_as_int(self.as_ref().to_glib_none().0)
-        }
+        unsafe { gtk_sys::gtk_spin_button_get_value_as_int(self.as_ref().to_glib_none().0) }
     }
 
     fn get_wrap(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_spin_button_get_wrap(self.as_ref().to_glib_none().0))
+            from_glib(gtk_sys::gtk_spin_button_get_wrap(
+                self.as_ref().to_glib_none().0,
+            ))
         }
     }
 
     fn set_adjustment<P: IsA<Adjustment>>(&self, adjustment: &P) {
         unsafe {
-            ffi::gtk_spin_button_set_adjustment(self.as_ref().to_glib_none().0, adjustment.as_ref().to_glib_none().0);
+            gtk_sys::gtk_spin_button_set_adjustment(
+                self.as_ref().to_glib_none().0,
+                adjustment.as_ref().to_glib_none().0,
+            );
         }
     }
 
     fn set_digits(&self, digits: u32) {
         unsafe {
-            ffi::gtk_spin_button_set_digits(self.as_ref().to_glib_none().0, digits);
+            gtk_sys::gtk_spin_button_set_digits(self.as_ref().to_glib_none().0, digits);
         }
     }
 
     fn set_increments(&self, step: f64, page: f64) {
         unsafe {
-            ffi::gtk_spin_button_set_increments(self.as_ref().to_glib_none().0, step, page);
+            gtk_sys::gtk_spin_button_set_increments(self.as_ref().to_glib_none().0, step, page);
         }
     }
 
     fn set_numeric(&self, numeric: bool) {
         unsafe {
-            ffi::gtk_spin_button_set_numeric(self.as_ref().to_glib_none().0, numeric.to_glib());
+            gtk_sys::gtk_spin_button_set_numeric(self.as_ref().to_glib_none().0, numeric.to_glib());
         }
     }
 
     fn set_range(&self, min: f64, max: f64) {
         unsafe {
-            ffi::gtk_spin_button_set_range(self.as_ref().to_glib_none().0, min, max);
+            gtk_sys::gtk_spin_button_set_range(self.as_ref().to_glib_none().0, min, max);
         }
     }
 
     fn set_snap_to_ticks(&self, snap_to_ticks: bool) {
         unsafe {
-            ffi::gtk_spin_button_set_snap_to_ticks(self.as_ref().to_glib_none().0, snap_to_ticks.to_glib());
+            gtk_sys::gtk_spin_button_set_snap_to_ticks(
+                self.as_ref().to_glib_none().0,
+                snap_to_ticks.to_glib(),
+            );
         }
     }
 
     fn set_update_policy(&self, policy: SpinButtonUpdatePolicy) {
         unsafe {
-            ffi::gtk_spin_button_set_update_policy(self.as_ref().to_glib_none().0, policy.to_glib());
+            gtk_sys::gtk_spin_button_set_update_policy(
+                self.as_ref().to_glib_none().0,
+                policy.to_glib(),
+            );
         }
     }
 
     fn set_value(&self, value: f64) {
         unsafe {
-            ffi::gtk_spin_button_set_value(self.as_ref().to_glib_none().0, value);
+            gtk_sys::gtk_spin_button_set_value(self.as_ref().to_glib_none().0, value);
         }
     }
 
     fn set_wrap(&self, wrap: bool) {
         unsafe {
-            ffi::gtk_spin_button_set_wrap(self.as_ref().to_glib_none().0, wrap.to_glib());
+            gtk_sys::gtk_spin_button_set_wrap(self.as_ref().to_glib_none().0, wrap.to_glib());
         }
     }
 
     fn spin(&self, direction: SpinType, increment: f64) {
         unsafe {
-            ffi::gtk_spin_button_spin(self.as_ref().to_glib_none().0, direction.to_glib(), increment);
+            gtk_sys::gtk_spin_button_spin(
+                self.as_ref().to_glib_none().0,
+                direction.to_glib(),
+                increment,
+            );
         }
     }
 
     fn update(&self) {
         unsafe {
-            ffi::gtk_spin_button_update(self.as_ref().to_glib_none().0);
+            gtk_sys::gtk_spin_button_update(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_property_climb_rate(&self) -> f64 {
         unsafe {
             let mut value = Value::from_type(<f64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"climb-rate\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"climb-rate\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
             value.get().unwrap()
         }
     }
 
     fn set_property_climb_rate(&self, climb_rate: f64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"climb-rate\0".as_ptr() as *const _, Value::from(&climb_rate).to_glib_none().0);
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"climb-rate\0".as_ptr() as *const _,
+                Value::from(&climb_rate).to_glib_none().0,
+            );
         }
     }
 
     fn connect_property_adjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_adjustment_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::adjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_adjustment_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::adjustment\0".as_ptr() as *const _,
+                Some(transmute(notify_adjustment_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_climb_rate_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_climb_rate_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::climb-rate\0".as_ptr() as *const _,
-                Some(transmute(notify_climb_rate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::climb-rate\0".as_ptr() as *const _,
+                Some(transmute(notify_climb_rate_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_digits_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_digits_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::digits\0".as_ptr() as *const _,
-                Some(transmute(notify_digits_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::digits\0".as_ptr() as *const _,
+                Some(transmute(notify_digits_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_numeric_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_numeric_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::numeric\0".as_ptr() as *const _,
-                Some(transmute(notify_numeric_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::numeric\0".as_ptr() as *const _,
+                Some(transmute(notify_numeric_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_snap_to_ticks_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_snap_to_ticks_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_snap_to_ticks_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::snap-to-ticks\0".as_ptr() as *const _,
-                Some(transmute(notify_snap_to_ticks_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::snap-to-ticks\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_snap_to_ticks_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_update_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_property_update_policy_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_update_policy_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::update-policy\0".as_ptr() as *const _,
-                Some(transmute(notify_update_policy_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::update-policy\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_update_policy_trampoline::<Self, F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::value\0".as_ptr() as *const _,
+                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
     fn connect_property_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_wrap_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSpinButton,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<SpinButton>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::wrap\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::wrap\0".as_ptr() as *const _,
+                Some(transmute(notify_wrap_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
-}
-
-unsafe extern "C" fn notify_adjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_climb_rate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_numeric_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_snap_to_ticks_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_update_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_wrap_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
-    f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for SpinButton {

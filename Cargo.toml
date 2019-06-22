@@ -36,7 +36,8 @@ v3_24 = ["v3_22_30", "gtk-sys/v3_24"]
 purge-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/purge-lgpl-docs"]
 embed-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/embed-lgpl-docs"]
 dox = ["gdk/dox", "gtk-sys/dox"]
-futures = ["futures-core-preview", "fragile", "gio/futures"]
+futures = ["futures-preview", "fragile", "gio/futures"]
+subclassing = ["glib/subclassing", "gio/subclassing"]
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cc = "^1.0"
@@ -65,7 +66,7 @@ libc = "0.2"
 bitflags = "1.0"
 lazy_static = "1.0"
 fragile = { version = "0.3", optional = true }
-futures-core-preview = { version = "0.2", optional = true }
+futures-preview = { version = "0.3.0-alpha", optional = true }
 
 [dev-dependencies]
 gir-format-check = "^0.1"

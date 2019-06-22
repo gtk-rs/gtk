@@ -1,5 +1,5 @@
-use ffi;
 use glib::translate::{from_glib, ToGlib};
+use gtk_sys;
 use IconSize;
 use ResponseType;
 
@@ -20,7 +20,7 @@ impl Into<i32> for IconSize {
 impl From<i32> for IconSize {
     fn from(val: i32) -> Self {
         skip_assert_initialized!();
-        from_glib(val as ffi::GtkIconSize)
+        from_glib(val as gtk_sys::GtkIconSize)
     }
 }
 
@@ -34,6 +34,6 @@ impl Into<i32> for ResponseType {
 impl From<i32> for ResponseType {
     fn from(val: i32) -> Self {
         skip_assert_initialized!();
-        from_glib(val as ffi::GtkResponseType)
+        from_glib(val as gtk_sys::GtkResponseType)
     }
 }

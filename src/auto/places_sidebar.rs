@@ -2,45 +2,894 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Bin;
-use Buildable;
-use Container;
-use PlacesOpenFlags;
-use ScrolledWindow;
-use Widget;
-use ffi;
-#[cfg(any(feature = "v3_18", feature = "dox"))]
 use gdk;
 use gio;
-use gio_ffi;
-use glib::GString;
-use glib::StaticType;
-use glib::Value;
+use gio_sys;
 use glib::object::Cast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
+use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
+use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
+use glib::GString;
+use glib::StaticType;
+use glib::ToValue;
+use glib::Value;
+use glib_sys;
+use gobject_sys;
+use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use Adjustment;
+use Align;
+use Bin;
+use Buildable;
+use Container;
+use CornerType;
+use PlacesOpenFlags;
+use PolicyType;
+use ResizeMode;
+use ScrolledWindow;
+use ShadowType;
+use Widget;
 
 glib_wrapper! {
-    pub struct PlacesSidebar(Object<ffi::GtkPlacesSidebar, ffi::GtkPlacesSidebarClass, PlacesSidebarClass>) @extends ScrolledWindow, Bin, Container, Widget, @implements Buildable;
+    pub struct PlacesSidebar(Object<gtk_sys::GtkPlacesSidebar, gtk_sys::GtkPlacesSidebarClass, PlacesSidebarClass>) @extends ScrolledWindow, Bin, Container, Widget, @implements Buildable;
 
     match fn {
-        get_type => || ffi::gtk_places_sidebar_get_type(),
+        get_type => || gtk_sys::gtk_places_sidebar_get_type(),
     }
 }
 
 impl PlacesSidebar {
     pub fn new() -> PlacesSidebar {
         assert_initialized_main_thread!();
+        unsafe { Widget::from_glib_none(gtk_sys::gtk_places_sidebar_new()).unsafe_cast() }
+    }
+
+    pub fn add_shortcut<P: IsA<gio::File>>(&self, location: &P) {
         unsafe {
-            Widget::from_glib_none(ffi::gtk_places_sidebar_new()).unsafe_cast()
+            gtk_sys::gtk_places_sidebar_add_shortcut(
+                self.to_glib_none().0,
+                location.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    pub fn get_local_only(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_local_only(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn get_location(&self) -> Option<gio::File> {
+        unsafe {
+            from_glib_full(gtk_sys::gtk_places_sidebar_get_location(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn get_nth_bookmark(&self, n: i32) -> Option<gio::File> {
+        unsafe {
+            from_glib_full(gtk_sys::gtk_places_sidebar_get_nth_bookmark(
+                self.to_glib_none().0,
+                n,
+            ))
+        }
+    }
+
+    pub fn get_open_flags(&self) -> PlacesOpenFlags {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_open_flags(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg_attr(feature = "v3_18", deprecated)]
+    pub fn get_show_connect_to_server(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_show_connect_to_server(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn get_show_desktop(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_show_desktop(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn get_show_enter_location(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_show_enter_location(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn get_show_other_locations(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_show_other_locations(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn get_show_recent(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_show_recent(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
+    pub fn get_show_starred_location(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_show_starred_location(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn get_show_trash(&self) -> bool {
+        unsafe {
+            from_glib(gtk_sys::gtk_places_sidebar_get_show_trash(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn list_shortcuts(&self) -> Vec<gio::File> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(gtk_sys::gtk_places_sidebar_list_shortcuts(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    pub fn remove_shortcut<P: IsA<gio::File>>(&self, location: &P) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_remove_shortcut(
+                self.to_glib_none().0,
+                location.as_ref().to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn set_drop_targets_visible(&self, visible: bool, context: &gdk::DragContext) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_drop_targets_visible(
+                self.to_glib_none().0,
+                visible.to_glib(),
+                context.to_glib_none().0,
+            );
+        }
+    }
+
+    pub fn set_local_only(&self, local_only: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_local_only(self.to_glib_none().0, local_only.to_glib());
+        }
+    }
+
+    pub fn set_location<P: IsA<gio::File>>(&self, location: Option<&P>) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_location(
+                self.to_glib_none().0,
+                location.map(|p| p.as_ref()).to_glib_none().0,
+            );
+        }
+    }
+
+    pub fn set_open_flags(&self, flags: PlacesOpenFlags) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_open_flags(self.to_glib_none().0, flags.to_glib());
+        }
+    }
+
+    #[cfg_attr(feature = "v3_18", deprecated)]
+    pub fn set_show_connect_to_server(&self, show_connect_to_server: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_show_connect_to_server(
+                self.to_glib_none().0,
+                show_connect_to_server.to_glib(),
+            );
+        }
+    }
+
+    pub fn set_show_desktop(&self, show_desktop: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_show_desktop(
+                self.to_glib_none().0,
+                show_desktop.to_glib(),
+            );
+        }
+    }
+
+    pub fn set_show_enter_location(&self, show_enter_location: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_show_enter_location(
+                self.to_glib_none().0,
+                show_enter_location.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn set_show_other_locations(&self, show_other_locations: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_show_other_locations(
+                self.to_glib_none().0,
+                show_other_locations.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn set_show_recent(&self, show_recent: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_show_recent(
+                self.to_glib_none().0,
+                show_recent.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
+    pub fn set_show_starred_location(&self, show_starred_location: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_show_starred_location(
+                self.to_glib_none().0,
+                show_starred_location.to_glib(),
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn set_show_trash(&self, show_trash: bool) {
+        unsafe {
+            gtk_sys::gtk_places_sidebar_set_show_trash(self.to_glib_none().0, show_trash.to_glib());
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn get_property_populate_all(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"populate-all\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn set_property_populate_all(&self, populate_all: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"populate-all\0".as_ptr() as *const _,
+                Value::from(&populate_all).to_glib_none().0,
+            );
+        }
+    }
+
+    pub fn get_property_show_other_locations(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"show-other-locations\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value.get().unwrap()
+        }
+    }
+
+    pub fn set_property_show_other_locations(&self, show_other_locations: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"show-other-locations\0".as_ptr() as *const _,
+                Value::from(&show_other_locations).to_glib_none().0,
+            );
+        }
+    }
+
+    pub fn get_property_show_recent(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"show-recent\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value.get().unwrap()
+        }
+    }
+
+    pub fn set_property_show_recent(&self, show_recent: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"show-recent\0".as_ptr() as *const _,
+                Value::from(&show_recent).to_glib_none().0,
+            );
+        }
+    }
+
+    pub fn get_property_show_trash(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"show-trash\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value.get().unwrap()
+        }
+    }
+
+    pub fn set_property_show_trash(&self, show_trash: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.as_ptr() as *mut gobject_sys::GObject,
+                b"show-trash\0".as_ptr() as *const _,
+                Value::from(&show_trash).to_glib_none().0,
+            );
+        }
+    }
+
+    pub fn connect_drag_action_ask<F: Fn(&PlacesSidebar, i32) -> i32 + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn drag_action_ask_trampoline<
+            F: Fn(&PlacesSidebar, i32) -> i32 + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            actions: libc::c_int,
+            f: glib_sys::gpointer,
+        ) -> libc::c_int {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), actions)
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"drag-action-ask\0".as_ptr() as *const _,
+                Some(transmute(drag_action_ask_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn connect_mount<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn mount_trampoline<
+            F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            mount_operation: *mut gio_sys::GMountOperation,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(mount_operation))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"mount\0".as_ptr() as *const _,
+                Some(transmute(mount_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_open_location<F: Fn(&PlacesSidebar, &gio::File, PlacesOpenFlags) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn open_location_trampoline<
+            F: Fn(&PlacesSidebar, &gio::File, PlacesOpenFlags) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            location: *mut gio_sys::GFile,
+            open_flags: gtk_sys::GtkPlacesOpenFlags,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                &from_glib_borrow(this),
+                &from_glib_borrow(location),
+                from_glib(open_flags),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"open-location\0".as_ptr() as *const _,
+                Some(transmute(open_location_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    //pub fn connect_populate_popup<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
+    //    Ignored selected_volume: Gio.Volume
+    //}
+
+    #[cfg_attr(feature = "v3_18", deprecated)]
+    pub fn connect_show_connect_to_server<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_connect_to_server_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-connect-to-server\0".as_ptr() as *const _,
+                Some(transmute(show_connect_to_server_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_show_enter_location<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_enter_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-enter-location\0".as_ptr() as *const _,
+                Some(transmute(show_enter_location_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_show_error_message<F: Fn(&PlacesSidebar, &str, &str) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_error_message_trampoline<
+            F: Fn(&PlacesSidebar, &str, &str) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            primary: *mut libc::c_char,
+            secondary: *mut libc::c_char,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(
+                &from_glib_borrow(this),
+                &GString::from_glib_borrow(primary),
+                &GString::from_glib_borrow(secondary),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-error-message\0".as_ptr() as *const _,
+                Some(transmute(show_error_message_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg_attr(feature = "v3_20", deprecated)]
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn connect_show_other_locations<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_other_locations_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-other-locations\0".as_ptr() as *const _,
+                Some(transmute(show_other_locations_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn connect_show_other_locations_with_flags<
+        F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_other_locations_with_flags_trampoline<
+            F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            open_flags: gtk_sys::GtkPlacesOpenFlags,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), from_glib(open_flags))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-other-locations-with-flags\0".as_ptr() as *const _,
+                Some(transmute(
+                    show_other_locations_with_flags_trampoline::<F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
+    pub fn connect_show_starred_location<F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn show_starred_location_trampoline<
+            F: Fn(&PlacesSidebar, PlacesOpenFlags) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            open_flags: gtk_sys::GtkPlacesOpenFlags,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), from_glib(open_flags))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"show-starred-location\0".as_ptr() as *const _,
+                Some(transmute(show_starred_location_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    pub fn connect_unmount<F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn unmount_trampoline<
+            F: Fn(&PlacesSidebar, &gio::MountOperation) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            mount_operation: *mut gio_sys::GMountOperation,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(mount_operation))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"unmount\0".as_ptr() as *const _,
+                Some(transmute(unmount_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_local_only_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_local_only_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::local-only\0".as_ptr() as *const _,
+                Some(transmute(notify_local_only_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_location_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_location_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::location\0".as_ptr() as *const _,
+                Some(transmute(notify_location_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_open_flags_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_open_flags_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::open-flags\0".as_ptr() as *const _,
+                Some(transmute(notify_open_flags_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    pub fn connect_property_populate_all_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_populate_all_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::populate-all\0".as_ptr() as *const _,
+                Some(transmute(notify_populate_all_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_show_connect_to_server_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_connect_to_server_trampoline<
+            F: Fn(&PlacesSidebar) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-connect-to-server\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_show_connect_to_server_trampoline::<F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_show_desktop_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_desktop_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-desktop\0".as_ptr() as *const _,
+                Some(transmute(notify_show_desktop_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_show_enter_location_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_enter_location_trampoline<
+            F: Fn(&PlacesSidebar) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-enter-location\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_show_enter_location_trampoline::<F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_show_other_locations_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_other_locations_trampoline<
+            F: Fn(&PlacesSidebar) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-other-locations\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_show_other_locations_trampoline::<F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_show_recent_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_recent_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-recent\0".as_ptr() as *const _,
+                Some(transmute(notify_show_recent_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
+    pub fn connect_property_show_starred_location_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_starred_location_trampoline<
+            F: Fn(&PlacesSidebar) + 'static,
+        >(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-starred-location\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_show_starred_location_trampoline::<F> as usize,
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    pub fn connect_property_show_trash_notify<F: Fn(&PlacesSidebar) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_show_trash_trampoline<F: Fn(&PlacesSidebar) + 'static>(
+            this: *mut gtk_sys::GtkPlacesSidebar,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::show-trash\0".as_ptr() as *const _,
+                Some(transmute(notify_show_trash_trampoline::<F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 }
@@ -51,672 +900,671 @@ impl Default for PlacesSidebar {
     }
 }
 
-pub const NONE_PLACES_SIDEBAR: Option<&PlacesSidebar> = None;
+pub struct PlacesSidebarBuilder {
+    local_only: Option<bool>,
+    location: Option<gio::File>,
+    open_flags: Option<PlacesOpenFlags>,
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    populate_all: Option<bool>,
+    show_connect_to_server: Option<bool>,
+    show_desktop: Option<bool>,
+    show_enter_location: Option<bool>,
+    show_other_locations: Option<bool>,
+    show_recent: Option<bool>,
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
+    show_starred_location: Option<bool>,
+    show_trash: Option<bool>,
+    hadjustment: Option<Adjustment>,
+    hscrollbar_policy: Option<PolicyType>,
+    kinetic_scrolling: Option<bool>,
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    max_content_height: Option<i32>,
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    max_content_width: Option<i32>,
+    min_content_height: Option<i32>,
+    min_content_width: Option<i32>,
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    overlay_scrolling: Option<bool>,
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    propagate_natural_height: Option<bool>,
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    propagate_natural_width: Option<bool>,
+    shadow_type: Option<ShadowType>,
+    vadjustment: Option<Adjustment>,
+    vscrollbar_policy: Option<PolicyType>,
+    window_placement: Option<CornerType>,
+    border_width: Option<u32>,
+    child: Option<Widget>,
+    resize_mode: Option<ResizeMode>,
+    app_paintable: Option<bool>,
+    can_default: Option<bool>,
+    can_focus: Option<bool>,
+    events: Option<gdk::EventMask>,
+    expand: Option<bool>,
+    #[cfg(any(feature = "v3_20", feature = "dox"))]
+    focus_on_click: Option<bool>,
+    halign: Option<Align>,
+    has_default: Option<bool>,
+    has_focus: Option<bool>,
+    has_tooltip: Option<bool>,
+    height_request: Option<i32>,
+    hexpand: Option<bool>,
+    hexpand_set: Option<bool>,
+    is_focus: Option<bool>,
+    margin: Option<i32>,
+    margin_bottom: Option<i32>,
+    margin_end: Option<i32>,
+    margin_start: Option<i32>,
+    margin_top: Option<i32>,
+    name: Option<String>,
+    no_show_all: Option<bool>,
+    opacity: Option<f64>,
+    parent: Option<Container>,
+    receives_default: Option<bool>,
+    sensitive: Option<bool>,
+    //style: /*Unknown type*/,
+    tooltip_markup: Option<String>,
+    tooltip_text: Option<String>,
+    valign: Option<Align>,
+    vexpand: Option<bool>,
+    vexpand_set: Option<bool>,
+    visible: Option<bool>,
+    width_request: Option<i32>,
+}
 
-pub trait PlacesSidebarExt: 'static {
-    fn add_shortcut<P: IsA<gio::File>>(&self, location: &P);
+impl PlacesSidebarBuilder {
+    pub fn new() -> Self {
+        Self {
+            local_only: None,
+            location: None,
+            open_flags: None,
+            #[cfg(any(feature = "v3_18", feature = "dox"))]
+            populate_all: None,
+            show_connect_to_server: None,
+            show_desktop: None,
+            show_enter_location: None,
+            show_other_locations: None,
+            show_recent: None,
+            #[cfg(any(feature = "v3_22_26", feature = "dox"))]
+            show_starred_location: None,
+            show_trash: None,
+            hadjustment: None,
+            hscrollbar_policy: None,
+            kinetic_scrolling: None,
+            #[cfg(any(feature = "v3_22", feature = "dox"))]
+            max_content_height: None,
+            #[cfg(any(feature = "v3_22", feature = "dox"))]
+            max_content_width: None,
+            min_content_height: None,
+            min_content_width: None,
+            #[cfg(any(feature = "v3_16", feature = "dox"))]
+            overlay_scrolling: None,
+            #[cfg(any(feature = "v3_22", feature = "dox"))]
+            propagate_natural_height: None,
+            #[cfg(any(feature = "v3_22", feature = "dox"))]
+            propagate_natural_width: None,
+            shadow_type: None,
+            vadjustment: None,
+            vscrollbar_policy: None,
+            window_placement: None,
+            border_width: None,
+            child: None,
+            resize_mode: None,
+            app_paintable: None,
+            can_default: None,
+            can_focus: None,
+            events: None,
+            expand: None,
+            #[cfg(any(feature = "v3_20", feature = "dox"))]
+            focus_on_click: None,
+            halign: None,
+            has_default: None,
+            has_focus: None,
+            has_tooltip: None,
+            height_request: None,
+            hexpand: None,
+            hexpand_set: None,
+            is_focus: None,
+            margin: None,
+            margin_bottom: None,
+            margin_end: None,
+            margin_start: None,
+            margin_top: None,
+            name: None,
+            no_show_all: None,
+            opacity: None,
+            parent: None,
+            receives_default: None,
+            sensitive: None,
+            tooltip_markup: None,
+            tooltip_text: None,
+            valign: None,
+            vexpand: None,
+            vexpand_set: None,
+            visible: None,
+            width_request: None,
+        }
+    }
 
-    fn get_local_only(&self) -> bool;
+    pub fn build(self) -> PlacesSidebar {
+        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
+        if let Some(ref local_only) = self.local_only {
+            properties.push(("local-only", local_only));
+        }
+        if let Some(ref location) = self.location {
+            properties.push(("location", location));
+        }
+        if let Some(ref open_flags) = self.open_flags {
+            properties.push(("open-flags", open_flags));
+        }
+        #[cfg(any(feature = "v3_18", feature = "dox"))]
+        {
+            if let Some(ref populate_all) = self.populate_all {
+                properties.push(("populate-all", populate_all));
+            }
+        }
+        if let Some(ref show_connect_to_server) = self.show_connect_to_server {
+            properties.push(("show-connect-to-server", show_connect_to_server));
+        }
+        if let Some(ref show_desktop) = self.show_desktop {
+            properties.push(("show-desktop", show_desktop));
+        }
+        if let Some(ref show_enter_location) = self.show_enter_location {
+            properties.push(("show-enter-location", show_enter_location));
+        }
+        if let Some(ref show_other_locations) = self.show_other_locations {
+            properties.push(("show-other-locations", show_other_locations));
+        }
+        if let Some(ref show_recent) = self.show_recent {
+            properties.push(("show-recent", show_recent));
+        }
+        #[cfg(any(feature = "v3_22_26", feature = "dox"))]
+        {
+            if let Some(ref show_starred_location) = self.show_starred_location {
+                properties.push(("show-starred-location", show_starred_location));
+            }
+        }
+        if let Some(ref show_trash) = self.show_trash {
+            properties.push(("show-trash", show_trash));
+        }
+        if let Some(ref hadjustment) = self.hadjustment {
+            properties.push(("hadjustment", hadjustment));
+        }
+        if let Some(ref hscrollbar_policy) = self.hscrollbar_policy {
+            properties.push(("hscrollbar-policy", hscrollbar_policy));
+        }
+        if let Some(ref kinetic_scrolling) = self.kinetic_scrolling {
+            properties.push(("kinetic-scrolling", kinetic_scrolling));
+        }
+        #[cfg(any(feature = "v3_22", feature = "dox"))]
+        {
+            if let Some(ref max_content_height) = self.max_content_height {
+                properties.push(("max-content-height", max_content_height));
+            }
+        }
+        #[cfg(any(feature = "v3_22", feature = "dox"))]
+        {
+            if let Some(ref max_content_width) = self.max_content_width {
+                properties.push(("max-content-width", max_content_width));
+            }
+        }
+        if let Some(ref min_content_height) = self.min_content_height {
+            properties.push(("min-content-height", min_content_height));
+        }
+        if let Some(ref min_content_width) = self.min_content_width {
+            properties.push(("min-content-width", min_content_width));
+        }
+        #[cfg(any(feature = "v3_16", feature = "dox"))]
+        {
+            if let Some(ref overlay_scrolling) = self.overlay_scrolling {
+                properties.push(("overlay-scrolling", overlay_scrolling));
+            }
+        }
+        #[cfg(any(feature = "v3_22", feature = "dox"))]
+        {
+            if let Some(ref propagate_natural_height) = self.propagate_natural_height {
+                properties.push(("propagate-natural-height", propagate_natural_height));
+            }
+        }
+        #[cfg(any(feature = "v3_22", feature = "dox"))]
+        {
+            if let Some(ref propagate_natural_width) = self.propagate_natural_width {
+                properties.push(("propagate-natural-width", propagate_natural_width));
+            }
+        }
+        if let Some(ref shadow_type) = self.shadow_type {
+            properties.push(("shadow-type", shadow_type));
+        }
+        if let Some(ref vadjustment) = self.vadjustment {
+            properties.push(("vadjustment", vadjustment));
+        }
+        if let Some(ref vscrollbar_policy) = self.vscrollbar_policy {
+            properties.push(("vscrollbar-policy", vscrollbar_policy));
+        }
+        if let Some(ref window_placement) = self.window_placement {
+            properties.push(("window-placement", window_placement));
+        }
+        if let Some(ref border_width) = self.border_width {
+            properties.push(("border-width", border_width));
+        }
+        if let Some(ref child) = self.child {
+            properties.push(("child", child));
+        }
+        if let Some(ref resize_mode) = self.resize_mode {
+            properties.push(("resize-mode", resize_mode));
+        }
+        if let Some(ref app_paintable) = self.app_paintable {
+            properties.push(("app-paintable", app_paintable));
+        }
+        if let Some(ref can_default) = self.can_default {
+            properties.push(("can-default", can_default));
+        }
+        if let Some(ref can_focus) = self.can_focus {
+            properties.push(("can-focus", can_focus));
+        }
+        if let Some(ref events) = self.events {
+            properties.push(("events", events));
+        }
+        if let Some(ref expand) = self.expand {
+            properties.push(("expand", expand));
+        }
+        #[cfg(any(feature = "v3_20", feature = "dox"))]
+        {
+            if let Some(ref focus_on_click) = self.focus_on_click {
+                properties.push(("focus-on-click", focus_on_click));
+            }
+        }
+        if let Some(ref halign) = self.halign {
+            properties.push(("halign", halign));
+        }
+        if let Some(ref has_default) = self.has_default {
+            properties.push(("has-default", has_default));
+        }
+        if let Some(ref has_focus) = self.has_focus {
+            properties.push(("has-focus", has_focus));
+        }
+        if let Some(ref has_tooltip) = self.has_tooltip {
+            properties.push(("has-tooltip", has_tooltip));
+        }
+        if let Some(ref height_request) = self.height_request {
+            properties.push(("height-request", height_request));
+        }
+        if let Some(ref hexpand) = self.hexpand {
+            properties.push(("hexpand", hexpand));
+        }
+        if let Some(ref hexpand_set) = self.hexpand_set {
+            properties.push(("hexpand-set", hexpand_set));
+        }
+        if let Some(ref is_focus) = self.is_focus {
+            properties.push(("is-focus", is_focus));
+        }
+        if let Some(ref margin) = self.margin {
+            properties.push(("margin", margin));
+        }
+        if let Some(ref margin_bottom) = self.margin_bottom {
+            properties.push(("margin-bottom", margin_bottom));
+        }
+        if let Some(ref margin_end) = self.margin_end {
+            properties.push(("margin-end", margin_end));
+        }
+        if let Some(ref margin_start) = self.margin_start {
+            properties.push(("margin-start", margin_start));
+        }
+        if let Some(ref margin_top) = self.margin_top {
+            properties.push(("margin-top", margin_top));
+        }
+        if let Some(ref name) = self.name {
+            properties.push(("name", name));
+        }
+        if let Some(ref no_show_all) = self.no_show_all {
+            properties.push(("no-show-all", no_show_all));
+        }
+        if let Some(ref opacity) = self.opacity {
+            properties.push(("opacity", opacity));
+        }
+        if let Some(ref parent) = self.parent {
+            properties.push(("parent", parent));
+        }
+        if let Some(ref receives_default) = self.receives_default {
+            properties.push(("receives-default", receives_default));
+        }
+        if let Some(ref sensitive) = self.sensitive {
+            properties.push(("sensitive", sensitive));
+        }
+        if let Some(ref tooltip_markup) = self.tooltip_markup {
+            properties.push(("tooltip-markup", tooltip_markup));
+        }
+        if let Some(ref tooltip_text) = self.tooltip_text {
+            properties.push(("tooltip-text", tooltip_text));
+        }
+        if let Some(ref valign) = self.valign {
+            properties.push(("valign", valign));
+        }
+        if let Some(ref vexpand) = self.vexpand {
+            properties.push(("vexpand", vexpand));
+        }
+        if let Some(ref vexpand_set) = self.vexpand_set {
+            properties.push(("vexpand-set", vexpand_set));
+        }
+        if let Some(ref visible) = self.visible {
+            properties.push(("visible", visible));
+        }
+        if let Some(ref width_request) = self.width_request {
+            properties.push(("width-request", width_request));
+        }
+        glib::Object::new(PlacesSidebar::static_type(), &properties)
+            .expect("object new")
+            .downcast()
+            .expect("downcast")
+    }
 
-    fn get_location(&self) -> Option<gio::File>;
+    pub fn local_only(mut self, local_only: bool) -> Self {
+        self.local_only = Some(local_only);
+        self
+    }
 
-    fn get_nth_bookmark(&self, n: i32) -> Option<gio::File>;
+    pub fn location(mut self, location: &gio::File) -> Self {
+        self.location = Some(location.clone());
+        self
+    }
 
-    fn get_open_flags(&self) -> PlacesOpenFlags;
-
-    #[cfg_attr(feature = "v3_18", deprecated)]
-    fn get_show_connect_to_server(&self) -> bool;
-
-    fn get_show_desktop(&self) -> bool;
-
-    fn get_show_enter_location(&self) -> bool;
+    pub fn open_flags(mut self, open_flags: PlacesOpenFlags) -> Self {
+        self.open_flags = Some(open_flags);
+        self
+    }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_show_other_locations(&self) -> bool;
+    pub fn populate_all(mut self, populate_all: bool) -> Self {
+        self.populate_all = Some(populate_all);
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_show_recent(&self) -> bool;
+    pub fn show_connect_to_server(mut self, show_connect_to_server: bool) -> Self {
+        self.show_connect_to_server = Some(show_connect_to_server);
+        self
+    }
+
+    pub fn show_desktop(mut self, show_desktop: bool) -> Self {
+        self.show_desktop = Some(show_desktop);
+        self
+    }
+
+    pub fn show_enter_location(mut self, show_enter_location: bool) -> Self {
+        self.show_enter_location = Some(show_enter_location);
+        self
+    }
+
+    pub fn show_other_locations(mut self, show_other_locations: bool) -> Self {
+        self.show_other_locations = Some(show_other_locations);
+        self
+    }
+
+    pub fn show_recent(mut self, show_recent: bool) -> Self {
+        self.show_recent = Some(show_recent);
+        self
+    }
 
     #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn get_show_starred_location(&self) -> bool;
+    pub fn show_starred_location(mut self, show_starred_location: bool) -> Self {
+        self.show_starred_location = Some(show_starred_location);
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_show_trash(&self) -> bool;
+    pub fn show_trash(mut self, show_trash: bool) -> Self {
+        self.show_trash = Some(show_trash);
+        self
+    }
 
-    fn list_shortcuts(&self) -> Vec<gio::File>;
+    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
+        self.hadjustment = Some(hadjustment.clone());
+        self
+    }
 
-    fn remove_shortcut<P: IsA<gio::File>>(&self, location: &P);
+    pub fn hscrollbar_policy(mut self, hscrollbar_policy: PolicyType) -> Self {
+        self.hscrollbar_policy = Some(hscrollbar_policy);
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_drop_targets_visible(&self, visible: bool, context: &gdk::DragContext);
+    pub fn kinetic_scrolling(mut self, kinetic_scrolling: bool) -> Self {
+        self.kinetic_scrolling = Some(kinetic_scrolling);
+        self
+    }
 
-    fn set_local_only(&self, local_only: bool);
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    pub fn max_content_height(mut self, max_content_height: i32) -> Self {
+        self.max_content_height = Some(max_content_height);
+        self
+    }
 
-    fn set_location<'a, P: IsA<gio::File> + 'a, Q: Into<Option<&'a P>>>(&self, location: Q);
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    pub fn max_content_width(mut self, max_content_width: i32) -> Self {
+        self.max_content_width = Some(max_content_width);
+        self
+    }
 
-    fn set_open_flags(&self, flags: PlacesOpenFlags);
+    pub fn min_content_height(mut self, min_content_height: i32) -> Self {
+        self.min_content_height = Some(min_content_height);
+        self
+    }
 
-    #[cfg_attr(feature = "v3_18", deprecated)]
-    fn set_show_connect_to_server(&self, show_connect_to_server: bool);
+    pub fn min_content_width(mut self, min_content_width: i32) -> Self {
+        self.min_content_width = Some(min_content_width);
+        self
+    }
 
-    fn set_show_desktop(&self, show_desktop: bool);
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn overlay_scrolling(mut self, overlay_scrolling: bool) -> Self {
+        self.overlay_scrolling = Some(overlay_scrolling);
+        self
+    }
 
-    fn set_show_enter_location(&self, show_enter_location: bool);
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    pub fn propagate_natural_height(mut self, propagate_natural_height: bool) -> Self {
+        self.propagate_natural_height = Some(propagate_natural_height);
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_show_other_locations(&self, show_other_locations: bool);
+    #[cfg(any(feature = "v3_22", feature = "dox"))]
+    pub fn propagate_natural_width(mut self, propagate_natural_width: bool) -> Self {
+        self.propagate_natural_width = Some(propagate_natural_width);
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_show_recent(&self, show_recent: bool);
+    pub fn shadow_type(mut self, shadow_type: ShadowType) -> Self {
+        self.shadow_type = Some(shadow_type);
+        self
+    }
 
-    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn set_show_starred_location(&self, show_starred_location: bool);
+    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
+        self.vadjustment = Some(vadjustment.clone());
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_show_trash(&self, show_trash: bool);
+    pub fn vscrollbar_policy(mut self, vscrollbar_policy: PolicyType) -> Self {
+        self.vscrollbar_policy = Some(vscrollbar_policy);
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_property_populate_all(&self) -> bool;
+    pub fn window_placement(mut self, window_placement: CornerType) -> Self {
+        self.window_placement = Some(window_placement);
+        self
+    }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_property_populate_all(&self, populate_all: bool);
+    pub fn border_width(mut self, border_width: u32) -> Self {
+        self.border_width = Some(border_width);
+        self
+    }
 
-    fn get_property_show_other_locations(&self) -> bool;
+    pub fn child(mut self, child: &Widget) -> Self {
+        self.child = Some(child.clone());
+        self
+    }
 
-    fn set_property_show_other_locations(&self, show_other_locations: bool);
+    pub fn resize_mode(mut self, resize_mode: ResizeMode) -> Self {
+        self.resize_mode = Some(resize_mode);
+        self
+    }
 
-    fn get_property_show_recent(&self) -> bool;
+    pub fn app_paintable(mut self, app_paintable: bool) -> Self {
+        self.app_paintable = Some(app_paintable);
+        self
+    }
 
-    fn set_property_show_recent(&self, show_recent: bool);
+    pub fn can_default(mut self, can_default: bool) -> Self {
+        self.can_default = Some(can_default);
+        self
+    }
 
-    fn get_property_show_trash(&self) -> bool;
+    pub fn can_focus(mut self, can_focus: bool) -> Self {
+        self.can_focus = Some(can_focus);
+        self
+    }
 
-    fn set_property_show_trash(&self, show_trash: bool);
+    pub fn events(mut self, events: gdk::EventMask) -> Self {
+        self.events = Some(events);
+        self
+    }
 
-    fn connect_drag_action_ask<F: Fn(&Self, i32) -> i32 + 'static>(&self, f: F) -> SignalHandlerId;
+    pub fn expand(mut self, expand: bool) -> Self {
+        self.expand = Some(expand);
+        self
+    }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_mount<F: Fn(&Self, &gio::MountOperation) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_open_location<F: Fn(&Self, &gio::File, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    //fn connect_populate_popup<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_18", deprecated)]
-    fn connect_show_connect_to_server<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_show_enter_location<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_show_error_message<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_20", deprecated)]
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn connect_show_other_locations<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_show_other_locations_with_flags<F: Fn(&Self, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn connect_show_starred_location<F: Fn(&Self, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_unmount<F: Fn(&Self, &gio::MountOperation) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_location_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_open_flags_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_show_connect_to_server_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_show_desktop_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_show_enter_location_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_show_other_locations_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_show_recent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn connect_property_show_starred_location_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_show_trash_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
-    fn add_shortcut<P: IsA<gio::File>>(&self, location: &P) {
-        unsafe {
-            ffi::gtk_places_sidebar_add_shortcut(self.as_ref().to_glib_none().0, location.as_ref().to_glib_none().0);
-        }
+    pub fn focus_on_click(mut self, focus_on_click: bool) -> Self {
+        self.focus_on_click = Some(focus_on_click);
+        self
     }
 
-    fn get_local_only(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_local_only(self.as_ref().to_glib_none().0))
-        }
+    pub fn halign(mut self, halign: Align) -> Self {
+        self.halign = Some(halign);
+        self
     }
 
-    fn get_location(&self) -> Option<gio::File> {
-        unsafe {
-            from_glib_full(ffi::gtk_places_sidebar_get_location(self.as_ref().to_glib_none().0))
-        }
+    pub fn has_default(mut self, has_default: bool) -> Self {
+        self.has_default = Some(has_default);
+        self
     }
 
-    fn get_nth_bookmark(&self, n: i32) -> Option<gio::File> {
-        unsafe {
-            from_glib_full(ffi::gtk_places_sidebar_get_nth_bookmark(self.as_ref().to_glib_none().0, n))
-        }
+    pub fn has_focus(mut self, has_focus: bool) -> Self {
+        self.has_focus = Some(has_focus);
+        self
     }
 
-    fn get_open_flags(&self) -> PlacesOpenFlags {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_open_flags(self.as_ref().to_glib_none().0))
-        }
+    pub fn has_tooltip(mut self, has_tooltip: bool) -> Self {
+        self.has_tooltip = Some(has_tooltip);
+        self
     }
 
-    fn get_show_connect_to_server(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_show_connect_to_server(self.as_ref().to_glib_none().0))
-        }
+    pub fn height_request(mut self, height_request: i32) -> Self {
+        self.height_request = Some(height_request);
+        self
     }
 
-    fn get_show_desktop(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_show_desktop(self.as_ref().to_glib_none().0))
-        }
+    pub fn hexpand(mut self, hexpand: bool) -> Self {
+        self.hexpand = Some(hexpand);
+        self
     }
 
-    fn get_show_enter_location(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_show_enter_location(self.as_ref().to_glib_none().0))
-        }
+    pub fn hexpand_set(mut self, hexpand_set: bool) -> Self {
+        self.hexpand_set = Some(hexpand_set);
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_show_other_locations(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_show_other_locations(self.as_ref().to_glib_none().0))
-        }
+    pub fn is_focus(mut self, is_focus: bool) -> Self {
+        self.is_focus = Some(is_focus);
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_show_recent(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_show_recent(self.as_ref().to_glib_none().0))
-        }
+    pub fn margin(mut self, margin: i32) -> Self {
+        self.margin = Some(margin);
+        self
     }
 
-    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn get_show_starred_location(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_show_starred_location(self.as_ref().to_glib_none().0))
-        }
+    pub fn margin_bottom(mut self, margin_bottom: i32) -> Self {
+        self.margin_bottom = Some(margin_bottom);
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_show_trash(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_places_sidebar_get_show_trash(self.as_ref().to_glib_none().0))
-        }
+    pub fn margin_end(mut self, margin_end: i32) -> Self {
+        self.margin_end = Some(margin_end);
+        self
     }
 
-    fn list_shortcuts(&self) -> Vec<gio::File> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gtk_places_sidebar_list_shortcuts(self.as_ref().to_glib_none().0))
-        }
+    pub fn margin_start(mut self, margin_start: i32) -> Self {
+        self.margin_start = Some(margin_start);
+        self
     }
 
-    fn remove_shortcut<P: IsA<gio::File>>(&self, location: &P) {
-        unsafe {
-            ffi::gtk_places_sidebar_remove_shortcut(self.as_ref().to_glib_none().0, location.as_ref().to_glib_none().0);
-        }
+    pub fn margin_top(mut self, margin_top: i32) -> Self {
+        self.margin_top = Some(margin_top);
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_drop_targets_visible(&self, visible: bool, context: &gdk::DragContext) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_drop_targets_visible(self.as_ref().to_glib_none().0, visible.to_glib(), context.to_glib_none().0);
-        }
+    pub fn name(mut self, name: &str) -> Self {
+        self.name = Some(name.to_string());
+        self
     }
 
-    fn set_local_only(&self, local_only: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_local_only(self.as_ref().to_glib_none().0, local_only.to_glib());
-        }
+    pub fn no_show_all(mut self, no_show_all: bool) -> Self {
+        self.no_show_all = Some(no_show_all);
+        self
     }
 
-    fn set_location<'a, P: IsA<gio::File> + 'a, Q: Into<Option<&'a P>>>(&self, location: Q) {
-        let location = location.into();
-        unsafe {
-            ffi::gtk_places_sidebar_set_location(self.as_ref().to_glib_none().0, location.map(|p| p.as_ref()).to_glib_none().0);
-        }
+    pub fn opacity(mut self, opacity: f64) -> Self {
+        self.opacity = Some(opacity);
+        self
     }
 
-    fn set_open_flags(&self, flags: PlacesOpenFlags) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_open_flags(self.as_ref().to_glib_none().0, flags.to_glib());
-        }
+    pub fn parent(mut self, parent: &Container) -> Self {
+        self.parent = Some(parent.clone());
+        self
     }
 
-    fn set_show_connect_to_server(&self, show_connect_to_server: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_show_connect_to_server(self.as_ref().to_glib_none().0, show_connect_to_server.to_glib());
-        }
+    pub fn receives_default(mut self, receives_default: bool) -> Self {
+        self.receives_default = Some(receives_default);
+        self
     }
 
-    fn set_show_desktop(&self, show_desktop: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_show_desktop(self.as_ref().to_glib_none().0, show_desktop.to_glib());
-        }
+    pub fn sensitive(mut self, sensitive: bool) -> Self {
+        self.sensitive = Some(sensitive);
+        self
     }
 
-    fn set_show_enter_location(&self, show_enter_location: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_show_enter_location(self.as_ref().to_glib_none().0, show_enter_location.to_glib());
-        }
+    pub fn tooltip_markup(mut self, tooltip_markup: &str) -> Self {
+        self.tooltip_markup = Some(tooltip_markup.to_string());
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_show_other_locations(&self, show_other_locations: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_show_other_locations(self.as_ref().to_glib_none().0, show_other_locations.to_glib());
-        }
+    pub fn tooltip_text(mut self, tooltip_text: &str) -> Self {
+        self.tooltip_text = Some(tooltip_text.to_string());
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_show_recent(&self, show_recent: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_show_recent(self.as_ref().to_glib_none().0, show_recent.to_glib());
-        }
+    pub fn valign(mut self, valign: Align) -> Self {
+        self.valign = Some(valign);
+        self
     }
 
-    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn set_show_starred_location(&self, show_starred_location: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_show_starred_location(self.as_ref().to_glib_none().0, show_starred_location.to_glib());
-        }
+    pub fn vexpand(mut self, vexpand: bool) -> Self {
+        self.vexpand = Some(vexpand);
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_show_trash(&self, show_trash: bool) {
-        unsafe {
-            ffi::gtk_places_sidebar_set_show_trash(self.as_ref().to_glib_none().0, show_trash.to_glib());
-        }
+    pub fn vexpand_set(mut self, vexpand_set: bool) -> Self {
+        self.vexpand_set = Some(vexpand_set);
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn get_property_populate_all(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
+    pub fn visible(mut self, visible: bool) -> Self {
+        self.visible = Some(visible);
+        self
     }
 
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_property_populate_all(&self, populate_all: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, Value::from(&populate_all).to_glib_none().0);
-        }
+    pub fn width_request(mut self, width_request: i32) -> Self {
+        self.width_request = Some(width_request);
+        self
     }
-
-    fn get_property_show_other_locations(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-other-locations\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_show_other_locations(&self, show_other_locations: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-other-locations\0".as_ptr() as *const _, Value::from(&show_other_locations).to_glib_none().0);
-        }
-    }
-
-    fn get_property_show_recent(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-recent\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_show_recent(&self, show_recent: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-recent\0".as_ptr() as *const _, Value::from(&show_recent).to_glib_none().0);
-        }
-    }
-
-    fn get_property_show_trash(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-trash\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_show_trash(&self, show_trash: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-trash\0".as_ptr() as *const _, Value::from(&show_trash).to_glib_none().0);
-        }
-    }
-
-    fn connect_drag_action_ask<F: Fn(&Self, i32) -> i32 + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"drag-action-ask\0".as_ptr() as *const _,
-                Some(transmute(drag_action_ask_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_mount<F: Fn(&Self, &gio::MountOperation) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"mount\0".as_ptr() as *const _,
-                Some(transmute(mount_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_open_location<F: Fn(&Self, &gio::File, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"open-location\0".as_ptr() as *const _,
-                Some(transmute(open_location_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    //fn connect_populate_popup<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored selected_volume: Gio.Volume
-    //}
-
-    fn connect_show_connect_to_server<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"show-connect-to-server\0".as_ptr() as *const _,
-                Some(transmute(show_connect_to_server_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_show_enter_location<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"show-enter-location\0".as_ptr() as *const _,
-                Some(transmute(show_enter_location_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_show_error_message<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"show-error-message\0".as_ptr() as *const _,
-                Some(transmute(show_error_message_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn connect_show_other_locations<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"show-other-locations\0".as_ptr() as *const _,
-                Some(transmute(show_other_locations_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_show_other_locations_with_flags<F: Fn(&Self, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"show-other-locations-with-flags\0".as_ptr() as *const _,
-                Some(transmute(show_other_locations_with_flags_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn connect_show_starred_location<F: Fn(&Self, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"show-starred-location\0".as_ptr() as *const _,
-                Some(transmute(show_starred_location_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_unmount<F: Fn(&Self, &gio::MountOperation) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"unmount\0".as_ptr() as *const _,
-                Some(transmute(unmount_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::local-only\0".as_ptr() as *const _,
-                Some(transmute(notify_local_only_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_location_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::location\0".as_ptr() as *const _,
-                Some(transmute(notify_location_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_open_flags_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::open-flags\0".as_ptr() as *const _,
-                Some(transmute(notify_open_flags_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::populate-all\0".as_ptr() as *const _,
-                Some(transmute(notify_populate_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_show_connect_to_server_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-connect-to-server\0".as_ptr() as *const _,
-                Some(transmute(notify_show_connect_to_server_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_show_desktop_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-desktop\0".as_ptr() as *const _,
-                Some(transmute(notify_show_desktop_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_show_enter_location_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-enter-location\0".as_ptr() as *const _,
-                Some(transmute(notify_show_enter_location_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_show_other_locations_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-other-locations\0".as_ptr() as *const _,
-                Some(transmute(notify_show_other_locations_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_show_recent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-recent\0".as_ptr() as *const _,
-                Some(transmute(notify_show_recent_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-    fn connect_property_show_starred_location_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-starred-location\0".as_ptr() as *const _,
-                Some(transmute(notify_show_starred_location_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_show_trash_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::show-trash\0".as_ptr() as *const _,
-                Some(transmute(notify_show_trash_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-}
-
-unsafe extern "C" fn drag_action_ask_trampoline<P, F: Fn(&P, i32) -> i32 + 'static>(this: *mut ffi::GtkPlacesSidebar, actions: libc::c_int, f: glib_ffi::gpointer) -> libc::c_int
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), actions)
-}
-
-#[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn mount_trampoline<P, F: Fn(&P, &gio::MountOperation) + 'static>(this: *mut ffi::GtkPlacesSidebar, mount_operation: *mut gio_ffi::GMountOperation, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(mount_operation))
-}
-
-unsafe extern "C" fn open_location_trampoline<P, F: Fn(&P, &gio::File, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, location: *mut gio_ffi::GFile, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(location), from_glib(open_flags))
-}
-
-unsafe extern "C" fn show_connect_to_server_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn show_enter_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn show_error_message_trampoline<P, F: Fn(&P, &str, &str) + 'static>(this: *mut ffi::GtkPlacesSidebar, primary: *mut libc::c_char, secondary: *mut libc::c_char, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(primary), &GString::from_glib_borrow(secondary))
-}
-
-#[cfg(any(feature = "v3_18", feature = "dox"))]
-unsafe extern "C" fn show_other_locations_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn show_other_locations_with_flags_trampoline<P, F: Fn(&P, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), from_glib(open_flags))
-}
-
-#[cfg(any(feature = "v3_22_26", feature = "dox"))]
-unsafe extern "C" fn show_starred_location_trampoline<P, F: Fn(&P, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), from_glib(open_flags))
-}
-
-#[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn unmount_trampoline<P, F: Fn(&P, &gio::MountOperation) + 'static>(this: *mut ffi::GtkPlacesSidebar, mount_operation: *mut gio_ffi::GMountOperation, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(mount_operation))
-}
-
-unsafe extern "C" fn notify_local_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_open_flags_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_18", feature = "dox"))]
-unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_connect_to_server_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_desktop_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_enter_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_other_locations_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_recent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_22_26", feature = "dox"))]
-unsafe extern "C" fn notify_show_starred_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_show_trash_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<PlacesSidebar> {
-    let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for PlacesSidebar {

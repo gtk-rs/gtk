@@ -10,12 +10,14 @@ pub use auto::traits::*;
 
 pub use app_chooser::AppChooserExt;
 pub use buildable::BuildableExtManual;
+pub use builder::BuilderExtManual;
 pub use cell_renderer_pixbuf::CellRendererPixbufExtManual;
 pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
 pub use combo_box::ComboBoxExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
+pub use entry_completion::EntryCompletionExtManual;
 pub use fixed::FixedExtManual;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 pub use flow_box::FlowBoxExtManual;
