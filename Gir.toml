@@ -2279,8 +2279,9 @@ manual_traits = ["WidgetExtManual"]
     doc_trait_name = "WidgetExtManual"
     [[object.function]]
     name = "override_font"
-    ignore = true
-    doc_trait_name = "WidgetExtManual"
+        [[object.function.parameter]]
+        name = "font_desc"
+        nullable = false
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
