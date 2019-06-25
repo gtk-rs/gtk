@@ -557,8 +557,6 @@ pub const NONE_COLOR_BUTTON: Option<&ColorButton> = None;
 pub trait ColorButtonExt: 'static {
     fn get_title(&self) -> Option<GString>;
 
-    //fn set_color(&self, color: /*Ignored*/&gdk::Color);
-
     fn set_title(&self, title: &str);
 
     fn get_property_alpha(&self) -> u32;
@@ -593,10 +591,6 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
             ))
         }
     }
-
-    //fn set_color(&self, color: /*Ignored*/&gdk::Color) {
-    //    unsafe { TODO: call gtk_sys:gtk_color_button_set_color() }
-    //}
 
     fn set_title(&self, title: &str) {
         unsafe {

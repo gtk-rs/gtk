@@ -8,11 +8,7 @@ use gtk_sys;
 use PadActionEntry;
 use PadController;
 
-pub trait PadControllerExtManual: 'static {
-    fn set_action_entries(&self, entries: &[PadActionEntry]);
-}
-
-impl<O: IsA<PadController>> PadControllerExtManual for O {
+impl PadController {
     fn set_action_entries(&self, entries: &[PadActionEntry]) {
         let n_entries = entries.len() as i32;
         let entry_strings = entries
@@ -37,7 +33,7 @@ impl<O: IsA<PadController>> PadControllerExtManual for O {
             .collect::<Vec<_>>();
         unsafe {
             gtk_sys::gtk_pad_controller_set_action_entries(
-                self.as_ref().to_glib_none().0,
+                self.to_glib_none().0,
                 entries.as_ptr(),
                 n_entries,
             );

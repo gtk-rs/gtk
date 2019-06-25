@@ -410,7 +410,7 @@ pub trait WidgetExt: 'static {
     fn override_cursor(&self, cursor: Option<&gdk::RGBA>, secondary_cursor: Option<&gdk::RGBA>);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn override_font(&self, font_desc: Option<&pango::FontDescription>);
+    fn override_font(&self, font_desc: &pango::FontDescription);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
     fn override_symbolic_color(&self, name: &str, color: Option<&gdk::RGBA>);
@@ -2176,7 +2176,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn override_font(&self, font_desc: Option<&pango::FontDescription>) {
+    fn override_font(&self, font_desc: &pango::FontDescription) {
         unsafe {
             gtk_sys::gtk_widget_override_font(
                 self.as_ref().to_glib_none().0,
