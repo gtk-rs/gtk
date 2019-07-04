@@ -13,7 +13,7 @@ pub trait PadControllerExtManual: 'static {
 }
 
 impl<O: IsA<PadController>> PadControllerExtManual for O {
-    fn set_action_entries(&self, entries: &[PadActionEntry]) {
+    pub fn set_action_entries(&self, entries: &[PadActionEntry]) {
         let n_entries = entries.len() as i32;
         let entry_strings = entries
             .iter()
