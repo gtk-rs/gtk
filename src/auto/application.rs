@@ -178,6 +178,9 @@ pub trait GtkApplicationExt: 'static {
     #[cfg(any(feature = "v3_24", feature = "dox"))]
     fn get_property_screensaver_active(&self) -> bool;
 
+    #[cfg(any(feature = "v3_24_8", feature = "dox"))]
+    fn connect_query_end<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_window_removed<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -397,6 +400,28 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
                 value.to_glib_none_mut().0,
             );
             value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_24_8", feature = "dox"))]
+    fn connect_query_end<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn query_end_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkApplication,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Application>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Application::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"query-end\0".as_ptr() as *const _,
+                Some(transmute(query_end_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 
