@@ -41,7 +41,7 @@ impl TargetEntry {
 impl Uninitialized for TargetEntry {
     #[inline]
     unsafe fn uninitialized() -> Self {
-        mem::uninitialized()
+        mem::zeroed()
     }
 }
 
