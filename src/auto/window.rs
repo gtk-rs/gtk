@@ -1268,13 +1268,15 @@ impl<O: IsA<Window>> GtkWindowExt for O {
 
     fn get_default_size(&self) -> (i32, i32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_window_get_default_size(
                 self.as_ref().to_glib_none().0,
-                &mut width,
-                &mut height,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
@@ -1397,13 +1399,15 @@ impl<O: IsA<Window>> GtkWindowExt for O {
 
     fn get_position(&self) -> (i32, i32) {
         unsafe {
-            let mut root_x = mem::uninitialized();
-            let mut root_y = mem::uninitialized();
+            let mut root_x = mem::MaybeUninit::uninit();
+            let mut root_y = mem::MaybeUninit::uninit();
             gtk_sys::gtk_window_get_position(
                 self.as_ref().to_glib_none().0,
-                &mut root_x,
-                &mut root_y,
+                root_x.as_mut_ptr(),
+                root_y.as_mut_ptr(),
             );
+            let root_x = root_x.assume_init();
+            let root_y = root_y.assume_init();
             (root_x, root_y)
         }
     }
@@ -1422,9 +1426,15 @@ impl<O: IsA<Window>> GtkWindowExt for O {
 
     fn get_size(&self) -> (i32, i32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
-            gtk_sys::gtk_window_get_size(self.as_ref().to_glib_none().0, &mut width, &mut height);
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_window_get_size(
+                self.as_ref().to_glib_none().0,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
+            );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }

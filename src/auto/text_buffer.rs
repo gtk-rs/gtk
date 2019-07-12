@@ -586,13 +586,13 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
 
     fn get_deserialize_formats(&self) -> Vec<gdk::Atom> {
         unsafe {
-            let mut n_formats = mem::uninitialized();
+            let mut n_formats = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_container_num(
                 gtk_sys::gtk_text_buffer_get_deserialize_formats(
                     self.as_ref().to_glib_none().0,
-                    &mut n_formats,
+                    n_formats.as_mut_ptr(),
                 ),
-                n_formats as usize,
+                n_formats.assume_init() as usize,
             );
             ret
         }
@@ -755,13 +755,13 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
 
     fn get_serialize_formats(&self) -> Vec<gdk::Atom> {
         unsafe {
-            let mut n_formats = mem::uninitialized();
+            let mut n_formats = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_container_num(
                 gtk_sys::gtk_text_buffer_get_serialize_formats(
                     self.as_ref().to_glib_none().0,
-                    &mut n_formats,
+                    n_formats.as_mut_ptr(),
                 ),
-                n_formats as usize,
+                n_formats.assume_init() as usize,
             );
             ret
         }
@@ -1062,7 +1062,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         end: &TextIter,
     ) -> Vec<u8> {
         unsafe {
-            let mut length = mem::uninitialized();
+            let mut length = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
                 gtk_sys::gtk_text_buffer_serialize(
                     self.as_ref().to_glib_none().0,
@@ -1070,9 +1070,9 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
                     format.to_glib_none().0,
                     start.to_glib_none().0,
                     end.to_glib_none().0,
-                    &mut length,
+                    length.as_mut_ptr(),
                 ),
-                length as usize,
+                length.assume_init() as usize,
             );
             ret
         }

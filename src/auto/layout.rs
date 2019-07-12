@@ -490,9 +490,15 @@ impl<O: IsA<Layout>> LayoutExt for O {
 
     fn get_size(&self) -> (u32, u32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
-            gtk_sys::gtk_layout_get_size(self.as_ref().to_glib_none().0, &mut width, &mut height);
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_layout_get_size(
+                self.as_ref().to_glib_none().0,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
+            );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
