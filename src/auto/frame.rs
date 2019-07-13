@@ -517,13 +517,15 @@ impl<O: IsA<Frame>> FrameExt for O {
 
     fn get_label_align(&self) -> (f32, f32) {
         unsafe {
-            let mut xalign = mem::uninitialized();
-            let mut yalign = mem::uninitialized();
+            let mut xalign = mem::MaybeUninit::uninit();
+            let mut yalign = mem::MaybeUninit::uninit();
             gtk_sys::gtk_frame_get_label_align(
                 self.as_ref().to_glib_none().0,
-                &mut xalign,
-                &mut yalign,
+                xalign.as_mut_ptr(),
+                yalign.as_mut_ptr(),
             );
+            let xalign = xalign.assume_init();
+            let yalign = yalign.assume_init();
             (xalign, yalign)
         }
     }

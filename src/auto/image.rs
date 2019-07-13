@@ -661,8 +661,13 @@ impl<O: IsA<Image>> ImageExt for O {
     fn get_gicon(&self) -> (gio::Icon, IconSize) {
         unsafe {
             let mut gicon = ptr::null_mut();
-            let mut size = mem::uninitialized();
-            gtk_sys::gtk_image_get_gicon(self.as_ref().to_glib_none().0, &mut gicon, &mut size);
+            let mut size = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_image_get_gicon(
+                self.as_ref().to_glib_none().0,
+                &mut gicon,
+                size.as_mut_ptr(),
+            );
+            let size = size.assume_init();
             (from_glib_none(gicon), from_glib(size))
         }
     }

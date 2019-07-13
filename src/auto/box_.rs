@@ -579,18 +579,22 @@ impl<O: IsA<Box>> BoxExt for O {
 
     fn query_child_packing<P: IsA<Widget>>(&self, child: &P) -> (bool, bool, u32, PackType) {
         unsafe {
-            let mut expand = mem::uninitialized();
-            let mut fill = mem::uninitialized();
-            let mut padding = mem::uninitialized();
-            let mut pack_type = mem::uninitialized();
+            let mut expand = mem::MaybeUninit::uninit();
+            let mut fill = mem::MaybeUninit::uninit();
+            let mut padding = mem::MaybeUninit::uninit();
+            let mut pack_type = mem::MaybeUninit::uninit();
             gtk_sys::gtk_box_query_child_packing(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                &mut expand,
-                &mut fill,
-                &mut padding,
-                &mut pack_type,
+                expand.as_mut_ptr(),
+                fill.as_mut_ptr(),
+                padding.as_mut_ptr(),
+                pack_type.as_mut_ptr(),
             );
+            let expand = expand.assume_init();
+            let fill = fill.assume_init();
+            let padding = padding.assume_init();
+            let pack_type = pack_type.assume_init();
             (
                 from_glib(expand),
                 from_glib(fill),

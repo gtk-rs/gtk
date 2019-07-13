@@ -1379,12 +1379,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn get_allocated_size(&self) -> (Allocation, i32) {
         unsafe {
             let mut allocation = Allocation::uninitialized();
-            let mut baseline = mem::uninitialized();
+            let mut baseline = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_allocated_size(
                 self.as_ref().to_glib_none().0,
                 allocation.to_glib_none_mut().0,
-                &mut baseline,
+                baseline.as_mut_ptr(),
             );
+            let baseline = baseline.assume_init();
             (allocation, baseline)
         }
     }
@@ -1658,31 +1659,37 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_preferred_height(&self) -> (i32, i32) {
         unsafe {
-            let mut minimum_height = mem::uninitialized();
-            let mut natural_height = mem::uninitialized();
+            let mut minimum_height = mem::MaybeUninit::uninit();
+            let mut natural_height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_height(
                 self.as_ref().to_glib_none().0,
-                &mut minimum_height,
-                &mut natural_height,
+                minimum_height.as_mut_ptr(),
+                natural_height.as_mut_ptr(),
             );
+            let minimum_height = minimum_height.assume_init();
+            let natural_height = natural_height.assume_init();
             (minimum_height, natural_height)
         }
     }
 
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
         unsafe {
-            let mut minimum_height = mem::uninitialized();
-            let mut natural_height = mem::uninitialized();
-            let mut minimum_baseline = mem::uninitialized();
-            let mut natural_baseline = mem::uninitialized();
+            let mut minimum_height = mem::MaybeUninit::uninit();
+            let mut natural_height = mem::MaybeUninit::uninit();
+            let mut minimum_baseline = mem::MaybeUninit::uninit();
+            let mut natural_baseline = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_height_and_baseline_for_width(
                 self.as_ref().to_glib_none().0,
                 width,
-                &mut minimum_height,
-                &mut natural_height,
-                &mut minimum_baseline,
-                &mut natural_baseline,
+                minimum_height.as_mut_ptr(),
+                natural_height.as_mut_ptr(),
+                minimum_baseline.as_mut_ptr(),
+                natural_baseline.as_mut_ptr(),
             );
+            let minimum_height = minimum_height.assume_init();
+            let natural_height = natural_height.assume_init();
+            let minimum_baseline = minimum_baseline.assume_init();
+            let natural_baseline = natural_baseline.assume_init();
             (
                 minimum_height,
                 natural_height,
@@ -1694,14 +1701,16 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32) {
         unsafe {
-            let mut minimum_height = mem::uninitialized();
-            let mut natural_height = mem::uninitialized();
+            let mut minimum_height = mem::MaybeUninit::uninit();
+            let mut natural_height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_height_for_width(
                 self.as_ref().to_glib_none().0,
                 width,
-                &mut minimum_height,
-                &mut natural_height,
+                minimum_height.as_mut_ptr(),
+                natural_height.as_mut_ptr(),
             );
+            let minimum_height = minimum_height.assume_init();
+            let natural_height = natural_height.assume_init();
             (minimum_height, natural_height)
         }
     }
@@ -1721,27 +1730,31 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_preferred_width(&self) -> (i32, i32) {
         unsafe {
-            let mut minimum_width = mem::uninitialized();
-            let mut natural_width = mem::uninitialized();
+            let mut minimum_width = mem::MaybeUninit::uninit();
+            let mut natural_width = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_width(
                 self.as_ref().to_glib_none().0,
-                &mut minimum_width,
-                &mut natural_width,
+                minimum_width.as_mut_ptr(),
+                natural_width.as_mut_ptr(),
             );
+            let minimum_width = minimum_width.assume_init();
+            let natural_width = natural_width.assume_init();
             (minimum_width, natural_width)
         }
     }
 
     fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32) {
         unsafe {
-            let mut minimum_width = mem::uninitialized();
-            let mut natural_width = mem::uninitialized();
+            let mut minimum_width = mem::MaybeUninit::uninit();
+            let mut natural_width = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_width_for_height(
                 self.as_ref().to_glib_none().0,
                 height,
-                &mut minimum_width,
-                &mut natural_width,
+                minimum_width.as_mut_ptr(),
+                natural_width.as_mut_ptr(),
             );
+            let minimum_width = minimum_width.assume_init();
+            let natural_width = natural_width.assume_init();
             (minimum_width, natural_width)
         }
     }
@@ -1800,13 +1813,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_size_request(&self) -> (i32, i32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_size_request(
                 self.as_ref().to_glib_none().0,
-                &mut width,
-                &mut height,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
@@ -2722,16 +2737,18 @@ impl<O: IsA<Widget>> WidgetExt for O {
         src_y: i32,
     ) -> Option<(i32, i32)> {
         unsafe {
-            let mut dest_x = mem::uninitialized();
-            let mut dest_y = mem::uninitialized();
+            let mut dest_x = mem::MaybeUninit::uninit();
+            let mut dest_y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_widget_translate_coordinates(
                 self.as_ref().to_glib_none().0,
                 dest_widget.as_ref().to_glib_none().0,
                 src_x,
                 src_y,
-                &mut dest_x,
-                &mut dest_y,
+                dest_x.as_mut_ptr(),
+                dest_y.as_mut_ptr(),
             ));
+            let dest_x = dest_x.assume_init();
+            let dest_y = dest_y.assume_init();
             if ret {
                 Some((dest_x, dest_y))
             } else {

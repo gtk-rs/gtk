@@ -227,10 +227,13 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
 
     fn get_uris(&self) -> Vec<GString> {
         unsafe {
-            let mut length = mem::uninitialized();
+            let mut length = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
-                gtk_sys::gtk_recent_chooser_get_uris(self.as_ref().to_glib_none().0, &mut length),
-                length as usize,
+                gtk_sys::gtk_recent_chooser_get_uris(
+                    self.as_ref().to_glib_none().0,
+                    length.as_mut_ptr(),
+                ),
+                length.assume_init() as usize,
             );
             ret
         }

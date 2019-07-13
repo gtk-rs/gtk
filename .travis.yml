@@ -15,10 +15,10 @@ matrix:
       rust: beta
       env: GTK=3.24 FEATURES=v3_16
     - os: linux
-      rust: 1.34.0
+      rust: 1.36.0
       env: GTK=3.14 FEATURES=
     - os: linux
-      rust: 1.34.0
+      rust: 1.36.0
       env: GTK=3.24 FEATURES=v3_16
     - os: osx
       rust: nightly
