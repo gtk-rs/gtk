@@ -641,6 +641,10 @@ manual_traits = ["BuilderExtManual"]
     ignore = true
     doc_trait_name = "BuilderExtManual"
     [[object.function]]
+    name = "connect_signals_full"
+    #manual: connect object and swapped signal not supported
+    ignore = true
+    [[object.function]]
     name = "get_object"
     #downcast
     ignore = true
