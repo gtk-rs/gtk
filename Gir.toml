@@ -387,6 +387,7 @@ manual = [
     "Gdk.EventVisibility",
     "Gdk.EventWindowState",
     "Gdk.FrameClock",
+    "Gdk.Geometry",
     "Gdk.GLContext",
     "Gdk.Gravity",
     "Gdk.ModifierIntent",
@@ -2463,3 +2464,8 @@ manual_traits = ["GtkWindowExtManual"]
     name = "present"
     ignore = true
     doc_trait_name = "GtkWindowExtManual"
+    [[object.function]]
+    name = "set_geometry_hints"
+        [[object.function.parameter]]
+        name = "geometry"
+        const = true
