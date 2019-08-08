@@ -6,6 +6,8 @@ use glib::subclass::prelude::*;
 
 use crate::Inhibit;
 use crate::Orientation;
+use cairo;
+use cairo_sys;
 use Widget;
 use WidgetClass;
 
@@ -60,6 +62,10 @@ pub trait WidgetImpl: WidgetImplExt + ObjectImpl + 'static {
         self.parent_button_release_event(widget, event)
     }
 
+    fn draw(&self, widget: &Widget, cr: &cairo::Context) -> Inhibit {
+        self.parent_draw(widget, cr)
+    }
+
     // fn can_activate_accel(&self, widget: &Widget, signal_id: u32) -> bool {
     //     self.parent_can_activate_accel(widget, signal_id)
     // }
@@ -92,6 +98,8 @@ pub trait WidgetImplExt {
     fn parent_button_press_event(&self, widget: &Widget, event: &gdk::EventButton) -> Inhibit;
     fn parent_button_release_event(&self, widget: &Widget, event: &gdk::EventButton) -> Inhibit;
     // fn parent_can_activate_accel(&self, widget: &Widget, signal_id: u32) -> bool;
+
+    fn parent_draw(&self, widget: &Widget, cr: &cairo::Context) -> Inhibit;
 }
 
 impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
@@ -178,7 +186,7 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
                 .button_press_event
                 .expect("No parent class impl for \"button_press_event\"");
             let ev_glib = glib::translate::mut_override(event.to_glib_none().0);
-            Inhibit(f(widget.to_glib_none().0, ev_glib) != 0)
+            Inhibit(from_glib(f(widget.to_glib_none().0, ev_glib)))
         }
     }
 
@@ -190,7 +198,7 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
                 .button_release_event
                 .expect("No parent class impl for \"button_release_event\"");
             let ev_glib = glib::translate::mut_override(event.to_glib_none().0);
-            Inhibit(f(widget.to_glib_none().0, ev_glib) != 0)
+            Inhibit(from_glib(f(widget.to_glib_none().0, ev_glib)))
         }
     }
 
@@ -205,6 +213,17 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
     //         f(widget.to_glib_none().0, signal_id) != 0
     //     }
     // }
+
+    fn parent_draw(&self, widget: &Widget, cr: &cairo::Context) -> Inhibit {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            let f = (*parent_class)
+                .draw
+                .expect("No parent class impl for \"draw\"");
+            Inhibit(from_glib(f(widget.to_glib_none().0, cr.to_glib_none().0)))
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
@@ -218,6 +237,7 @@ unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
             klass.button_press_event = Some(widget_button_press_event::<T>);
             klass.button_release_event = Some(widget_button_release_event::<T>);
             // klass.can_activate_accel = Some(widget_can_activate_accel::<T>);
+            klass.draw = Some(widget_draw::<T>);
         }
     }
 }
@@ -302,7 +322,7 @@ where
     let wrap: Widget = from_glib_borrow(ptr);
     let evwrap: gdk::EventButton = from_glib_borrow(btnptr);
 
-    imp.button_press_event(&wrap, &evwrap).0 as glib_sys::gboolean
+    imp.button_press_event(&wrap, &evwrap).to_glib()
 }
 
 unsafe extern "C" fn widget_button_release_event<T: ObjectSubclass>(
@@ -317,7 +337,7 @@ where
     let wrap: Widget = from_glib_borrow(ptr);
     let evwrap: gdk::EventButton = from_glib_borrow(btnptr);
 
-    imp.button_release_event(&wrap, &evwrap).0 as glib_sys::gboolean
+    imp.button_release_event(&wrap, &evwrap).to_glib()
 }
 
 // unsafe extern "C" fn widget_can_activate_accel<T: ObjectSubclass>(
@@ -332,3 +352,18 @@ where
 
 //     imp.can_activate_accel(&wrap, signal_id) as glib_sys::gboolean
 // }
+
+unsafe extern "C" fn widget_draw<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    cr_ptr: *mut cairo_sys::cairo_t,
+) -> glib_sys::gboolean
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+    let cr: cairo::Context = from_glib_borrow(cr_ptr);
+
+    imp.draw(&wrap, &cr).to_glib()
+}
