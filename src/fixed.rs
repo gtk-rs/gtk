@@ -47,7 +47,10 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
                 value.to_glib_none_mut().0,
             );
         }
-        value.get().unwrap()
+        value
+            .get()
+            .expect("Return Value for `FixedExtManual::get_child_x`")
+            .unwrap()
     }
 
     fn set_child_x<T: IsA<Widget>>(&self, item: &T, x: i32) {
@@ -79,7 +82,10 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
                 value.to_glib_none_mut().0,
             );
         }
-        value.get().unwrap()
+        value
+            .get()
+            .expect("Return Value for `FixedExtManual::get_child_y`")
+            .unwrap()
     }
 
     fn set_child_y<T: IsA<Widget>>(&self, item: &T, y: i32) {
