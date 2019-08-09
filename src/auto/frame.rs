@@ -581,7 +581,10 @@ impl<O: IsA<Frame>> FrameExt for O {
                 b"label-xalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `label-xalign` getter")
+                .unwrap()
         }
     }
 
@@ -603,7 +606,10 @@ impl<O: IsA<Frame>> FrameExt for O {
                 b"label-yalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `label-yalign` getter")
+                .unwrap()
         }
     }
 

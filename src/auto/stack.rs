@@ -821,7 +821,10 @@ impl<O: IsA<Stack>> StackExt for O {
                 b"interpolate-size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `interpolate-size` getter")
+                .unwrap()
         }
     }
 
@@ -844,7 +847,9 @@ impl<O: IsA<Stack>> StackExt for O {
                 b"icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `icon-name` getter")
         }
     }
 
@@ -868,7 +873,9 @@ impl<O: IsA<Stack>> StackExt for O {
                 b"name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `name` getter")
         }
     }
 
@@ -892,7 +899,10 @@ impl<O: IsA<Stack>> StackExt for O {
                 b"needs-attention\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `needs-attention` getter")
+                .unwrap()
         }
     }
 
@@ -916,7 +926,10 @@ impl<O: IsA<Stack>> StackExt for O {
                 b"position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `position` getter")
+                .unwrap()
         }
     }
 
@@ -940,7 +953,9 @@ impl<O: IsA<Stack>> StackExt for O {
                 b"title\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `title` getter")
         }
     }
 

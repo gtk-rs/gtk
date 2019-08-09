@@ -355,7 +355,10 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"follow-state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `follow-state` getter")
+                .unwrap()
         }
     }
 
@@ -377,7 +380,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"gicon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gicon` getter")
         }
     }
 
@@ -399,7 +404,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `icon-name` getter")
         }
     }
 
@@ -421,7 +428,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"pixbuf\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `pixbuf` getter")
         }
     }
 
@@ -443,7 +452,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"pixbuf-expander-closed\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `pixbuf-expander-closed` getter")
         }
     }
 
@@ -468,7 +479,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"pixbuf-expander-open\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `pixbuf-expander-open` getter")
         }
     }
 
@@ -490,7 +503,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"stock-detail\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `stock-detail` getter")
         }
     }
 

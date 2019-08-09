@@ -209,7 +209,9 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
                 b"filename\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `filename` getter")
         }
     }
 
@@ -221,7 +223,10 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
                 b"size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size` getter")
+                .unwrap()
         }
     }
 

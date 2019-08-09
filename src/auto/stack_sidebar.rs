@@ -477,7 +477,9 @@ impl<O: IsA<StackSidebar>> StackSidebarExt for O {
                 b"stack\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `stack` getter")
         }
     }
 

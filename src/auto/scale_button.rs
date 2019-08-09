@@ -647,7 +647,10 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
                 b"icons\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `icons` getter")
+                .unwrap()
         }
     }
 
@@ -659,7 +662,10 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
                 b"size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size` getter")
+                .unwrap()
         }
     }
 

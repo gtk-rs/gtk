@@ -1022,7 +1022,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
                 b"use-header-bar\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `use-header-bar` getter")
+                .unwrap()
         }
     }
 
@@ -1035,7 +1038,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
                 b"complete\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `complete` getter")
+                .unwrap()
         }
     }
 
@@ -1059,7 +1065,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
                 b"has-padding\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-padding` getter")
+                .unwrap()
         }
     }
 
@@ -1083,7 +1092,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
                 b"page-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `page-type` getter")
+                .unwrap()
         }
     }
 
@@ -1107,7 +1119,9 @@ impl<O: IsA<Assistant>> AssistantExt for O {
                 b"title\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `title` getter")
         }
     }
 

@@ -553,7 +553,10 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
                 b"direction\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `direction` getter")
+                .unwrap()
         }
     }
 
@@ -575,7 +578,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
                 b"paint-clock\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `paint-clock` getter")
         }
     }
 

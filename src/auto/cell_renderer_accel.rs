@@ -751,7 +751,10 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
                 b"accel-key\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `accel-key` getter")
+                .unwrap()
         }
     }
 
@@ -773,7 +776,10 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
                 b"accel-mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `accel-mode` getter")
+                .unwrap()
         }
     }
 
@@ -795,7 +801,10 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
                 b"accel-mods\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `accel-mods` getter")
+                .unwrap()
         }
     }
 
@@ -817,7 +826,10 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
                 b"keycode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `keycode` getter")
+                .unwrap()
         }
     }
 

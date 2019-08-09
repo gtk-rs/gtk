@@ -987,7 +987,9 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 b"cell-area\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-area` getter")
         }
     }
 
@@ -999,7 +1001,10 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 b"has-frame\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-frame` getter")
+                .unwrap()
         }
     }
 
@@ -1021,7 +1026,10 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 b"popup-shown\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `popup-shown` getter")
+                .unwrap()
         }
     }
 
@@ -1137,7 +1145,10 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 .emit("popdown", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_popdown`")
+            .unwrap()
     }
 
     fn connect_popup<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

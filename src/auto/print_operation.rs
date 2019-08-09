@@ -682,7 +682,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"allow-async\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `allow-async` getter")
+                .unwrap()
         }
     }
 
@@ -694,7 +697,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"current-page\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `current-page` getter")
+                .unwrap()
         }
     }
 
@@ -706,7 +712,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"custom-tab-label\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `custom-tab-label` getter")
         }
     }
 
@@ -718,7 +726,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"export-filename\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `export-filename` getter")
         }
     }
 
@@ -730,7 +740,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"job-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `job-name` getter")
         }
     }
 
@@ -742,7 +754,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"n-pages\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `n-pages` getter")
+                .unwrap()
         }
     }
 
@@ -754,7 +769,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"show-progress\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-progress` getter")
+                .unwrap()
         }
     }
 
@@ -766,7 +784,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"track-print-status\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `track-print-status` getter")
+                .unwrap()
         }
     }
 
@@ -778,7 +799,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"unit\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `unit` getter")
+                .unwrap()
         }
     }
 
@@ -790,7 +814,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"use-full-page\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `use-full-page` getter")
+                .unwrap()
         }
     }
 

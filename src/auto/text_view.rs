@@ -1673,7 +1673,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
                 b"im-module\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `im-module` getter")
         }
     }
 
@@ -1695,7 +1697,10 @@ impl<O: IsA<TextView>> TextViewExt for O {
                 b"monospace\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `monospace` getter")
+                .unwrap()
         }
     }
 
@@ -1717,7 +1722,10 @@ impl<O: IsA<TextView>> TextViewExt for O {
                 b"populate-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `populate-all` getter")
+                .unwrap()
         }
     }
 

@@ -698,7 +698,10 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
                 b"icon-size-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `icon-size-set` getter")
+                .unwrap()
         }
     }
 
@@ -720,7 +723,10 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
                 b"toolbar-style\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `toolbar-style` getter")
+                .unwrap()
         }
     }
 

@@ -2221,7 +2221,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 b"enable-grid-lines\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `enable-grid-lines` getter")
+                .unwrap()
         }
     }
 
@@ -2334,7 +2337,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("expand-collapse-cursor-row", &[&object, &p0, &p1])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_expand_collapse_cursor_row`")
+            .unwrap()
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) -> bool + 'static>(
@@ -2378,7 +2384,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("move-cursor", &[&step, &direction])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_move_cursor`")
+            .unwrap()
     }
 
     fn connect_row_activated<F: Fn(&Self, &TreePath, &TreeViewColumn) + 'static>(
@@ -2513,7 +2522,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("select-all", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_select_all`")
+            .unwrap()
     }
 
     fn connect_select_cursor_parent<F: Fn(&Self) -> bool + 'static>(
@@ -2549,7 +2561,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("select-cursor-parent", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_select_cursor_parent`")
+            .unwrap()
     }
 
     fn connect_select_cursor_row<F: Fn(&Self, bool) -> bool + 'static>(
@@ -2588,7 +2603,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("select-cursor-row", &[&object])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_select_cursor_row`")
+            .unwrap()
     }
 
     fn connect_start_interactive_search<F: Fn(&Self) -> bool + 'static>(
@@ -2624,7 +2642,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("start-interactive-search", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_start_interactive_search`")
+            .unwrap()
     }
 
     fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(
@@ -2725,7 +2746,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("toggle-cursor-row", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_toggle_cursor_row`")
+            .unwrap()
     }
 
     fn connect_unselect_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
@@ -2756,7 +2780,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("unselect-all", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_unselect_all`")
+            .unwrap()
     }
 
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(

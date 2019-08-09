@@ -1910,7 +1910,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"caps-lock-warning\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `caps-lock-warning` getter")
+                .unwrap()
         }
     }
 
@@ -1932,7 +1935,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"cursor-position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `cursor-position` getter")
+                .unwrap()
         }
     }
 
@@ -1944,7 +1950,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"enable-emoji-completion\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `enable-emoji-completion` getter")
+                .unwrap()
         }
     }
 
@@ -1966,7 +1975,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"im-module\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `im-module` getter")
         }
     }
 
@@ -1988,7 +1999,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"invisible-char-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `invisible-char-set` getter")
+                .unwrap()
         }
     }
 
@@ -2010,7 +2024,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"populate-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `populate-all` getter")
+                .unwrap()
         }
     }
 
@@ -2032,7 +2049,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-activatable\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-activatable` getter")
+                .unwrap()
         }
     }
 
@@ -2054,7 +2074,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-gicon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-gicon` getter")
         }
     }
 
@@ -2076,7 +2098,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-name` getter")
         }
     }
 
@@ -2098,7 +2122,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-pixbuf\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-pixbuf` getter")
         }
     }
 
@@ -2120,7 +2146,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-sensitive\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-sensitive` getter")
+                .unwrap()
         }
     }
 
@@ -2142,7 +2171,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-storage-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-storage-type` getter")
+                .unwrap()
         }
     }
 
@@ -2154,7 +2186,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-tooltip-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-tooltip-markup` getter")
         }
     }
 
@@ -2176,7 +2210,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-tooltip-text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-tooltip-text` getter")
         }
     }
 
@@ -2198,7 +2234,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"scroll-offset\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `scroll-offset` getter")
+                .unwrap()
         }
     }
 
@@ -2210,7 +2249,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-activatable\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-activatable` getter")
+                .unwrap()
         }
     }
 
@@ -2232,7 +2274,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-gicon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-gicon` getter")
         }
     }
 
@@ -2254,7 +2298,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-name` getter")
         }
     }
 
@@ -2276,7 +2322,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-pixbuf\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-pixbuf` getter")
         }
     }
 
@@ -2301,7 +2349,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-sensitive\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-sensitive` getter")
+                .unwrap()
         }
     }
 
@@ -2323,7 +2374,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-storage-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-storage-type` getter")
+                .unwrap()
         }
     }
 
@@ -2335,7 +2389,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-tooltip-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-tooltip-markup` getter")
         }
     }
 
@@ -2360,7 +2416,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-tooltip-text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-tooltip-text` getter")
         }
     }
 
@@ -2382,7 +2440,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"selection-bound\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `selection-bound` getter")
+                .unwrap()
         }
     }
 
@@ -2394,7 +2455,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"shadow-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `shadow-type` getter")
+                .unwrap()
         }
     }
 
@@ -2416,7 +2480,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"show-emoji-icon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-emoji-icon` getter")
+                .unwrap()
         }
     }
 
@@ -2438,7 +2505,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"truncate-multiline\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `truncate-multiline` getter")
+                .unwrap()
         }
     }
 
@@ -2460,7 +2530,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"xalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `xalign` getter")
+                .unwrap()
         }
     }
 

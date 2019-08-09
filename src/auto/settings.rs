@@ -568,7 +568,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-alternative-button-order\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-alternative-button-order` getter")
+                .unwrap()
         }
     }
 
@@ -590,7 +593,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-alternative-sort-arrows\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-alternative-sort-arrows` getter")
+                .unwrap()
         }
     }
 
@@ -612,7 +618,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-application-prefer-dark-theme\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-application-prefer-dark-theme` getter")
+                .unwrap()
         }
     }
 
@@ -639,7 +648,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-cursor-blink\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-cursor-blink` getter")
+                .unwrap()
         }
     }
 
@@ -661,7 +673,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-cursor-blink-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-cursor-blink-time` getter")
+                .unwrap()
         }
     }
 
@@ -683,7 +698,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-cursor-blink-timeout\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-cursor-blink-timeout` getter")
+                .unwrap()
         }
     }
 
@@ -705,7 +723,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-cursor-theme-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-cursor-theme-name` getter")
         }
     }
 
@@ -727,7 +747,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-cursor-theme-size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-cursor-theme-size` getter")
+                .unwrap()
         }
     }
 
@@ -749,7 +772,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-decoration-layout\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-decoration-layout` getter")
         }
     }
 
@@ -771,7 +796,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-dialogs-use-header\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-dialogs-use-header` getter")
+                .unwrap()
         }
     }
 
@@ -793,7 +821,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-dnd-drag-threshold\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-dnd-drag-threshold` getter")
+                .unwrap()
         }
     }
 
@@ -815,7 +846,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-double-click-distance\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-double-click-distance` getter")
+                .unwrap()
         }
     }
 
@@ -837,7 +871,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-double-click-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-double-click-time` getter")
+                .unwrap()
         }
     }
 
@@ -859,7 +896,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-enable-accels\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-enable-accels` getter")
+                .unwrap()
         }
     }
 
@@ -881,7 +921,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-enable-animations\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-enable-animations` getter")
+                .unwrap()
         }
     }
 
@@ -903,7 +946,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-enable-event-sounds\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-enable-event-sounds` getter")
+                .unwrap()
         }
     }
 
@@ -925,7 +971,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-enable-input-feedback-sounds\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-enable-input-feedback-sounds` getter")
+                .unwrap()
         }
     }
 
@@ -952,7 +1001,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-enable-primary-paste\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-enable-primary-paste` getter")
+                .unwrap()
         }
     }
 
@@ -974,7 +1026,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-entry-password-hint-timeout\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-entry-password-hint-timeout` getter")
+                .unwrap()
         }
     }
 
@@ -998,7 +1053,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-entry-select-on-focus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-entry-select-on-focus` getter")
+                .unwrap()
         }
     }
 
@@ -1020,7 +1078,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-error-bell\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-error-bell` getter")
+                .unwrap()
         }
     }
 
@@ -1042,7 +1103,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-font-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-font-name` getter")
         }
     }
 
@@ -1064,7 +1127,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-fontconfig-timestamp\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-fontconfig-timestamp` getter")
+                .unwrap()
         }
     }
 
@@ -1086,7 +1152,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-icon-theme-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-icon-theme-name` getter")
         }
     }
 
@@ -1108,7 +1176,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-im-module\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-im-module` getter")
         }
     }
 
@@ -1130,7 +1200,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-key-theme-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-key-theme-name` getter")
         }
     }
 
@@ -1153,7 +1225,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-keynav-use-caret\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-keynav-use-caret` getter")
+                .unwrap()
         }
     }
 
@@ -1176,7 +1251,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-label-select-on-focus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-label-select-on-focus` getter")
+                .unwrap()
         }
     }
 
@@ -1198,7 +1276,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-long-press-time\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-long-press-time` getter")
+                .unwrap()
         }
     }
 
@@ -1220,7 +1301,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-modules\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-modules` getter")
         }
     }
 
@@ -1242,7 +1325,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-primary-button-warps-slider\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-primary-button-warps-slider` getter")
+                .unwrap()
         }
     }
 
@@ -1266,7 +1352,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-print-backends\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-print-backends` getter")
         }
     }
 
@@ -1288,7 +1376,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-print-preview-command\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-print-preview-command` getter")
         }
     }
 
@@ -1310,7 +1400,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-recent-files-enabled\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-recent-files-enabled` getter")
+                .unwrap()
         }
     }
 
@@ -1332,7 +1425,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-recent-files-max-age\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-recent-files-max-age` getter")
+                .unwrap()
         }
     }
 
@@ -1354,7 +1450,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-shell-shows-app-menu\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-shell-shows-app-menu` getter")
+                .unwrap()
         }
     }
 
@@ -1376,7 +1475,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-shell-shows-desktop\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-shell-shows-desktop` getter")
+                .unwrap()
         }
     }
 
@@ -1398,7 +1500,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-shell-shows-menubar\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-shell-shows-menubar` getter")
+                .unwrap()
         }
     }
 
@@ -1420,7 +1525,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-sound-theme-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-sound-theme-name` getter")
         }
     }
 
@@ -1442,7 +1549,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-split-cursor\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-split-cursor` getter")
+                .unwrap()
         }
     }
 
@@ -1464,7 +1574,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-theme-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-theme-name` getter")
         }
     }
 
@@ -1486,7 +1598,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-titlebar-double-click\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-titlebar-double-click` getter")
         }
     }
 
@@ -1508,7 +1622,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-titlebar-middle-click\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-titlebar-middle-click` getter")
         }
     }
 
@@ -1530,7 +1646,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-titlebar-right-click\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-titlebar-right-click` getter")
         }
     }
 
@@ -1552,7 +1670,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-xft-antialias\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-xft-antialias` getter")
+                .unwrap()
         }
     }
 
@@ -1574,7 +1695,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-xft-dpi\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-xft-dpi` getter")
+                .unwrap()
         }
     }
 
@@ -1596,7 +1720,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-xft-hinting\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `gtk-xft-hinting` getter")
+                .unwrap()
         }
     }
 
@@ -1618,7 +1745,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-xft-hintstyle\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-xft-hintstyle` getter")
         }
     }
 
@@ -1640,7 +1769,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"gtk-xft-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gtk-xft-rgba` getter")
         }
     }
 
