@@ -2804,7 +2804,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"composite-child\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `composite-child` getter")
+                .unwrap()
         }
     }
 
@@ -2816,7 +2819,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"expand\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `expand` getter")
+                .unwrap()
         }
     }
 
@@ -2838,7 +2844,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"has-default\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-default` getter")
+                .unwrap()
         }
     }
 
@@ -2860,7 +2869,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"has-focus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-focus` getter")
+                .unwrap()
         }
     }
 
@@ -2882,7 +2894,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"height-request\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `height-request` getter")
+                .unwrap()
         }
     }
 
@@ -2904,7 +2919,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"is-focus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-focus` getter")
+                .unwrap()
         }
     }
 
@@ -2926,7 +2944,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"margin\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `margin` getter")
+                .unwrap()
         }
     }
 
@@ -2948,7 +2969,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"width-request\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `width-request` getter")
+                .unwrap()
         }
     }
 
@@ -4256,7 +4280,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 .emit("popup-menu", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_popup_menu`")
+            .unwrap()
     }
 
     fn connect_property_notify_event<F: Fn(&Self, &gdk::EventProperty) -> Inhibit + 'static>(
@@ -4716,7 +4743,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 .emit("show-help", &[&help_type])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_show_help`")
+            .unwrap()
     }
 
     fn connect_size_allocate<F: Fn(&Self, &Allocation) + 'static>(&self, f: F) -> SignalHandlerId {

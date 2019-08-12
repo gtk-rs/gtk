@@ -1076,7 +1076,10 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
                 .emit("move-cursor", &[&step, &count])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_move_cursor`")
+            .unwrap()
     }
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

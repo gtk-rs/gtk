@@ -233,7 +233,9 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
                 b"accept-label\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `accept-label` getter")
         }
     }
 
@@ -255,7 +257,9 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
                 b"cancel-label\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cancel-label` getter")
         }
     }
 

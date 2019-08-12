@@ -275,7 +275,10 @@ impl PlacesSidebar {
                 b"populate-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `populate-all` getter")
+                .unwrap()
         }
     }
 
@@ -298,7 +301,10 @@ impl PlacesSidebar {
                 b"show-other-locations\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-other-locations` getter")
+                .unwrap()
         }
     }
 
@@ -320,7 +326,10 @@ impl PlacesSidebar {
                 b"show-recent\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-recent` getter")
+                .unwrap()
         }
     }
 
@@ -342,7 +351,10 @@ impl PlacesSidebar {
                 b"show-trash\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-trash` getter")
+                .unwrap()
         }
     }
 

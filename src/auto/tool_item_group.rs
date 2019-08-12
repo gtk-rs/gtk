@@ -683,7 +683,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"expand\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `expand` getter")
+                .unwrap()
         }
     }
 
@@ -707,7 +710,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"fill\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `fill` getter")
+                .unwrap()
         }
     }
 
@@ -731,7 +737,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"homogeneous\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `homogeneous` getter")
+                .unwrap()
         }
     }
 
@@ -755,7 +764,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"new-row\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `new-row` getter")
+                .unwrap()
         }
     }
 

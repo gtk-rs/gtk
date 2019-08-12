@@ -312,7 +312,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"inverted\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `inverted` getter")
+                .unwrap()
         }
     }
 
@@ -334,7 +337,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"pulse\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pulse` getter")
+                .unwrap()
         }
     }
 
@@ -356,7 +362,9 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `text` getter")
         }
     }
 
@@ -378,7 +386,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"text-xalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `text-xalign` getter")
+                .unwrap()
         }
     }
 
@@ -400,7 +411,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"text-yalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `text-yalign` getter")
+                .unwrap()
         }
     }
 
@@ -422,7 +436,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"value\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `value` getter")
+                .unwrap()
         }
     }
 

@@ -1385,7 +1385,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"accumulative-margin\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `accumulative-margin` getter")
+                .unwrap()
         }
     }
 
@@ -1417,7 +1420,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"background-full-height\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `background-full-height` getter")
+                .unwrap()
         }
     }
 
@@ -1439,7 +1445,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"background-full-height-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `background-full-height-set` getter")
+                .unwrap()
         }
     }
 
@@ -1461,7 +1470,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"background-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `background-rgba` getter")
         }
     }
 
@@ -1483,7 +1494,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"background-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `background-set` getter")
+                .unwrap()
         }
     }
 
@@ -1505,7 +1519,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"direction\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `direction` getter")
+                .unwrap()
         }
     }
 
@@ -1527,7 +1544,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"editable\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `editable` getter")
+                .unwrap()
         }
     }
 
@@ -1549,7 +1569,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"editable-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `editable-set` getter")
+                .unwrap()
         }
     }
 
@@ -1572,7 +1595,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"fallback\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `fallback` getter")
+                .unwrap()
         }
     }
 
@@ -1595,7 +1621,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"fallback-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `fallback-set` getter")
+                .unwrap()
         }
     }
 
@@ -1617,7 +1646,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"family\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `family` getter")
         }
     }
 
@@ -1639,7 +1670,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"family-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `family-set` getter")
+                .unwrap()
         }
     }
 
@@ -1661,7 +1695,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"font\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `font` getter")
         }
     }
 
@@ -1684,7 +1720,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"font-features\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `font-features` getter")
         }
     }
 
@@ -1707,7 +1745,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"font-features-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `font-features-set` getter")
+                .unwrap()
         }
     }
 
@@ -1739,7 +1780,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"foreground-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `foreground-rgba` getter")
         }
     }
 
@@ -1761,7 +1804,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"foreground-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `foreground-set` getter")
+                .unwrap()
         }
     }
 
@@ -1783,7 +1829,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"indent\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `indent` getter")
+                .unwrap()
         }
     }
 
@@ -1805,7 +1854,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"indent-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `indent-set` getter")
+                .unwrap()
         }
     }
 
@@ -1827,7 +1879,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"invisible\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `invisible` getter")
+                .unwrap()
         }
     }
 
@@ -1849,7 +1904,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"invisible-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `invisible-set` getter")
+                .unwrap()
         }
     }
 
@@ -1871,7 +1929,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"justification\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `justification` getter")
+                .unwrap()
         }
     }
 
@@ -1893,7 +1954,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"justification-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `justification-set` getter")
+                .unwrap()
         }
     }
 
@@ -1915,7 +1979,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"language\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `language` getter")
         }
     }
 
@@ -1937,7 +2003,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"language-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `language-set` getter")
+                .unwrap()
         }
     }
 
@@ -1959,7 +2028,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"left-margin\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `left-margin` getter")
+                .unwrap()
         }
     }
 
@@ -1981,7 +2053,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"left-margin-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `left-margin-set` getter")
+                .unwrap()
         }
     }
 
@@ -2004,7 +2079,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"letter-spacing\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `letter-spacing` getter")
+                .unwrap()
         }
     }
 
@@ -2027,7 +2105,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"letter-spacing-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `letter-spacing-set` getter")
+                .unwrap()
         }
     }
 
@@ -2049,7 +2130,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `name` getter")
         }
     }
 
@@ -2071,7 +2154,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"paragraph-background-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `paragraph-background-rgba` getter")
         }
     }
 
@@ -2096,7 +2181,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"paragraph-background-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `paragraph-background-set` getter")
+                .unwrap()
         }
     }
 
@@ -2118,7 +2206,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"pixels-above-lines\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pixels-above-lines` getter")
+                .unwrap()
         }
     }
 
@@ -2140,7 +2231,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"pixels-above-lines-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pixels-above-lines-set` getter")
+                .unwrap()
         }
     }
 
@@ -2162,7 +2256,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"pixels-below-lines\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pixels-below-lines` getter")
+                .unwrap()
         }
     }
 
@@ -2184,7 +2281,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"pixels-below-lines-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pixels-below-lines-set` getter")
+                .unwrap()
         }
     }
 
@@ -2206,7 +2306,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"pixels-inside-wrap\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pixels-inside-wrap` getter")
+                .unwrap()
         }
     }
 
@@ -2228,7 +2331,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"pixels-inside-wrap-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pixels-inside-wrap-set` getter")
+                .unwrap()
         }
     }
 
@@ -2250,7 +2356,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"right-margin\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `right-margin` getter")
+                .unwrap()
         }
     }
 
@@ -2272,7 +2381,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"right-margin-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `right-margin-set` getter")
+                .unwrap()
         }
     }
 
@@ -2294,7 +2406,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"rise\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `rise` getter")
+                .unwrap()
         }
     }
 
@@ -2316,7 +2431,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"rise-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `rise-set` getter")
+                .unwrap()
         }
     }
 
@@ -2338,7 +2456,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"scale\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `scale` getter")
+                .unwrap()
         }
     }
 
@@ -2360,7 +2481,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"scale-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `scale-set` getter")
+                .unwrap()
         }
     }
 
@@ -2382,7 +2506,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size` getter")
+                .unwrap()
         }
     }
 
@@ -2404,7 +2531,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"size-points\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size-points` getter")
+                .unwrap()
         }
     }
 
@@ -2426,7 +2556,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"size-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size-set` getter")
+                .unwrap()
         }
     }
 
@@ -2448,7 +2581,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"stretch\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `stretch` getter")
+                .unwrap()
         }
     }
 
@@ -2470,7 +2606,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"stretch-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `stretch-set` getter")
+                .unwrap()
         }
     }
 
@@ -2492,7 +2631,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"strikethrough\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `strikethrough` getter")
+                .unwrap()
         }
     }
 
@@ -2515,7 +2657,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"strikethrough-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `strikethrough-rgba` getter")
         }
     }
 
@@ -2539,7 +2683,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"strikethrough-rgba-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `strikethrough-rgba-set` getter")
+                .unwrap()
         }
     }
 
@@ -2562,7 +2709,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"strikethrough-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `strikethrough-set` getter")
+                .unwrap()
         }
     }
 
@@ -2584,7 +2734,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"style\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `style` getter")
+                .unwrap()
         }
     }
 
@@ -2606,7 +2759,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"style-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `style-set` getter")
+                .unwrap()
         }
     }
 
@@ -2628,7 +2784,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"tabs-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `tabs-set` getter")
+                .unwrap()
         }
     }
 
@@ -2650,7 +2809,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"underline\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `underline` getter")
+                .unwrap()
         }
     }
 
@@ -2673,7 +2835,9 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"underline-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `underline-rgba` getter")
         }
     }
 
@@ -2697,7 +2861,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"underline-rgba-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `underline-rgba-set` getter")
+                .unwrap()
         }
     }
 
@@ -2720,7 +2887,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"underline-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `underline-set` getter")
+                .unwrap()
         }
     }
 
@@ -2742,7 +2912,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"variant\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `variant` getter")
+                .unwrap()
         }
     }
 
@@ -2764,7 +2937,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"variant-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `variant-set` getter")
+                .unwrap()
         }
     }
 
@@ -2786,7 +2962,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"weight\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `weight` getter")
+                .unwrap()
         }
     }
 
@@ -2808,7 +2987,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"weight-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `weight-set` getter")
+                .unwrap()
         }
     }
 
@@ -2830,7 +3012,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"wrap-mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `wrap-mode` getter")
+                .unwrap()
         }
     }
 
@@ -2852,7 +3037,10 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 b"wrap-mode-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `wrap-mode-set` getter")
+                .unwrap()
         }
     }
 

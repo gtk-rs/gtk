@@ -867,7 +867,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
                 b"cell-area\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-area` getter")
         }
     }
 
@@ -904,7 +906,10 @@ impl<O: IsA<IconView>> IconViewExt for O {
                 .emit("activate-cursor-item", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_activate_cursor_item`")
+            .unwrap()
     }
 
     fn connect_item_activated<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -973,7 +978,10 @@ impl<O: IsA<IconView>> IconViewExt for O {
                 .emit("move-cursor", &[&step, &count])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_move_cursor`")
+            .unwrap()
     }
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

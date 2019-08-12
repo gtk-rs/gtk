@@ -26,7 +26,12 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
                 "stock-size".to_glib_none().0,
                 value.to_glib_none_mut().0,
             );
-            from_glib(value.get::<u32>().unwrap() as i32)
+            from_glib(
+                value
+                    .get::<u32>()
+                    .expect("Return Value for property `stock_size` getter")
+                    .unwrap() as i32,
+            )
         }
     }
 

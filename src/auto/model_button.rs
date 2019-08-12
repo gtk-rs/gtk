@@ -66,7 +66,10 @@ impl ModelButton {
                 b"active\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `active` getter")
+                .unwrap()
         }
     }
 
@@ -90,7 +93,10 @@ impl ModelButton {
                 b"centered\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `centered` getter")
+                .unwrap()
         }
     }
 
@@ -114,7 +120,9 @@ impl ModelButton {
                 b"icon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `icon` getter")
         }
     }
 
@@ -138,7 +146,10 @@ impl ModelButton {
                 b"iconic\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `iconic` getter")
+                .unwrap()
         }
     }
 
@@ -162,7 +173,10 @@ impl ModelButton {
                 b"inverted\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `inverted` getter")
+                .unwrap()
         }
     }
 
@@ -186,7 +200,9 @@ impl ModelButton {
                 b"menu-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `menu-name` getter")
         }
     }
 
@@ -210,7 +226,10 @@ impl ModelButton {
                 b"role\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `role` getter")
+                .unwrap()
         }
     }
 
@@ -234,7 +253,9 @@ impl ModelButton {
                 b"text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `text` getter")
         }
     }
 
@@ -258,7 +279,10 @@ impl ModelButton {
                 b"use-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `use-markup` getter")
+                .unwrap()
         }
     }
 

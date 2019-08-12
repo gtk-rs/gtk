@@ -728,7 +728,10 @@ impl<O: IsA<Grid>> GridExt for O {
                 b"height\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `height` getter")
+                .unwrap()
         }
     }
 
@@ -752,7 +755,10 @@ impl<O: IsA<Grid>> GridExt for O {
                 b"width\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `width` getter")
+                .unwrap()
         }
     }
 
@@ -776,7 +782,10 @@ impl<O: IsA<Grid>> GridExt for O {
                 b"left-attach\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `left-attach` getter")
+                .unwrap()
         }
     }
 
@@ -800,7 +809,10 @@ impl<O: IsA<Grid>> GridExt for O {
                 b"top-attach\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `top-attach` getter")
+                .unwrap()
         }
     }
 

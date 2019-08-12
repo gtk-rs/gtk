@@ -536,7 +536,10 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
                 b"search-mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `search-mode` getter")
+                .unwrap()
         }
     }
 
@@ -558,7 +561,9 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
                 b"subtitle\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `subtitle` getter")
         }
     }
 

@@ -480,7 +480,10 @@ impl<O: IsA<ActionBar>> ActionBarExt for O {
                 b"pack-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pack-type` getter")
+                .unwrap()
         }
     }
 
@@ -504,7 +507,10 @@ impl<O: IsA<ActionBar>> ActionBarExt for O {
                 b"position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `position` getter")
+                .unwrap()
         }
     }
 

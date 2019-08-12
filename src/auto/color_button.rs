@@ -609,7 +609,10 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
                 b"alpha\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `alpha` getter")
+                .unwrap()
         }
     }
 
@@ -632,7 +635,10 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
                 b"show-editor\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-editor` getter")
+                .unwrap()
         }
     }
 

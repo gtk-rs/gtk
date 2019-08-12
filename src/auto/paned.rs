@@ -646,7 +646,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 b"max-position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `max-position` getter")
+                .unwrap()
         }
     }
 
@@ -658,7 +661,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 b"min-position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `min-position` getter")
+                .unwrap()
         }
     }
 
@@ -670,7 +676,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 b"position-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `position-set` getter")
+                .unwrap()
         }
     }
 
@@ -693,7 +702,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 b"resize\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `resize` getter")
+                .unwrap()
         }
     }
 
@@ -717,7 +729,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 b"shrink\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `shrink` getter")
+                .unwrap()
         }
     }
 
@@ -760,7 +775,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 .emit("accept-position", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_accept_position`")
+            .unwrap()
     }
 
     fn connect_cancel_position<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
@@ -791,7 +809,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 .emit("cancel-position", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_cancel_position`")
+            .unwrap()
     }
 
     fn connect_cycle_child_focus<F: Fn(&Self, bool) -> bool + 'static>(
@@ -830,7 +851,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 .emit("cycle-child-focus", &[&reversed])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_cycle_child_focus`")
+            .unwrap()
     }
 
     fn connect_cycle_handle_focus<F: Fn(&Self, bool) -> bool + 'static>(
@@ -869,7 +893,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 .emit("cycle-handle-focus", &[&reversed])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_cycle_handle_focus`")
+            .unwrap()
     }
 
     fn connect_move_handle<F: Fn(&Self, ScrollType) -> bool + 'static>(
@@ -908,7 +935,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 .emit("move-handle", &[&scroll_type])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_move_handle`")
+            .unwrap()
     }
 
     fn connect_toggle_handle_focus<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
@@ -941,7 +971,10 @@ impl<O: IsA<Paned>> PanedExt for O {
                 .emit("toggle-handle-focus", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_toggle_handle_focus`")
+            .unwrap()
     }
 
     fn connect_property_max_position_notify<F: Fn(&Self) + 'static>(
