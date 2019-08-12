@@ -48,9 +48,8 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
             );
         }
         value
-            .get()
+            .get_some()
             .expect("Return Value for `FixedExtManual::get_child_x`")
-            .unwrap()
     }
 
     fn set_child_x<T: IsA<Widget>>(&self, item: &T, x: i32) {
@@ -83,9 +82,8 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
             );
         }
         value
-            .get()
+            .get_some()
             .expect("Return Value for `FixedExtManual::get_child_y`")
-            .unwrap()
     }
 
     fn set_child_y<T: IsA<Widget>>(&self, item: &T, y: i32) {
