@@ -5,6 +5,7 @@
 use gdk;
 use gio;
 use glib::object::Cast;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
 use glib::translate::*;

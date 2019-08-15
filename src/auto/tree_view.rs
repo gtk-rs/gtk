@@ -728,7 +728,7 @@ pub trait TreeViewExt: 'static {
 
     fn get_reorderable(&self) -> bool;
 
-    //fn get_row_separator_func(&self) -> Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>;
+    //fn get_row_separator_func(&self) -> Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>;
 
     fn get_rubber_banding(&self) -> bool;
 
@@ -736,9 +736,9 @@ pub trait TreeViewExt: 'static {
 
     fn get_search_entry(&self) -> Option<Entry>;
 
-    //fn get_search_equal_func(&self) -> Option<Box<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>>;
+    //fn get_search_equal_func(&self) -> Option<Box_<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>>;
 
-    //fn get_search_position_func(&self) -> Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>;
+    //fn get_search_position_func(&self) -> Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>;
 
     fn get_selection(&self) -> TreeSelection;
 
@@ -810,7 +810,7 @@ pub trait TreeViewExt: 'static {
     fn set_column_drag_function(
         &self,
         func: Option<
-            Box<
+            Box_<
                 dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                     + 'static,
             >,
@@ -860,7 +860,7 @@ pub trait TreeViewExt: 'static {
 
     fn set_row_separator_func(
         &self,
-        func: Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
+        func: Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
     );
 
     fn set_rubber_banding(&self, enable: bool);
@@ -874,7 +874,7 @@ pub trait TreeViewExt: 'static {
         search_equal_func: P,
     );
 
-    fn set_search_position_func(&self, func: Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>);
+    fn set_search_position_func(&self, func: Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>);
 
     fn set_show_expanders(&self, enabled: bool);
 
@@ -1469,7 +1469,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    //fn get_row_separator_func(&self) -> Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> {
+    //fn get_row_separator_func(&self) -> Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_get_row_separator_func() }
     //}
 
@@ -1493,11 +1493,11 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    //fn get_search_equal_func(&self) -> Option<Box<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>> {
+    //fn get_search_equal_func(&self) -> Option<Box_<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_get_search_equal_func() }
     //}
 
-    //fn get_search_position_func(&self) -> Option<Box<dyn Fn(&TreeView, &Widget) + 'static>> {
+    //fn get_search_position_func(&self) -> Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_get_search_position_func() }
     //}
 
@@ -1600,7 +1600,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         cell: &P,
         func: Q,
     ) -> i32 {
-        let func_data: Box_<Q> = Box::new(func);
+        let func_data: Box_<Q> = Box_::new(func);
         unsafe extern "C" fn func_func<
             P: IsA<CellRenderer>,
             Q: Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static,
@@ -1636,7 +1636,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 title.to_glib_none().0,
                 cell.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call6,
             )
         }
@@ -1782,7 +1782,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
     fn set_column_drag_function(
         &self,
         func: Option<
-            Box<
+            Box_<
                 dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                     + 'static,
             >,
@@ -1790,12 +1790,12 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
     ) {
         let func_data: Box_<
             Option<
-                Box<
+                Box_<
                     dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                         + 'static,
                 >,
             >,
-        > = Box::new(func);
+        > = Box_::new(func);
         unsafe extern "C" fn func_func(
             tree_view: *mut gtk_sys::GtkTreeView,
             column: *mut gtk_sys::GtkTreeViewColumn,
@@ -1808,7 +1808,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             let prev_column = from_glib_borrow(prev_column);
             let next_column = from_glib_borrow(next_column);
             let callback: &Option<
-                Box<
+                Box_<
                     dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                         + 'static,
                 >,
@@ -1828,7 +1828,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
             let _callback: Box_<
                 Option<
-                    Box<
+                    Box_<
                         dyn Fn(
                                 &TreeView,
                                 &TreeViewColumn,
@@ -1843,7 +1843,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         let destroy_call3 = Some(destroy_func as _);
         let super_callback0: Box_<
             Option<
-                Box<
+                Box_<
                     dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                         + 'static,
                 >,
@@ -1853,7 +1853,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             gtk_sys::gtk_tree_view_set_column_drag_function(
                 self.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -2013,10 +2013,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
 
     fn set_row_separator_func(
         &self,
-        func: Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
+        func: Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
     ) {
-        let func_data: Box_<Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
-            Box::new(func);
+        let func_data: Box_<Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
+            Box_::new(func);
         unsafe extern "C" fn func_func(
             model: *mut gtk_sys::GtkTreeModel,
             iter: *mut gtk_sys::GtkTreeIter,
@@ -2024,7 +2024,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         ) -> glib_sys::gboolean {
             let model = from_glib_borrow(model);
             let iter = from_glib_borrow(iter);
-            let callback: &Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> =
+            let callback: &Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> =
                 &*(data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&model, &iter)
@@ -2039,17 +2039,17 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             None
         };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
-            let _callback: Box_<Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
+            let _callback: Box_<Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
                 Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
-        let super_callback0: Box_<Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
+        let super_callback0: Box_<Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
             func_data;
         unsafe {
             gtk_sys::gtk_tree_view_set_row_separator_func(
                 self.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -2083,7 +2083,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         &self,
         search_equal_func: P,
     ) {
-        let search_equal_func_data: Box_<P> = Box::new(search_equal_func);
+        let search_equal_func_data: Box_<P> = Box_::new(search_equal_func);
         unsafe extern "C" fn search_equal_func_func<
             P: Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static,
         >(
@@ -2114,14 +2114,14 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             gtk_sys::gtk_tree_view_set_search_equal_func(
                 self.as_ref().to_glib_none().0,
                 search_equal_func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
     }
 
-    fn set_search_position_func(&self, func: Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>) {
-        let func_data: Box_<Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>> = Box::new(func);
+    fn set_search_position_func(&self, func: Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>) {
+        let func_data: Box_<Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>> = Box_::new(func);
         unsafe extern "C" fn func_func(
             tree_view: *mut gtk_sys::GtkTreeView,
             search_dialog: *mut gtk_sys::GtkWidget,
@@ -2129,7 +2129,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         ) {
             let tree_view = from_glib_borrow(tree_view);
             let search_dialog = from_glib_borrow(search_dialog);
-            let callback: &Option<Box<dyn Fn(&TreeView, &Widget) + 'static>> =
+            let callback: &Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>> =
                 &*(user_data as *mut _);
             if let Some(ref callback) = *callback {
                 callback(&tree_view, &search_dialog)
@@ -2143,16 +2143,16 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             None
         };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
-            let _callback: Box_<Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>> =
+            let _callback: Box_<Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>> =
                 Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
-        let super_callback0: Box_<Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>> = func_data;
+        let super_callback0: Box_<Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>> = func_data;
         unsafe {
             gtk_sys::gtk_tree_view_set_search_position_func(
                 self.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }

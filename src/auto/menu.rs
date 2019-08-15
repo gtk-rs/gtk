@@ -592,7 +592,7 @@ pub trait GtkMenuExt: 'static {
         bottom_attach: u32,
     );
 
-    //fn attach_to_widget<P: IsA<Widget>>(&self, attach_widget: &P, detacher: Option<Box<dyn FnOnce(&Widget, &Menu) + 'static>>);
+    //fn attach_to_widget<P: IsA<Widget>>(&self, attach_widget: &P, detacher: Option<Box_<dyn FnOnce(&Widget, &Menu) + 'static>>);
 
     fn detach(&self);
 
@@ -614,7 +614,7 @@ pub trait GtkMenuExt: 'static {
     fn popdown(&self);
 
     //#[cfg_attr(feature = "v3_22", deprecated)]
-    //fn popup<P: IsA<Widget>, Q: IsA<Widget>>(&self, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
+    //fn popup<P: IsA<Widget>, Q: IsA<Widget>>(&self, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box_<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn popup_at_pointer(&self, trigger_event: Option<&gdk::Event>);
@@ -639,7 +639,7 @@ pub trait GtkMenuExt: 'static {
     );
 
     //#[cfg_attr(feature = "v3_22", deprecated)]
-    //fn popup_for_device<P: IsA<Widget>, Q: IsA<Widget>>(&self, device: Option<&gdk::Device>, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
+    //fn popup_for_device<P: IsA<Widget>, Q: IsA<Widget>>(&self, device: Option<&gdk::Device>, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box_<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
 
     fn reorder_child<P: IsA<Widget>>(&self, child: &P, position: i32);
 
@@ -768,7 +768,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn attach_to_widget<P: IsA<Widget>>(&self, attach_widget: &P, detacher: Option<Box<dyn FnOnce(&Widget, &Menu) + 'static>>) {
+    //fn attach_to_widget<P: IsA<Widget>>(&self, attach_widget: &P, detacher: Option<Box_<dyn FnOnce(&Widget, &Menu) + 'static>>) {
     //    unsafe { TODO: call gtk_sys:gtk_menu_attach_to_widget() }
     //}
 
@@ -834,7 +834,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn popup<P: IsA<Widget>, Q: IsA<Widget>>(&self, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
+    //fn popup<P: IsA<Widget>, Q: IsA<Widget>>(&self, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box_<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
     //    unsafe { TODO: call gtk_sys:gtk_menu_popup() }
     //}
 
@@ -888,7 +888,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn popup_for_device<P: IsA<Widget>, Q: IsA<Widget>>(&self, device: Option<&gdk::Device>, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
+    //fn popup_for_device<P: IsA<Widget>, Q: IsA<Widget>>(&self, device: Option<&gdk::Device>, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box_<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
     //    unsafe { TODO: call gtk_sys:gtk_menu_popup_for_device() }
     //}
 
