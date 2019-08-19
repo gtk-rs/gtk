@@ -364,7 +364,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn set_sort_func<P: Fn(&RecentInfo, &RecentInfo) -> i32 + 'static>(&self, sort_func: P) {
-        let sort_func_data: Box_<P> = Box::new(sort_func);
+        let sort_func_data: Box_<P> = Box_::new(sort_func);
         unsafe extern "C" fn sort_func_func<P: Fn(&RecentInfo, &RecentInfo) -> i32 + 'static>(
             a: *mut gtk_sys::GtkRecentInfo,
             b: *mut gtk_sys::GtkRecentInfo,
@@ -388,7 +388,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             gtk_sys::gtk_recent_chooser_set_sort_func(
                 self.as_ref().to_glib_none().0,
                 sort_func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }

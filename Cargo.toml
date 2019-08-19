@@ -36,7 +36,7 @@ v3_24 = ["v3_22_30", "gtk-sys/v3_24"]
 v3_24_8 = ["v3_24", "gtk-sys/v3_24_8"]
 purge-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/purge-lgpl-docs"]
 embed-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/embed-lgpl-docs"]
-dox = ["gdk/dox", "gtk-sys/dox"]
+dox = ["gdk/dox", "gtk-sys/dox", "futures"]
 futures = ["futures-preview", "fragile", "gio/futures"]
 subclassing = ["glib/subclassing", "gio/subclassing"]
 

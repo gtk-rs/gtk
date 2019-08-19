@@ -49,7 +49,7 @@ impl Clipboard {
         target: &gdk::Atom,
         callback: P,
     ) {
-        let callback_data: Box_<P> = Box::new(callback);
+        let callback_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, &SelectionData) + 'static>(
             clipboard: *mut gtk_sys::GtkClipboard,
             selection_data: *mut gtk_sys::GtkSelectionData,
@@ -67,13 +67,13 @@ impl Clipboard {
                 self.to_glib_none().0,
                 target.to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
 
     pub fn request_image<P: FnOnce(&Clipboard, &gdk_pixbuf::Pixbuf) + 'static>(&self, callback: P) {
-        let callback_data: Box_<P> = Box::new(callback);
+        let callback_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, &gdk_pixbuf::Pixbuf) + 'static>(
             clipboard: *mut gtk_sys::GtkClipboard,
             pixbuf: *mut gdk_pixbuf_sys::GdkPixbuf,
@@ -90,7 +90,7 @@ impl Clipboard {
             gtk_sys::gtk_clipboard_request_image(
                 self.to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
@@ -103,7 +103,7 @@ impl Clipboard {
         buffer: &P,
         callback: Q,
     ) {
-        let callback_data: Box_<Q> = Box::new(callback);
+        let callback_data: Box_<Q> = Box_::new(callback);
         unsafe extern "C" fn callback_func<
             P: IsA<TextBuffer>,
             Q: FnOnce(&Clipboard, &gdk::Atom, Option<&str>, usize) + 'static,
@@ -128,13 +128,13 @@ impl Clipboard {
                 self.to_glib_none().0,
                 buffer.as_ref().to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
 
     pub fn request_text<P: FnOnce(&Clipboard, Option<&str>) + 'static>(&self, callback: P) {
-        let callback_data: Box_<P> = Box::new(callback);
+        let callback_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, Option<&str>) + 'static>(
             clipboard: *mut gtk_sys::GtkClipboard,
             text: *const libc::c_char,
@@ -152,7 +152,7 @@ impl Clipboard {
             gtk_sys::gtk_clipboard_request_text(
                 self.to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
