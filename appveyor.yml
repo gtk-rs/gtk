@@ -16,7 +16,7 @@ install:
   - pacman --noconfirm -S mingw-w64-%ARCH%-gtk3
 
 build_script:
-  - cargo doc --features "dox"
+  - IF "%BITS%" == "32" del C:\Users\appveyor\.rustup\toolchains\stable-%ARCH%-pc-windows-gnu\bin\libgcc_s_dw2-1.dll
   - cargo test
   - cargo test --features v3_24
   - cargo doc --features "dox"
