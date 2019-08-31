@@ -1716,6 +1716,11 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.ShortcutLabel"
+status = "generate"
+version = "3.22"
+
+[[object]]
 name = "Gtk.ShortcutsWindow"
 status = "generate"
 version = "3.20"
