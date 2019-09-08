@@ -179,9 +179,9 @@ extern crate gdk_pixbuf;
 extern crate gio;
 extern crate pango;
 
-#[cfg(feature = "futures")]
+#[cfg(any(feature = "futures", feature = "dox"))]
 extern crate fragile;
-#[cfg(feature = "futures")]
+#[cfg(any(feature = "futures", feature = "dox"))]
 extern crate futures;
 
 pub use glib::{Cast, Continue, Error, IsA, Object, StaticType, ToValue, Type, TypedValue, Value};
@@ -265,7 +265,6 @@ mod widget;
 mod window;
 
 #[macro_use]
-#[cfg(feature = "subclassing")]
 pub mod subclass;
 
 pub mod prelude;
