@@ -11,6 +11,7 @@ use glib::object::ObjectExt;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::GString;
 use glib::StaticType;
 use glib::ToValue;
@@ -663,7 +664,10 @@ pub trait GtkMenuExt: 'static {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_anchor_hints(&self, anchor_hints: gdk::AnchorHints);
 
-    fn set_property_attach_widget(&self, attach_widget: Option<&Widget>);
+    fn set_property_attach_widget<P: IsA<Widget> + SetValueOptional>(
+        &self,
+        attach_widget: Option<&P>,
+    );
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_property_menu_type_hint(&self) -> gdk::WindowTypeHint;
@@ -980,7 +984,10 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    fn set_property_attach_widget(&self, attach_widget: Option<&Widget>) {
+    fn set_property_attach_widget<P: IsA<Widget> + SetValueOptional>(
+        &self,
+        attach_widget: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,

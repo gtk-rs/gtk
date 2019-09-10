@@ -7,12 +7,16 @@ use gdk;
 use gio;
 use glib::object::Cast;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
+use glib::object::IsA;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::signal::connect_raw;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use glib::value::SetValueOptional;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::GString;
 use glib::StaticType;
@@ -127,7 +131,7 @@ impl ModelButton {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn set_property_icon(&self, icon: Option<&gio::Icon>) {
+    pub fn set_property_icon<P: IsA<gio::Icon> + SetValueOptional>(&self, icon: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.as_ptr() as *mut gobject_sys::GObject,

@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::ToValue;
 use glib::Value;
@@ -444,7 +445,7 @@ pub trait StackSidebarExt: 'static {
 
     fn get_property_stack(&self) -> Option<Stack>;
 
-    fn set_property_stack(&self, stack: Option<&Stack>);
+    fn set_property_stack<P: IsA<Stack> + SetValueOptional>(&self, stack: Option<&P>);
 
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -483,7 +484,7 @@ impl<O: IsA<StackSidebar>> StackSidebarExt for O {
         }
     }
 
-    fn set_property_stack(&self, stack: Option<&Stack>) {
+    fn set_property_stack<P: IsA<Stack> + SetValueOptional>(&self, stack: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
