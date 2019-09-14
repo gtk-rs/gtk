@@ -112,7 +112,6 @@ pub struct ColorChooserDialogBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -120,6 +119,8 @@ pub struct ColorChooserDialogBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    rgba: Option<gdk::RGBA>,
+    use_alpha: Option<bool>,
 }
 
 impl ColorChooserDialogBuilder {
@@ -191,6 +192,8 @@ impl ColorChooserDialogBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            rgba: None,
+            use_alpha: None,
         }
     }
 
@@ -393,6 +396,12 @@ impl ColorChooserDialogBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref rgba) = self.rgba {
+            properties.push(("rgba", rgba));
+        }
+        if let Some(ref use_alpha) = self.use_alpha {
+            properties.push(("use-alpha", use_alpha));
         }
         glib::Object::new(ColorChooserDialog::static_type(), &properties)
             .expect("object new")
@@ -723,6 +732,16 @@ impl ColorChooserDialogBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn rgba(mut self, rgba: &gdk::RGBA) -> Self {
+        self.rgba = Some(rgba.clone());
+        self
+    }
+
+    pub fn use_alpha(mut self, use_alpha: bool) -> Self {
+        self.use_alpha = Some(use_alpha);
         self
     }
 }

@@ -113,6 +113,7 @@ pub struct EntryBuilder {
     secondary_icon_tooltip_text: Option<String>,
     shadow_type: Option<ShadowType>,
     show_emoji_icon: Option<bool>,
+    tabs: Option<pango::TabArray>,
     text: Option<String>,
     truncate_multiline: Option<bool>,
     visibility: Option<bool>,
@@ -144,7 +145,6 @@ pub struct EntryBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -152,6 +152,7 @@ pub struct EntryBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
 }
 
 impl EntryBuilder {
@@ -193,6 +194,7 @@ impl EntryBuilder {
             secondary_icon_tooltip_text: None,
             shadow_type: None,
             show_emoji_icon: None,
+            tabs: None,
             text: None,
             truncate_multiline: None,
             visibility: None,
@@ -231,6 +233,7 @@ impl EntryBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            editing_canceled: None,
         }
     }
 
@@ -347,6 +350,9 @@ impl EntryBuilder {
         if let Some(ref show_emoji_icon) = self.show_emoji_icon {
             properties.push(("show-emoji-icon", show_emoji_icon));
         }
+        if let Some(ref tabs) = self.tabs {
+            properties.push(("tabs", tabs));
+        }
         if let Some(ref text) = self.text {
             properties.push(("text", text));
         }
@@ -460,6 +466,9 @@ impl EntryBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
         }
         glib::Object::new(Entry::static_type(), &properties)
             .expect("object new")
@@ -647,6 +656,11 @@ impl EntryBuilder {
         self
     }
 
+    pub fn tabs(mut self, tabs: &pango::TabArray) -> Self {
+        self.tabs = Some(tabs.clone());
+        self
+    }
+
     pub fn text(mut self, text: &str) -> Self {
         self.text = Some(text.to_string());
         self
@@ -830,6 +844,11 @@ impl EntryBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
         self
     }
 }
@@ -1343,6 +1362,8 @@ pub trait EntryExt: 'static {
         &self,
         f: F,
     ) -> SignalHandlerId;
+
+    fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -4066,6 +4087,28 @@ impl<O: IsA<Entry>> EntryExt for O {
                 Some(transmute(
                     notify_show_emoji_icon_trampoline::<Self, F> as usize,
                 )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_tabs_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::tabs\0".as_ptr() as *const _,
+                Some(transmute(notify_tabs_trampoline::<Self, F> as usize)),
                 Box_::into_raw(f),
             )
         }

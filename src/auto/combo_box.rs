@@ -145,7 +145,6 @@ pub struct ComboBoxBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -153,6 +152,7 @@ pub struct ComboBoxBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
 }
 
 impl ComboBoxBuilder {
@@ -207,6 +207,7 @@ impl ComboBoxBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            editing_canceled: None,
         }
     }
 
@@ -358,6 +359,9 @@ impl ComboBoxBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
         }
         glib::Object::new(ComboBox::static_type(), &properties)
             .expect("object new")
@@ -603,6 +607,11 @@ impl ComboBoxBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
         self
     }
 }

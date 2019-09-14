@@ -17,14 +17,17 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use Adjustment;
 use Align;
 use Buildable;
 use Container;
 use DestDefaults;
 use IconSize;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Scrollable;
+use ScrollablePolicy;
 use SelectionData;
 use TargetEntry;
 use ToolItem;
@@ -97,7 +100,6 @@ pub struct ToolPaletteBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -105,6 +107,11 @@ pub struct ToolPaletteBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    hadjustment: Option<Adjustment>,
+    hscroll_policy: Option<ScrollablePolicy>,
+    vadjustment: Option<Adjustment>,
+    vscroll_policy: Option<ScrollablePolicy>,
 }
 
 impl ToolPaletteBuilder {
@@ -149,6 +156,11 @@ impl ToolPaletteBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            orientation: None,
+            hadjustment: None,
+            hscroll_policy: None,
+            vadjustment: None,
+            vscroll_policy: None,
         }
     }
 
@@ -270,6 +282,21 @@ impl ToolPaletteBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref hadjustment) = self.hadjustment {
+            properties.push(("hadjustment", hadjustment));
+        }
+        if let Some(ref hscroll_policy) = self.hscroll_policy {
+            properties.push(("hscroll-policy", hscroll_policy));
+        }
+        if let Some(ref vadjustment) = self.vadjustment {
+            properties.push(("vadjustment", vadjustment));
+        }
+        if let Some(ref vscroll_policy) = self.vscroll_policy {
+            properties.push(("vscroll-policy", vscroll_policy));
         }
         glib::Object::new(ToolPalette::static_type(), &properties)
             .expect("object new")
@@ -465,6 +492,31 @@ impl ToolPaletteBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
+        self.hadjustment = Some(hadjustment.clone());
+        self
+    }
+
+    pub fn hscroll_policy(mut self, hscroll_policy: ScrollablePolicy) -> Self {
+        self.hscroll_policy = Some(hscroll_policy);
+        self
+    }
+
+    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
+        self.vadjustment = Some(vadjustment.clone());
+        self
+    }
+
+    pub fn vscroll_policy(mut self, vscroll_policy: ScrollablePolicy) -> Self {
+        self.vscroll_policy = Some(vscroll_policy);
         self
     }
 }

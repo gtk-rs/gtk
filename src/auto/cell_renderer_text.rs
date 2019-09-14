@@ -48,6 +48,7 @@ impl Default for CellRendererText {
 pub struct CellRendererTextBuilder {
     align_set: Option<bool>,
     alignment: Option<pango::Alignment>,
+    attributes: Option<pango::AttrList>,
     background: Option<String>,
     background_rgba: Option<gdk::RGBA>,
     background_set: Option<bool>,
@@ -58,6 +59,7 @@ pub struct CellRendererTextBuilder {
     family: Option<String>,
     family_set: Option<bool>,
     font: Option<String>,
+    font_desc: Option<pango::FontDescription>,
     foreground: Option<String>,
     foreground_rgba: Option<gdk::RGBA>,
     foreground_set: Option<bool>,
@@ -111,6 +113,7 @@ impl CellRendererTextBuilder {
         Self {
             align_set: None,
             alignment: None,
+            attributes: None,
             background: None,
             background_rgba: None,
             background_set: None,
@@ -121,6 +124,7 @@ impl CellRendererTextBuilder {
             family: None,
             family_set: None,
             font: None,
+            font_desc: None,
             foreground: None,
             foreground_rgba: None,
             foreground_set: None,
@@ -178,6 +182,9 @@ impl CellRendererTextBuilder {
         if let Some(ref alignment) = self.alignment {
             properties.push(("alignment", alignment));
         }
+        if let Some(ref attributes) = self.attributes {
+            properties.push(("attributes", attributes));
+        }
         if let Some(ref background) = self.background {
             properties.push(("background", background));
         }
@@ -207,6 +214,9 @@ impl CellRendererTextBuilder {
         }
         if let Some(ref font) = self.font {
             properties.push(("font", font));
+        }
+        if let Some(ref font_desc) = self.font_desc {
+            properties.push(("font-desc", font_desc));
         }
         if let Some(ref foreground) = self.foreground {
             properties.push(("foreground", foreground));
@@ -362,6 +372,11 @@ impl CellRendererTextBuilder {
         self
     }
 
+    pub fn attributes(mut self, attributes: &pango::AttrList) -> Self {
+        self.attributes = Some(attributes.clone());
+        self
+    }
+
     pub fn background(mut self, background: &str) -> Self {
         self.background = Some(background.to_string());
         self
@@ -409,6 +424,11 @@ impl CellRendererTextBuilder {
 
     pub fn font(mut self, font: &str) -> Self {
         self.font = Some(font.to_string());
+        self
+    }
+
+    pub fn font_desc(mut self, font_desc: &pango::FontDescription) -> Self {
+        self.font_desc = Some(font_desc.clone());
         self
     }
 
@@ -656,6 +676,10 @@ pub trait CellRendererTextExt: 'static {
 
     fn set_property_alignment(&self, alignment: pango::Alignment);
 
+    fn get_property_attributes(&self) -> Option<pango::AttrList>;
+
+    fn set_property_attributes(&self, attributes: Option<&pango::AttrList>);
+
     fn set_property_background(&self, background: Option<&str>);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
@@ -693,6 +717,10 @@ pub trait CellRendererTextExt: 'static {
     fn get_property_font(&self) -> Option<GString>;
 
     fn set_property_font(&self, font: Option<&str>);
+
+    fn get_property_font_desc(&self) -> Option<pango::FontDescription>;
+
+    fn set_property_font_desc(&self, font_desc: Option<&pango::FontDescription>);
 
     fn set_property_foreground(&self, foreground: Option<&str>);
 
@@ -824,6 +852,8 @@ pub trait CellRendererTextExt: 'static {
 
     fn connect_property_alignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     fn connect_property_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_background_rgba_notify<F: Fn(&Self) + 'static>(
@@ -853,6 +883,8 @@ pub trait CellRendererTextExt: 'static {
     fn connect_property_family_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_foreground_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -1000,6 +1032,30 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"alignment\0".as_ptr() as *const _,
                 Value::from(&alignment).to_glib_none().0,
+            );
+        }
+    }
+
+    fn get_property_attributes(&self) -> Option<pango::AttrList> {
+        unsafe {
+            let mut value = Value::from_type(<pango::AttrList as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"attributes\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `attributes` getter")
+        }
+    }
+
+    fn set_property_attributes(&self, attributes: Option<&pango::AttrList>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"attributes\0".as_ptr() as *const _,
+                Value::from(attributes).to_glib_none().0,
             );
         }
     }
@@ -1232,6 +1288,30 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"font\0".as_ptr() as *const _,
                 Value::from(font).to_glib_none().0,
+            );
+        }
+    }
+
+    fn get_property_font_desc(&self) -> Option<pango::FontDescription> {
+        unsafe {
+            let mut value = Value::from_type(<pango::FontDescription as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"font-desc\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `font-desc` getter")
+        }
+    }
+
+    fn set_property_font_desc(&self, font_desc: Option<&pango::FontDescription>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"font-desc\0".as_ptr() as *const _,
+                Value::from(font_desc).to_glib_none().0,
             );
         }
     }
@@ -2074,6 +2154,28 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
         }
     }
 
+    fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererText,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererText>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::attributes\0".as_ptr() as *const _,
+                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     fn connect_property_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_background_trampoline<P, F: Fn(&P) + 'static>(
             this: *mut gtk_sys::GtkCellRendererText,
@@ -2309,6 +2411,28 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 self.as_ptr() as *mut _,
                 b"notify::font\0".as_ptr() as *const _,
                 Some(transmute(notify_font_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_font_desc_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererText,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererText>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::font-desc\0".as_ptr() as *const _,
+                Some(transmute(notify_font_desc_trampoline::<Self, F> as usize)),
                 Box_::into_raw(f),
             )
         }

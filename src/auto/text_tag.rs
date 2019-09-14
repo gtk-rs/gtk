@@ -58,6 +58,7 @@ pub struct TextTagBuilder {
     family: Option<String>,
     family_set: Option<bool>,
     font: Option<String>,
+    font_desc: Option<pango::FontDescription>,
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     font_features: Option<String>,
     font_features_set: Option<bool>,
@@ -106,6 +107,7 @@ pub struct TextTagBuilder {
     strikethrough_set: Option<bool>,
     style: Option<pango::Style>,
     style_set: Option<bool>,
+    tabs: Option<pango::TabArray>,
     tabs_set: Option<bool>,
     underline: Option<pango::Underline>,
     #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -139,6 +141,7 @@ impl TextTagBuilder {
             family: None,
             family_set: None,
             font: None,
+            font_desc: None,
             #[cfg(any(feature = "v3_18", feature = "dox"))]
             font_features: None,
             font_features_set: None,
@@ -187,6 +190,7 @@ impl TextTagBuilder {
             strikethrough_set: None,
             style: None,
             style_set: None,
+            tabs: None,
             tabs_set: None,
             underline: None,
             #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -249,6 +253,9 @@ impl TextTagBuilder {
         }
         if let Some(ref font) = self.font {
             properties.push(("font", font));
+        }
+        if let Some(ref font_desc) = self.font_desc {
+            properties.push(("font-desc", font_desc));
         }
         #[cfg(any(feature = "v3_18", feature = "dox"))]
         {
@@ -394,6 +401,9 @@ impl TextTagBuilder {
         if let Some(ref style_set) = self.style_set {
             properties.push(("style-set", style_set));
         }
+        if let Some(ref tabs) = self.tabs {
+            properties.push(("tabs", tabs));
+        }
         if let Some(ref tabs_set) = self.tabs_set {
             properties.push(("tabs-set", tabs_set));
         }
@@ -507,6 +517,11 @@ impl TextTagBuilder {
 
     pub fn font(mut self, font: &str) -> Self {
         self.font = Some(font.to_string());
+        self
+    }
+
+    pub fn font_desc(mut self, font_desc: &pango::FontDescription) -> Self {
+        self.font_desc = Some(font_desc.clone());
         self
     }
 
@@ -734,6 +749,11 @@ impl TextTagBuilder {
         self
     }
 
+    pub fn tabs(mut self, tabs: &pango::TabArray) -> Self {
+        self.tabs = Some(tabs.clone());
+        self
+    }
+
     pub fn tabs_set(mut self, tabs_set: bool) -> Self {
         self.tabs_set = Some(tabs_set);
         self
@@ -864,6 +884,10 @@ pub trait TextTagExt: 'static {
     fn get_property_font(&self) -> Option<GString>;
 
     fn set_property_font(&self, font: Option<&str>);
+
+    fn get_property_font_desc(&self) -> Option<pango::FontDescription>;
+
+    fn set_property_font_desc(&self, font_desc: Option<&pango::FontDescription>);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_property_font_features(&self) -> Option<GString>;
@@ -1043,6 +1067,10 @@ pub trait TextTagExt: 'static {
 
     fn set_property_style_set(&self, style_set: bool);
 
+    fn get_property_tabs(&self) -> Option<pango::TabArray>;
+
+    fn set_property_tabs(&self, tabs: Option<&pango::TabArray>);
+
     fn get_property_tabs_set(&self) -> bool;
 
     fn set_property_tabs_set(&self, tabs_set: bool);
@@ -1141,6 +1169,8 @@ pub trait TextTagExt: 'static {
     fn connect_property_family_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn connect_property_font_features_notify<F: Fn(&Self) + 'static>(
@@ -1305,6 +1335,8 @@ pub trait TextTagExt: 'static {
     fn connect_property_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_style_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_tabs_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -1707,6 +1739,30 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"font\0".as_ptr() as *const _,
                 Value::from(font).to_glib_none().0,
+            );
+        }
+    }
+
+    fn get_property_font_desc(&self) -> Option<pango::FontDescription> {
+        unsafe {
+            let mut value = Value::from_type(<pango::FontDescription as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"font-desc\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `font-desc` getter")
+        }
+    }
+
+    fn set_property_font_desc(&self, font_desc: Option<&pango::FontDescription>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"font-desc\0".as_ptr() as *const _,
+                Value::from(font_desc).to_glib_none().0,
             );
         }
     }
@@ -2776,6 +2832,30 @@ impl<O: IsA<TextTag>> TextTagExt for O {
         }
     }
 
+    fn get_property_tabs(&self) -> Option<pango::TabArray> {
+        unsafe {
+            let mut value = Value::from_type(<pango::TabArray as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"tabs\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `tabs` getter")
+        }
+    }
+
+    fn set_property_tabs(&self, tabs: Option<&pango::TabArray>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"tabs\0".as_ptr() as *const _,
+                Value::from(tabs).to_glib_none().0,
+            );
+        }
+    }
+
     fn get_property_tabs_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -3430,6 +3510,28 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 self.as_ptr() as *mut _,
                 b"notify::font\0".as_ptr() as *const _,
                 Some(transmute(notify_font_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_font_desc_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkTextTag,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<TextTag>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::font-desc\0".as_ptr() as *const _,
+                Some(transmute(notify_font_desc_trampoline::<Self, F> as usize)),
                 Box_::into_raw(f),
             )
         }
@@ -4510,6 +4612,28 @@ impl<O: IsA<TextTag>> TextTagExt for O {
                 self.as_ptr() as *mut _,
                 b"notify::style-set\0".as_ptr() as *const _,
                 Some(transmute(notify_style_set_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_tabs_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkTextTag,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<TextTag>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::tabs\0".as_ptr() as *const _,
+                Some(transmute(notify_tabs_trampoline::<Self, F> as usize)),
                 Box_::into_raw(f),
             )
         }
