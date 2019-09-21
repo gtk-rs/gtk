@@ -25,6 +25,7 @@ use CellAreaContext;
 use CellLayout;
 use Container;
 use Orientable;
+use Orientation;
 use TreeModel;
 use TreePath;
 use Widget;
@@ -127,7 +128,6 @@ pub struct CellViewBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -135,6 +135,7 @@ pub struct CellViewBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
 }
 
 impl CellViewBuilder {
@@ -181,6 +182,7 @@ impl CellViewBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            orientation: None,
         }
     }
 
@@ -308,6 +310,9 @@ impl CellViewBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
         }
         glib::Object::new(CellView::static_type(), &properties)
             .expect("object new")
@@ -513,6 +518,11 @@ impl CellViewBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }

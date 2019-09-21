@@ -26,6 +26,7 @@ use Buildable;
 use Container;
 use Menu;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Widget;
 
@@ -88,7 +89,6 @@ pub struct AppChooserWidgetBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -96,6 +96,8 @@ pub struct AppChooserWidgetBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    content_type: Option<String>,
 }
 
 impl AppChooserWidgetBuilder {
@@ -146,6 +148,8 @@ impl AppChooserWidgetBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            orientation: None,
+            content_type: None,
         }
     }
 
@@ -285,6 +289,12 @@ impl AppChooserWidgetBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref content_type) = self.content_type {
+            properties.push(("content-type", content_type));
         }
         glib::Object::new(AppChooserWidget::static_type(), &properties)
             .expect("object new")
@@ -510,6 +520,16 @@ impl AppChooserWidgetBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn content_type(mut self, content_type: &str) -> Self {
+        self.content_type = Some(content_type.to_string());
         self
     }
 }

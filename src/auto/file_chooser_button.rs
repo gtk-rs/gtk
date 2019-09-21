@@ -24,7 +24,9 @@ use Container;
 use Dialog;
 use FileChooser;
 use FileChooserAction;
+use FileFilter;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Widget;
 
@@ -95,7 +97,6 @@ pub struct FileChooserButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -103,6 +104,18 @@ pub struct FileChooserButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    action: Option<FileChooserAction>,
+    create_folders: Option<bool>,
+    do_overwrite_confirmation: Option<bool>,
+    extra_widget: Option<Widget>,
+    filter: Option<FileFilter>,
+    local_only: Option<bool>,
+    preview_widget: Option<Widget>,
+    preview_widget_active: Option<bool>,
+    select_multiple: Option<bool>,
+    show_hidden: Option<bool>,
+    use_preview_label: Option<bool>,
 }
 
 impl FileChooserButtonBuilder {
@@ -150,6 +163,18 @@ impl FileChooserButtonBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            orientation: None,
+            action: None,
+            create_folders: None,
+            do_overwrite_confirmation: None,
+            extra_widget: None,
+            filter: None,
+            local_only: None,
+            preview_widget: None,
+            preview_widget_active: None,
+            select_multiple: None,
+            show_hidden: None,
+            use_preview_label: None,
         }
     }
 
@@ -280,6 +305,42 @@ impl FileChooserButtonBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref action) = self.action {
+            properties.push(("action", action));
+        }
+        if let Some(ref create_folders) = self.create_folders {
+            properties.push(("create-folders", create_folders));
+        }
+        if let Some(ref do_overwrite_confirmation) = self.do_overwrite_confirmation {
+            properties.push(("do-overwrite-confirmation", do_overwrite_confirmation));
+        }
+        if let Some(ref extra_widget) = self.extra_widget {
+            properties.push(("extra-widget", extra_widget));
+        }
+        if let Some(ref filter) = self.filter {
+            properties.push(("filter", filter));
+        }
+        if let Some(ref local_only) = self.local_only {
+            properties.push(("local-only", local_only));
+        }
+        if let Some(ref preview_widget) = self.preview_widget {
+            properties.push(("preview-widget", preview_widget));
+        }
+        if let Some(ref preview_widget_active) = self.preview_widget_active {
+            properties.push(("preview-widget-active", preview_widget_active));
+        }
+        if let Some(ref select_multiple) = self.select_multiple {
+            properties.push(("select-multiple", select_multiple));
+        }
+        if let Some(ref show_hidden) = self.show_hidden {
+            properties.push(("show-hidden", show_hidden));
+        }
+        if let Some(ref use_preview_label) = self.use_preview_label {
+            properties.push(("use-preview-label", use_preview_label));
         }
         glib::Object::new(FileChooserButton::static_type(), &properties)
             .expect("object new")
@@ -490,6 +551,66 @@ impl FileChooserButtonBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn action(mut self, action: FileChooserAction) -> Self {
+        self.action = Some(action);
+        self
+    }
+
+    pub fn create_folders(mut self, create_folders: bool) -> Self {
+        self.create_folders = Some(create_folders);
+        self
+    }
+
+    pub fn do_overwrite_confirmation(mut self, do_overwrite_confirmation: bool) -> Self {
+        self.do_overwrite_confirmation = Some(do_overwrite_confirmation);
+        self
+    }
+
+    pub fn extra_widget(mut self, extra_widget: &Widget) -> Self {
+        self.extra_widget = Some(extra_widget.clone());
+        self
+    }
+
+    pub fn filter(mut self, filter: &FileFilter) -> Self {
+        self.filter = Some(filter.clone());
+        self
+    }
+
+    pub fn local_only(mut self, local_only: bool) -> Self {
+        self.local_only = Some(local_only);
+        self
+    }
+
+    pub fn preview_widget(mut self, preview_widget: &Widget) -> Self {
+        self.preview_widget = Some(preview_widget.clone());
+        self
+    }
+
+    pub fn preview_widget_active(mut self, preview_widget_active: bool) -> Self {
+        self.preview_widget_active = Some(preview_widget_active);
+        self
+    }
+
+    pub fn select_multiple(mut self, select_multiple: bool) -> Self {
+        self.select_multiple = Some(select_multiple);
+        self
+    }
+
+    pub fn show_hidden(mut self, show_hidden: bool) -> Self {
+        self.show_hidden = Some(show_hidden);
+        self
+    }
+
+    pub fn use_preview_label(mut self, use_preview_label: bool) -> Self {
+        self.use_preview_label = Some(use_preview_label);
         self
     }
 }

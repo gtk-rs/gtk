@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -86,7 +87,6 @@ pub struct MenuToolButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -94,6 +94,8 @@ pub struct MenuToolButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    action_name: Option<String>,
+    action_target: Option<glib::Variant>,
 }
 
 impl MenuToolButtonBuilder {
@@ -144,6 +146,8 @@ impl MenuToolButtonBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            action_name: None,
+            action_target: None,
         }
     }
 
@@ -283,6 +287,12 @@ impl MenuToolButtonBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref action_name) = self.action_name {
+            properties.push(("action-name", action_name));
+        }
+        if let Some(ref action_target) = self.action_target {
+            properties.push(("action-target", action_target));
         }
         glib::Object::new(MenuToolButton::static_type(), &properties)
             .expect("object new")
@@ -508,6 +518,16 @@ impl MenuToolButtonBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn action_name(mut self, action_name: &str) -> Self {
+        self.action_name = Some(action_name.to_string());
+        self
+    }
+
+    pub fn action_target(mut self, action_target: &glib::Variant) -> Self {
+        self.action_target = Some(action_target.clone());
         self
     }
 }

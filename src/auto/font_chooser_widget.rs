@@ -12,6 +12,7 @@ use glib::StaticType;
 use glib::ToValue;
 use glib_sys;
 use gtk_sys;
+use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -21,7 +22,10 @@ use Box;
 use Buildable;
 use Container;
 use FontChooser;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+use FontChooserLevel;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Widget;
 
@@ -79,7 +83,6 @@ pub struct FontChooserWidgetBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -87,6 +90,15 @@ pub struct FontChooserWidgetBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    font: Option<String>,
+    font_desc: Option<pango::FontDescription>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    language: Option<String>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    level: Option<FontChooserLevel>,
+    preview_text: Option<String>,
+    show_preview_entry: Option<bool>,
 }
 
 impl FontChooserWidgetBuilder {
@@ -131,6 +143,15 @@ impl FontChooserWidgetBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            orientation: None,
+            font: None,
+            font_desc: None,
+            #[cfg(any(feature = "v3_24", feature = "dox"))]
+            language: None,
+            #[cfg(any(feature = "v3_24", feature = "dox"))]
+            level: None,
+            preview_text: None,
+            show_preview_entry: None,
         }
     }
 
@@ -252,6 +273,33 @@ impl FontChooserWidgetBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref font) = self.font {
+            properties.push(("font", font));
+        }
+        if let Some(ref font_desc) = self.font_desc {
+            properties.push(("font-desc", font_desc));
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref language) = self.language {
+                properties.push(("language", language));
+            }
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref level) = self.level {
+                properties.push(("level", level));
+            }
+        }
+        if let Some(ref preview_text) = self.preview_text {
+            properties.push(("preview-text", preview_text));
+        }
+        if let Some(ref show_preview_entry) = self.show_preview_entry {
+            properties.push(("show-preview-entry", show_preview_entry));
         }
         glib::Object::new(FontChooserWidget::static_type(), &properties)
             .expect("object new")
@@ -447,6 +495,43 @@ impl FontChooserWidgetBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn font(mut self, font: &str) -> Self {
+        self.font = Some(font.to_string());
+        self
+    }
+
+    pub fn font_desc(mut self, font_desc: &pango::FontDescription) -> Self {
+        self.font_desc = Some(font_desc.clone());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn language(mut self, language: &str) -> Self {
+        self.language = Some(language.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn level(mut self, level: FontChooserLevel) -> Self {
+        self.level = Some(level);
+        self
+    }
+
+    pub fn preview_text(mut self, preview_text: &str) -> Self {
+        self.preview_text = Some(preview_text.to_string());
+        self
+    }
+
+    pub fn show_preview_entry(mut self, show_preview_entry: bool) -> Self {
+        self.show_preview_entry = Some(show_preview_entry);
         self
     }
 }

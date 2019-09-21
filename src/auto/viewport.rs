@@ -22,6 +22,7 @@ use Buildable;
 use Container;
 use ResizeMode;
 use Scrollable;
+use ScrollablePolicy;
 use ShadowType;
 use Widget;
 
@@ -80,7 +81,6 @@ pub struct ViewportBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -88,6 +88,10 @@ pub struct ViewportBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    hadjustment: Option<Adjustment>,
+    hscroll_policy: Option<ScrollablePolicy>,
+    vadjustment: Option<Adjustment>,
+    vscroll_policy: Option<ScrollablePolicy>,
 }
 
 impl ViewportBuilder {
@@ -130,6 +134,10 @@ impl ViewportBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            hadjustment: None,
+            hscroll_policy: None,
+            vadjustment: None,
+            vscroll_policy: None,
         }
     }
 
@@ -245,6 +253,18 @@ impl ViewportBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref hadjustment) = self.hadjustment {
+            properties.push(("hadjustment", hadjustment));
+        }
+        if let Some(ref hscroll_policy) = self.hscroll_policy {
+            properties.push(("hscroll-policy", hscroll_policy));
+        }
+        if let Some(ref vadjustment) = self.vadjustment {
+            properties.push(("vadjustment", vadjustment));
+        }
+        if let Some(ref vscroll_policy) = self.vscroll_policy {
+            properties.push(("vscroll-policy", vscroll_policy));
         }
         glib::Object::new(Viewport::static_type(), &properties)
             .expect("object new")
@@ -430,6 +450,26 @@ impl ViewportBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
+        self.hadjustment = Some(hadjustment.clone());
+        self
+    }
+
+    pub fn hscroll_policy(mut self, hscroll_policy: ScrollablePolicy) -> Self {
+        self.hscroll_policy = Some(hscroll_policy);
+        self
+    }
+
+    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
+        self.vadjustment = Some(vadjustment.clone());
+        self
+    }
+
+    pub fn vscroll_policy(mut self, vscroll_policy: ScrollablePolicy) -> Self {
+        self.vscroll_policy = Some(vscroll_policy);
         self
     }
 }

@@ -21,6 +21,7 @@ use std::mem::transmute;
 use CellRenderer;
 use CellRendererMode;
 use Orientable;
+use Orientation;
 
 glib_wrapper! {
     pub struct CellRendererProgress(Object<gtk_sys::GtkCellRendererProgress, gtk_sys::GtkCellRendererProgressClass, CellRendererProgressClass>) @extends CellRenderer, @implements Orientable;
@@ -66,6 +67,7 @@ pub struct CellRendererProgressBuilder {
     xpad: Option<u32>,
     yalign: Option<f32>,
     ypad: Option<u32>,
+    orientation: Option<Orientation>,
 }
 
 impl CellRendererProgressBuilder {
@@ -91,6 +93,7 @@ impl CellRendererProgressBuilder {
             xpad: None,
             yalign: None,
             ypad: None,
+            orientation: None,
         }
     }
 
@@ -155,6 +158,9 @@ impl CellRendererProgressBuilder {
         }
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
         }
         glib::Object::new(CellRendererProgress::static_type(), &properties)
             .expect("object new")
@@ -259,6 +265,11 @@ impl CellRendererProgressBuilder {
 
     pub fn ypad(mut self, ypad: u32) -> Self {
         self.ypad = Some(ypad);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }

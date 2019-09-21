@@ -17,6 +17,9 @@ use Buildable;
 use Container;
 use Dialog;
 use RecentChooser;
+use RecentFilter;
+use RecentManager;
+use RecentSortType;
 use ResizeMode;
 use Widget;
 use Window;
@@ -100,7 +103,6 @@ pub struct RecentChooserDialogBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -108,6 +110,16 @@ pub struct RecentChooserDialogBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    filter: Option<RecentFilter>,
+    limit: Option<i32>,
+    local_only: Option<bool>,
+    recent_manager: Option<RecentManager>,
+    select_multiple: Option<bool>,
+    show_icons: Option<bool>,
+    show_not_found: Option<bool>,
+    show_private: Option<bool>,
+    show_tips: Option<bool>,
+    sort_type: Option<RecentSortType>,
 }
 
 impl RecentChooserDialogBuilder {
@@ -178,6 +190,16 @@ impl RecentChooserDialogBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            filter: None,
+            limit: None,
+            local_only: None,
+            recent_manager: None,
+            select_multiple: None,
+            show_icons: None,
+            show_not_found: None,
+            show_private: None,
+            show_tips: None,
+            sort_type: None,
         }
     }
 
@@ -377,6 +399,36 @@ impl RecentChooserDialogBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref filter) = self.filter {
+            properties.push(("filter", filter));
+        }
+        if let Some(ref limit) = self.limit {
+            properties.push(("limit", limit));
+        }
+        if let Some(ref local_only) = self.local_only {
+            properties.push(("local-only", local_only));
+        }
+        if let Some(ref recent_manager) = self.recent_manager {
+            properties.push(("recent-manager", recent_manager));
+        }
+        if let Some(ref select_multiple) = self.select_multiple {
+            properties.push(("select-multiple", select_multiple));
+        }
+        if let Some(ref show_icons) = self.show_icons {
+            properties.push(("show-icons", show_icons));
+        }
+        if let Some(ref show_not_found) = self.show_not_found {
+            properties.push(("show-not-found", show_not_found));
+        }
+        if let Some(ref show_private) = self.show_private {
+            properties.push(("show-private", show_private));
+        }
+        if let Some(ref show_tips) = self.show_tips {
+            properties.push(("show-tips", show_tips));
+        }
+        if let Some(ref sort_type) = self.sort_type {
+            properties.push(("sort-type", sort_type));
         }
         glib::Object::new(RecentChooserDialog::static_type(), &properties)
             .expect("object new")
@@ -702,6 +754,56 @@ impl RecentChooserDialogBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn filter(mut self, filter: &RecentFilter) -> Self {
+        self.filter = Some(filter.clone());
+        self
+    }
+
+    pub fn limit(mut self, limit: i32) -> Self {
+        self.limit = Some(limit);
+        self
+    }
+
+    pub fn local_only(mut self, local_only: bool) -> Self {
+        self.local_only = Some(local_only);
+        self
+    }
+
+    pub fn recent_manager(mut self, recent_manager: &RecentManager) -> Self {
+        self.recent_manager = Some(recent_manager.clone());
+        self
+    }
+
+    pub fn select_multiple(mut self, select_multiple: bool) -> Self {
+        self.select_multiple = Some(select_multiple);
+        self
+    }
+
+    pub fn show_icons(mut self, show_icons: bool) -> Self {
+        self.show_icons = Some(show_icons);
+        self
+    }
+
+    pub fn show_not_found(mut self, show_not_found: bool) -> Self {
+        self.show_not_found = Some(show_not_found);
+        self
+    }
+
+    pub fn show_private(mut self, show_private: bool) -> Self {
+        self.show_private = Some(show_private);
+        self
+    }
+
+    pub fn show_tips(mut self, show_tips: bool) -> Self {
+        self.show_tips = Some(show_tips);
+        self
+    }
+
+    pub fn sort_type(mut self, sort_type: RecentSortType) -> Self {
+        self.sort_type = Some(sort_type);
         self
     }
 }

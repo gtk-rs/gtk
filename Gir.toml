@@ -533,9 +533,9 @@ status = "generate"
 name = "Gtk.Actionable"
 status = "generate"
     [[object.property]]
-    #value glib.Variant
     name = "action-target"
-    ignore = true
+    #has get/set function
+    generate = ["notify"]
 
 [[object]]
 name = "Gtk.ActionBar"
@@ -785,14 +785,6 @@ status = "generate"
         [[object.signal.parameter]]
         name = "path"
         transformation = "treepath"
-    [[object.property]]
-    name = "font-desc"
-    #value pango::FontDescription
-    ignore = true
-    [[object.property]]
-    name = "attributes"
-    #value pango::AttrList
-    ignore = true
 
 [[object]]
 name = "Gtk.CellRendererToggle"
@@ -971,10 +963,6 @@ status = "generate"
         [[object.function.parameter]]
         name = "tabs"
         const = true
-    [[object.property]]
-    name = "tabs"
-    #value pango::TabArray
-    ignore = true
 
 [[object]]
 name = "Gtk.EntryCompletion"
@@ -1773,9 +1761,6 @@ status = "generate"
     [[object.function]]
     pattern = "get_(style_)?property"
     ignore = true
-    [[object.function]]
-    name = "get_font"
-    ignore = true #returning Pango.FontDescription from *const
     [[object.property]]
     name = "paint-clock"
     version = "3.8"
@@ -1860,14 +1845,6 @@ status = "generate"
     [[object.signal]]
     name = "event"
     inhibit = true
-    [[object.property]]
-    name = "font-desc"
-    #value pango::FontDescription
-    ignore = true
-    [[object.property]]
-    name = "tabs"
-    #value pango::TabArray
-    ignore = true
 
 [[object]]
 name = "Gtk.TextView"

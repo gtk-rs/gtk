@@ -33,6 +33,7 @@ use EntryCompletion;
 use InputHints;
 use InputPurpose;
 use Orientable;
+use Orientation;
 use ShadowType;
 use SpinButtonUpdatePolicy;
 use SpinType;
@@ -149,7 +150,6 @@ pub struct SpinButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -157,6 +157,8 @@ pub struct SpinButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
+    orientation: Option<Orientation>,
 }
 
 impl SpinButtonBuilder {
@@ -245,6 +247,8 @@ impl SpinButtonBuilder {
             vexpand_set: None,
             visible: None,
             width_request: None,
+            editing_canceled: None,
+            orientation: None,
         }
     }
 
@@ -501,6 +505,12 @@ impl SpinButtonBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
         }
         glib::Object::new(SpinButton::static_type(), &properties)
             .expect("object new")
@@ -916,6 +926,16 @@ impl SpinButtonBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
