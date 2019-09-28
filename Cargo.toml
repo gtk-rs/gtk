@@ -39,7 +39,7 @@ embed-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/embed-lgpl-docs"]
 dox = ["gdk/dox", "gtk-sys/dox", "futures"]
 futures = ["futures-preview", "fragile", "gio/futures"]
 
-["package.metadata.docs.rs"]
+[package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
