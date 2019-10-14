@@ -108,7 +108,6 @@ generate = [
     "Gtk.ModelButton",
     "Gtk.MountOperation",
     "Gtk.MovementStep",
-    "Gtk.NativeDialog",
     "Gtk.NotebookTab",
     "Gtk.NumberUpLayout",
     "Gtk.OffscreenWindow",
@@ -1337,6 +1336,14 @@ status = "generate"
     [[object.signal]]
     name = "move-selected"
     inhibit = true
+
+[[object]]
+name = "Gtk.NativeDialog"
+status = "generate"
+    [[object.function]]
+    name = "run"
+        [object.function.return]
+        type = "Gtk.ResponseType"
 
 [[object]]
 name = "Gtk.Notebook"
