@@ -59,7 +59,7 @@ pub trait NativeDialogExt: 'static {
     fn hide(&self);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn run(&self) -> i32;
+    fn run(&self) -> ResponseType;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_modal(&self, modal: bool);
@@ -147,8 +147,12 @@ impl<O: IsA<NativeDialog>> NativeDialogExt for O {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn run(&self) -> i32 {
-        unsafe { gtk_sys::gtk_native_dialog_run(self.as_ref().to_glib_none().0) }
+    fn run(&self) -> ResponseType {
+        unsafe {
+            from_glib(gtk_sys::gtk_native_dialog_run(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
