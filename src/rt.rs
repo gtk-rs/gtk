@@ -10,6 +10,7 @@ use libc::c_uint;
 use std::cell::Cell;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering, ATOMIC_BOOL_INIT};
+use std::thread;
 
 thread_local! {
     static IS_MAIN_THREAD: Cell<bool> = Cell::new(false)
@@ -89,6 +90,9 @@ pub fn init() -> Result<(), glib::BoolError> {
         return Ok(());
     } else if is_initialized() {
         panic!("Attempted to initialize GTK from two different threads.");
+    } else if cfg!(target_os = "macos") && thread::current().name() != Some("main") {
+        //  OS X has its own notion of the main thread and init must be called on that thread.
+        panic!("Attempted to initialize GTK on OSX from non-main thread");
     }
     unsafe {
         if from_glib(gtk_sys::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
