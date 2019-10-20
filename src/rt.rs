@@ -74,7 +74,8 @@ pub unsafe fn set_initialized() {
     }
 
     //  OS X has its own notion of the main thread and init must be called on that thread.
-    #[cfg(target_os = "macos")] {
+    #[cfg(target_os = "macos")]
+    {
         if pthread_main_np() == 0 {
             panic!("Attempted to initialize GTK on OSX from non-main thread");
         }
