@@ -266,7 +266,6 @@ pub mod prelude;
 
 pub use auto::functions::*;
 pub use auto::*;
-pub use prelude::*;
 pub use rt::*;
 pub use signal::*;
 
