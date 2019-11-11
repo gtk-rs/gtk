@@ -179,10 +179,7 @@ extern crate gdk_pixbuf;
 extern crate gio;
 extern crate pango;
 
-#[cfg(any(feature = "futures", feature = "dox"))]
 extern crate fragile;
-#[cfg(any(feature = "futures", feature = "dox"))]
-extern crate futures;
 
 pub mod xlib;
 

@@ -36,8 +36,7 @@ v3_24 = ["v3_22_30", "gtk-sys/v3_24"]
 v3_24_8 = ["v3_24", "gtk-sys/v3_24_8"]
 purge-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/purge-lgpl-docs"]
 embed-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/embed-lgpl-docs"]
-dox = ["gdk/dox", "gtk-sys/dox", "futures"]
-futures = ["futures-preview", "fragile", "gio/futures"]
+dox = ["gdk/dox", "gtk-sys/dox"]
 
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]
@@ -54,8 +53,7 @@ git = "https://github.com/gtk-rs/lgpl-docs"
 libc = "0.2"
 bitflags = "1.0"
 lazy_static = "1.0"
-fragile = { version = "0.3", optional = true }
-futures-preview = { version = "0.3.0-alpha", optional = true }
+fragile = { version = "0.3" }
 atk = { git = "https://github.com/gtk-rs/atk" }
 cairo-sys-rs = { git = "https://github.com/gtk-rs/cairo" }
 gdk-sys = { git = "https://github.com/gtk-rs/sys" }
