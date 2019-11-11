@@ -3,9 +3,9 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
+use glib::IsA;
 use gtk_sys;
 use Buildable;
-use IsA;
 
 pub trait BuildableExtManual: 'static {
     fn get_name(&self) -> Option<String>;

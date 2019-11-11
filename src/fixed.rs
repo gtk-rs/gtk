@@ -3,10 +3,10 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
+use glib::IsA;
 use glib_sys;
 use gtk_sys;
 use Fixed;
-use IsA;
 use Widget;
 
 // All this is in order to avoid the segfault. More info in :
