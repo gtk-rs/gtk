@@ -184,8 +184,6 @@ extern crate fragile;
 #[cfg(any(feature = "futures", feature = "dox"))]
 extern crate futures;
 
-pub use glib::{Cast, Continue, Error, IsA, Object, StaticType, ToValue, Type, TypedValue, Value};
-
 pub mod xlib;
 
 pub const STYLE_PROVIDER_PRIORITY_FALLBACK: u32 =
