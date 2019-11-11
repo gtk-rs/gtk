@@ -6,7 +6,7 @@ use gdk;
 use gdk::{DragAction, Event, ModifierType};
 use gdk_sys;
 use glib::object::{Cast, IsA, WeakRef};
-use glib::signal::{connect_raw, SignalHandlerId};
+use glib::signal::{connect_raw, Inhibit, SignalHandlerId};
 use glib::translate::*;
 use glib::ObjectExt;
 use glib_sys::gboolean;
@@ -14,7 +14,8 @@ use gtk_sys;
 use std::mem::transmute;
 use std::ptr;
 
-use {Continue, DestDefaults, Inhibit, Rectangle, TargetEntry, Widget};
+use glib::Continue;
+use {DestDefaults, Rectangle, TargetEntry, Widget};
 
 pub struct TickCallbackId {
     id: u32,

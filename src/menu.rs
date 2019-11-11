@@ -4,12 +4,12 @@
 
 use glib::object::Cast;
 use glib::translate::*;
+use glib::IsA;
 use glib_sys;
 use gtk_sys;
 use libc::c_int;
 use std::boxed::Box as Box_;
 use std::ptr;
-use IsA;
 use Menu;
 use Widget;
 
