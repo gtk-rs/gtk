@@ -179,8 +179,8 @@ impl CellRendererPixbufBuilder {
         self
     }
 
-    pub fn gicon(mut self, gicon: &gio::Icon) -> Self {
-        self.gicon = Some(gicon.clone());
+    pub fn gicon<P: IsA<gio::Icon>>(mut self, gicon: &P) -> Self {
+        self.gicon = Some(gicon.clone().upcast());
         self
     }
 

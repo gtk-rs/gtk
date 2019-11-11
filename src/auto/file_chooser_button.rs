@@ -348,8 +348,8 @@ impl FileChooserButtonBuilder {
             .expect("downcast")
     }
 
-    pub fn dialog(mut self, dialog: &FileChooser) -> Self {
-        self.dialog = Some(dialog.clone());
+    pub fn dialog<P: IsA<FileChooser>>(mut self, dialog: &P) -> Self {
+        self.dialog = Some(dialog.clone().upcast());
         self
     }
 
@@ -383,8 +383,8 @@ impl FileChooserButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -504,8 +504,8 @@ impl FileChooserButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -574,8 +574,8 @@ impl FileChooserButtonBuilder {
         self
     }
 
-    pub fn extra_widget(mut self, extra_widget: &Widget) -> Self {
-        self.extra_widget = Some(extra_widget.clone());
+    pub fn extra_widget<P: IsA<Widget>>(mut self, extra_widget: &P) -> Self {
+        self.extra_widget = Some(extra_widget.clone().upcast());
         self
     }
 
@@ -589,8 +589,8 @@ impl FileChooserButtonBuilder {
         self
     }
 
-    pub fn preview_widget(mut self, preview_widget: &Widget) -> Self {
-        self.preview_widget = Some(preview_widget.clone());
+    pub fn preview_widget<P: IsA<Widget>>(mut self, preview_widget: &P) -> Self {
+        self.preview_widget = Some(preview_widget.clone().upcast());
         self
     }
 

@@ -18,7 +18,6 @@ use glib_sys;
 use gobject_sys;
 use gtk_sys;
 use pango;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -1119,7 +1118,9 @@ pub trait TextTagExt: 'static {
 
     fn set_property_wrap_mode_set(&self, wrap_mode_set: bool);
 
-    fn connect_event<F: Fn(&Self, &glib::Object, &gdk::Event, &TextIter) -> Inhibit + 'static>(
+    fn connect_event<
+        F: Fn(&Self, &glib::Object, &gdk::Event, &TextIter) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -3134,13 +3135,15 @@ impl<O: IsA<TextTag>> TextTagExt for O {
         }
     }
 
-    fn connect_event<F: Fn(&Self, &glib::Object, &gdk::Event, &TextIter) -> Inhibit + 'static>(
+    fn connect_event<
+        F: Fn(&Self, &glib::Object, &gdk::Event, &TextIter) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn event_trampoline<
             P,
-            F: Fn(&P, &glib::Object, &gdk::Event, &TextIter) -> Inhibit + 'static,
+            F: Fn(&P, &glib::Object, &gdk::Event, &TextIter) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkTextTag,
             object: *mut gobject_sys::GObject,

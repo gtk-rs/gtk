@@ -200,8 +200,8 @@ impl FileChooserNativeBuilder {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    pub fn transient_for(mut self, transient_for: &Window) -> Self {
-        self.transient_for = Some(transient_for.clone());
+    pub fn transient_for<P: IsA<Window>>(mut self, transient_for: &P) -> Self {
+        self.transient_for = Some(transient_for.clone().upcast());
         self
     }
 
@@ -226,8 +226,8 @@ impl FileChooserNativeBuilder {
         self
     }
 
-    pub fn extra_widget(mut self, extra_widget: &Widget) -> Self {
-        self.extra_widget = Some(extra_widget.clone());
+    pub fn extra_widget<P: IsA<Widget>>(mut self, extra_widget: &P) -> Self {
+        self.extra_widget = Some(extra_widget.clone().upcast());
         self
     }
 
@@ -241,8 +241,8 @@ impl FileChooserNativeBuilder {
         self
     }
 
-    pub fn preview_widget(mut self, preview_widget: &Widget) -> Self {
-        self.preview_widget = Some(preview_widget.clone());
+    pub fn preview_widget<P: IsA<Widget>>(mut self, preview_widget: &P) -> Self {
+        self.preview_widget = Some(preview_widget.clone().upcast());
         self
     }
 

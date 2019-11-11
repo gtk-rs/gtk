@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gio;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -16,7 +17,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use FileChooserAction;
 use FileChooserConfirmation;
 use FileFilter;
@@ -35,9 +35,9 @@ pub const NONE_FILE_CHOOSER: Option<&FileChooser> = None;
 pub trait FileChooserExt: 'static {
     fn add_filter(&self, filter: &FileFilter);
 
-    fn add_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), Error>;
+    fn add_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), glib::Error>;
 
-    fn add_shortcut_folder_uri(&self, uri: &str) -> Result<(), Error>;
+    fn add_shortcut_folder_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
     fn get_action(&self) -> FileChooserAction;
 
@@ -101,13 +101,16 @@ pub trait FileChooserExt: 'static {
 
     fn remove_filter(&self, filter: &FileFilter);
 
-    fn remove_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), Error>;
+    fn remove_shortcut_folder<P: AsRef<std::path::Path>>(
+        &self,
+        folder: P,
+    ) -> Result<(), glib::Error>;
 
-    fn remove_shortcut_folder_uri(&self, uri: &str) -> Result<(), Error>;
+    fn remove_shortcut_folder_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
     fn select_all(&self);
 
-    fn select_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error>;
+    fn select_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error>;
 
     fn select_filename<P: AsRef<std::path::Path>>(&self, filename: P) -> bool;
 
@@ -122,7 +125,7 @@ pub trait FileChooserExt: 'static {
 
     fn set_current_folder<P: AsRef<std::path::Path>>(&self, filename: P) -> bool;
 
-    fn set_current_folder_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error>;
+    fn set_current_folder_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error>;
 
     fn set_current_folder_uri(&self, uri: &str) -> bool;
 
@@ -132,7 +135,7 @@ pub trait FileChooserExt: 'static {
 
     fn set_extra_widget<P: IsA<Widget>>(&self, extra_widget: &P);
 
-    fn set_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error>;
+    fn set_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error>;
 
     fn set_filename<P: AsRef<std::path::Path>>(&self, filename: P) -> bool;
 
@@ -225,7 +228,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn add_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), Error> {
+    fn add_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_file_chooser_add_shortcut_folder(
@@ -241,7 +244,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn add_shortcut_folder_uri(&self, uri: &str) -> Result<(), Error> {
+    fn add_shortcut_folder_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_file_chooser_add_shortcut_folder_uri(
@@ -502,7 +505,10 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn remove_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), Error> {
+    fn remove_shortcut_folder<P: AsRef<std::path::Path>>(
+        &self,
+        folder: P,
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_file_chooser_remove_shortcut_folder(
@@ -518,7 +524,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn remove_shortcut_folder_uri(&self, uri: &str) -> Result<(), Error> {
+    fn remove_shortcut_folder_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_file_chooser_remove_shortcut_folder_uri(
@@ -540,7 +546,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn select_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error> {
+    fn select_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_file_chooser_select_file(
@@ -609,7 +615,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn set_current_folder_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error> {
+    fn set_current_folder_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_file_chooser_set_current_folder_file(
@@ -661,7 +667,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn set_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error> {
+    fn set_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_file_chooser_set_file(

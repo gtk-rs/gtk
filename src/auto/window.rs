@@ -30,7 +30,6 @@ use Application;
 use Bin;
 use Buildable;
 use Container;
-use Error;
 use ResizeMode;
 use Widget;
 use WindowGroup;
@@ -82,7 +81,9 @@ impl Window {
         }
     }
 
-    pub fn set_default_icon_from_file<P: AsRef<std::path::Path>>(filename: P) -> Result<(), Error> {
+    pub fn set_default_icon_from_file<P: AsRef<std::path::Path>>(
+        filename: P,
+    ) -> Result<(), glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -462,13 +463,13 @@ impl WindowBuilder {
         self
     }
 
-    pub fn application(mut self, application: &Application) -> Self {
-        self.application = Some(application.clone());
+    pub fn application<P: IsA<Application>>(mut self, application: &P) -> Self {
+        self.application = Some(application.clone().upcast());
         self
     }
 
-    pub fn attached_to(mut self, attached_to: &Widget) -> Self {
-        self.attached_to = Some(attached_to.clone());
+    pub fn attached_to<P: IsA<Widget>>(mut self, attached_to: &P) -> Self {
+        self.attached_to = Some(attached_to.clone().upcast());
         self
     }
 
@@ -572,8 +573,8 @@ impl WindowBuilder {
         self
     }
 
-    pub fn transient_for(mut self, transient_for: &Window) -> Self {
-        self.transient_for = Some(transient_for.clone());
+    pub fn transient_for<P: IsA<Window>>(mut self, transient_for: &P) -> Self {
+        self.transient_for = Some(transient_for.clone().upcast());
         self
     }
 
@@ -602,8 +603,8 @@ impl WindowBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -723,8 +724,8 @@ impl WindowBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -944,7 +945,8 @@ pub trait GtkWindowExt: 'static {
 
     fn set_icon(&self, icon: Option<&gdk_pixbuf::Pixbuf>);
 
-    fn set_icon_from_file<P: AsRef<std::path::Path>>(&self, filename: P) -> Result<(), Error>;
+    fn set_icon_from_file<P: AsRef<std::path::Path>>(&self, filename: P)
+        -> Result<(), glib::Error>;
 
     fn set_icon_list(&self, list: &[gdk_pixbuf::Pixbuf]);
 
@@ -1759,7 +1761,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn set_icon_from_file<P: AsRef<std::path::Path>>(&self, filename: P) -> Result<(), Error> {
+    fn set_icon_from_file<P: AsRef<std::path::Path>>(
+        &self,
+        filename: P,
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_window_set_icon_from_file(

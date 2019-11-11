@@ -335,8 +335,8 @@ impl MenuButtonBuilder {
             .expect("downcast")
     }
 
-    pub fn align_widget(mut self, align_widget: &Container) -> Self {
-        self.align_widget = Some(align_widget.clone());
+    pub fn align_widget<P: IsA<Container>>(mut self, align_widget: &P) -> Self {
+        self.align_widget = Some(align_widget.clone().upcast());
         self
     }
 
@@ -345,18 +345,18 @@ impl MenuButtonBuilder {
         self
     }
 
-    pub fn menu_model(mut self, menu_model: &gio::MenuModel) -> Self {
-        self.menu_model = Some(menu_model.clone());
+    pub fn menu_model<P: IsA<gio::MenuModel>>(mut self, menu_model: &P) -> Self {
+        self.menu_model = Some(menu_model.clone().upcast());
         self
     }
 
-    pub fn popover(mut self, popover: &Popover) -> Self {
-        self.popover = Some(popover.clone());
+    pub fn popover<P: IsA<Popover>>(mut self, popover: &P) -> Self {
+        self.popover = Some(popover.clone().upcast());
         self
     }
 
-    pub fn popup(mut self, popup: &Menu) -> Self {
-        self.popup = Some(popup.clone());
+    pub fn popup<P: IsA<Menu>>(mut self, popup: &P) -> Self {
+        self.popup = Some(popup.clone().upcast());
         self
     }
 
@@ -385,8 +385,8 @@ impl MenuButtonBuilder {
         self
     }
 
-    pub fn image(mut self, image: &Widget) -> Self {
-        self.image = Some(image.clone());
+    pub fn image<P: IsA<Widget>>(mut self, image: &P) -> Self {
+        self.image = Some(image.clone().upcast());
         self
     }
 
@@ -415,8 +415,8 @@ impl MenuButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -536,8 +536,8 @@ impl MenuButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

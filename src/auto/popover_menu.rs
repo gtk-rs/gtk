@@ -320,8 +320,8 @@ impl PopoverMenuBuilder {
         self
     }
 
-    pub fn relative_to(mut self, relative_to: &Widget) -> Self {
-        self.relative_to = Some(relative_to.clone());
+    pub fn relative_to<P: IsA<Widget>>(mut self, relative_to: &P) -> Self {
+        self.relative_to = Some(relative_to.clone().upcast());
         self
     }
 
@@ -336,8 +336,8 @@ impl PopoverMenuBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -457,8 +457,8 @@ impl PopoverMenuBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

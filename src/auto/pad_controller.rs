@@ -5,7 +5,6 @@
 use gdk;
 use gio;
 use glib::object::Cast;
-#[cfg(any(feature = "v3_22", feature = "dox"))]
 use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
 use glib::translate::*;
@@ -133,8 +132,8 @@ impl PadControllerBuilder {
             .expect("downcast")
     }
 
-    pub fn action_group(mut self, action_group: &gio::ActionGroup) -> Self {
-        self.action_group = Some(action_group.clone());
+    pub fn action_group<P: IsA<gio::ActionGroup>>(mut self, action_group: &P) -> Self {
+        self.action_group = Some(action_group.clone().upcast());
         self
     }
 
@@ -148,8 +147,8 @@ impl PadControllerBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }
