@@ -13,7 +13,6 @@ use glib::ToValue;
 use glib_sys;
 use gtk_sys;
 use pango;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -282,8 +281,8 @@ impl ToolItemBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -403,8 +402,8 @@ impl ToolItemBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -507,8 +506,10 @@ pub trait ToolItemExt: 'static {
 
     fn toolbar_reconfigured(&self);
 
-    fn connect_create_menu_proxy<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F)
-        -> SignalHandlerId;
+    fn connect_create_menu_proxy<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_toolbar_reconfigured<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -725,11 +726,14 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
         }
     }
 
-    fn connect_create_menu_proxy<F: Fn(&Self) -> Inhibit + 'static>(
+    fn connect_create_menu_proxy<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn create_menu_proxy_trampoline<P, F: Fn(&P) -> Inhibit + 'static>(
+        unsafe extern "C" fn create_menu_proxy_trampoline<
+            P,
+            F: Fn(&P) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkToolItem,
             f: glib_sys::gpointer,
         ) -> glib_sys::gboolean

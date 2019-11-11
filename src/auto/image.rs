@@ -356,8 +356,8 @@ impl ImageBuilder {
         self
     }
 
-    pub fn gicon(mut self, gicon: &gio::Icon) -> Self {
-        self.gicon = Some(gicon.clone());
+    pub fn gicon<P: IsA<gio::Icon>>(mut self, gicon: &P) -> Self {
+        self.gicon = Some(gicon.clone().upcast());
         self
     }
 
@@ -376,8 +376,11 @@ impl ImageBuilder {
         self
     }
 
-    pub fn pixbuf_animation(mut self, pixbuf_animation: &gdk_pixbuf::PixbufAnimation) -> Self {
-        self.pixbuf_animation = Some(pixbuf_animation.clone());
+    pub fn pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(
+        mut self,
+        pixbuf_animation: &P,
+    ) -> Self {
+        self.pixbuf_animation = Some(pixbuf_animation.clone().upcast());
         self
     }
 
@@ -507,8 +510,8 @@ impl ImageBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

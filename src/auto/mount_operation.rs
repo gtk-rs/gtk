@@ -108,8 +108,8 @@ impl MountOperationBuilder {
             .expect("downcast")
     }
 
-    pub fn parent(mut self, parent: &Window) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Window>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

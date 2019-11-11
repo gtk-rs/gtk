@@ -19,8 +19,6 @@ use gobject_sys;
 use gtk_sys;
 use libc;
 use pango;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
@@ -423,8 +421,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn buffer(mut self, buffer: &TextBuffer) -> Self {
-        self.buffer = Some(buffer.clone());
+    pub fn buffer<P: IsA<TextBuffer>>(mut self, buffer: &P) -> Self {
+        self.buffer = Some(buffer.clone().upcast());
         self
     }
 
@@ -524,8 +522,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -645,8 +643,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -695,8 +693,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
-        self.hadjustment = Some(hadjustment.clone());
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
         self
     }
 
@@ -705,8 +703,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
-        self.vadjustment = Some(vadjustment.clone());
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
         self
     }
 
@@ -927,7 +925,8 @@ pub trait TextViewExt: 'static {
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_extend_selection<
-        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static,
+        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> glib::signal::Inhibit
+            + 'static,
     >(
         &self,
         f: F,
@@ -1910,14 +1909,22 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_extend_selection<
-        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static,
+        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> glib::signal::Inhibit
+            + 'static,
     >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn extend_selection_trampoline<
             P,
-            F: Fn(&P, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static,
+            F: Fn(
+                    &P,
+                    TextExtendSelection,
+                    &TextIter,
+                    &TextIter,
+                    &TextIter,
+                ) -> glib::signal::Inhibit
+                + 'static,
         >(
             this: *mut gtk_sys::GtkTextView,
             granularity: gtk_sys::GtkTextExtendSelection,

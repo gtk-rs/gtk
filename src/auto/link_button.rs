@@ -14,7 +14,6 @@ use glib::StaticType;
 use glib::ToValue;
 use glib_sys;
 use gtk_sys;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -319,8 +318,8 @@ impl LinkButtonBuilder {
         self
     }
 
-    pub fn image(mut self, image: &Widget) -> Self {
-        self.image = Some(image.clone());
+    pub fn image<P: IsA<Widget>>(mut self, image: &P) -> Self {
+        self.image = Some(image.clone().upcast());
         self
     }
 
@@ -349,8 +348,8 @@ impl LinkButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -470,8 +469,8 @@ impl LinkButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -542,7 +541,10 @@ pub trait LinkButtonExt: 'static {
 
     fn set_visited(&self, visited: bool);
 
-    fn connect_activate_link<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_activate_link<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -578,8 +580,14 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
         }
     }
 
-    fn connect_activate_link<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P) -> Inhibit + 'static>(
+    fn connect_activate_link<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn activate_link_trampoline<
+            P,
+            F: Fn(&P) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkLinkButton,
             f: glib_sys::gpointer,
         ) -> glib_sys::gboolean

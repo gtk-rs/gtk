@@ -391,8 +391,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn accel_group(mut self, accel_group: &AccelGroup) -> Self {
-        self.accel_group = Some(accel_group.clone());
+    pub fn accel_group<P: IsA<AccelGroup>>(mut self, accel_group: &P) -> Self {
+        self.accel_group = Some(accel_group.clone().upcast());
         self
     }
 
@@ -412,8 +412,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn attach_widget(mut self, attach_widget: &Widget) -> Self {
-        self.attach_widget = Some(attach_widget.clone());
+    pub fn attach_widget<P: IsA<Widget>>(mut self, attach_widget: &P) -> Self {
+        self.attach_widget = Some(attach_widget.clone().upcast());
         self
     }
 
@@ -455,8 +455,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -576,8 +576,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -641,8 +641,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn recent_manager(mut self, recent_manager: &RecentManager) -> Self {
-        self.recent_manager = Some(recent_manager.clone());
+    pub fn recent_manager<P: IsA<RecentManager>>(mut self, recent_manager: &P) -> Self {
+        self.recent_manager = Some(recent_manager.clone().upcast());
         self
     }
 

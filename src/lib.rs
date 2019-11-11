@@ -179,12 +179,7 @@ extern crate gdk_pixbuf;
 extern crate gio;
 extern crate pango;
 
-#[cfg(any(feature = "futures", feature = "dox"))]
 extern crate fragile;
-#[cfg(any(feature = "futures", feature = "dox"))]
-extern crate futures;
-
-pub use glib::{Cast, Continue, Error, IsA, Object, StaticType, ToValue, Type, TypedValue, Value};
 
 pub mod xlib;
 
@@ -271,7 +266,6 @@ pub mod prelude;
 
 pub use auto::functions::*;
 pub use auto::*;
-pub use prelude::*;
 pub use rt::*;
 pub use signal::*;
 

@@ -15,7 +15,6 @@ use glib::ToValue;
 use glib_sys;
 use gobject_sys;
 use gtk_sys;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -369,8 +368,8 @@ impl SwitchBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -445,7 +444,10 @@ pub trait SwitchExt: 'static {
 
     fn emit_activate(&self);
 
-    fn connect_state_set<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_state_set<F: Fn(&Self, bool) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -510,8 +512,14 @@ impl<O: IsA<Switch>> SwitchExt for O {
         };
     }
 
-    fn connect_state_set<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn state_set_trampoline<P, F: Fn(&P, bool) -> Inhibit + 'static>(
+    fn connect_state_set<F: Fn(&Self, bool) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn state_set_trampoline<
+            P,
+            F: Fn(&P, bool) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkSwitch,
             state: glib_sys::gboolean,
             f: glib_sys::gpointer,

@@ -4,6 +4,7 @@
 
 use gdk;
 use glib::object::Cast;
+use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
@@ -328,8 +329,8 @@ impl DrawingAreaBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

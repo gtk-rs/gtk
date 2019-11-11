@@ -301,8 +301,8 @@ impl ToolButtonBuilder {
         self
     }
 
-    pub fn icon_widget(mut self, icon_widget: &Widget) -> Self {
-        self.icon_widget = Some(icon_widget.clone());
+    pub fn icon_widget<P: IsA<Widget>>(mut self, icon_widget: &P) -> Self {
+        self.icon_widget = Some(icon_widget.clone().upcast());
         self
     }
 
@@ -311,8 +311,8 @@ impl ToolButtonBuilder {
         self
     }
 
-    pub fn label_widget(mut self, label_widget: &Widget) -> Self {
-        self.label_widget = Some(label_widget.clone());
+    pub fn label_widget<P: IsA<Widget>>(mut self, label_widget: &P) -> Self {
+        self.label_widget = Some(label_widget.clone().upcast());
         self
     }
 
@@ -341,8 +341,8 @@ impl ToolButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -462,8 +462,8 @@ impl ToolButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

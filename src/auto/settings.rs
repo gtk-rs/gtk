@@ -197,6 +197,12 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_modules(&self, gtk_modules: Option<&str>);
 
+    #[cfg(any(feature = "v3_24_9", feature = "dox"))]
+    fn get_property_gtk_overlay_scrolling(&self) -> bool;
+
+    #[cfg(any(feature = "v3_24_9", feature = "dox"))]
+    fn set_property_gtk_overlay_scrolling(&self, gtk_overlay_scrolling: bool);
+
     fn get_property_gtk_primary_button_warps_slider(&self) -> bool;
 
     fn set_property_gtk_primary_button_warps_slider(&self, gtk_primary_button_warps_slider: bool);
@@ -420,6 +426,12 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_gtk_modules_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_24_9", feature = "dox"))]
+    fn connect_property_gtk_overlay_scrolling_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_gtk_primary_button_warps_slider_notify<F: Fn(&Self) + 'static>(
         &self,
@@ -1313,6 +1325,33 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"gtk-modules\0".as_ptr() as *const _,
                 Value::from(gtk_modules).to_glib_none().0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v3_24_9", feature = "dox"))]
+    fn get_property_gtk_overlay_scrolling(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"gtk-overlay-scrolling\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `gtk-overlay-scrolling` getter")
+                .unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_24_9", feature = "dox"))]
+    fn set_property_gtk_overlay_scrolling(&self, gtk_overlay_scrolling: bool) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"gtk-overlay-scrolling\0".as_ptr() as *const _,
+                Value::from(&gtk_overlay_scrolling).to_glib_none().0,
             );
         }
     }
@@ -2598,6 +2637,34 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 self.as_ptr() as *mut _,
                 b"notify::gtk-modules\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_modules_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_24_9", feature = "dox"))]
+    fn connect_property_gtk_overlay_scrolling_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_gtk_overlay_scrolling_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSettings,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Settings>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::gtk-overlay-scrolling\0".as_ptr() as *const _,
+                Some(transmute(
+                    notify_gtk_overlay_scrolling_trampoline::<Self, F> as usize,
+                )),
                 Box_::into_raw(f),
             )
         }

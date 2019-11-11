@@ -351,8 +351,8 @@ impl ScrolledWindowBuilder {
             .expect("downcast")
     }
 
-    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
-        self.hadjustment = Some(hadjustment.clone());
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
         self
     }
 
@@ -411,8 +411,8 @@ impl ScrolledWindowBuilder {
         self
     }
 
-    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
-        self.vadjustment = Some(vadjustment.clone());
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
         self
     }
 
@@ -431,8 +431,8 @@ impl ScrolledWindowBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -552,8 +552,8 @@ impl ScrolledWindowBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -645,7 +645,7 @@ pub trait ScrolledWindowExt: 'static {
 
     fn set_capture_button_press(&self, capture_button_press: bool);
 
-    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: &P);
+    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: Option<&P>);
 
     fn set_kinetic_scrolling(&self, kinetic_scrolling: bool);
 
@@ -674,7 +674,7 @@ pub trait ScrolledWindowExt: 'static {
 
     fn set_shadow_type(&self, type_: ShadowType);
 
-    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: &P);
+    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: Option<&P>);
 
     fn unset_placement(&self);
 
@@ -919,11 +919,11 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
         }
     }
 
-    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: &P) {
+    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: Option<&P>) {
         unsafe {
             gtk_sys::gtk_scrolled_window_set_hadjustment(
                 self.as_ref().to_glib_none().0,
-                hadjustment.as_ref().to_glib_none().0,
+                hadjustment.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }
@@ -1033,11 +1033,11 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
         }
     }
 
-    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: &P) {
+    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: Option<&P>) {
         unsafe {
             gtk_sys::gtk_scrolled_window_set_vadjustment(
                 self.as_ref().to_glib_none().0,
-                vadjustment.as_ref().to_glib_none().0,
+                vadjustment.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }

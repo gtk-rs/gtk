@@ -7,7 +7,6 @@ use glib_sys;
 use gtk_sys;
 use Fixed;
 use IsA;
-use Value;
 use Widget;
 
 // All this is in order to avoid the segfault. More info in :
@@ -38,7 +37,7 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
             has_widget(self, item),
             "this item isn't in the Fixed's widget list"
         );
-        let mut value = Value::from(&0);
+        let mut value = glib::Value::from(&0);
         unsafe {
             gtk_sys::gtk_container_child_get_property(
                 self.to_glib_none().0 as *mut _,
@@ -62,7 +61,7 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
                 self.to_glib_none().0 as *mut _,
                 item.as_ref().to_glib_none().0,
                 "x".to_glib_none().0,
-                Value::from(&x).to_glib_none().0,
+                glib::Value::from(&x).to_glib_none().0,
             );
         }
     }
@@ -72,7 +71,7 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
             has_widget(self, item),
             "this item isn't in the Fixed's widget list"
         );
-        let mut value = Value::from(&0);
+        let mut value = glib::Value::from(&0);
         unsafe {
             gtk_sys::gtk_container_child_get_property(
                 self.to_glib_none().0 as *mut _,
@@ -96,7 +95,7 @@ impl<O: IsA<Fixed>> FixedExtManual for O {
                 self.to_glib_none().0 as *mut _,
                 item.as_ref().to_glib_none().0,
                 "y".to_glib_none().0,
-                Value::from(&y).to_glib_none().0,
+                glib::Value::from(&y).to_glib_none().0,
             );
         }
     }

@@ -15,7 +15,6 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::ptr;
 use AccelGroup;
-use Error;
 use Orientation;
 use PageSetup;
 use PositionType;
@@ -305,7 +304,7 @@ pub fn grab_get_current() -> Option<Widget> {
 //    unsafe { TODO: call gtk_sys:gtk_init_check() }
 //}
 
-//pub fn init_with_args(argv: /*Unimplemented*/Vec<GString>, parameter_string: Option<&str>, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Option<&str>) -> Result<(), Error> {
+//pub fn init_with_args(argv: /*Unimplemented*/Vec<GString>, parameter_string: Option<&str>, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Option<&str>) -> Result<(), glib::Error> {
 //    unsafe { TODO: call gtk_sys:gtk_init_with_args() }
 //}
 
@@ -894,7 +893,11 @@ pub fn set_debug_flags(flags: u32) {
 //    unsafe { TODO: call gtk_sys:gtk_show_about_dialog() }
 //}
 
-pub fn show_uri(screen: Option<&gdk::Screen>, uri: &str, timestamp: u32) -> Result<(), Error> {
+pub fn show_uri(
+    screen: Option<&gdk::Screen>,
+    uri: &str,
+    timestamp: u32,
+) -> Result<(), glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
@@ -917,7 +920,7 @@ pub fn show_uri_on_window<P: IsA<Window>>(
     parent: Option<&P>,
     uri: &str,
     timestamp: u32,
-) -> Result<(), Error> {
+) -> Result<(), glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();

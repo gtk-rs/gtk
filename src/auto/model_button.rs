@@ -7,7 +7,6 @@ use gdk;
 use gio;
 use glib;
 use glib::object::Cast;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::object::IsA;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::object::ObjectType as ObjectType_;
@@ -866,8 +865,8 @@ impl ModelButtonBuilder {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn icon(mut self, icon: &gio::Icon) -> Self {
-        self.icon = Some(icon.clone());
+    pub fn icon<P: IsA<gio::Icon>>(mut self, icon: &P) -> Self {
+        self.icon = Some(icon.clone().upcast());
         self
     }
 
@@ -912,8 +911,8 @@ impl ModelButtonBuilder {
         self
     }
 
-    pub fn image(mut self, image: &Widget) -> Self {
-        self.image = Some(image.clone());
+    pub fn image<P: IsA<Widget>>(mut self, image: &P) -> Self {
+        self.image = Some(image.clone().upcast());
         self
     }
 
@@ -942,8 +941,8 @@ impl ModelButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -1063,8 +1062,8 @@ impl ModelButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

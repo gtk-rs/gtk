@@ -14,7 +14,6 @@ use glib_sys;
 use gobject_sys;
 use gtk_sys;
 use libc;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
@@ -97,7 +96,7 @@ pub trait RangeExt: 'static {
 
     fn connect_adjust_bounds<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> Inhibit + 'static>(
+    fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -369,13 +368,13 @@ impl<O: IsA<Range>> RangeExt for O {
         }
     }
 
-    fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> Inhibit + 'static>(
+    fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn change_value_trampoline<
             P,
-            F: Fn(&P, ScrollType, f64) -> Inhibit + 'static,
+            F: Fn(&P, ScrollType, f64) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkRange,
             scroll: gtk_sys::GtkScrollType,

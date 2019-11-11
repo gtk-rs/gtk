@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -15,7 +16,6 @@ use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use RecentFilter;
 use RecentInfo;
 use RecentSortType;
@@ -65,9 +65,9 @@ pub trait RecentChooserExt: 'static {
 
     fn select_all(&self);
 
-    fn select_uri(&self, uri: &str) -> Result<(), Error>;
+    fn select_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
-    fn set_current_uri(&self, uri: &str) -> Result<(), Error>;
+    fn set_current_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
     fn set_filter(&self, filter: Option<&RecentFilter>);
 
@@ -262,7 +262,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    fn select_uri(&self, uri: &str) -> Result<(), Error> {
+    fn select_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_recent_chooser_select_uri(
@@ -278,7 +278,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    fn set_current_uri(&self, uri: &str) -> Result<(), Error> {
+    fn set_current_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_recent_chooser_set_current_uri(

@@ -241,8 +241,8 @@ impl OverlayBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -362,8 +362,8 @@ impl OverlayBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -422,7 +422,7 @@ pub trait OverlayExt: 'static {
     fn get_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P) -> bool;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, position: i32);
+    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, index_: i32);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P, pass_through: bool);
@@ -455,12 +455,12 @@ impl<O: IsA<Overlay>> OverlayExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, position: i32) {
+    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, index_: i32) {
         unsafe {
             gtk_sys::gtk_overlay_reorder_overlay(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                position,
+                index_,
             );
         }
     }

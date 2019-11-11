@@ -1274,8 +1274,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn location(mut self, location: &gio::File) -> Self {
-        self.location = Some(location.clone());
+    pub fn location<P: IsA<gio::File>>(mut self, location: &P) -> Self {
+        self.location = Some(location.clone().upcast());
         self
     }
 
@@ -1326,8 +1326,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
-        self.hadjustment = Some(hadjustment.clone());
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
         self
     }
 
@@ -1386,8 +1386,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
-        self.vadjustment = Some(vadjustment.clone());
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
         self
     }
 
@@ -1406,8 +1406,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -1527,8 +1527,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

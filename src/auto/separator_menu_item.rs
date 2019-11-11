@@ -5,6 +5,7 @@
 use gdk;
 use glib;
 use glib::object::Cast;
+use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
@@ -288,8 +289,8 @@ impl SeparatorMenuItemBuilder {
         self
     }
 
-    pub fn submenu(mut self, submenu: &Menu) -> Self {
-        self.submenu = Some(submenu.clone());
+    pub fn submenu<P: IsA<Menu>>(mut self, submenu: &P) -> Self {
+        self.submenu = Some(submenu.clone().upcast());
         self
     }
 
@@ -303,8 +304,8 @@ impl SeparatorMenuItemBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -424,8 +425,8 @@ impl SeparatorMenuItemBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

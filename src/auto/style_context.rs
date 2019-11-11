@@ -128,8 +128,8 @@ impl StyleContextBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &StyleContext) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<StyleContext>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

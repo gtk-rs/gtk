@@ -5,6 +5,7 @@
 use gdk;
 use gdk_pixbuf;
 use gdk_pixbuf_sys;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -23,7 +24,6 @@ use std::mem;
 use std::mem::transmute;
 use std::ptr;
 use Clipboard;
-use Error;
 use TargetList;
 use TextChildAnchor;
 use TextIter;
@@ -77,8 +77,8 @@ impl TextBufferBuilder {
             .expect("downcast")
     }
 
-    pub fn tag_table(mut self, tag_table: &TextTagTable) -> Self {
-        self.tag_table = Some(tag_table.clone());
+    pub fn tag_table<P: IsA<TextTagTable>>(mut self, tag_table: &P) -> Self {
+        self.tag_table = Some(tag_table.clone().upcast());
         self
     }
 
@@ -139,7 +139,7 @@ pub trait TextBufferExt: 'static {
         format: &gdk::Atom,
         iter: &mut TextIter,
         data: &[u8],
-    ) -> Result<(), Error>;
+    ) -> Result<(), glib::Error>;
 
     fn deserialize_get_can_create_tags(&self, format: &gdk::Atom) -> bool;
 
@@ -247,7 +247,7 @@ pub trait TextBufferExt: 'static {
 
     fn place_cursor(&self, where_: &TextIter);
 
-    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom>;
+    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&glib::Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom>;
 
     fn register_deserialize_tagset(&self, tagset_name: Option<&str>) -> gdk::Atom;
 
@@ -513,7 +513,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         format: &gdk::Atom,
         iter: &mut TextIter,
         data: &[u8],
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         let length = data.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
@@ -981,7 +981,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom> {
+    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&glib::Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom> {
     //    unsafe { TODO: call gtk_sys:gtk_text_buffer_register_deserialize_format() }
     //}
 

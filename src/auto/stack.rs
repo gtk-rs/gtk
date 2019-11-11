@@ -325,8 +325,8 @@ impl StackBuilder {
         self
     }
 
-    pub fn visible_child(mut self, visible_child: &Widget) -> Self {
-        self.visible_child = Some(visible_child.clone());
+    pub fn visible_child<P: IsA<Widget>>(mut self, visible_child: &P) -> Self {
+        self.visible_child = Some(visible_child.clone().upcast());
         self
     }
 
@@ -340,8 +340,8 @@ impl StackBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -461,8 +461,8 @@ impl StackBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

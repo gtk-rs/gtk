@@ -86,13 +86,13 @@ impl ApplicationBuilder {
             .expect("downcast")
     }
 
-    pub fn app_menu(mut self, app_menu: &gio::MenuModel) -> Self {
-        self.app_menu = Some(app_menu.clone());
+    pub fn app_menu<P: IsA<gio::MenuModel>>(mut self, app_menu: &P) -> Self {
+        self.app_menu = Some(app_menu.clone().upcast());
         self
     }
 
-    pub fn menubar(mut self, menubar: &gio::MenuModel) -> Self {
-        self.menubar = Some(menubar.clone());
+    pub fn menubar<P: IsA<gio::MenuModel>>(mut self, menubar: &P) -> Self {
+        self.menubar = Some(menubar.clone().upcast());
         self
     }
 
@@ -101,8 +101,8 @@ impl ApplicationBuilder {
         self
     }
 
-    pub fn action_group(mut self, action_group: &gio::ActionGroup) -> Self {
-        self.action_group = Some(action_group.clone());
+    pub fn action_group<P: IsA<gio::ActionGroup>>(mut self, action_group: &P) -> Self {
+        self.action_group = Some(action_group.clone().upcast());
         self
     }
 
