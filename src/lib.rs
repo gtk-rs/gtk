@@ -202,6 +202,7 @@ mod rt;
 #[cfg_attr(feature = "cargo-clippy", allow(wrong_self_convention))]
 mod auto;
 
+mod accel_group;
 mod app_chooser;
 mod application;
 mod application_window;

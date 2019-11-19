@@ -527,6 +527,14 @@ status = "generate"
     # It's not a part of public API
     # See https://mail.gnome.org/archives/commits-list/2012-May/msg07052.html
     ignore = true
+    [[object.function]]
+    name = "connect"
+    # Manual, more convenient implementation
+    ignore = true
+    [[object.function]]
+    name = "connect_by_path"
+    # Manual, more convenient implementation
+    ignore = true
 
 [[object]]
 name = "Gtk.Actionable"
