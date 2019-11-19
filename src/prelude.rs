@@ -9,6 +9,7 @@ pub use glib::prelude::*;
 
 pub use auto::traits::*;
 
+pub use accel_group::AccelGroupExtManual;
 pub use app_chooser::AppChooserExt;
 pub use buildable::BuildableExtManual;
 pub use builder::BuilderExtManual;

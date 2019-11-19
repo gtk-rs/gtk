@@ -17,7 +17,6 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
-use AccelFlags;
 
 glib_wrapper! {
     pub struct AccelGroup(Object<gtk_sys::GtkAccelGroup, gtk_sys::GtkAccelGroupClass, AccelGroupClass>);
@@ -59,16 +58,6 @@ pub trait AccelGroupExt: 'static {
         accel_key: u32,
         accel_mods: gdk::ModifierType,
     ) -> bool;
-
-    fn connect(
-        &self,
-        accel_key: u32,
-        accel_mods: gdk::ModifierType,
-        accel_flags: AccelFlags,
-        closure: &glib::Closure,
-    );
-
-    fn connect_by_path(&self, accel_path: &str, closure: &glib::Closure);
 
     fn disconnect(&self, closure: Option<&glib::Closure>) -> bool;
 
@@ -120,34 +109,6 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
                 accel_key,
                 accel_mods.to_glib(),
             ))
-        }
-    }
-
-    fn connect(
-        &self,
-        accel_key: u32,
-        accel_mods: gdk::ModifierType,
-        accel_flags: AccelFlags,
-        closure: &glib::Closure,
-    ) {
-        unsafe {
-            gtk_sys::gtk_accel_group_connect(
-                self.as_ref().to_glib_none().0,
-                accel_key,
-                accel_mods.to_glib(),
-                accel_flags.to_glib(),
-                closure.to_glib_none().0,
-            );
-        }
-    }
-
-    fn connect_by_path(&self, accel_path: &str, closure: &glib::Closure) {
-        unsafe {
-            gtk_sys::gtk_accel_group_connect_by_path(
-                self.as_ref().to_glib_none().0,
-                accel_path.to_glib_none().0,
-                closure.to_glib_none().0,
-            );
         }
     }
 
