@@ -179,8 +179,6 @@ extern crate gdk_pixbuf;
 extern crate gio;
 extern crate pango;
 
-extern crate fragile;
-
 pub mod xlib;
 
 pub const STYLE_PROVIDER_PRIORITY_FALLBACK: u32 =
