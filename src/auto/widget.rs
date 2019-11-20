@@ -265,7 +265,7 @@ pub trait WidgetExt: 'static {
 
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
 
-    fn get_name(&self) -> Option<GString>;
+    fn get_widget_name(&self) -> Option<GString>;
 
     fn get_no_show_all(&self) -> bool;
 
@@ -498,7 +498,7 @@ pub trait WidgetExt: 'static {
 
     fn set_margin_top(&self, margin: i32);
 
-    fn set_name(&self, name: &str);
+    fn set_widget_name(&self, name: &str);
 
     fn set_no_show_all(&self, no_show_all: bool);
 
@@ -1644,7 +1644,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn get_name(&self) -> Option<GString> {
+    fn get_widget_name(&self) -> Option<GString> {
         unsafe { from_glib_none(gtk_sys::gtk_widget_get_name(self.as_ref().to_glib_none().0)) }
     }
 
@@ -2541,7 +2541,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_name(&self, name: &str) {
+    fn set_widget_name(&self, name: &str) {
         unsafe {
             gtk_sys::gtk_widget_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }

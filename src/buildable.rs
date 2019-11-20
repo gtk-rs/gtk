@@ -8,13 +8,13 @@ use gtk_sys;
 use Buildable;
 
 pub trait BuildableExtManual: 'static {
-    fn get_name(&self) -> Option<String>;
+    fn get_buildable_name(&self) -> Option<String>;
 
-    fn set_name(&self, name: &str);
+    fn set_buildable_name(&self, name: &str);
 }
 
 impl<O: IsA<Buildable>> BuildableExtManual for O {
-    fn get_name(&self) -> Option<String> {
+    fn get_buildable_name(&self) -> Option<String> {
         unsafe {
             from_glib_none(gtk_sys::gtk_buildable_get_name(
                 self.as_ref().to_glib_none().0,
@@ -22,7 +22,7 @@ impl<O: IsA<Buildable>> BuildableExtManual for O {
         }
     }
 
-    fn set_name(&self, name: &str) {
+    fn set_buildable_name(&self, name: &str) {
         unsafe {
             gtk_sys::gtk_buildable_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }

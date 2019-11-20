@@ -2441,6 +2441,12 @@ manual_traits = ["WidgetExtManual"]
         [[object.function.parameter]]
         name = "region"
         const = true
+    [[object.function]]
+    name = "set_name"
+    rename = "set_widget_name"
+    [[object.function]]
+    name = "get_name"
+    rename = "get_widget_name"
 
 [[object]]
 name = "Gtk.Window"
