@@ -115,18 +115,14 @@ impl IconInfo {
     ) -> Pin<
         Box_<dyn std::future::Future<Output = Result<gdk_pixbuf::Pixbuf, glib::Error>> + 'static>,
     > {
-        use fragile::Fragile;
-        use gio::GioFuture;
-
-        GioFuture::new(self, move |obj, send| {
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = Fragile::new(send);
             obj.load_icon_async(Some(&cancellable), move |res| {
-                let _ = send.into_inner().send(res);
+                send.resolve(res);
             });
 
             cancellable
-        })
+        }))
     }
 
     pub fn load_surface<P: IsA<gdk::Window>>(
@@ -240,16 +236,12 @@ impl IconInfo {
                 + 'static,
         >,
     > {
-        use fragile::Fragile;
-        use gio::GioFuture;
-
         let fg = fg.clone();
         let success_color = success_color.map(ToOwned::to_owned);
         let warning_color = warning_color.map(ToOwned::to_owned);
         let error_color = error_color.map(ToOwned::to_owned);
-        GioFuture::new(self, move |obj, send| {
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = Fragile::new(send);
             obj.load_symbolic_async(
                 &fg,
                 success_color.as_ref().map(::std::borrow::Borrow::borrow),
@@ -257,12 +249,12 @@ impl IconInfo {
                 error_color.as_ref().map(::std::borrow::Borrow::borrow),
                 Some(&cancellable),
                 move |res| {
-                    let _ = send.into_inner().send(res);
+                    send.resolve(res);
                 },
             );
 
             cancellable
-        })
+        }))
     }
 
     pub fn load_symbolic_for_context<P: IsA<StyleContext>>(
@@ -343,19 +335,15 @@ impl IconInfo {
                 + 'static,
         >,
     > {
-        use fragile::Fragile;
-        use gio::GioFuture;
-
         let context = context.clone();
-        GioFuture::new(self, move |obj, send| {
+        Box_::pin(gio::GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = Fragile::new(send);
             obj.load_symbolic_for_context_async(&context, Some(&cancellable), move |res| {
-                let _ = send.into_inner().send(res);
+                send.resolve(res);
             });
 
             cancellable
-        })
+        }))
     }
 }
 
