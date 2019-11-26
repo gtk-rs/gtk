@@ -63,6 +63,7 @@ impl Scale {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ScaleBuilder {
     digits: Option<i32>,
     draw_value: Option<bool>,
@@ -114,54 +115,7 @@ pub struct ScaleBuilder {
 
 impl ScaleBuilder {
     pub fn new() -> Self {
-        Self {
-            digits: None,
-            draw_value: None,
-            has_origin: None,
-            value_pos: None,
-            adjustment: None,
-            fill_level: None,
-            inverted: None,
-            lower_stepper_sensitivity: None,
-            restrict_to_fill_level: None,
-            round_digits: None,
-            show_fill_level: None,
-            upper_stepper_sensitivity: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-            orientation: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Scale {

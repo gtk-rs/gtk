@@ -46,6 +46,7 @@ impl Default for CellRendererProgress {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererProgressBuilder {
     inverted: Option<bool>,
     pulse: Option<i32>,
@@ -72,29 +73,7 @@ pub struct CellRendererProgressBuilder {
 
 impl CellRendererProgressBuilder {
     pub fn new() -> Self {
-        Self {
-            inverted: None,
-            pulse: None,
-            text: None,
-            text_xalign: None,
-            text_yalign: None,
-            value: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-            orientation: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererProgress {

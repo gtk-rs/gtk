@@ -136,6 +136,7 @@ impl GestureLongPress {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureLongPressBuilder {
     delay_factor: Option<f64>,
     button: Option<u32>,
@@ -149,16 +150,7 @@ pub struct GestureLongPressBuilder {
 
 impl GestureLongPressBuilder {
     pub fn new() -> Self {
-        Self {
-            delay_factor: None,
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureLongPress {

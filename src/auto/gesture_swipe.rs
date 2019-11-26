@@ -84,6 +84,7 @@ impl GestureSwipe {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureSwipeBuilder {
     button: Option<u32>,
     exclusive: Option<bool>,
@@ -96,15 +97,7 @@ pub struct GestureSwipeBuilder {
 
 impl GestureSwipeBuilder {
     pub fn new() -> Self {
-        Self {
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureSwipe {

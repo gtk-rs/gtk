@@ -55,6 +55,7 @@ impl FileChooserNative {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct FileChooserNativeBuilder {
     accept_label: Option<String>,
     cancel_label: Option<String>,
@@ -81,29 +82,7 @@ pub struct FileChooserNativeBuilder {
 
 impl FileChooserNativeBuilder {
     pub fn new() -> Self {
-        Self {
-            accept_label: None,
-            cancel_label: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            modal: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            title: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            transient_for: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            visible: None,
-            action: None,
-            create_folders: None,
-            do_overwrite_confirmation: None,
-            extra_widget: None,
-            filter: None,
-            local_only: None,
-            preview_widget: None,
-            preview_widget_active: None,
-            select_multiple: None,
-            show_hidden: None,
-            use_preview_label: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> FileChooserNative {

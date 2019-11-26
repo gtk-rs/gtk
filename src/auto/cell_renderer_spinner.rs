@@ -44,6 +44,7 @@ impl Default for CellRendererSpinner {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererSpinnerBuilder {
     active: Option<bool>,
     pulse: Option<u32>,
@@ -66,25 +67,7 @@ pub struct CellRendererSpinnerBuilder {
 
 impl CellRendererSpinnerBuilder {
     pub fn new() -> Self {
-        Self {
-            active: None,
-            pulse: None,
-            size: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererSpinner {

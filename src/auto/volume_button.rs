@@ -55,6 +55,7 @@ impl Default for VolumeButton {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct VolumeButtonBuilder {
     use_symbolic: Option<bool>,
     adjustment: Option<Adjustment>,
@@ -110,58 +111,7 @@ pub struct VolumeButtonBuilder {
 
 impl VolumeButtonBuilder {
     pub fn new() -> Self {
-        Self {
-            use_symbolic: None,
-            adjustment: None,
-            icons: None,
-            size: None,
-            value: None,
-            always_show_image: None,
-            image: None,
-            image_position: None,
-            label: None,
-            relief: None,
-            use_underline: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-            action_name: None,
-            action_target: None,
-            orientation: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> VolumeButton {
