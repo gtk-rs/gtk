@@ -95,6 +95,7 @@ impl PadController {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct PadControllerBuilder {
     action_group: Option<gio::ActionGroup>,
     pad: Option<gdk::Device>,
@@ -104,12 +105,7 @@ pub struct PadControllerBuilder {
 
 impl PadControllerBuilder {
     pub fn new() -> Self {
-        Self {
-            action_group: None,
-            pad: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> PadController {

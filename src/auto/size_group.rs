@@ -33,6 +33,7 @@ impl SizeGroup {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct SizeGroupBuilder {
     ignore_hidden: Option<bool>,
     mode: Option<SizeGroupMode>,
@@ -40,10 +41,7 @@ pub struct SizeGroupBuilder {
 
 impl SizeGroupBuilder {
     pub fn new() -> Self {
-        Self {
-            ignore_hidden: None,
-            mode: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> SizeGroup {

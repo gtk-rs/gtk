@@ -70,6 +70,7 @@ impl GestureRotate {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureRotateBuilder {
     n_points: Option<u32>,
     window: Option<gdk::Window>,
@@ -79,12 +80,7 @@ pub struct GestureRotateBuilder {
 
 impl GestureRotateBuilder {
     pub fn new() -> Self {
-        Self {
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureRotate {

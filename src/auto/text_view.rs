@@ -78,6 +78,7 @@ impl Default for TextView {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct TextViewBuilder {
     accepts_tab: Option<bool>,
     #[cfg(any(feature = "v3_18", feature = "dox"))]
@@ -146,71 +147,7 @@ pub struct TextViewBuilder {
 
 impl TextViewBuilder {
     pub fn new() -> Self {
-        Self {
-            accepts_tab: None,
-            #[cfg(any(feature = "v3_18", feature = "dox"))]
-            bottom_margin: None,
-            buffer: None,
-            cursor_visible: None,
-            editable: None,
-            im_module: None,
-            indent: None,
-            input_hints: None,
-            input_purpose: None,
-            justification: None,
-            left_margin: None,
-            monospace: None,
-            overwrite: None,
-            pixels_above_lines: None,
-            pixels_below_lines: None,
-            pixels_inside_wrap: None,
-            populate_all: None,
-            right_margin: None,
-            tabs: None,
-            #[cfg(any(feature = "v3_18", feature = "dox"))]
-            top_margin: None,
-            wrap_mode: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-            hadjustment: None,
-            hscroll_policy: None,
-            vadjustment: None,
-            vscroll_policy: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> TextView {

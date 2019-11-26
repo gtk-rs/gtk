@@ -102,6 +102,7 @@ impl Default for ComboBox {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ComboBoxBuilder {
     active: Option<i32>,
     active_id: Option<String>,
@@ -157,58 +158,7 @@ pub struct ComboBoxBuilder {
 
 impl ComboBoxBuilder {
     pub fn new() -> Self {
-        Self {
-            active: None,
-            active_id: None,
-            button_sensitivity: None,
-            cell_area: None,
-            column_span_column: None,
-            entry_text_column: None,
-            has_entry: None,
-            has_frame: None,
-            id_column: None,
-            model: None,
-            popup_fixed_width: None,
-            row_span_column: None,
-            wrap_width: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-            editing_canceled: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ComboBox {

@@ -48,13 +48,14 @@ impl Default for RecentManager {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct RecentManagerBuilder {
     filename: Option<String>,
 }
 
 impl RecentManagerBuilder {
     pub fn new() -> Self {
-        Self { filename: None }
+        Self::default()
     }
 
     pub fn build(self) -> RecentManager {

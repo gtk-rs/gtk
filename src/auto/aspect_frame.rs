@@ -56,6 +56,7 @@ impl AspectFrame {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct AspectFrameBuilder {
     obey_child: Option<bool>,
     ratio: Option<f32>,
@@ -106,53 +107,7 @@ pub struct AspectFrameBuilder {
 
 impl AspectFrameBuilder {
     pub fn new() -> Self {
-        Self {
-            obey_child: None,
-            ratio: None,
-            xalign: None,
-            yalign: None,
-            label: None,
-            label_widget: None,
-            label_xalign: None,
-            label_yalign: None,
-            shadow_type: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> AspectFrame {

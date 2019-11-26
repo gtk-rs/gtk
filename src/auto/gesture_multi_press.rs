@@ -137,6 +137,7 @@ impl GestureMultiPress {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureMultiPressBuilder {
     button: Option<u32>,
     exclusive: Option<bool>,
@@ -149,15 +150,7 @@ pub struct GestureMultiPressBuilder {
 
 impl GestureMultiPressBuilder {
     pub fn new() -> Self {
-        Self {
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureMultiPress {

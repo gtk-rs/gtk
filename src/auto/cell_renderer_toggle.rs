@@ -45,6 +45,7 @@ impl Default for CellRendererToggle {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererToggleBuilder {
     activatable: Option<bool>,
     active: Option<bool>,
@@ -69,27 +70,7 @@ pub struct CellRendererToggleBuilder {
 
 impl CellRendererToggleBuilder {
     pub fn new() -> Self {
-        Self {
-            activatable: None,
-            active: None,
-            inconsistent: None,
-            indicator_size: None,
-            radio: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererToggle {

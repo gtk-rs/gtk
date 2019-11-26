@@ -108,6 +108,7 @@ impl GesturePan {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GesturePanBuilder {
     orientation: Option<Orientation>,
     button: Option<u32>,
@@ -121,16 +122,7 @@ pub struct GesturePanBuilder {
 
 impl GesturePanBuilder {
     pub fn new() -> Self {
-        Self {
-            orientation: None,
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GesturePan {

@@ -81,6 +81,7 @@ impl Default for StyleContext {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct StyleContextBuilder {
     direction: Option<TextDirection>,
     paint_clock: Option<gdk::FrameClock>,
@@ -90,12 +91,7 @@ pub struct StyleContextBuilder {
 
 impl StyleContextBuilder {
     pub fn new() -> Self {
-        Self {
-            direction: None,
-            paint_clock: None,
-            parent: None,
-            screen: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> StyleContext {

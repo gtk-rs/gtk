@@ -67,6 +67,7 @@ impl Default for ToolPalette {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ToolPaletteBuilder {
     icon_size: Option<IconSize>,
     icon_size_set: Option<bool>,
@@ -116,52 +117,7 @@ pub struct ToolPaletteBuilder {
 
 impl ToolPaletteBuilder {
     pub fn new() -> Self {
-        Self {
-            icon_size: None,
-            icon_size_set: None,
-            toolbar_style: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-            orientation: None,
-            hadjustment: None,
-            hscroll_policy: None,
-            vadjustment: None,
-            vscroll_policy: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ToolPalette {

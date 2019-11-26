@@ -53,6 +53,7 @@ impl Default for PrintOperation {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct PrintOperationBuilder {
     allow_async: Option<bool>,
     current_page: Option<i32>,
@@ -73,23 +74,7 @@ pub struct PrintOperationBuilder {
 
 impl PrintOperationBuilder {
     pub fn new() -> Self {
-        Self {
-            allow_async: None,
-            current_page: None,
-            custom_tab_label: None,
-            default_page_setup: None,
-            embed_page_setup: None,
-            export_filename: None,
-            has_selection: None,
-            job_name: None,
-            n_pages: None,
-            print_settings: None,
-            show_progress: None,
-            support_selection: None,
-            track_print_status: None,
-            unit: None,
-            use_full_page: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> PrintOperation {

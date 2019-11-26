@@ -50,6 +50,7 @@ impl TextBuffer {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct TextBufferBuilder {
     tag_table: Option<TextTagTable>,
     text: Option<String>,
@@ -57,10 +58,7 @@ pub struct TextBufferBuilder {
 
 impl TextBufferBuilder {
     pub fn new() -> Self {
-        Self {
-            tag_table: None,
-            text: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> TextBuffer {

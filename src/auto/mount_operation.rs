@@ -40,6 +40,7 @@ impl MountOperation {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct MountOperationBuilder {
     parent: Option<Window>,
     screen: Option<gdk::Screen>,
@@ -56,18 +57,7 @@ pub struct MountOperationBuilder {
 
 impl MountOperationBuilder {
     pub fn new() -> Self {
-        Self {
-            parent: None,
-            screen: None,
-            anonymous: None,
-            choice: None,
-            domain: None,
-            is_tcrypt_hidden_volume: None,
-            is_tcrypt_system_volume: None,
-            password: None,
-            pim: None,
-            username: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> MountOperation {

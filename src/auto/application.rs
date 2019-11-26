@@ -29,6 +29,7 @@ glib_wrapper! {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ApplicationBuilder {
     app_menu: Option<gio::MenuModel>,
     menubar: Option<gio::MenuModel>,
@@ -42,16 +43,7 @@ pub struct ApplicationBuilder {
 
 impl ApplicationBuilder {
     pub fn new() -> Self {
-        Self {
-            app_menu: None,
-            menubar: None,
-            register_session: None,
-            action_group: None,
-            application_id: None,
-            flags: None,
-            inactivity_timeout: None,
-            resource_base_path: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Application {

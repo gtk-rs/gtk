@@ -47,6 +47,7 @@ impl Default for CellRendererPixbuf {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererPixbufBuilder {
     follow_state: Option<bool>,
     gicon: Option<gio::Icon>,
@@ -74,30 +75,7 @@ pub struct CellRendererPixbufBuilder {
 
 impl CellRendererPixbufBuilder {
     pub fn new() -> Self {
-        Self {
-            follow_state: None,
-            gicon: None,
-            icon_name: None,
-            pixbuf: None,
-            pixbuf_expander_closed: None,
-            pixbuf_expander_open: None,
-            stock_detail: None,
-            stock_size: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererPixbuf {

@@ -43,6 +43,7 @@ impl GestureDrag {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureDragBuilder {
     button: Option<u32>,
     exclusive: Option<bool>,
@@ -55,15 +56,7 @@ pub struct GestureDragBuilder {
 
 impl GestureDragBuilder {
     pub fn new() -> Self {
-        Self {
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureDrag {
