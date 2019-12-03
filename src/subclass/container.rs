@@ -51,10 +51,9 @@ impl<T: ContainerImpl + ObjectImpl> ContainerImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
-            let f = (*parent_class)
-                .add
-                .expect("No parent class impl for \"add\"");
-            f(container.to_glib_none().0, widget.to_glib_none().0)
+            if let Some(f) = (*parent_class).add {
+                f(container.to_glib_none().0, widget.to_glib_none().0)
+            }
         }
     }
 
@@ -62,10 +61,9 @@ impl<T: ContainerImpl + ObjectImpl> ContainerImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
-            let f = (*parent_class)
-                .remove
-                .expect("No parent class impl for \"remove\"");
-            f(container.to_glib_none().0, widget.to_glib_none().0)
+            if let Some(f) = (*parent_class).remove {
+                f(container.to_glib_none().0, widget.to_glib_none().0)
+            }
         }
     }
 
@@ -73,10 +71,9 @@ impl<T: ContainerImpl + ObjectImpl> ContainerImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
-            let f = (*parent_class)
-                .check_resize
-                .expect("No parent class impl for \"check_resize\"");
-            f(container.to_glib_none().0)
+            if let Some(f) = (*parent_class).check_resize {
+                f(container.to_glib_none().0)
+            }
         }
     }
 
@@ -84,10 +81,9 @@ impl<T: ContainerImpl + ObjectImpl> ContainerImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
-            let f = (*parent_class)
-                .set_focus_child
-                .expect("No parent class impl for \"set_focus_child\"");
-            f(container.to_glib_none().0, widget.to_glib_none().0)
+            if let Some(f) = (*parent_class).set_focus_child {
+                f(container.to_glib_none().0, widget.to_glib_none().0)
+            }
         }
     }
 
@@ -95,10 +91,11 @@ impl<T: ContainerImpl + ObjectImpl> ContainerImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
-            let f = (*parent_class)
-                .child_type
-                .expect("No parent class impl for \"child_type\"");
-            from_glib(f(container.to_glib_none().0))
+            if let Some(f) = (*parent_class).child_type {
+                from_glib(f(container.to_glib_none().0))
+            } else {
+                glib::Type::Unit
+            }
         }
     }
 

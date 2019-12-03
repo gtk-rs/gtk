@@ -30,10 +30,9 @@ impl<T: DialogImpl + ObjectImpl> DialogImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkDialogClass;
-            let f = (*parent_class)
-                .response
-                .expect("No parent class impl for \"response\"");
-            f(dialog.to_glib_none().0, response.to_glib())
+            if let Some(f) = (*parent_class).response {
+                f(dialog.to_glib_none().0, response.to_glib())
+            }
         }
     }
 
@@ -41,10 +40,9 @@ impl<T: DialogImpl + ObjectImpl> DialogImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkDialogClass;
-            let f = (*parent_class)
-                .close
-                .expect("No parent class impl for \"close\"");
-            f(dialog.to_glib_none().0)
+            if let Some(f) = (*parent_class).close {
+                f(dialog.to_glib_none().0)
+            }
         }
     }
 }

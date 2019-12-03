@@ -45,10 +45,9 @@ impl<T: WindowImpl + ObjectImpl> WindowImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWindowClass;
-            let f = (*parent_class)
-                .set_focus
-                .expect("No parent class impl for \"set_focus\"");
-            f(window.to_glib_none().0, focus.to_glib_none().0)
+            if let Some(f) = (*parent_class).set_focus {
+                f(window.to_glib_none().0, focus.to_glib_none().0)
+            }
         }
     }
 
@@ -56,10 +55,9 @@ impl<T: WindowImpl + ObjectImpl> WindowImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWindowClass;
-            let f = (*parent_class)
-                .activate_focus
-                .expect("No parent class impl for \"activate_focus\"");
-            f(window.to_glib_none().0)
+            if let Some(f) = (*parent_class).activate_focus {
+                f(window.to_glib_none().0)
+            }
         }
     }
 
@@ -67,10 +65,9 @@ impl<T: WindowImpl + ObjectImpl> WindowImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWindowClass;
-            let f = (*parent_class)
-                .activate_default
-                .expect("No parent class impl for \"activate_default\"");
-            f(window.to_glib_none().0)
+            if let Some(f) = (*parent_class).activate_default {
+                f(window.to_glib_none().0)
+            }
         }
     }
 
@@ -78,10 +75,9 @@ impl<T: WindowImpl + ObjectImpl> WindowImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWindowClass;
-            let f = (*parent_class)
-                .keys_changed
-                .expect("No parent class impl for \"keys_changed\"");
-            f(window.to_glib_none().0)
+            if let Some(f) = (*parent_class).keys_changed {
+                f(window.to_glib_none().0)
+            }
         }
     }
 
@@ -89,10 +85,11 @@ impl<T: WindowImpl + ObjectImpl> WindowImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWindowClass;
-            let f = (*parent_class)
-                .enable_debugging
-                .expect("No parent class impl for \"enable_debugging\"");
-            from_glib(f(window.to_glib_none().0, toggle.to_glib()))
+            if let Some(f) = (*parent_class).enable_debugging {
+                from_glib(f(window.to_glib_none().0, toggle.to_glib()))
+            } else {
+                false
+            }
         }
     }
 }
