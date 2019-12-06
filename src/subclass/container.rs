@@ -24,7 +24,7 @@ pub trait ContainerImpl: ContainerImplExt + WidgetImpl + 'static {
         self.parent_check_resize(container)
     }
 
-    fn set_focus_child(&self, container: &Container, widget: &Widget) {
+    fn set_focus_child(&self, container: &Container, widget: Option<&Widget>) {
         self.parent_set_focus_child(container, widget)
     }
 
@@ -41,7 +41,7 @@ pub trait ContainerImplExt {
     fn parent_add(&self, container: &Container, widget: &Widget);
     fn parent_remove(&self, container: &Container, widget: &Widget);
     fn parent_check_resize(&self, container: &Container);
-    fn parent_set_focus_child(&self, container: &Container, widget: &Widget);
+    fn parent_set_focus_child(&self, container: &Container, widget: Option<&Widget>);
     fn parent_child_type(&self, container: &Container) -> glib::Type;
     fn parent_get_path_for_child(&self, container: &Container, widget: &Widget) -> WidgetPath;
 }
@@ -80,7 +80,7 @@ impl<T: ContainerImpl + ObjectImpl> ContainerImplExt for T {
         }
     }
 
-    fn parent_set_focus_child(&self, container: &Container, widget: &Widget) {
+    fn parent_set_focus_child(&self, container: &Container, widget: Option<&Widget>) {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
@@ -177,9 +177,9 @@ unsafe extern "C" fn container_set_focus_child<T: ObjectSubclass>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Container = from_glib_borrow(ptr);
-    let widget: Widget = from_glib_borrow(wdgtptr);
+    let widget: Option<Widget> = from_glib_borrow(wdgtptr);
 
-    imp.set_focus_child(&wrap, &widget)
+    imp.set_focus_child(&wrap, widget.as_ref())
 }
 
 unsafe extern "C" fn container_child_type<T: ObjectSubclass>(
