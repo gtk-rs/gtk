@@ -11,7 +11,7 @@ use Window;
 use WindowClass;
 
 pub trait WindowImpl: WindowImplExt + BinImpl + 'static {
-    fn set_focus(&self, window: &Window, focus: &Widget) {
+    fn set_focus(&self, window: &Window, focus: Option<&Widget>) {
         self.parent_set_focus(window, focus)
     }
 
@@ -33,7 +33,7 @@ pub trait WindowImpl: WindowImplExt + BinImpl + 'static {
 }
 
 pub trait WindowImplExt {
-    fn parent_set_focus(&self, window: &Window, focus: &Widget);
+    fn parent_set_focus(&self, window: &Window, focus: Option<&Widget>);
     fn parent_activate_focus(&self, window: &Window);
     fn parent_activate_default(&self, window: &Window);
     fn parent_keys_changed(&self, window: &Window);
@@ -41,7 +41,7 @@ pub trait WindowImplExt {
 }
 
 impl<T: WindowImpl + ObjectImpl> WindowImplExt for T {
-    fn parent_set_focus(&self, window: &Window, focus: &Widget) {
+    fn parent_set_focus(&self, window: &Window, focus: Option<&Widget>) {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWindowClass;
@@ -117,9 +117,9 @@ unsafe extern "C" fn window_set_focus<T: ObjectSubclass>(
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Window = from_glib_borrow(ptr);
-    let widget: Widget = from_glib_borrow(widgetptr);
+    let widget: Option<Widget> = from_glib_borrow(widgetptr);
 
-    imp.set_focus(&wrap, &widget)
+    imp.set_focus(&wrap, widget.as_ref())
 }
 
 unsafe extern "C" fn window_activate_focus<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWindow)
