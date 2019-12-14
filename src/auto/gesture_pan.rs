@@ -108,6 +108,7 @@ impl GesturePan {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GesturePanBuilder {
     orientation: Option<Orientation>,
     button: Option<u32>,
@@ -121,16 +122,7 @@ pub struct GesturePanBuilder {
 
 impl GesturePanBuilder {
     pub fn new() -> Self {
-        Self {
-            orientation: None,
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GesturePan {
@@ -190,8 +182,8 @@ impl GesturePanBuilder {
         self
     }
 
-    pub fn window(mut self, window: &gdk::Window) -> Self {
-        self.window = Some(window.clone());
+    pub fn window<P: IsA<gdk::Window>>(mut self, window: &P) -> Self {
+        self.window = Some(window.clone().upcast());
         self
     }
 
@@ -200,8 +192,8 @@ impl GesturePanBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }

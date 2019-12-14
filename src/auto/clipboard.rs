@@ -49,7 +49,7 @@ impl Clipboard {
         target: &gdk::Atom,
         callback: P,
     ) {
-        let callback_data: Box_<P> = Box::new(callback);
+        let callback_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, &SelectionData) + 'static>(
             clipboard: *mut gtk_sys::GtkClipboard,
             selection_data: *mut gtk_sys::GtkSelectionData,
@@ -67,13 +67,13 @@ impl Clipboard {
                 self.to_glib_none().0,
                 target.to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
 
     pub fn request_image<P: FnOnce(&Clipboard, &gdk_pixbuf::Pixbuf) + 'static>(&self, callback: P) {
-        let callback_data: Box_<P> = Box::new(callback);
+        let callback_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, &gdk_pixbuf::Pixbuf) + 'static>(
             clipboard: *mut gtk_sys::GtkClipboard,
             pixbuf: *mut gdk_pixbuf_sys::GdkPixbuf,
@@ -90,7 +90,7 @@ impl Clipboard {
             gtk_sys::gtk_clipboard_request_image(
                 self.to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
@@ -103,7 +103,7 @@ impl Clipboard {
         buffer: &P,
         callback: Q,
     ) {
-        let callback_data: Box_<Q> = Box::new(callback);
+        let callback_data: Box_<Q> = Box_::new(callback);
         unsafe extern "C" fn callback_func<
             P: IsA<TextBuffer>,
             Q: FnOnce(&Clipboard, &gdk::Atom, Option<&str>, usize) + 'static,
@@ -128,13 +128,13 @@ impl Clipboard {
                 self.to_glib_none().0,
                 buffer.as_ref().to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
 
     pub fn request_text<P: FnOnce(&Clipboard, Option<&str>) + 'static>(&self, callback: P) {
-        let callback_data: Box_<P> = Box::new(callback);
+        let callback_data: Box_<P> = Box_::new(callback);
         unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, Option<&str>) + 'static>(
             clipboard: *mut gtk_sys::GtkClipboard,
             text: *const libc::c_char,
@@ -152,7 +152,7 @@ impl Clipboard {
             gtk_sys::gtk_clipboard_request_text(
                 self.to_glib_none().0,
                 callback,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
             );
         }
     }
@@ -192,15 +192,15 @@ impl Clipboard {
     pub fn wait_for_rich_text<P: IsA<TextBuffer>>(&self, buffer: &P) -> (Vec<u8>, gdk::Atom) {
         unsafe {
             let mut format = gdk::Atom::uninitialized();
-            let mut length = mem::uninitialized();
+            let mut length = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
                 gtk_sys::gtk_clipboard_wait_for_rich_text(
                     self.to_glib_none().0,
                     buffer.as_ref().to_glib_none().0,
                     format.to_glib_none_mut().0,
-                    &mut length,
+                    length.as_mut_ptr(),
                 ),
-                length as usize,
+                length.assume_init() as usize,
             );
             (ret, format)
         }
@@ -209,16 +209,16 @@ impl Clipboard {
     pub fn wait_for_targets(&self) -> Option<Vec<gdk::Atom>> {
         unsafe {
             let mut targets = ptr::null_mut();
-            let mut n_targets = mem::uninitialized();
+            let mut n_targets = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_clipboard_wait_for_targets(
                 self.to_glib_none().0,
                 &mut targets,
-                &mut n_targets,
+                n_targets.as_mut_ptr(),
             ));
             if ret {
                 Some(FromGlibContainer::from_glib_container_num(
                     targets,
-                    n_targets as usize,
+                    n_targets.assume_init() as usize,
                 ))
             } else {
                 None

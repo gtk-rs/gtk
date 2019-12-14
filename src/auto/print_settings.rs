@@ -10,7 +10,6 @@ use std;
 use std::fmt;
 use std::mem;
 use std::ptr;
-use Error;
 use NumberUpLayout;
 use PageOrientation;
 use PageRange;
@@ -35,7 +34,9 @@ impl PrintSettings {
         unsafe { from_glib_full(gtk_sys::gtk_print_settings_new()) }
     }
 
-    pub fn new_from_file<P: AsRef<std::path::Path>>(file_name: P) -> Result<PrintSettings, Error> {
+    pub fn new_from_file<P: AsRef<std::path::Path>>(
+        file_name: P,
+    ) -> Result<PrintSettings, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -64,7 +65,7 @@ impl PrintSettings {
     pub fn new_from_key_file(
         key_file: &glib::KeyFile,
         group_name: Option<&str>,
-    ) -> Result<PrintSettings, Error> {
+    ) -> Result<PrintSettings, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -248,10 +249,13 @@ impl PrintSettings {
 
     pub fn get_page_ranges(&self) -> Vec<PageRange> {
         unsafe {
-            let mut num_ranges = mem::uninitialized();
+            let mut num_ranges = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
-                gtk_sys::gtk_print_settings_get_page_ranges(self.to_glib_none().0, &mut num_ranges),
-                num_ranges as usize,
+                gtk_sys::gtk_print_settings_get_page_ranges(
+                    self.to_glib_none().0,
+                    num_ranges.as_mut_ptr(),
+                ),
+                num_ranges.assume_init() as usize,
             );
             ret
         }
@@ -354,7 +358,7 @@ impl PrintSettings {
         }
     }
 
-    pub fn load_file<P: AsRef<std::path::Path>>(&self, file_name: P) -> Result<(), Error> {
+    pub fn load_file<P: AsRef<std::path::Path>>(&self, file_name: P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_print_settings_load_file(
@@ -374,7 +378,7 @@ impl PrintSettings {
         &self,
         key_file: &glib::KeyFile,
         group_name: Option<&str>,
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_print_settings_load_key_file(
@@ -618,7 +622,7 @@ impl PrintSettings {
         }
     }
 
-    pub fn to_file<P: AsRef<std::path::Path>>(&self, file_name: P) -> Result<(), Error> {
+    pub fn to_file<P: AsRef<std::path::Path>>(&self, file_name: P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_print_settings_to_file(

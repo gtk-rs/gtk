@@ -45,6 +45,7 @@ impl Default for CellRendererToggle {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererToggleBuilder {
     activatable: Option<bool>,
     active: Option<bool>,
@@ -69,27 +70,7 @@ pub struct CellRendererToggleBuilder {
 
 impl CellRendererToggleBuilder {
     pub fn new() -> Self {
-        Self {
-            activatable: None,
-            active: None,
-            inconsistent: None,
-            indicator_size: None,
-            radio: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererToggle {
@@ -353,7 +334,10 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
                 b"inconsistent\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `inconsistent` getter")
+                .unwrap()
         }
     }
 
@@ -375,7 +359,10 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
                 b"indicator-size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `indicator-size` getter")
+                .unwrap()
         }
     }
 

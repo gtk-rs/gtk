@@ -16,7 +16,6 @@ use std::fmt;
 use std::mem::transmute;
 use std::ptr;
 use Application;
-use Error;
 use Widget;
 
 glib_wrapper! {
@@ -67,21 +66,20 @@ pub trait BuilderExt: 'static {
 
     //fn add_callback_symbols<P: FnOnce() + 'static>(&self, first_callback_name: &str, first_callback_symbol: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    fn add_from_resource(&self, resource_path: &str) -> Result<(), Error>;
+    fn add_from_resource(&self, resource_path: &str) -> Result<(), glib::Error>;
 
-    fn add_from_string(&self, buffer: &str) -> Result<(), Error>;
+    fn add_from_string(&self, buffer: &str) -> Result<(), glib::Error>;
 
     fn add_objects_from_resource(
         &self,
         resource_path: &str,
         object_ids: &[&str],
-    ) -> Result<(), Error>;
+    ) -> Result<(), glib::Error>;
 
-    fn add_objects_from_string(&self, buffer: &str, object_ids: &[&str]) -> Result<(), Error>;
+    fn add_objects_from_string(&self, buffer: &str, object_ids: &[&str])
+        -> Result<(), glib::Error>;
 
     //fn connect_signals(&self, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
-
-    //fn connect_signals_full(&self, func: /*Unimplemented*/FnMut(&Builder, &glib::Object, &str, &str, Option<&glib::Object>, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     fn expose_object<P: IsA<glib::Object>>(&self, name: &str, object: &P);
 
@@ -90,7 +88,7 @@ pub trait BuilderExt: 'static {
         widget: &P,
         template_type: glib::types::Type,
         buffer: &str,
-    ) -> Result<(), Error>;
+    ) -> Result<(), glib::Error>;
 
     fn get_application(&self) -> Option<Application>;
 
@@ -100,19 +98,19 @@ pub trait BuilderExt: 'static {
 
     fn get_type_from_name(&self, type_name: &str) -> glib::types::Type;
 
-    //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box<dyn Fn() + 'static>>;
+    //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box_<dyn Fn() + 'static>>;
 
     fn set_application<P: IsA<Application>>(&self, application: &P);
 
     fn set_translation_domain(&self, domain: Option<&str>);
 
-    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, Error>;
+    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, glib::Error>;
 
     fn value_from_string_type(
         &self,
         type_: glib::types::Type,
         string: &str,
-    ) -> Result<glib::Value, Error>;
+    ) -> Result<glib::Value, glib::Error>;
 
     fn connect_property_translation_domain_notify<F: Fn(&Self) + 'static>(
         &self,
@@ -129,7 +127,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     //    unsafe { TODO: call gtk_sys:gtk_builder_add_callback_symbols() }
     //}
 
-    fn add_from_resource(&self, resource_path: &str) -> Result<(), Error> {
+    fn add_from_resource(&self, resource_path: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_builder_add_from_resource(
@@ -145,7 +143,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    fn add_from_string(&self, buffer: &str) -> Result<(), Error> {
+    fn add_from_string(&self, buffer: &str) -> Result<(), glib::Error> {
         let length = buffer.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
@@ -167,7 +165,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         &self,
         resource_path: &str,
         object_ids: &[&str],
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_builder_add_objects_from_resource(
@@ -184,7 +182,11 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    fn add_objects_from_string(&self, buffer: &str, object_ids: &[&str]) -> Result<(), Error> {
+    fn add_objects_from_string(
+        &self,
+        buffer: &str,
+        object_ids: &[&str],
+    ) -> Result<(), glib::Error> {
         let length = buffer.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
@@ -207,10 +209,6 @@ impl<O: IsA<Builder>> BuilderExt for O {
     //    unsafe { TODO: call gtk_sys:gtk_builder_connect_signals() }
     //}
 
-    //fn connect_signals_full(&self, func: /*Unimplemented*/FnMut(&Builder, &glib::Object, &str, &str, Option<&glib::Object>, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call gtk_sys:gtk_builder_connect_signals_full() }
-    //}
-
     fn expose_object<P: IsA<glib::Object>>(&self, name: &str, object: &P) {
         unsafe {
             gtk_sys::gtk_builder_expose_object(
@@ -226,7 +224,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         widget: &P,
         template_type: glib::types::Type,
         buffer: &str,
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         let length = buffer.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
@@ -279,7 +277,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box<dyn Fn() + 'static>> {
+    //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box_<dyn Fn() + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_builder_lookup_callback_symbol() }
     //}
 
@@ -301,7 +299,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, Error> {
+    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, glib::Error> {
     //    unsafe { TODO: call gtk_sys:gtk_builder_value_from_string() }
     //}
 
@@ -309,7 +307,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         &self,
         type_: glib::types::Type,
         string: &str,
-    ) -> Result<glib::Value, Error> {
+    ) -> Result<glib::Value, glib::Error> {
         unsafe {
             let mut value = glib::Value::uninitialized();
             let mut error = ptr::null_mut();

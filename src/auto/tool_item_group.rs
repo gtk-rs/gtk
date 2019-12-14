@@ -45,6 +45,7 @@ impl ToolItemGroup {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ToolItemGroupBuilder {
     collapsed: Option<bool>,
     ellipsize: Option<pango::EllipsizeMode>,
@@ -80,7 +81,6 @@ pub struct ToolItemGroupBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -92,49 +92,7 @@ pub struct ToolItemGroupBuilder {
 
 impl ToolItemGroupBuilder {
     pub fn new() -> Self {
-        Self {
-            collapsed: None,
-            ellipsize: None,
-            header_relief: None,
-            label: None,
-            label_widget: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ToolItemGroup {
@@ -288,8 +246,8 @@ impl ToolItemGroupBuilder {
         self
     }
 
-    pub fn label_widget(mut self, label_widget: &Widget) -> Self {
-        self.label_widget = Some(label_widget.clone());
+    pub fn label_widget<P: IsA<Widget>>(mut self, label_widget: &P) -> Self {
+        self.label_widget = Some(label_widget.clone().upcast());
         self
     }
 
@@ -298,8 +256,8 @@ impl ToolItemGroupBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -419,8 +377,8 @@ impl ToolItemGroupBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -683,7 +641,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"expand\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `expand` getter")
+                .unwrap()
         }
     }
 
@@ -707,7 +668,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"fill\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `fill` getter")
+                .unwrap()
         }
     }
 
@@ -731,7 +695,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"homogeneous\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `homogeneous` getter")
+                .unwrap()
         }
     }
 
@@ -755,7 +722,10 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
                 b"new-row\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `new-row` getter")
+                .unwrap()
         }
     }
 

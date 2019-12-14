@@ -4,10 +4,12 @@
 
 //! Traits and essential types intended for blanket imports.
 
+#[doc(hidden)]
 pub use glib::prelude::*;
 
 pub use auto::traits::*;
 
+pub use accel_group::AccelGroupExtManual;
 pub use app_chooser::AppChooserExt;
 pub use buildable::BuildableExtManual;
 pub use builder::BuilderExtManual;
@@ -28,8 +30,6 @@ pub use list_box::ListBoxExtManual;
 pub use list_store::GtkListStoreExtManual;
 pub use menu::GtkMenuExtManual;
 pub use notebook::NotebookExtManual;
-#[cfg(any(feature = "v3_22", feature = "dox"))]
-pub use pad_controller::PadControllerExtManual;
 pub use switch::SwitchExtManual;
 pub use text_buffer::TextBufferExtManual;
 pub use tree_sortable::TreeSortableExtManual;

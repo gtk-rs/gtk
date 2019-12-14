@@ -81,6 +81,7 @@ impl Default for StyleContext {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct StyleContextBuilder {
     direction: Option<TextDirection>,
     paint_clock: Option<gdk::FrameClock>,
@@ -90,12 +91,7 @@ pub struct StyleContextBuilder {
 
 impl StyleContextBuilder {
     pub fn new() -> Self {
-        Self {
-            direction: None,
-            paint_clock: None,
-            parent: None,
-            screen: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> StyleContext {
@@ -128,8 +124,8 @@ impl StyleContextBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &StyleContext) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<StyleContext>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -553,7 +549,10 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
                 b"direction\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `direction` getter")
+                .unwrap()
         }
     }
 
@@ -575,7 +574,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
                 b"paint-clock\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `paint-clock` getter")
         }
     }
 

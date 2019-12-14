@@ -13,7 +13,6 @@ use glib::ToValue;
 use glib_sys;
 use gtk_sys;
 use pango;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -50,6 +49,7 @@ impl Default for ToolItem {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ToolItemBuilder {
     is_important: Option<bool>,
     visible_horizontal: Option<bool>,
@@ -83,7 +83,6 @@ pub struct ToolItemBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -95,47 +94,7 @@ pub struct ToolItemBuilder {
 
 impl ToolItemBuilder {
     pub fn new() -> Self {
-        Self {
-            is_important: None,
-            visible_horizontal: None,
-            visible_vertical: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ToolItem {
@@ -283,8 +242,8 @@ impl ToolItemBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -404,8 +363,8 @@ impl ToolItemBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -508,8 +467,10 @@ pub trait ToolItemExt: 'static {
 
     fn toolbar_reconfigured(&self);
 
-    fn connect_create_menu_proxy<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F)
-        -> SignalHandlerId;
+    fn connect_create_menu_proxy<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_toolbar_reconfigured<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -726,11 +687,14 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
         }
     }
 
-    fn connect_create_menu_proxy<F: Fn(&Self) -> Inhibit + 'static>(
+    fn connect_create_menu_proxy<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn create_menu_proxy_trampoline<P, F: Fn(&P) -> Inhibit + 'static>(
+        unsafe extern "C" fn create_menu_proxy_trampoline<
+            P,
+            F: Fn(&P) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkToolItem,
             f: glib_sys::gpointer,
         ) -> glib_sys::gboolean

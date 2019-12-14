@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gio;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -16,7 +17,6 @@ use std::fmt;
 use std::mem::transmute;
 use std::ptr;
 use CssSection;
-use Error;
 use StyleProvider;
 
 glib_wrapper! {
@@ -59,25 +59,25 @@ impl Default for CssProvider {
 pub const NONE_CSS_PROVIDER: Option<&CssProvider> = None;
 
 pub trait CssProviderExt: 'static {
-    fn load_from_data(&self, data: &[u8]) -> Result<(), Error>;
+    fn load_from_data(&self, data: &[u8]) -> Result<(), glib::Error>;
 
-    fn load_from_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error>;
+    fn load_from_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error>;
 
-    fn load_from_path(&self, path: &str) -> Result<(), Error>;
+    fn load_from_path(&self, path: &str) -> Result<(), glib::Error>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn load_from_resource(&self, resource_path: &str);
 
     fn to_string(&self) -> GString;
 
-    fn connect_parsing_error<F: Fn(&Self, &CssSection, &Error) + 'static>(
+    fn connect_parsing_error<F: Fn(&Self, &CssSection, &glib::Error) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 }
 
 impl<O: IsA<CssProvider>> CssProviderExt for O {
-    fn load_from_data(&self, data: &[u8]) -> Result<(), Error> {
+    fn load_from_data(&self, data: &[u8]) -> Result<(), glib::Error> {
         let length = data.len() as isize;
         unsafe {
             let mut error = ptr::null_mut();
@@ -95,7 +95,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
         }
     }
 
-    fn load_from_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error> {
+    fn load_from_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_css_provider_load_from_file(
@@ -111,7 +111,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
         }
     }
 
-    fn load_from_path(&self, path: &str) -> Result<(), Error> {
+    fn load_from_path(&self, path: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_css_provider_load_from_path(
@@ -145,11 +145,14 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
         }
     }
 
-    fn connect_parsing_error<F: Fn(&Self, &CssSection, &Error) + 'static>(
+    fn connect_parsing_error<F: Fn(&Self, &CssSection, &glib::Error) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn parsing_error_trampoline<P, F: Fn(&P, &CssSection, &Error) + 'static>(
+        unsafe extern "C" fn parsing_error_trampoline<
+            P,
+            F: Fn(&P, &CssSection, &glib::Error) + 'static,
+        >(
             this: *mut gtk_sys::GtkCssProvider,
             section: *mut gtk_sys::GtkCssSection,
             error: *mut glib_sys::GError,

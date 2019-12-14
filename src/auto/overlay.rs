@@ -39,6 +39,7 @@ impl Default for Overlay {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct OverlayBuilder {
     border_width: Option<u32>,
     child: Option<Widget>,
@@ -69,7 +70,6 @@ pub struct OverlayBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -81,44 +81,7 @@ pub struct OverlayBuilder {
 
 impl OverlayBuilder {
     pub fn new() -> Self {
-        Self {
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Overlay {
@@ -242,8 +205,8 @@ impl OverlayBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -363,8 +326,8 @@ impl OverlayBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -423,7 +386,7 @@ pub trait OverlayExt: 'static {
     fn get_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P) -> bool;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, position: i32);
+    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, index_: i32);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P, pass_through: bool);
@@ -456,12 +419,12 @@ impl<O: IsA<Overlay>> OverlayExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, position: i32) {
+    fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, index_: i32) {
         unsafe {
             gtk_sys::gtk_overlay_reorder_overlay(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                position,
+                index_,
             );
         }
     }
@@ -486,7 +449,10 @@ impl<O: IsA<Overlay>> OverlayExt for O {
                 b"index\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `index` getter")
+                .unwrap()
         }
     }
 

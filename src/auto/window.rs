@@ -30,7 +30,6 @@ use Application;
 use Bin;
 use Buildable;
 use Container;
-use Error;
 use ResizeMode;
 use Widget;
 use WindowGroup;
@@ -82,7 +81,9 @@ impl Window {
         }
     }
 
-    pub fn set_default_icon_from_file<P: AsRef<std::path::Path>>(filename: P) -> Result<(), Error> {
+    pub fn set_default_icon_from_file<P: AsRef<std::path::Path>>(
+        filename: P,
+    ) -> Result<(), glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
             let mut error = ptr::null_mut();
@@ -120,6 +121,7 @@ impl Window {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct WindowBuilder {
     accept_focus: Option<bool>,
     application: Option<Application>,
@@ -178,7 +180,6 @@ pub struct WindowBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -190,72 +191,7 @@ pub struct WindowBuilder {
 
 impl WindowBuilder {
     pub fn new() -> Self {
-        Self {
-            accept_focus: None,
-            application: None,
-            attached_to: None,
-            decorated: None,
-            default_height: None,
-            default_width: None,
-            deletable: None,
-            destroy_with_parent: None,
-            focus_on_map: None,
-            focus_visible: None,
-            gravity: None,
-            hide_titlebar_when_maximized: None,
-            icon: None,
-            icon_name: None,
-            mnemonics_visible: None,
-            modal: None,
-            resizable: None,
-            role: None,
-            screen: None,
-            skip_pager_hint: None,
-            skip_taskbar_hint: None,
-            startup_id: None,
-            title: None,
-            transient_for: None,
-            type_: None,
-            type_hint: None,
-            urgency_hint: None,
-            window_position: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Window {
@@ -463,13 +399,13 @@ impl WindowBuilder {
         self
     }
 
-    pub fn application(mut self, application: &Application) -> Self {
-        self.application = Some(application.clone());
+    pub fn application<P: IsA<Application>>(mut self, application: &P) -> Self {
+        self.application = Some(application.clone().upcast());
         self
     }
 
-    pub fn attached_to(mut self, attached_to: &Widget) -> Self {
-        self.attached_to = Some(attached_to.clone());
+    pub fn attached_to<P: IsA<Widget>>(mut self, attached_to: &P) -> Self {
+        self.attached_to = Some(attached_to.clone().upcast());
         self
     }
 
@@ -573,8 +509,8 @@ impl WindowBuilder {
         self
     }
 
-    pub fn transient_for(mut self, transient_for: &Window) -> Self {
-        self.transient_for = Some(transient_for.clone());
+    pub fn transient_for<P: IsA<Window>>(mut self, transient_for: &P) -> Self {
+        self.transient_for = Some(transient_for.clone().upcast());
         self
     }
 
@@ -603,8 +539,8 @@ impl WindowBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -724,8 +660,8 @@ impl WindowBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -930,7 +866,12 @@ pub trait GtkWindowExt: 'static {
 
     fn set_focus_visible(&self, setting: bool);
 
-    //fn set_geometry_hints<P: IsA<Widget>>(&self, geometry_widget: Option<&P>, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: gdk::WindowHints);
+    fn set_geometry_hints<P: IsA<Widget>>(
+        &self,
+        geometry_widget: Option<&P>,
+        geometry: Option<&gdk::Geometry>,
+        geom_mask: gdk::WindowHints,
+    );
 
     fn set_gravity(&self, gravity: gdk::Gravity);
 
@@ -940,7 +881,8 @@ pub trait GtkWindowExt: 'static {
 
     fn set_icon(&self, icon: Option<&gdk_pixbuf::Pixbuf>);
 
-    fn set_icon_from_file<P: AsRef<std::path::Path>>(&self, filename: P) -> Result<(), Error>;
+    fn set_icon_from_file<P: AsRef<std::path::Path>>(&self, filename: P)
+        -> Result<(), glib::Error>;
 
     fn set_icon_list(&self, list: &[gdk_pixbuf::Pixbuf]);
 
@@ -1268,13 +1210,15 @@ impl<O: IsA<Window>> GtkWindowExt for O {
 
     fn get_default_size(&self) -> (i32, i32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_window_get_default_size(
                 self.as_ref().to_glib_none().0,
-                &mut width,
-                &mut height,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
@@ -1397,13 +1341,15 @@ impl<O: IsA<Window>> GtkWindowExt for O {
 
     fn get_position(&self) -> (i32, i32) {
         unsafe {
-            let mut root_x = mem::uninitialized();
-            let mut root_y = mem::uninitialized();
+            let mut root_x = mem::MaybeUninit::uninit();
+            let mut root_y = mem::MaybeUninit::uninit();
             gtk_sys::gtk_window_get_position(
                 self.as_ref().to_glib_none().0,
-                &mut root_x,
-                &mut root_y,
+                root_x.as_mut_ptr(),
+                root_y.as_mut_ptr(),
             );
+            let root_x = root_x.assume_init();
+            let root_y = root_y.assume_init();
             (root_x, root_y)
         }
     }
@@ -1422,9 +1368,15 @@ impl<O: IsA<Window>> GtkWindowExt for O {
 
     fn get_size(&self) -> (i32, i32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
-            gtk_sys::gtk_window_get_size(self.as_ref().to_glib_none().0, &mut width, &mut height);
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_window_get_size(
+                self.as_ref().to_glib_none().0,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
+            );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
@@ -1699,9 +1651,21 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    //fn set_geometry_hints<P: IsA<Widget>>(&self, geometry_widget: Option<&P>, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: gdk::WindowHints) {
-    //    unsafe { TODO: call gtk_sys:gtk_window_set_geometry_hints() }
-    //}
+    fn set_geometry_hints<P: IsA<Widget>>(
+        &self,
+        geometry_widget: Option<&P>,
+        geometry: Option<&gdk::Geometry>,
+        geom_mask: gdk::WindowHints,
+    ) {
+        unsafe {
+            gtk_sys::gtk_window_set_geometry_hints(
+                self.as_ref().to_glib_none().0,
+                geometry_widget.map(|p| p.as_ref()).to_glib_none().0,
+                mut_override(geometry.to_glib_none().0),
+                geom_mask.to_glib(),
+            );
+        }
+    }
 
     fn set_gravity(&self, gravity: gdk::Gravity) {
         unsafe {
@@ -1733,7 +1697,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn set_icon_from_file<P: AsRef<std::path::Path>>(&self, filename: P) -> Result<(), Error> {
+    fn set_icon_from_file<P: AsRef<std::path::Path>>(
+        &self,
+        filename: P,
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_window_set_icon_from_file(
@@ -1932,7 +1899,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 b"default-height\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `default-height` getter")
+                .unwrap()
         }
     }
 
@@ -1954,7 +1924,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 b"default-width\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `default-width` getter")
+                .unwrap()
         }
     }
 
@@ -1976,7 +1949,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 b"has-toplevel-focus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-toplevel-focus` getter")
+                .unwrap()
         }
     }
 
@@ -1988,7 +1964,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 b"is-active\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-active` getter")
+                .unwrap()
         }
     }
 
@@ -2000,7 +1979,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 b"is-maximized\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-maximized` getter")
+                .unwrap()
         }
     }
 
@@ -2012,7 +1994,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 b"type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `type` getter")
+                .unwrap()
         }
     }
 
@@ -2024,7 +2009,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 b"window-position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `window-position` getter")
+                .unwrap()
         }
     }
 
@@ -2132,7 +2120,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
                 .emit("enable-debugging", &[&toggle])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_enable_debugging`")
+            .unwrap()
     }
 
     fn connect_keys_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

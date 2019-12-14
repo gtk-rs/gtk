@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::ToValue;
 use glib::Value;
@@ -49,6 +50,7 @@ impl Default for CellRendererCombo {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererComboBuilder {
     has_entry: Option<bool>,
     model: Option<TreeModel>,
@@ -117,71 +119,7 @@ pub struct CellRendererComboBuilder {
 
 impl CellRendererComboBuilder {
     pub fn new() -> Self {
-        Self {
-            has_entry: None,
-            model: None,
-            text_column: None,
-            align_set: None,
-            alignment: None,
-            attributes: None,
-            background: None,
-            background_rgba: None,
-            background_set: None,
-            editable: None,
-            editable_set: None,
-            ellipsize: None,
-            ellipsize_set: None,
-            family: None,
-            family_set: None,
-            font: None,
-            font_desc: None,
-            foreground: None,
-            foreground_rgba: None,
-            foreground_set: None,
-            language: None,
-            language_set: None,
-            markup: None,
-            max_width_chars: None,
-            placeholder_text: None,
-            rise: None,
-            rise_set: None,
-            scale: None,
-            scale_set: None,
-            single_paragraph_mode: None,
-            size: None,
-            size_points: None,
-            size_set: None,
-            stretch: None,
-            stretch_set: None,
-            strikethrough: None,
-            strikethrough_set: None,
-            style: None,
-            style_set: None,
-            text: None,
-            underline: None,
-            underline_set: None,
-            variant: None,
-            variant_set: None,
-            weight: None,
-            weight_set: None,
-            width_chars: None,
-            wrap_mode: None,
-            wrap_width: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererCombo {
@@ -386,8 +324,8 @@ impl CellRendererComboBuilder {
         self
     }
 
-    pub fn model(mut self, model: &TreeModel) -> Self {
-        self.model = Some(model.clone());
+    pub fn model<P: IsA<TreeModel>>(mut self, model: &P) -> Self {
+        self.model = Some(model.clone().upcast());
         self
     }
 
@@ -706,7 +644,7 @@ pub trait CellRendererComboExt: 'static {
 
     fn get_property_model(&self) -> Option<TreeModel>;
 
-    fn set_property_model(&self, model: Option<&TreeModel>);
+    fn set_property_model<P: IsA<TreeModel> + SetValueOptional>(&self, model: Option<&P>);
 
     fn get_property_text_column(&self) -> i32;
 
@@ -731,7 +669,10 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
                 b"has-entry\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-entry` getter")
+                .unwrap()
         }
     }
 
@@ -753,11 +694,13 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
                 b"model\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `model` getter")
         }
     }
 
-    fn set_property_model(&self, model: Option<&TreeModel>) {
+    fn set_property_model<P: IsA<TreeModel> + SetValueOptional>(&self, model: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -775,7 +718,10 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
                 b"text-column\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `text-column` getter")
+                .unwrap()
         }
     }
 

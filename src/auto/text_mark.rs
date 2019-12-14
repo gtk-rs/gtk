@@ -32,6 +32,7 @@ impl TextMark {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct TextMarkBuilder {
     left_gravity: Option<bool>,
     name: Option<String>,
@@ -39,10 +40,7 @@ pub struct TextMarkBuilder {
 
 impl TextMarkBuilder {
     pub fn new() -> Self {
-        Self {
-            left_gravity: None,
-            name: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> TextMark {

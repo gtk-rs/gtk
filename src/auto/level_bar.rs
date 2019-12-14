@@ -23,6 +23,7 @@ use Buildable;
 use Container;
 use LevelBarMode;
 use Orientable;
+use Orientation;
 use Widget;
 
 glib_wrapper! {
@@ -56,6 +57,7 @@ impl Default for LevelBar {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct LevelBarBuilder {
     inverted: Option<bool>,
     max_value: Option<f64>,
@@ -88,7 +90,6 @@ pub struct LevelBarBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -96,50 +97,12 @@ pub struct LevelBarBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
 }
 
 impl LevelBarBuilder {
     pub fn new() -> Self {
-        Self {
-            inverted: None,
-            max_value: None,
-            min_value: None,
-            mode: None,
-            value: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> LevelBar {
@@ -257,6 +220,9 @@ impl LevelBarBuilder {
         }
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
         }
         glib::Object::new(LevelBar::static_type(), &properties)
             .expect("object new")
@@ -400,8 +366,8 @@ impl LevelBarBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -447,6 +413,11 @@ impl LevelBarBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
@@ -530,12 +501,13 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
 
     fn get_offset_value(&self, name: Option<&str>) -> Option<f64> {
         unsafe {
-            let mut value = mem::uninitialized();
+            let mut value = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_level_bar_get_offset_value(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
-                &mut value,
+                value.as_mut_ptr(),
             ));
+            let value = value.assume_init();
             if ret {
                 Some(value)
             } else {

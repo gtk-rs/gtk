@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -15,7 +16,6 @@ use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use RecentFilter;
 use RecentInfo;
 use RecentSortType;
@@ -65,9 +65,9 @@ pub trait RecentChooserExt: 'static {
 
     fn select_all(&self);
 
-    fn select_uri(&self, uri: &str) -> Result<(), Error>;
+    fn select_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
-    fn set_current_uri(&self, uri: &str) -> Result<(), Error>;
+    fn set_current_uri(&self, uri: &str) -> Result<(), glib::Error>;
 
     fn set_filter(&self, filter: Option<&RecentFilter>);
 
@@ -227,10 +227,13 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
 
     fn get_uris(&self) -> Vec<GString> {
         unsafe {
-            let mut length = mem::uninitialized();
+            let mut length = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
-                gtk_sys::gtk_recent_chooser_get_uris(self.as_ref().to_glib_none().0, &mut length),
-                length as usize,
+                gtk_sys::gtk_recent_chooser_get_uris(
+                    self.as_ref().to_glib_none().0,
+                    length.as_mut_ptr(),
+                ),
+                length.assume_init() as usize,
             );
             ret
         }
@@ -259,7 +262,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    fn select_uri(&self, uri: &str) -> Result<(), Error> {
+    fn select_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_recent_chooser_select_uri(
@@ -275,7 +278,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    fn set_current_uri(&self, uri: &str) -> Result<(), Error> {
+    fn set_current_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_recent_chooser_set_current_uri(
@@ -361,7 +364,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     }
 
     fn set_sort_func<P: Fn(&RecentInfo, &RecentInfo) -> i32 + 'static>(&self, sort_func: P) {
-        let sort_func_data: Box_<P> = Box::new(sort_func);
+        let sort_func_data: Box_<P> = Box_::new(sort_func);
         unsafe extern "C" fn sort_func_func<P: Fn(&RecentInfo, &RecentInfo) -> i32 + 'static>(
             a: *mut gtk_sys::GtkRecentInfo,
             b: *mut gtk_sys::GtkRecentInfo,
@@ -385,7 +388,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             gtk_sys::gtk_recent_chooser_set_sort_func(
                 self.as_ref().to_glib_none().0,
                 sort_func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }

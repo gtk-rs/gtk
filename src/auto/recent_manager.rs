@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -18,7 +19,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use RecentData;
 use RecentInfo;
 
@@ -48,13 +48,14 @@ impl Default for RecentManager {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct RecentManagerBuilder {
     filename: Option<String>,
 }
 
 impl RecentManagerBuilder {
     pub fn new() -> Self {
-        Self { filename: None }
+        Self::default()
     }
 
     pub fn build(self) -> RecentManager {
@@ -85,13 +86,13 @@ pub trait RecentManagerExt: 'static {
 
     fn has_item(&self, uri: &str) -> bool;
 
-    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error>;
+    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, glib::Error>;
 
-    fn move_item(&self, uri: &str, new_uri: Option<&str>) -> Result<(), Error>;
+    fn move_item(&self, uri: &str, new_uri: Option<&str>) -> Result<(), glib::Error>;
 
-    fn purge_items(&self) -> Result<i32, Error>;
+    fn purge_items(&self) -> Result<i32, glib::Error>;
 
-    fn remove_item(&self, uri: &str) -> Result<(), Error>;
+    fn remove_item(&self, uri: &str) -> Result<(), glib::Error>;
 
     fn get_property_filename(&self) -> Option<GString>;
 
@@ -139,7 +140,7 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
         }
     }
 
-    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error> {
+    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gtk_sys::gtk_recent_manager_lookup_item(
@@ -155,7 +156,7 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
         }
     }
 
-    fn move_item(&self, uri: &str, new_uri: Option<&str>) -> Result<(), Error> {
+    fn move_item(&self, uri: &str, new_uri: Option<&str>) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_recent_manager_move_item(
@@ -172,7 +173,7 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
         }
     }
 
-    fn purge_items(&self) -> Result<i32, Error> {
+    fn purge_items(&self) -> Result<i32, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret =
@@ -185,7 +186,7 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
         }
     }
 
-    fn remove_item(&self, uri: &str) -> Result<(), Error> {
+    fn remove_item(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = gtk_sys::gtk_recent_manager_remove_item(
@@ -209,7 +210,9 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
                 b"filename\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `filename` getter")
         }
     }
 
@@ -221,7 +224,10 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
                 b"size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size` getter")
+                .unwrap()
         }
     }
 

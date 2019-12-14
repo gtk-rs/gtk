@@ -19,6 +19,7 @@ use CellArea;
 use CellLayout;
 use CellRenderer;
 use Orientable;
+use Orientation;
 
 glib_wrapper! {
     pub struct CellAreaBox(Object<gtk_sys::GtkCellAreaBox, gtk_sys::GtkCellAreaBoxClass, CellAreaBoxClass>) @extends CellArea, @implements Buildable, CellLayout, Orientable;
@@ -41,17 +42,16 @@ impl Default for CellAreaBox {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellAreaBoxBuilder {
     spacing: Option<i32>,
     focus_cell: Option<CellRenderer>,
+    orientation: Option<Orientation>,
 }
 
 impl CellAreaBoxBuilder {
     pub fn new() -> Self {
-        Self {
-            spacing: None,
-            focus_cell: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellAreaBox {
@@ -61,6 +61,9 @@ impl CellAreaBoxBuilder {
         }
         if let Some(ref focus_cell) = self.focus_cell {
             properties.push(("focus-cell", focus_cell));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
         }
         glib::Object::new(CellAreaBox::static_type(), &properties)
             .expect("object new")
@@ -73,8 +76,13 @@ impl CellAreaBoxBuilder {
         self
     }
 
-    pub fn focus_cell(mut self, focus_cell: &CellRenderer) -> Self {
-        self.focus_cell = Some(focus_cell.clone());
+    pub fn focus_cell<P: IsA<CellRenderer>>(mut self, focus_cell: &P) -> Self {
+        self.focus_cell = Some(focus_cell.clone().upcast());
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }

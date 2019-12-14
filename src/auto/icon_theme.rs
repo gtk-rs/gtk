@@ -6,6 +6,7 @@ use cairo;
 use gdk;
 use gdk_pixbuf;
 use gio;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -19,7 +20,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use IconInfo;
 use IconLookupFlags;
 
@@ -78,7 +78,7 @@ pub trait IconThemeExt: 'static {
         icon_name: &str,
         size: i32,
         flags: IconLookupFlags,
-    ) -> Result<Option<gdk_pixbuf::Pixbuf>, Error>;
+    ) -> Result<Option<gdk_pixbuf::Pixbuf>, glib::Error>;
 
     fn load_icon_for_scale(
         &self,
@@ -86,7 +86,7 @@ pub trait IconThemeExt: 'static {
         size: i32,
         scale: i32,
         flags: IconLookupFlags,
-    ) -> Result<Option<gdk_pixbuf::Pixbuf>, Error>;
+    ) -> Result<Option<gdk_pixbuf::Pixbuf>, glib::Error>;
 
     fn load_surface<P: IsA<gdk::Window>>(
         &self,
@@ -95,7 +95,7 @@ pub trait IconThemeExt: 'static {
         scale: i32,
         for_window: Option<&P>,
         flags: IconLookupFlags,
-    ) -> Result<Option<cairo::Surface>, Error>;
+    ) -> Result<Option<cairo::Surface>, glib::Error>;
 
     fn lookup_by_gicon<P: IsA<gio::Icon>>(
         &self,
@@ -191,7 +191,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         icon_name: &str,
         size: i32,
         flags: IconLookupFlags,
-    ) -> Result<Option<gdk_pixbuf::Pixbuf>, Error> {
+    ) -> Result<Option<gdk_pixbuf::Pixbuf>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gtk_sys::gtk_icon_theme_load_icon(
@@ -215,7 +215,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         size: i32,
         scale: i32,
         flags: IconLookupFlags,
-    ) -> Result<Option<gdk_pixbuf::Pixbuf>, Error> {
+    ) -> Result<Option<gdk_pixbuf::Pixbuf>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gtk_sys::gtk_icon_theme_load_icon_for_scale(
@@ -241,7 +241,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         scale: i32,
         for_window: Option<&P>,
         flags: IconLookupFlags,
-    ) -> Result<Option<cairo::Surface>, Error> {
+    ) -> Result<Option<cairo::Surface>, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gtk_sys::gtk_icon_theme_load_surface(

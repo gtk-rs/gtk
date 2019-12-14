@@ -72,12 +72,13 @@ impl TargetList {
 
     pub fn find(&self, target: &gdk::Atom) -> Option<u32> {
         unsafe {
-            let mut info = mem::uninitialized();
+            let mut info = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_target_list_find(
                 self.to_glib_none().0,
                 target.to_glib_none().0,
-                &mut info,
+                info.as_mut_ptr(),
             ));
+            let info = info.assume_init();
             if ret {
                 Some(info)
             } else {

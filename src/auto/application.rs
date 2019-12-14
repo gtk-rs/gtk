@@ -29,6 +29,7 @@ glib_wrapper! {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ApplicationBuilder {
     app_menu: Option<gio::MenuModel>,
     menubar: Option<gio::MenuModel>,
@@ -42,16 +43,7 @@ pub struct ApplicationBuilder {
 
 impl ApplicationBuilder {
     pub fn new() -> Self {
-        Self {
-            app_menu: None,
-            menubar: None,
-            register_session: None,
-            action_group: None,
-            application_id: None,
-            flags: None,
-            inactivity_timeout: None,
-            resource_base_path: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Application {
@@ -86,13 +78,13 @@ impl ApplicationBuilder {
             .expect("downcast")
     }
 
-    pub fn app_menu(mut self, app_menu: &gio::MenuModel) -> Self {
-        self.app_menu = Some(app_menu.clone());
+    pub fn app_menu<P: IsA<gio::MenuModel>>(mut self, app_menu: &P) -> Self {
+        self.app_menu = Some(app_menu.clone().upcast());
         self
     }
 
-    pub fn menubar(mut self, menubar: &gio::MenuModel) -> Self {
-        self.menubar = Some(menubar.clone());
+    pub fn menubar<P: IsA<gio::MenuModel>>(mut self, menubar: &P) -> Self {
+        self.menubar = Some(menubar.clone().upcast());
         self
     }
 
@@ -101,8 +93,8 @@ impl ApplicationBuilder {
         self
     }
 
-    pub fn action_group(mut self, action_group: &gio::ActionGroup) -> Self {
-        self.action_group = Some(action_group.clone());
+    pub fn action_group<P: IsA<gio::ActionGroup>>(mut self, action_group: &P) -> Self {
+        self.action_group = Some(action_group.clone().upcast());
         self
     }
 
@@ -177,6 +169,9 @@ pub trait GtkApplicationExt: 'static {
 
     #[cfg(any(feature = "v3_24", feature = "dox"))]
     fn get_property_screensaver_active(&self) -> bool;
+
+    #[cfg(any(feature = "v3_24_8", feature = "dox"))]
+    fn connect_query_end<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -373,7 +368,10 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
                 b"register-session\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `register-session` getter")
+                .unwrap()
         }
     }
 
@@ -396,7 +394,32 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
                 b"screensaver-active\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `screensaver-active` getter")
+                .unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_24_8", feature = "dox"))]
+    fn connect_query_end<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn query_end_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkApplication,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Application>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Application::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"query-end\0".as_ptr() as *const _,
+                Some(transmute(query_end_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
         }
     }
 

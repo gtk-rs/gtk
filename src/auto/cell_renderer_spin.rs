@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::ToValue;
 use glib::Value;
@@ -44,6 +45,7 @@ impl Default for CellRendererSpin {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererSpinBuilder {
     adjustment: Option<Adjustment>,
     climb_rate: Option<f64>,
@@ -112,71 +114,7 @@ pub struct CellRendererSpinBuilder {
 
 impl CellRendererSpinBuilder {
     pub fn new() -> Self {
-        Self {
-            adjustment: None,
-            climb_rate: None,
-            digits: None,
-            align_set: None,
-            alignment: None,
-            attributes: None,
-            background: None,
-            background_rgba: None,
-            background_set: None,
-            editable: None,
-            editable_set: None,
-            ellipsize: None,
-            ellipsize_set: None,
-            family: None,
-            family_set: None,
-            font: None,
-            font_desc: None,
-            foreground: None,
-            foreground_rgba: None,
-            foreground_set: None,
-            language: None,
-            language_set: None,
-            markup: None,
-            max_width_chars: None,
-            placeholder_text: None,
-            rise: None,
-            rise_set: None,
-            scale: None,
-            scale_set: None,
-            single_paragraph_mode: None,
-            size: None,
-            size_points: None,
-            size_set: None,
-            stretch: None,
-            stretch_set: None,
-            strikethrough: None,
-            strikethrough_set: None,
-            style: None,
-            style_set: None,
-            text: None,
-            underline: None,
-            underline_set: None,
-            variant: None,
-            variant_set: None,
-            weight: None,
-            weight_set: None,
-            width_chars: None,
-            wrap_mode: None,
-            wrap_width: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererSpin {
@@ -376,8 +314,8 @@ impl CellRendererSpinBuilder {
             .expect("downcast")
     }
 
-    pub fn adjustment(mut self, adjustment: &Adjustment) -> Self {
-        self.adjustment = Some(adjustment.clone());
+    pub fn adjustment<P: IsA<Adjustment>>(mut self, adjustment: &P) -> Self {
+        self.adjustment = Some(adjustment.clone().upcast());
         self
     }
 
@@ -697,7 +635,10 @@ pub const NONE_CELL_RENDERER_SPIN: Option<&CellRendererSpin> = None;
 pub trait CellRendererSpinExt: 'static {
     fn get_property_adjustment(&self) -> Option<Adjustment>;
 
-    fn set_property_adjustment(&self, adjustment: Option<&Adjustment>);
+    fn set_property_adjustment<P: IsA<Adjustment> + SetValueOptional>(
+        &self,
+        adjustment: Option<&P>,
+    );
 
     fn get_property_climb_rate(&self) -> f64;
 
@@ -723,11 +664,16 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
                 b"adjustment\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `adjustment` getter")
         }
     }
 
-    fn set_property_adjustment(&self, adjustment: Option<&Adjustment>) {
+    fn set_property_adjustment<P: IsA<Adjustment> + SetValueOptional>(
+        &self,
+        adjustment: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -745,7 +691,10 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
                 b"climb-rate\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `climb-rate` getter")
+                .unwrap()
         }
     }
 
@@ -767,7 +716,10 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
                 b"digits\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `digits` getter")
+                .unwrap()
         }
     }
 

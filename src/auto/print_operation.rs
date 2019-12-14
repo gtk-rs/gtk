@@ -21,7 +21,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::ptr;
-use Error;
 use PageSetup;
 use PrintContext;
 use PrintOperationAction;
@@ -54,6 +53,7 @@ impl Default for PrintOperation {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct PrintOperationBuilder {
     allow_async: Option<bool>,
     current_page: Option<i32>,
@@ -74,23 +74,7 @@ pub struct PrintOperationBuilder {
 
 impl PrintOperationBuilder {
     pub fn new() -> Self {
-        Self {
-            allow_async: None,
-            current_page: None,
-            custom_tab_label: None,
-            default_page_setup: None,
-            embed_page_setup: None,
-            export_filename: None,
-            has_selection: None,
-            job_name: None,
-            n_pages: None,
-            print_settings: None,
-            show_progress: None,
-            support_selection: None,
-            track_print_status: None,
-            unit: None,
-            use_full_page: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> PrintOperation {
@@ -233,7 +217,7 @@ pub trait PrintOperationExt: 'static {
 
     fn get_embed_page_setup(&self) -> bool;
 
-    fn get_error(&self) -> Result<(), Error>;
+    fn get_error(&self) -> Result<(), glib::Error>;
 
     fn get_has_selection(&self) -> bool;
 
@@ -253,7 +237,7 @@ pub trait PrintOperationExt: 'static {
         &self,
         action: PrintOperationAction,
         parent: Option<&P>,
-    ) -> Result<PrintOperationResult, Error>;
+    ) -> Result<PrintOperationResult, glib::Error>;
 
     fn set_allow_async(&self, allow_async: bool);
 
@@ -453,7 +437,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         }
     }
 
-    fn get_error(&self) -> Result<(), Error> {
+    fn get_error(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ =
@@ -522,7 +506,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         &self,
         action: PrintOperationAction,
         parent: Option<&P>,
-    ) -> Result<PrintOperationResult, Error> {
+    ) -> Result<PrintOperationResult, glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = gtk_sys::gtk_print_operation_run(
@@ -682,7 +666,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"allow-async\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `allow-async` getter")
+                .unwrap()
         }
     }
 
@@ -694,7 +681,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"current-page\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `current-page` getter")
+                .unwrap()
         }
     }
 
@@ -706,7 +696,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"custom-tab-label\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `custom-tab-label` getter")
         }
     }
 
@@ -718,7 +710,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"export-filename\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `export-filename` getter")
         }
     }
 
@@ -730,7 +724,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"job-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `job-name` getter")
         }
     }
 
@@ -742,7 +738,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"n-pages\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `n-pages` getter")
+                .unwrap()
         }
     }
 
@@ -754,7 +753,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"show-progress\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-progress` getter")
+                .unwrap()
         }
     }
 
@@ -766,7 +768,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"track-print-status\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `track-print-status` getter")
+                .unwrap()
         }
     }
 
@@ -778,7 +783,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"unit\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `unit` getter")
+                .unwrap()
         }
     }
 
@@ -790,7 +798,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
                 b"use-full-page\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `use-full-page` getter")
+                .unwrap()
         }
     }
 

@@ -24,6 +24,7 @@ use Buildable;
 use ColorChooser;
 use Container;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Widget;
 
@@ -48,6 +49,7 @@ impl Default for ColorChooserWidget {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ColorChooserWidgetBuilder {
     show_editor: Option<bool>,
     baseline_position: Option<BaselinePosition>,
@@ -82,7 +84,6 @@ pub struct ColorChooserWidgetBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -90,52 +91,14 @@ pub struct ColorChooserWidgetBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    rgba: Option<gdk::RGBA>,
+    use_alpha: Option<bool>,
 }
 
 impl ColorChooserWidgetBuilder {
     pub fn new() -> Self {
-        Self {
-            show_editor: None,
-            baseline_position: None,
-            homogeneous: None,
-            spacing: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ColorChooserWidget {
@@ -260,6 +223,15 @@ impl ColorChooserWidgetBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref rgba) = self.rgba {
+            properties.push(("rgba", rgba));
+        }
+        if let Some(ref use_alpha) = self.use_alpha {
+            properties.push(("use-alpha", use_alpha));
+        }
         glib::Object::new(ColorChooserWidget::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -291,8 +263,8 @@ impl ColorChooserWidgetBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -412,8 +384,8 @@ impl ColorChooserWidgetBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -461,6 +433,21 @@ impl ColorChooserWidgetBuilder {
         self.width_request = Some(width_request);
         self
     }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn rgba(mut self, rgba: &gdk::RGBA) -> Self {
+        self.rgba = Some(rgba.clone());
+        self
+    }
+
+    pub fn use_alpha(mut self, use_alpha: bool) -> Self {
+        self.use_alpha = Some(use_alpha);
+        self
+    }
 }
 
 pub const NONE_COLOR_CHOOSER_WIDGET: Option<&ColorChooserWidget> = None;
@@ -482,7 +469,10 @@ impl<O: IsA<ColorChooserWidget>> ColorChooserWidgetExt for O {
                 b"show-editor\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-editor` getter")
+                .unwrap()
         }
     }
 

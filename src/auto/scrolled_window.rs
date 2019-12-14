@@ -59,6 +59,7 @@ impl ScrolledWindow {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ScrolledWindowBuilder {
     hadjustment: Option<Adjustment>,
     hscrollbar_policy: Option<PolicyType>,
@@ -108,7 +109,6 @@ pub struct ScrolledWindowBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -120,63 +120,7 @@ pub struct ScrolledWindowBuilder {
 
 impl ScrolledWindowBuilder {
     pub fn new() -> Self {
-        Self {
-            hadjustment: None,
-            hscrollbar_policy: None,
-            kinetic_scrolling: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            max_content_height: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            max_content_width: None,
-            min_content_height: None,
-            min_content_width: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            overlay_scrolling: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            propagate_natural_height: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            propagate_natural_width: None,
-            shadow_type: None,
-            vadjustment: None,
-            vscrollbar_policy: None,
-            window_placement: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ScrolledWindow {
@@ -352,8 +296,8 @@ impl ScrolledWindowBuilder {
             .expect("downcast")
     }
 
-    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
-        self.hadjustment = Some(hadjustment.clone());
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
         self
     }
 
@@ -412,8 +356,8 @@ impl ScrolledWindowBuilder {
         self
     }
 
-    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
-        self.vadjustment = Some(vadjustment.clone());
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
         self
     }
 
@@ -432,8 +376,8 @@ impl ScrolledWindowBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -553,8 +497,8 @@ impl ScrolledWindowBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -646,7 +590,7 @@ pub trait ScrolledWindowExt: 'static {
 
     fn set_capture_button_press(&self, capture_button_press: bool);
 
-    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: &P);
+    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: Option<&P>);
 
     fn set_kinetic_scrolling(&self, kinetic_scrolling: bool);
 
@@ -675,7 +619,7 @@ pub trait ScrolledWindowExt: 'static {
 
     fn set_shadow_type(&self, type_: ShadowType);
 
-    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: &P);
+    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: Option<&P>);
 
     fn unset_placement(&self);
 
@@ -856,13 +800,15 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
 
     fn get_policy(&self) -> (PolicyType, PolicyType) {
         unsafe {
-            let mut hscrollbar_policy = mem::uninitialized();
-            let mut vscrollbar_policy = mem::uninitialized();
+            let mut hscrollbar_policy = mem::MaybeUninit::uninit();
+            let mut vscrollbar_policy = mem::MaybeUninit::uninit();
             gtk_sys::gtk_scrolled_window_get_policy(
                 self.as_ref().to_glib_none().0,
-                &mut hscrollbar_policy,
-                &mut vscrollbar_policy,
+                hscrollbar_policy.as_mut_ptr(),
+                vscrollbar_policy.as_mut_ptr(),
             );
+            let hscrollbar_policy = hscrollbar_policy.assume_init();
+            let vscrollbar_policy = vscrollbar_policy.assume_init();
             (from_glib(hscrollbar_policy), from_glib(vscrollbar_policy))
         }
     }
@@ -918,11 +864,11 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
         }
     }
 
-    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: &P) {
+    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: Option<&P>) {
         unsafe {
             gtk_sys::gtk_scrolled_window_set_hadjustment(
                 self.as_ref().to_glib_none().0,
-                hadjustment.as_ref().to_glib_none().0,
+                hadjustment.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }
@@ -1032,11 +978,11 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
         }
     }
 
-    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: &P) {
+    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: Option<&P>) {
         unsafe {
             gtk_sys::gtk_scrolled_window_set_vadjustment(
                 self.as_ref().to_glib_none().0,
-                vadjustment.as_ref().to_glib_none().0,
+                vadjustment.map(|p| p.as_ref()).to_glib_none().0,
             );
         }
     }
@@ -1055,7 +1001,10 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
                 b"hscrollbar-policy\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `hscrollbar-policy` getter")
+                .unwrap()
         }
     }
 
@@ -1077,7 +1026,10 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
                 b"vscrollbar-policy\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `vscrollbar-policy` getter")
+                .unwrap()
         }
     }
 
@@ -1099,7 +1051,10 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
                 b"window-placement\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `window-placement` getter")
+                .unwrap()
         }
     }
 
@@ -1242,7 +1197,10 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
                 .emit("scroll-child", &[&scroll, &horizontal])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_scroll_child`")
+            .unwrap()
     }
 
     fn connect_property_hadjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

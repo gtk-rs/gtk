@@ -25,6 +25,7 @@ use CellAreaContext;
 use CellLayout;
 use Container;
 use Orientable;
+use Orientation;
 use TreeModel;
 use TreePath;
 use Widget;
@@ -92,6 +93,7 @@ impl Default for CellView {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellViewBuilder {
     background: Option<String>,
     background_rgba: Option<gdk::RGBA>,
@@ -127,7 +129,6 @@ pub struct CellViewBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -135,53 +136,12 @@ pub struct CellViewBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
 }
 
 impl CellViewBuilder {
     pub fn new() -> Self {
-        Self {
-            background: None,
-            background_rgba: None,
-            background_set: None,
-            cell_area: None,
-            cell_area_context: None,
-            draw_sensitive: None,
-            fit_model: None,
-            model: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellView {
@@ -309,6 +269,9 @@ impl CellViewBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
         glib::Object::new(CellView::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -330,13 +293,13 @@ impl CellViewBuilder {
         self
     }
 
-    pub fn cell_area(mut self, cell_area: &CellArea) -> Self {
-        self.cell_area = Some(cell_area.clone());
+    pub fn cell_area<P: IsA<CellArea>>(mut self, cell_area: &P) -> Self {
+        self.cell_area = Some(cell_area.clone().upcast());
         self
     }
 
-    pub fn cell_area_context(mut self, cell_area_context: &CellAreaContext) -> Self {
-        self.cell_area_context = Some(cell_area_context.clone());
+    pub fn cell_area_context<P: IsA<CellAreaContext>>(mut self, cell_area_context: &P) -> Self {
+        self.cell_area_context = Some(cell_area_context.clone().upcast());
         self
     }
 
@@ -350,8 +313,8 @@ impl CellViewBuilder {
         self
     }
 
-    pub fn model(mut self, model: &TreeModel) -> Self {
-        self.model = Some(model.clone());
+    pub fn model<P: IsA<TreeModel>>(mut self, model: &P) -> Self {
+        self.model = Some(model.clone().upcast());
         self
     }
 
@@ -466,8 +429,8 @@ impl CellViewBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -513,6 +476,11 @@ impl CellViewBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
@@ -668,7 +636,9 @@ impl<O: IsA<CellView>> CellViewExt for O {
                 b"background-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `background-rgba` getter")
         }
     }
 
@@ -680,7 +650,10 @@ impl<O: IsA<CellView>> CellViewExt for O {
                 b"background-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `background-set` getter")
+                .unwrap()
         }
     }
 
@@ -702,7 +675,9 @@ impl<O: IsA<CellView>> CellViewExt for O {
                 b"cell-area\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-area` getter")
         }
     }
 
@@ -714,7 +689,9 @@ impl<O: IsA<CellView>> CellViewExt for O {
                 b"cell-area-context\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-area-context` getter")
         }
     }
 

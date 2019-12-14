@@ -740,6 +740,11 @@ mod settings;
 pub use self::settings::SettingsExt;
 pub use self::settings::{Settings, SettingsClass, NONE_SETTINGS};
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+mod shortcut_label;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+pub use self::shortcut_label::{ShortcutLabel, ShortcutLabelClass};
+
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 mod shortcuts_window;
 #[cfg(any(feature = "v3_20", feature = "dox"))]

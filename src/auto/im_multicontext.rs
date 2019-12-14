@@ -35,6 +35,7 @@ impl Default for IMMulticontext {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct IMMulticontextBuilder {
     input_hints: Option<InputHints>,
     input_purpose: Option<InputPurpose>,
@@ -42,10 +43,7 @@ pub struct IMMulticontextBuilder {
 
 impl IMMulticontextBuilder {
     pub fn new() -> Self {
-        Self {
-            input_hints: None,
-            input_purpose: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> IMMulticontext {

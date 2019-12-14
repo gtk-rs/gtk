@@ -3,7 +3,6 @@ use glib::translate::*;
 use gtk_sys;
 use libc::c_char;
 use std::ffi::CStr;
-use std::mem;
 use TargetFlags;
 
 #[derive(Clone, Debug)]
@@ -34,14 +33,6 @@ impl TargetEntry {
 
     pub fn get_info(&self) -> u32 {
         self.info
-    }
-}
-
-#[doc(hidden)]
-impl Uninitialized for TargetEntry {
-    #[inline]
-    unsafe fn uninitialized() -> Self {
-        mem::uninitialized()
     }
 }
 

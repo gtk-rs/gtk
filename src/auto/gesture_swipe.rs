@@ -45,13 +45,15 @@ impl GestureSwipe {
 
     pub fn get_velocity(&self) -> Option<(f64, f64)> {
         unsafe {
-            let mut velocity_x = mem::uninitialized();
-            let mut velocity_y = mem::uninitialized();
+            let mut velocity_x = mem::MaybeUninit::uninit();
+            let mut velocity_y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_gesture_swipe_get_velocity(
                 self.to_glib_none().0,
-                &mut velocity_x,
-                &mut velocity_y,
+                velocity_x.as_mut_ptr(),
+                velocity_y.as_mut_ptr(),
             ));
+            let velocity_x = velocity_x.assume_init();
+            let velocity_y = velocity_y.assume_init();
             if ret {
                 Some((velocity_x, velocity_y))
             } else {
@@ -82,6 +84,7 @@ impl GestureSwipe {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureSwipeBuilder {
     button: Option<u32>,
     exclusive: Option<bool>,
@@ -94,15 +97,7 @@ pub struct GestureSwipeBuilder {
 
 impl GestureSwipeBuilder {
     pub fn new() -> Self {
-        Self {
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureSwipe {
@@ -154,8 +149,8 @@ impl GestureSwipeBuilder {
         self
     }
 
-    pub fn window(mut self, window: &gdk::Window) -> Self {
-        self.window = Some(window.clone());
+    pub fn window<P: IsA<gdk::Window>>(mut self, window: &P) -> Self {
+        self.window = Some(window.clone().upcast());
         self
     }
 
@@ -164,8 +159,8 @@ impl GestureSwipeBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }

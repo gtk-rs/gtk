@@ -52,7 +52,10 @@ impl GestureLongPress {
                 b"delay-factor\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `delay-factor` getter")
+                .unwrap()
         }
     }
 
@@ -133,6 +136,7 @@ impl GestureLongPress {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureLongPressBuilder {
     delay_factor: Option<f64>,
     button: Option<u32>,
@@ -146,16 +150,7 @@ pub struct GestureLongPressBuilder {
 
 impl GestureLongPressBuilder {
     pub fn new() -> Self {
-        Self {
-            delay_factor: None,
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureLongPress {
@@ -215,8 +210,8 @@ impl GestureLongPressBuilder {
         self
     }
 
-    pub fn window(mut self, window: &gdk::Window) -> Self {
-        self.window = Some(window.clone());
+    pub fn window<P: IsA<gdk::Window>>(mut self, window: &P) -> Self {
+        self.window = Some(window.clone().upcast());
         self
     }
 
@@ -225,8 +220,8 @@ impl GestureLongPressBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }

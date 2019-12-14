@@ -14,7 +14,6 @@ use glib_sys;
 use gobject_sys;
 use gtk_sys;
 use libc;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -92,7 +91,7 @@ pub trait MenuShellExt: 'static {
 
     fn emit_move_current(&self, direction: MenuDirectionType);
 
-    fn connect_move_selected<F: Fn(&Self, i32) -> Inhibit + 'static>(
+    fn connect_move_selected<F: Fn(&Self, i32) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -405,11 +404,14 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
         };
     }
 
-    fn connect_move_selected<F: Fn(&Self, i32) -> Inhibit + 'static>(
+    fn connect_move_selected<F: Fn(&Self, i32) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn move_selected_trampoline<P, F: Fn(&P, i32) -> Inhibit + 'static>(
+        unsafe extern "C" fn move_selected_trampoline<
+            P,
+            F: Fn(&P, i32) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkMenuShell,
             distance: libc::c_int,
             f: glib_sys::gpointer,

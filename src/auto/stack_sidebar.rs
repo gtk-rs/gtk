@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::ToValue;
 use glib::Value;
@@ -48,6 +49,7 @@ impl Default for StackSidebar {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct StackSidebarBuilder {
     stack: Option<Stack>,
     border_width: Option<u32>,
@@ -79,7 +81,6 @@ pub struct StackSidebarBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -91,45 +92,7 @@ pub struct StackSidebarBuilder {
 
 impl StackSidebarBuilder {
     pub fn new() -> Self {
-        Self {
-            stack: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> StackSidebar {
@@ -251,8 +214,8 @@ impl StackSidebarBuilder {
             .expect("downcast")
     }
 
-    pub fn stack(mut self, stack: &Stack) -> Self {
-        self.stack = Some(stack.clone());
+    pub fn stack<P: IsA<Stack>>(mut self, stack: &P) -> Self {
+        self.stack = Some(stack.clone().upcast());
         self
     }
 
@@ -261,8 +224,8 @@ impl StackSidebarBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -382,8 +345,8 @@ impl StackSidebarBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -444,7 +407,7 @@ pub trait StackSidebarExt: 'static {
 
     fn get_property_stack(&self) -> Option<Stack>;
 
-    fn set_property_stack(&self, stack: Option<&Stack>);
+    fn set_property_stack<P: IsA<Stack> + SetValueOptional>(&self, stack: Option<&P>);
 
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -477,11 +440,13 @@ impl<O: IsA<StackSidebar>> StackSidebarExt for O {
                 b"stack\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `stack` getter")
         }
     }
 
-    fn set_property_stack(&self, stack: Option<&Stack>) {
+    fn set_property_stack<P: IsA<Stack> + SetValueOptional>(&self, stack: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,

@@ -46,6 +46,7 @@ impl AccelLabel {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct AccelLabelBuilder {
     accel_closure: Option<glib::Closure>,
     accel_widget: Option<Widget>,
@@ -96,7 +97,6 @@ pub struct AccelLabelBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -108,64 +108,7 @@ pub struct AccelLabelBuilder {
 
 impl AccelLabelBuilder {
     pub fn new() -> Self {
-        Self {
-            accel_closure: None,
-            accel_widget: None,
-            angle: None,
-            attributes: None,
-            ellipsize: None,
-            justify: None,
-            label: None,
-            lines: None,
-            max_width_chars: None,
-            mnemonic_widget: None,
-            pattern: None,
-            selectable: None,
-            single_line_mode: None,
-            track_visited_links: None,
-            use_markup: None,
-            use_underline: None,
-            width_chars: None,
-            wrap: None,
-            wrap_mode: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            xalign: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            yalign: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> AccelLabel {
@@ -349,8 +292,8 @@ impl AccelLabelBuilder {
         self
     }
 
-    pub fn accel_widget(mut self, accel_widget: &Widget) -> Self {
-        self.accel_widget = Some(accel_widget.clone());
+    pub fn accel_widget<P: IsA<Widget>>(mut self, accel_widget: &P) -> Self {
+        self.accel_widget = Some(accel_widget.clone().upcast());
         self
     }
 
@@ -389,8 +332,8 @@ impl AccelLabelBuilder {
         self
     }
 
-    pub fn mnemonic_widget(mut self, mnemonic_widget: &Widget) -> Self {
-        self.mnemonic_widget = Some(mnemonic_widget.clone());
+    pub fn mnemonic_widget<P: IsA<Widget>>(mut self, mnemonic_widget: &P) -> Self {
+        self.mnemonic_widget = Some(mnemonic_widget.clone().upcast());
         self
     }
 
@@ -562,8 +505,8 @@ impl AccelLabelBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -644,13 +587,15 @@ pub trait AccelLabelExt: 'static {
 impl<O: IsA<AccelLabel>> AccelLabelExt for O {
     fn get_accel(&self) -> (u32, gdk::ModifierType) {
         unsafe {
-            let mut accelerator_key = mem::uninitialized();
-            let mut accelerator_mods = mem::uninitialized();
+            let mut accelerator_key = mem::MaybeUninit::uninit();
+            let mut accelerator_mods = mem::MaybeUninit::uninit();
             gtk_sys::gtk_accel_label_get_accel(
                 self.as_ref().to_glib_none().0,
-                &mut accelerator_key,
-                &mut accelerator_mods,
+                accelerator_key.as_mut_ptr(),
+                accelerator_mods.as_mut_ptr(),
             );
+            let accelerator_key = accelerator_key.assume_init();
+            let accelerator_mods = accelerator_mods.assume_init();
             (accelerator_key, from_glib(accelerator_mods))
         }
     }
@@ -711,7 +656,9 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
                 b"accel-closure\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `accel-closure` getter")
         }
     }
 

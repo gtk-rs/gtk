@@ -17,7 +17,6 @@ use glib_sys;
 use gobject_sys;
 use gtk_sys;
 use libc;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -54,6 +53,7 @@ impl Default for Toolbar {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ToolbarBuilder {
     icon_size: Option<IconSize>,
     icon_size_set: Option<bool>,
@@ -88,7 +88,6 @@ pub struct ToolbarBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -96,52 +95,12 @@ pub struct ToolbarBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
 }
 
 impl ToolbarBuilder {
     pub fn new() -> Self {
-        Self {
-            icon_size: None,
-            icon_size_set: None,
-            show_arrow: None,
-            toolbar_style: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Toolbar {
@@ -266,6 +225,9 @@ impl ToolbarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
         glib::Object::new(Toolbar::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -297,8 +259,8 @@ impl ToolbarBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -418,8 +380,8 @@ impl ToolbarBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -465,6 +427,11 @@ impl ToolbarBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
@@ -524,7 +491,7 @@ pub trait ToolbarExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_popup_context_menu<F: Fn(&Self, i32, i32, i32) -> Inhibit + 'static>(
+    fn connect_popup_context_menu<F: Fn(&Self, i32, i32, i32) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -642,7 +609,10 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
                 b"icon-size-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `icon-size-set` getter")
+                .unwrap()
         }
     }
 
@@ -664,7 +634,10 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
                 b"toolbar-style\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `toolbar-style` getter")
+                .unwrap()
         }
     }
 
@@ -687,7 +660,10 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
                 b"expand\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `expand` getter")
+                .unwrap()
         }
     }
 
@@ -711,7 +687,10 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
                 b"homogeneous\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `homogeneous` getter")
+                .unwrap()
         }
     }
 
@@ -762,7 +741,10 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
                 .emit("focus-home-or-end", &[&focus_home])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_focus_home_or_end`")
+            .unwrap()
     }
 
     fn connect_orientation_changed<F: Fn(&Self, Orientation) + 'static>(
@@ -795,13 +777,15 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
         }
     }
 
-    fn connect_popup_context_menu<F: Fn(&Self, i32, i32, i32) -> Inhibit + 'static>(
+    fn connect_popup_context_menu<
+        F: Fn(&Self, i32, i32, i32) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn popup_context_menu_trampoline<
             P,
-            F: Fn(&P, i32, i32, i32) -> Inhibit + 'static,
+            F: Fn(&P, i32, i32, i32) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkToolbar,
             x: libc::c_int,

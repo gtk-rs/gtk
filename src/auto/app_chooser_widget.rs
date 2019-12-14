@@ -26,6 +26,7 @@ use Buildable;
 use Container;
 use Menu;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Widget;
 
@@ -49,6 +50,7 @@ impl AppChooserWidget {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct AppChooserWidgetBuilder {
     default_text: Option<String>,
     show_all: Option<bool>,
@@ -88,7 +90,6 @@ pub struct AppChooserWidgetBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -96,57 +97,13 @@ pub struct AppChooserWidgetBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    content_type: Option<String>,
 }
 
 impl AppChooserWidgetBuilder {
     pub fn new() -> Self {
-        Self {
-            default_text: None,
-            show_all: None,
-            show_default: None,
-            show_fallback: None,
-            show_other: None,
-            show_recommended: None,
-            baseline_position: None,
-            homogeneous: None,
-            spacing: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> AppChooserWidget {
@@ -286,6 +243,12 @@ impl AppChooserWidgetBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref content_type) = self.content_type {
+            properties.push(("content-type", content_type));
+        }
         glib::Object::new(AppChooserWidget::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -342,8 +305,8 @@ impl AppChooserWidgetBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -463,8 +426,8 @@ impl AppChooserWidgetBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -510,6 +473,16 @@ impl AppChooserWidgetBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn content_type(mut self, content_type: &str) -> Self {
+        self.content_type = Some(content_type.to_string());
         self
     }
 }

@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -13,6 +14,7 @@ use glib::StaticType;
 use glib::ToValue;
 use glib_sys;
 use gtk_sys;
+use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -23,6 +25,8 @@ use Buildable;
 use Button;
 use Container;
 use FontChooser;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+use FontChooserLevel;
 use PositionType;
 use ReliefStyle;
 use ResizeMode;
@@ -59,6 +63,7 @@ impl Default for FontButton {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct FontButtonBuilder {
     font_name: Option<String>,
     show_size: Option<bool>,
@@ -101,7 +106,6 @@ pub struct FontButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -109,60 +113,21 @@ pub struct FontButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    action_name: Option<String>,
+    action_target: Option<glib::Variant>,
+    font: Option<String>,
+    font_desc: Option<pango::FontDescription>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    language: Option<String>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    level: Option<FontChooserLevel>,
+    preview_text: Option<String>,
+    show_preview_entry: Option<bool>,
 }
 
 impl FontButtonBuilder {
     pub fn new() -> Self {
-        Self {
-            font_name: None,
-            show_size: None,
-            show_style: None,
-            title: None,
-            use_font: None,
-            use_size: None,
-            always_show_image: None,
-            image: None,
-            image_position: None,
-            label: None,
-            relief: None,
-            use_underline: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> FontButton {
@@ -311,6 +276,36 @@ impl FontButtonBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref action_name) = self.action_name {
+            properties.push(("action-name", action_name));
+        }
+        if let Some(ref action_target) = self.action_target {
+            properties.push(("action-target", action_target));
+        }
+        if let Some(ref font) = self.font {
+            properties.push(("font", font));
+        }
+        if let Some(ref font_desc) = self.font_desc {
+            properties.push(("font-desc", font_desc));
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref language) = self.language {
+                properties.push(("language", language));
+            }
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref level) = self.level {
+                properties.push(("level", level));
+            }
+        }
+        if let Some(ref preview_text) = self.preview_text {
+            properties.push(("preview-text", preview_text));
+        }
+        if let Some(ref show_preview_entry) = self.show_preview_entry {
+            properties.push(("show-preview-entry", show_preview_entry));
+        }
         glib::Object::new(FontButton::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -352,8 +347,8 @@ impl FontButtonBuilder {
         self
     }
 
-    pub fn image(mut self, image: &Widget) -> Self {
-        self.image = Some(image.clone());
+    pub fn image<P: IsA<Widget>>(mut self, image: &P) -> Self {
+        self.image = Some(image.clone().upcast());
         self
     }
 
@@ -382,8 +377,8 @@ impl FontButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -503,8 +498,8 @@ impl FontButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -550,6 +545,48 @@ impl FontButtonBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn action_name(mut self, action_name: &str) -> Self {
+        self.action_name = Some(action_name.to_string());
+        self
+    }
+
+    pub fn action_target(mut self, action_target: &glib::Variant) -> Self {
+        self.action_target = Some(action_target.clone());
+        self
+    }
+
+    pub fn font(mut self, font: &str) -> Self {
+        self.font = Some(font.to_string());
+        self
+    }
+
+    pub fn font_desc(mut self, font_desc: &pango::FontDescription) -> Self {
+        self.font_desc = Some(font_desc.clone());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn language(mut self, language: &str) -> Self {
+        self.language = Some(language.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn level(mut self, level: FontChooserLevel) -> Self {
+        self.level = Some(level);
+        self
+    }
+
+    pub fn preview_text(mut self, preview_text: &str) -> Self {
+        self.preview_text = Some(preview_text.to_string());
+        self
+    }
+
+    pub fn show_preview_entry(mut self, show_preview_entry: bool) -> Self {
+        self.show_preview_entry = Some(show_preview_entry);
         self
     }
 }

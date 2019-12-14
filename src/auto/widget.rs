@@ -24,7 +24,6 @@ use gobject_sys;
 use gtk_sys;
 use libc;
 use pango;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
@@ -266,7 +265,7 @@ pub trait WidgetExt: 'static {
 
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
 
-    fn get_name(&self) -> Option<GString>;
+    fn get_widget_name(&self) -> Option<GString>;
 
     fn get_no_show_all(&self) -> bool;
 
@@ -410,7 +409,7 @@ pub trait WidgetExt: 'static {
     fn override_cursor(&self, cursor: Option<&gdk::RGBA>, secondary_cursor: Option<&gdk::RGBA>);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn override_font(&self, font_desc: Option<&pango::FontDescription>);
+    fn override_font(&self, font_desc: &pango::FontDescription);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
     fn override_symbolic_color(&self, name: &str, color: Option<&gdk::RGBA>);
@@ -499,7 +498,7 @@ pub trait WidgetExt: 'static {
 
     fn set_margin_top(&self, margin: i32);
 
-    fn set_name(&self, name: &str);
+    fn set_widget_name(&self, name: &str);
 
     fn set_no_show_all(&self, no_show_all: bool);
 
@@ -610,12 +609,16 @@ pub trait WidgetExt: 'static {
 
     fn connect_accel_closures_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_button_press_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(
+    fn connect_button_press_event<
+        F: Fn(&Self, &gdk::EventButton) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_button_release_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(
+    fn connect_button_release_event<
+        F: Fn(&Self, &gdk::EventButton) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -643,14 +646,14 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_delete_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_delete_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     fn connect_destroy<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_destroy_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_destroy_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -682,14 +685,18 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(
+    fn connect_drag_drop<
+        F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     fn connect_drag_end<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_drag_failed<F: Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>(
+    fn connect_drag_failed<
+        F: Fn(&Self, &gdk::DragContext, DragResult) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -699,44 +706,50 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(
+    fn connect_drag_motion<
+        F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_draw<F: Fn(&Self, &cairo::Context) -> Inhibit + 'static>(
+    fn connect_draw<F: Fn(&Self, &cairo::Context) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_enter_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(
+    fn connect_enter_notify_event<
+        F: Fn(&Self, &gdk::EventCrossing) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     fn connect_event_after<F: Fn(&Self, &gdk::Event) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_focus<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(
+    fn connect_focus<F: Fn(&Self, DirectionType) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_focus_in_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(
+    fn connect_focus_in_event<F: Fn(&Self, &gdk::EventFocus) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_focus_out_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(
+    fn connect_focus_out_event<F: Fn(&Self, &gdk::EventFocus) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_grab_broken_event<F: Fn(&Self, &gdk::EventGrabBroken) -> Inhibit + 'static>(
+    fn connect_grab_broken_event<
+        F: Fn(&Self, &gdk::EventGrabBroken) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -754,34 +767,38 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_key_press_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(
+    fn connect_key_press_event<F: Fn(&Self, &gdk::EventKey) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_key_release_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(
+    fn connect_key_release_event<F: Fn(&Self, &gdk::EventKey) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_keynav_failed<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(
+    fn connect_keynav_failed<F: Fn(&Self, DirectionType) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_leave_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(
+    fn connect_leave_notify_event<
+        F: Fn(&Self, &gdk::EventCrossing) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
     fn connect_map<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_mnemonic_activate<F: Fn(&Self, bool) -> Inhibit + 'static>(
+    fn connect_mnemonic_activate<F: Fn(&Self, bool) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_motion_notify_event<F: Fn(&Self, &gdk::EventMotion) -> Inhibit + 'static>(
+    fn connect_motion_notify_event<
+        F: Fn(&Self, &gdk::EventMotion) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -796,17 +813,23 @@ pub trait WidgetExt: 'static {
 
     fn emit_popup_menu(&self) -> bool;
 
-    fn connect_property_notify_event<F: Fn(&Self, &gdk::EventProperty) -> Inhibit + 'static>(
+    fn connect_property_notify_event<
+        F: Fn(&Self, &gdk::EventProperty) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_proximity_in_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(
+    fn connect_proximity_in_event<
+        F: Fn(&Self, &gdk::EventProximity) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_proximity_out_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(
+    fn connect_proximity_out_event<
+        F: Fn(&Self, &gdk::EventProximity) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -823,12 +846,14 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>(
+    fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_selection_clear_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(
+    fn connect_selection_clear_event<
+        F: Fn(&Self, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -838,7 +863,9 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_selection_notify_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(
+    fn connect_selection_notify_event<
+        F: Fn(&Self, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -848,7 +875,9 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_selection_request_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(
+    fn connect_selection_request_event<
+        F: Fn(&Self, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -871,7 +900,7 @@ pub trait WidgetExt: 'static {
 
     fn connect_style_updated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_touch_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_touch_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -880,7 +909,9 @@ pub trait WidgetExt: 'static {
 
     fn connect_unrealize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(
+    fn connect_window_state_event<
+        F: Fn(&Self, &gdk::EventWindowState) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -1379,12 +1410,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn get_allocated_size(&self) -> (Allocation, i32) {
         unsafe {
             let mut allocation = Allocation::uninitialized();
-            let mut baseline = mem::uninitialized();
+            let mut baseline = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_allocated_size(
                 self.as_ref().to_glib_none().0,
                 allocation.to_glib_none_mut().0,
-                &mut baseline,
+                baseline.as_mut_ptr(),
             );
+            let baseline = baseline.assume_init();
             (allocation, baseline)
         }
     }
@@ -1612,7 +1644,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn get_name(&self) -> Option<GString> {
+    fn get_widget_name(&self) -> Option<GString> {
         unsafe { from_glib_none(gtk_sys::gtk_widget_get_name(self.as_ref().to_glib_none().0)) }
     }
 
@@ -1658,31 +1690,37 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_preferred_height(&self) -> (i32, i32) {
         unsafe {
-            let mut minimum_height = mem::uninitialized();
-            let mut natural_height = mem::uninitialized();
+            let mut minimum_height = mem::MaybeUninit::uninit();
+            let mut natural_height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_height(
                 self.as_ref().to_glib_none().0,
-                &mut minimum_height,
-                &mut natural_height,
+                minimum_height.as_mut_ptr(),
+                natural_height.as_mut_ptr(),
             );
+            let minimum_height = minimum_height.assume_init();
+            let natural_height = natural_height.assume_init();
             (minimum_height, natural_height)
         }
     }
 
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
         unsafe {
-            let mut minimum_height = mem::uninitialized();
-            let mut natural_height = mem::uninitialized();
-            let mut minimum_baseline = mem::uninitialized();
-            let mut natural_baseline = mem::uninitialized();
+            let mut minimum_height = mem::MaybeUninit::uninit();
+            let mut natural_height = mem::MaybeUninit::uninit();
+            let mut minimum_baseline = mem::MaybeUninit::uninit();
+            let mut natural_baseline = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_height_and_baseline_for_width(
                 self.as_ref().to_glib_none().0,
                 width,
-                &mut minimum_height,
-                &mut natural_height,
-                &mut minimum_baseline,
-                &mut natural_baseline,
+                minimum_height.as_mut_ptr(),
+                natural_height.as_mut_ptr(),
+                minimum_baseline.as_mut_ptr(),
+                natural_baseline.as_mut_ptr(),
             );
+            let minimum_height = minimum_height.assume_init();
+            let natural_height = natural_height.assume_init();
+            let minimum_baseline = minimum_baseline.assume_init();
+            let natural_baseline = natural_baseline.assume_init();
             (
                 minimum_height,
                 natural_height,
@@ -1694,14 +1732,16 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32) {
         unsafe {
-            let mut minimum_height = mem::uninitialized();
-            let mut natural_height = mem::uninitialized();
+            let mut minimum_height = mem::MaybeUninit::uninit();
+            let mut natural_height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_height_for_width(
                 self.as_ref().to_glib_none().0,
                 width,
-                &mut minimum_height,
-                &mut natural_height,
+                minimum_height.as_mut_ptr(),
+                natural_height.as_mut_ptr(),
             );
+            let minimum_height = minimum_height.assume_init();
+            let natural_height = natural_height.assume_init();
             (minimum_height, natural_height)
         }
     }
@@ -1721,27 +1761,31 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_preferred_width(&self) -> (i32, i32) {
         unsafe {
-            let mut minimum_width = mem::uninitialized();
-            let mut natural_width = mem::uninitialized();
+            let mut minimum_width = mem::MaybeUninit::uninit();
+            let mut natural_width = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_width(
                 self.as_ref().to_glib_none().0,
-                &mut minimum_width,
-                &mut natural_width,
+                minimum_width.as_mut_ptr(),
+                natural_width.as_mut_ptr(),
             );
+            let minimum_width = minimum_width.assume_init();
+            let natural_width = natural_width.assume_init();
             (minimum_width, natural_width)
         }
     }
 
     fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32) {
         unsafe {
-            let mut minimum_width = mem::uninitialized();
-            let mut natural_width = mem::uninitialized();
+            let mut minimum_width = mem::MaybeUninit::uninit();
+            let mut natural_width = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_preferred_width_for_height(
                 self.as_ref().to_glib_none().0,
                 height,
-                &mut minimum_width,
-                &mut natural_width,
+                minimum_width.as_mut_ptr(),
+                natural_width.as_mut_ptr(),
             );
+            let minimum_width = minimum_width.assume_init();
+            let natural_width = natural_width.assume_init();
             (minimum_width, natural_width)
         }
     }
@@ -1800,13 +1844,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn get_size_request(&self) -> (i32, i32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_widget_get_size_request(
                 self.as_ref().to_glib_none().0,
-                &mut width,
-                &mut height,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
@@ -2176,7 +2222,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn override_font(&self, font_desc: Option<&pango::FontDescription>) {
+    fn override_font(&self, font_desc: &pango::FontDescription) {
         unsafe {
             gtk_sys::gtk_widget_override_font(
                 self.as_ref().to_glib_none().0,
@@ -2495,7 +2541,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_name(&self, name: &str) {
+    fn set_widget_name(&self, name: &str) {
         unsafe {
             gtk_sys::gtk_widget_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
@@ -2722,16 +2768,18 @@ impl<O: IsA<Widget>> WidgetExt for O {
         src_y: i32,
     ) -> Option<(i32, i32)> {
         unsafe {
-            let mut dest_x = mem::uninitialized();
-            let mut dest_y = mem::uninitialized();
+            let mut dest_x = mem::MaybeUninit::uninit();
+            let mut dest_y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_widget_translate_coordinates(
                 self.as_ref().to_glib_none().0,
                 dest_widget.as_ref().to_glib_none().0,
                 src_x,
                 src_y,
-                &mut dest_x,
-                &mut dest_y,
+                dest_x.as_mut_ptr(),
+                dest_y.as_mut_ptr(),
             ));
+            let dest_x = dest_x.assume_init();
+            let dest_y = dest_y.assume_init();
             if ret {
                 Some((dest_x, dest_y))
             } else {
@@ -2787,7 +2835,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"composite-child\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `composite-child` getter")
+                .unwrap()
         }
     }
 
@@ -2799,7 +2850,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"expand\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `expand` getter")
+                .unwrap()
         }
     }
 
@@ -2821,7 +2875,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"has-default\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-default` getter")
+                .unwrap()
         }
     }
 
@@ -2843,7 +2900,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"has-focus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-focus` getter")
+                .unwrap()
         }
     }
 
@@ -2865,7 +2925,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"height-request\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `height-request` getter")
+                .unwrap()
         }
     }
 
@@ -2887,7 +2950,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"is-focus\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-focus` getter")
+                .unwrap()
         }
     }
 
@@ -2909,7 +2975,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"margin\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `margin` getter")
+                .unwrap()
         }
     }
 
@@ -2931,7 +3000,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 b"width-request\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `width-request` getter")
+                .unwrap()
         }
     }
 
@@ -2968,13 +3040,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_button_press_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(
+    fn connect_button_press_event<
+        F: Fn(&Self, &gdk::EventButton) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn button_press_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventButton) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventButton) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventButton,
@@ -3001,13 +3075,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_button_release_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(
+    fn connect_button_release_event<
+        F: Fn(&Self, &gdk::EventButton) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn button_release_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventButton) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventButton) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventButton,
@@ -3161,13 +3237,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_delete_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_delete_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn delete_event_trampoline<
             P,
-            F: Fn(&P, &gdk::Event) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::Event) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEvent,
@@ -3215,13 +3291,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_destroy_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_destroy_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn destroy_event_trampoline<
             P,
-            F: Fn(&P, &gdk::Event) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::Event) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEvent,
@@ -3417,13 +3493,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(
+    fn connect_drag_drop<
+        F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn drag_drop_trampoline<
             P,
-            F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             context: *mut gdk_sys::GdkDragContext,
@@ -3481,13 +3559,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_drag_failed<F: Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>(
+    fn connect_drag_failed<
+        F: Fn(&Self, &gdk::DragContext, DragResult) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn drag_failed_trampoline<
             P,
-            F: Fn(&P, &gdk::DragContext, DragResult) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::DragContext, DragResult) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             context: *mut gdk_sys::GdkDragContext,
@@ -3546,13 +3626,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(
+    fn connect_drag_motion<
+        F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn drag_motion_trampoline<
             P,
-            F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             context: *mut gdk_sys::GdkDragContext,
@@ -3585,11 +3667,14 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_draw<F: Fn(&Self, &cairo::Context) -> Inhibit + 'static>(
+    fn connect_draw<F: Fn(&Self, &cairo::Context) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn draw_trampoline<P, F: Fn(&P, &cairo::Context) -> Inhibit + 'static>(
+        unsafe extern "C" fn draw_trampoline<
+            P,
+            F: Fn(&P, &cairo::Context) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkWidget,
             cr: *mut cairo_sys::cairo_t,
             f: glib_sys::gpointer,
@@ -3615,13 +3700,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_enter_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(
+    fn connect_enter_notify_event<
+        F: Fn(&Self, &gdk::EventCrossing) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn enter_notify_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventCrossing) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventCrossing,
@@ -3648,11 +3735,14 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(
+        unsafe extern "C" fn event_trampoline<
+            P,
+            F: Fn(&P, &gdk::Event) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEvent,
             f: glib_sys::gpointer,
@@ -3703,11 +3793,14 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_focus<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(
+    fn connect_focus<F: Fn(&Self, DirectionType) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn focus_trampoline<P, F: Fn(&P, DirectionType) -> Inhibit + 'static>(
+        unsafe extern "C" fn focus_trampoline<
+            P,
+            F: Fn(&P, DirectionType) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkWidget,
             direction: gtk_sys::GtkDirectionType,
             f: glib_sys::gpointer,
@@ -3733,13 +3826,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_focus_in_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(
+    fn connect_focus_in_event<F: Fn(&Self, &gdk::EventFocus) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn focus_in_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventFocus) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventFocus) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventFocus,
@@ -3766,13 +3859,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_focus_out_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(
+    fn connect_focus_out_event<
+        F: Fn(&Self, &gdk::EventFocus) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn focus_out_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventFocus) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventFocus) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventFocus,
@@ -3799,13 +3894,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_grab_broken_event<F: Fn(&Self, &gdk::EventGrabBroken) -> Inhibit + 'static>(
+    fn connect_grab_broken_event<
+        F: Fn(&Self, &gdk::EventGrabBroken) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn grab_broken_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventGrabBroken) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventGrabBroken) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventGrabBroken,
@@ -3935,13 +4032,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_key_press_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(
+    fn connect_key_press_event<F: Fn(&Self, &gdk::EventKey) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn key_press_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventKey) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventKey) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventKey,
@@ -3968,13 +4065,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_key_release_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(
+    fn connect_key_release_event<
+        F: Fn(&Self, &gdk::EventKey) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn key_release_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventKey) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventKey) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventKey,
@@ -4001,13 +4100,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_keynav_failed<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(
+    fn connect_keynav_failed<F: Fn(&Self, DirectionType) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn keynav_failed_trampoline<
             P,
-            F: Fn(&P, DirectionType) -> Inhibit + 'static,
+            F: Fn(&P, DirectionType) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             direction: gtk_sys::GtkDirectionType,
@@ -4034,13 +4133,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_leave_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(
+    fn connect_leave_notify_event<
+        F: Fn(&Self, &gdk::EventCrossing) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn leave_notify_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventCrossing) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventCrossing,
@@ -4088,11 +4189,14 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_mnemonic_activate<F: Fn(&Self, bool) -> Inhibit + 'static>(
+    fn connect_mnemonic_activate<F: Fn(&Self, bool) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn mnemonic_activate_trampoline<P, F: Fn(&P, bool) -> Inhibit + 'static>(
+        unsafe extern "C" fn mnemonic_activate_trampoline<
+            P,
+            F: Fn(&P, bool) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkWidget,
             group_cycling: glib_sys::gboolean,
             f: glib_sys::gpointer,
@@ -4118,13 +4222,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_motion_notify_event<F: Fn(&Self, &gdk::EventMotion) -> Inhibit + 'static>(
+    fn connect_motion_notify_event<
+        F: Fn(&Self, &gdk::EventMotion) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn motion_notify_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventMotion) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventMotion) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventMotion,
@@ -4239,16 +4345,21 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 .emit("popup-menu", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_popup_menu`")
+            .unwrap()
     }
 
-    fn connect_property_notify_event<F: Fn(&Self, &gdk::EventProperty) -> Inhibit + 'static>(
+    fn connect_property_notify_event<
+        F: Fn(&Self, &gdk::EventProperty) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn property_notify_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventProperty) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventProperty) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventProperty,
@@ -4277,13 +4388,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_proximity_in_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(
+    fn connect_proximity_in_event<
+        F: Fn(&Self, &gdk::EventProximity) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn proximity_in_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventProximity) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventProximity) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventProximity,
@@ -4310,13 +4423,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_proximity_out_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(
+    fn connect_proximity_out_event<
+        F: Fn(&Self, &gdk::EventProximity) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn proximity_out_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventProximity) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventProximity) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventProximity,
@@ -4436,13 +4551,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>(
+    fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn scroll_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventScroll) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventScroll) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventScroll,
@@ -4469,13 +4584,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_selection_clear_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(
+    fn connect_selection_clear_event<
+        F: Fn(&Self, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn selection_clear_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventSelection,
@@ -4539,13 +4656,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_selection_notify_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(
+    fn connect_selection_notify_event<
+        F: Fn(&Self, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn selection_notify_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventSelection,
@@ -4607,13 +4726,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_selection_request_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(
+    fn connect_selection_request_event<
+        F: Fn(&Self, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn selection_request_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventSelection) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventSelection,
@@ -4699,7 +4820,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 .emit("show-help", &[&help_type])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_show_help`")
+            .unwrap()
     }
 
     fn connect_size_allocate<F: Fn(&Self, &Allocation) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -4778,13 +4902,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_touch_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(
+    fn connect_touch_event<F: Fn(&Self, &gdk::Event) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn touch_event_trampoline<
             P,
-            F: Fn(&P, &gdk::Event) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::Event) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             object: *mut gdk_sys::GdkEvent,
@@ -4853,13 +4977,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(
+    fn connect_window_state_event<
+        F: Fn(&Self, &gdk::EventWindowState) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn window_state_event_trampoline<
             P,
-            F: Fn(&P, &gdk::EventWindowState) -> Inhibit + 'static,
+            F: Fn(&P, &gdk::EventWindowState) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkWidget,
             event: *mut gdk_sys::GdkEventWindowState,

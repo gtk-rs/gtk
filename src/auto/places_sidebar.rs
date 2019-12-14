@@ -275,7 +275,10 @@ impl PlacesSidebar {
                 b"populate-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `populate-all` getter")
+                .unwrap()
         }
     }
 
@@ -298,7 +301,10 @@ impl PlacesSidebar {
                 b"show-other-locations\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-other-locations` getter")
+                .unwrap()
         }
     }
 
@@ -320,7 +326,10 @@ impl PlacesSidebar {
                 b"show-recent\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-recent` getter")
+                .unwrap()
         }
     }
 
@@ -342,7 +351,10 @@ impl PlacesSidebar {
                 b"show-trash\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-trash` getter")
+                .unwrap()
         }
     }
 
@@ -900,6 +912,7 @@ impl Default for PlacesSidebar {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct PlacesSidebarBuilder {
     local_only: Option<bool>,
     location: Option<gio::File>,
@@ -962,7 +975,6 @@ pub struct PlacesSidebarBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -974,76 +986,7 @@ pub struct PlacesSidebarBuilder {
 
 impl PlacesSidebarBuilder {
     pub fn new() -> Self {
-        Self {
-            local_only: None,
-            location: None,
-            open_flags: None,
-            #[cfg(any(feature = "v3_18", feature = "dox"))]
-            populate_all: None,
-            show_connect_to_server: None,
-            show_desktop: None,
-            show_enter_location: None,
-            show_other_locations: None,
-            show_recent: None,
-            #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-            show_starred_location: None,
-            show_trash: None,
-            hadjustment: None,
-            hscrollbar_policy: None,
-            kinetic_scrolling: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            max_content_height: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            max_content_width: None,
-            min_content_height: None,
-            min_content_width: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            overlay_scrolling: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            propagate_natural_height: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            propagate_natural_width: None,
-            shadow_type: None,
-            vadjustment: None,
-            vscrollbar_policy: None,
-            window_placement: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> PlacesSidebar {
@@ -1263,8 +1206,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn location(mut self, location: &gio::File) -> Self {
-        self.location = Some(location.clone());
+    pub fn location<P: IsA<gio::File>>(mut self, location: &P) -> Self {
+        self.location = Some(location.clone().upcast());
         self
     }
 
@@ -1315,8 +1258,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn hadjustment(mut self, hadjustment: &Adjustment) -> Self {
-        self.hadjustment = Some(hadjustment.clone());
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
         self
     }
 
@@ -1375,8 +1318,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn vadjustment(mut self, vadjustment: &Adjustment) -> Self {
-        self.vadjustment = Some(vadjustment.clone());
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
         self
     }
 
@@ -1395,8 +1338,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -1516,8 +1459,8 @@ impl PlacesSidebarBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 

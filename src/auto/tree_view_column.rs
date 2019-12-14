@@ -63,6 +63,7 @@ impl Default for TreeViewColumn {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct TreeViewColumnBuilder {
     alignment: Option<f32>,
     cell_area: Option<CellArea>,
@@ -85,25 +86,7 @@ pub struct TreeViewColumnBuilder {
 
 impl TreeViewColumnBuilder {
     pub fn new() -> Self {
-        Self {
-            alignment: None,
-            cell_area: None,
-            clickable: None,
-            expand: None,
-            fixed_width: None,
-            max_width: None,
-            min_width: None,
-            reorderable: None,
-            resizable: None,
-            sizing: None,
-            sort_column_id: None,
-            sort_indicator: None,
-            sort_order: None,
-            spacing: None,
-            title: None,
-            visible: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> TreeViewColumn {
@@ -170,8 +153,8 @@ impl TreeViewColumnBuilder {
         self
     }
 
-    pub fn cell_area(mut self, cell_area: &CellArea) -> Self {
-        self.cell_area = Some(cell_area.clone());
+    pub fn cell_area<P: IsA<CellArea>>(mut self, cell_area: &P) -> Self {
+        self.cell_area = Some(cell_area.clone().upcast());
         self
     }
 
@@ -245,8 +228,8 @@ impl TreeViewColumnBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }
@@ -319,7 +302,7 @@ pub trait TreeViewColumnExt: 'static {
     fn set_cell_data_func<P: IsA<CellRenderer>>(
         &self,
         cell_renderer: &P,
-        func: Option<Box<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
+        func: Option<Box_<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
     );
 
     fn set_clickable(&self, clickable: bool);
@@ -402,14 +385,16 @@ pub trait TreeViewColumnExt: 'static {
 impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
     fn cell_get_position<P: IsA<CellRenderer>>(&self, cell_renderer: &P) -> Option<(i32, i32)> {
         unsafe {
-            let mut x_offset = mem::uninitialized();
-            let mut width = mem::uninitialized();
+            let mut x_offset = mem::MaybeUninit::uninit();
+            let mut width = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_tree_view_column_cell_get_position(
                 self.as_ref().to_glib_none().0,
                 cell_renderer.as_ref().to_glib_none().0,
-                &mut x_offset,
-                &mut width,
+                x_offset.as_mut_ptr(),
+                width.as_mut_ptr(),
             ));
+            let x_offset = x_offset.assume_init();
+            let width = width.assume_init();
             if ret {
                 Some((x_offset, width))
             } else {
@@ -420,18 +405,22 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
 
     fn cell_get_size(&self, cell_area: Option<&gdk::Rectangle>) -> (i32, i32, i32, i32) {
         unsafe {
-            let mut x_offset = mem::uninitialized();
-            let mut y_offset = mem::uninitialized();
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut x_offset = mem::MaybeUninit::uninit();
+            let mut y_offset = mem::MaybeUninit::uninit();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_column_cell_get_size(
                 self.as_ref().to_glib_none().0,
                 cell_area.to_glib_none().0,
-                &mut x_offset,
-                &mut y_offset,
-                &mut width,
-                &mut height,
+                x_offset.as_mut_ptr(),
+                y_offset.as_mut_ptr(),
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let x_offset = x_offset.assume_init();
+            let y_offset = y_offset.assume_init();
+            let width = width.assume_init();
+            let height = height.assume_init();
             (x_offset, y_offset, width, height)
         }
     }
@@ -620,11 +609,11 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
     fn set_cell_data_func<P: IsA<CellRenderer>>(
         &self,
         cell_renderer: &P,
-        func: Option<Box<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
+        func: Option<Box_<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
     ) {
         let func_data: Box_<
-            Option<Box<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
-        > = Box::new(func);
+            Option<Box_<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
+        > = Box_::new(func);
         unsafe extern "C" fn func_func<P: IsA<CellRenderer>>(
             tree_column: *mut gtk_sys::GtkTreeViewColumn,
             cell: *mut gtk_sys::GtkCellRenderer,
@@ -637,7 +626,7 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             let tree_model = from_glib_borrow(tree_model);
             let iter = from_glib_borrow(iter);
             let callback: &Option<
-                Box<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>,
+                Box_<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>,
             > = &*(data as *mut _);
             if let Some(ref callback) = *callback {
                 callback(&tree_column, &cell, &tree_model, &iter)
@@ -653,20 +642,20 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
         unsafe extern "C" fn destroy_func<P: IsA<CellRenderer>>(data: glib_sys::gpointer) {
             let _callback: Box_<
                 Option<
-                    Box<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>,
+                    Box_<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>,
                 >,
             > = Box_::from_raw(data as *mut _);
         }
         let destroy_call4 = Some(destroy_func::<P> as _);
         let super_callback0: Box_<
-            Option<Box<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
+            Option<Box_<dyn Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>>,
         > = func_data;
         unsafe {
             gtk_sys::gtk_tree_view_column_set_cell_data_func(
                 self.as_ref().to_glib_none().0,
                 cell_renderer.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call4,
             );
         }
@@ -806,7 +795,9 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
                 b"cell-area\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-area` getter")
         }
     }
 

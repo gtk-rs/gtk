@@ -179,13 +179,6 @@ extern crate gdk_pixbuf;
 extern crate gio;
 extern crate pango;
 
-#[cfg(feature = "futures")]
-extern crate fragile;
-#[cfg(feature = "futures")]
-extern crate futures;
-
-pub use glib::{Cast, Continue, Error, IsA, Object, StaticType, ToValue, Type, TypedValue, Value};
-
 pub mod xlib;
 
 pub const STYLE_PROVIDER_PRIORITY_FALLBACK: u32 =
@@ -207,6 +200,7 @@ mod rt;
 #[cfg_attr(feature = "cargo-clippy", allow(wrong_self_convention))]
 mod auto;
 
+mod accel_group;
 mod app_chooser;
 mod application;
 mod application_window;
@@ -265,14 +259,12 @@ mod widget;
 mod window;
 
 #[macro_use]
-#[cfg(feature = "subclassing")]
 pub mod subclass;
 
 pub mod prelude;
 
 pub use auto::functions::*;
 pub use auto::*;
-pub use prelude::*;
 pub use rt::*;
 pub use signal::*;
 

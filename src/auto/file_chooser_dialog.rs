@@ -5,6 +5,7 @@
 use gdk;
 use gdk_pixbuf;
 use glib::object::Cast;
+use glib::object::IsA;
 use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
@@ -17,6 +18,8 @@ use Buildable;
 use Container;
 use Dialog;
 use FileChooser;
+use FileChooserAction;
+use FileFilter;
 use ResizeMode;
 use Widget;
 use Window;
@@ -37,6 +40,7 @@ impl FileChooserDialog {
     //}
 }
 
+#[derive(Clone, Default)]
 pub struct FileChooserDialogBuilder {
     use_header_bar: Option<i32>,
     accept_focus: Option<bool>,
@@ -96,7 +100,6 @@ pub struct FileChooserDialogBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -104,77 +107,22 @@ pub struct FileChooserDialogBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    action: Option<FileChooserAction>,
+    create_folders: Option<bool>,
+    do_overwrite_confirmation: Option<bool>,
+    extra_widget: Option<Widget>,
+    filter: Option<FileFilter>,
+    local_only: Option<bool>,
+    preview_widget: Option<Widget>,
+    preview_widget_active: Option<bool>,
+    select_multiple: Option<bool>,
+    show_hidden: Option<bool>,
+    use_preview_label: Option<bool>,
 }
 
 impl FileChooserDialogBuilder {
     pub fn new() -> Self {
-        Self {
-            use_header_bar: None,
-            accept_focus: None,
-            application: None,
-            attached_to: None,
-            decorated: None,
-            default_height: None,
-            default_width: None,
-            deletable: None,
-            destroy_with_parent: None,
-            focus_on_map: None,
-            focus_visible: None,
-            gravity: None,
-            hide_titlebar_when_maximized: None,
-            icon: None,
-            icon_name: None,
-            mnemonics_visible: None,
-            modal: None,
-            resizable: None,
-            role: None,
-            screen: None,
-            skip_pager_hint: None,
-            skip_taskbar_hint: None,
-            startup_id: None,
-            title: None,
-            transient_for: None,
-            type_: None,
-            type_hint: None,
-            urgency_hint: None,
-            window_position: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> FileChooserDialog {
@@ -374,6 +322,39 @@ impl FileChooserDialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref action) = self.action {
+            properties.push(("action", action));
+        }
+        if let Some(ref create_folders) = self.create_folders {
+            properties.push(("create-folders", create_folders));
+        }
+        if let Some(ref do_overwrite_confirmation) = self.do_overwrite_confirmation {
+            properties.push(("do-overwrite-confirmation", do_overwrite_confirmation));
+        }
+        if let Some(ref extra_widget) = self.extra_widget {
+            properties.push(("extra-widget", extra_widget));
+        }
+        if let Some(ref filter) = self.filter {
+            properties.push(("filter", filter));
+        }
+        if let Some(ref local_only) = self.local_only {
+            properties.push(("local-only", local_only));
+        }
+        if let Some(ref preview_widget) = self.preview_widget {
+            properties.push(("preview-widget", preview_widget));
+        }
+        if let Some(ref preview_widget_active) = self.preview_widget_active {
+            properties.push(("preview-widget-active", preview_widget_active));
+        }
+        if let Some(ref select_multiple) = self.select_multiple {
+            properties.push(("select-multiple", select_multiple));
+        }
+        if let Some(ref show_hidden) = self.show_hidden {
+            properties.push(("show-hidden", show_hidden));
+        }
+        if let Some(ref use_preview_label) = self.use_preview_label {
+            properties.push(("use-preview-label", use_preview_label));
+        }
         glib::Object::new(FileChooserDialog::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -390,13 +371,13 @@ impl FileChooserDialogBuilder {
         self
     }
 
-    pub fn application(mut self, application: &Application) -> Self {
-        self.application = Some(application.clone());
+    pub fn application<P: IsA<Application>>(mut self, application: &P) -> Self {
+        self.application = Some(application.clone().upcast());
         self
     }
 
-    pub fn attached_to(mut self, attached_to: &Widget) -> Self {
-        self.attached_to = Some(attached_to.clone());
+    pub fn attached_to<P: IsA<Widget>>(mut self, attached_to: &P) -> Self {
+        self.attached_to = Some(attached_to.clone().upcast());
         self
     }
 
@@ -500,8 +481,8 @@ impl FileChooserDialogBuilder {
         self
     }
 
-    pub fn transient_for(mut self, transient_for: &Window) -> Self {
-        self.transient_for = Some(transient_for.clone());
+    pub fn transient_for<P: IsA<Window>>(mut self, transient_for: &P) -> Self {
+        self.transient_for = Some(transient_for.clone().upcast());
         self
     }
 
@@ -530,8 +511,8 @@ impl FileChooserDialogBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -651,8 +632,8 @@ impl FileChooserDialogBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -698,6 +679,61 @@ impl FileChooserDialogBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn action(mut self, action: FileChooserAction) -> Self {
+        self.action = Some(action);
+        self
+    }
+
+    pub fn create_folders(mut self, create_folders: bool) -> Self {
+        self.create_folders = Some(create_folders);
+        self
+    }
+
+    pub fn do_overwrite_confirmation(mut self, do_overwrite_confirmation: bool) -> Self {
+        self.do_overwrite_confirmation = Some(do_overwrite_confirmation);
+        self
+    }
+
+    pub fn extra_widget<P: IsA<Widget>>(mut self, extra_widget: &P) -> Self {
+        self.extra_widget = Some(extra_widget.clone().upcast());
+        self
+    }
+
+    pub fn filter(mut self, filter: &FileFilter) -> Self {
+        self.filter = Some(filter.clone());
+        self
+    }
+
+    pub fn local_only(mut self, local_only: bool) -> Self {
+        self.local_only = Some(local_only);
+        self
+    }
+
+    pub fn preview_widget<P: IsA<Widget>>(mut self, preview_widget: &P) -> Self {
+        self.preview_widget = Some(preview_widget.clone().upcast());
+        self
+    }
+
+    pub fn preview_widget_active(mut self, preview_widget_active: bool) -> Self {
+        self.preview_widget_active = Some(preview_widget_active);
+        self
+    }
+
+    pub fn select_multiple(mut self, select_multiple: bool) -> Self {
+        self.select_multiple = Some(select_multiple);
+        self
+    }
+
+    pub fn show_hidden(mut self, show_hidden: bool) -> Self {
+        self.show_hidden = Some(show_hidden);
+        self
+    }
+
+    pub fn use_preview_label(mut self, use_preview_label: bool) -> Self {
+        self.use_preview_label = Some(use_preview_label);
         self
     }
 }
