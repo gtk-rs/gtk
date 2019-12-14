@@ -11,6 +11,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::GString;
 use glib::StaticType;
 use glib::ToValue;
@@ -123,6 +124,7 @@ impl Default for Image {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ImageBuilder {
     file: Option<String>,
     gicon: Option<gio::Icon>,
@@ -159,7 +161,6 @@ pub struct ImageBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -171,50 +172,7 @@ pub struct ImageBuilder {
 
 impl ImageBuilder {
     pub fn new() -> Self {
-        Self {
-            file: None,
-            gicon: None,
-            icon_name: None,
-            icon_size: None,
-            pixbuf: None,
-            pixbuf_animation: None,
-            pixel_size: None,
-            resource: None,
-            use_fallback: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Image {
@@ -356,8 +314,8 @@ impl ImageBuilder {
         self
     }
 
-    pub fn gicon(mut self, gicon: &gio::Icon) -> Self {
-        self.gicon = Some(gicon.clone());
+    pub fn gicon<P: IsA<gio::Icon>>(mut self, gicon: &P) -> Self {
+        self.gicon = Some(gicon.clone().upcast());
         self
     }
 
@@ -376,8 +334,11 @@ impl ImageBuilder {
         self
     }
 
-    pub fn pixbuf_animation(mut self, pixbuf_animation: &gdk_pixbuf::PixbufAnimation) -> Self {
-        self.pixbuf_animation = Some(pixbuf_animation.clone());
+    pub fn pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(
+        mut self,
+        pixbuf_animation: &P,
+    ) -> Self {
+        self.pixbuf_animation = Some(pixbuf_animation.clone().upcast());
         self
     }
 
@@ -507,8 +468,8 @@ impl ImageBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -593,7 +554,7 @@ pub trait ImageExt: 'static {
 
     fn set_property_file(&self, file: Option<&str>);
 
-    fn set_property_gicon(&self, gicon: Option<&gio::Icon>);
+    fn set_property_gicon<P: IsA<gio::Icon> + SetValueOptional>(&self, gicon: Option<&P>);
 
     fn get_property_icon_name(&self) -> Option<GString>;
 
@@ -607,7 +568,10 @@ pub trait ImageExt: 'static {
 
     fn get_property_pixbuf_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    fn set_property_pixbuf_animation(&self, pixbuf_animation: Option<&gdk_pixbuf::PixbufAnimation>);
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + SetValueOptional>(
+        &self,
+        pixbuf_animation: Option<&P>,
+    );
 
     fn get_property_resource(&self) -> Option<GString>;
 
@@ -661,8 +625,13 @@ impl<O: IsA<Image>> ImageExt for O {
     fn get_gicon(&self) -> (gio::Icon, IconSize) {
         unsafe {
             let mut gicon = ptr::null_mut();
-            let mut size = mem::uninitialized();
-            gtk_sys::gtk_image_get_gicon(self.as_ref().to_glib_none().0, &mut gicon, &mut size);
+            let mut size = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_image_get_gicon(
+                self.as_ref().to_glib_none().0,
+                &mut gicon,
+                size.as_mut_ptr(),
+            );
+            let size = size.assume_init();
             (from_glib_none(gicon), from_glib(size))
         }
     }
@@ -766,7 +735,9 @@ impl<O: IsA<Image>> ImageExt for O {
                 b"file\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `file` getter")
         }
     }
 
@@ -780,7 +751,7 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_property_gicon(&self, gicon: Option<&gio::Icon>) {
+    fn set_property_gicon<P: IsA<gio::Icon> + SetValueOptional>(&self, gicon: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -798,7 +769,9 @@ impl<O: IsA<Image>> ImageExt for O {
                 b"icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `icon-name` getter")
         }
     }
 
@@ -820,7 +793,10 @@ impl<O: IsA<Image>> ImageExt for O {
                 b"icon-size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `icon-size` getter")
+                .unwrap()
         }
     }
 
@@ -853,13 +829,15 @@ impl<O: IsA<Image>> ImageExt for O {
                 b"pixbuf-animation\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `pixbuf-animation` getter")
         }
     }
 
-    fn set_property_pixbuf_animation(
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + SetValueOptional>(
         &self,
-        pixbuf_animation: Option<&gdk_pixbuf::PixbufAnimation>,
+        pixbuf_animation: Option<&P>,
     ) {
         unsafe {
             gobject_sys::g_object_set_property(
@@ -878,7 +856,9 @@ impl<O: IsA<Image>> ImageExt for O {
                 b"resource\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `resource` getter")
         }
     }
 
@@ -900,7 +880,10 @@ impl<O: IsA<Image>> ImageExt for O {
                 b"use-fallback\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `use-fallback` getter")
+                .unwrap()
         }
     }
 

@@ -10,6 +10,7 @@ use glib::translate::*;
 use glib::StaticType;
 use glib::ToValue;
 use gtk_sys;
+use pango;
 use std::fmt;
 use Align;
 use Application;
@@ -18,6 +19,8 @@ use Buildable;
 use Container;
 use Dialog;
 use FontChooser;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+use FontChooserLevel;
 use ResizeMode;
 use Widget;
 use Window;
@@ -45,6 +48,7 @@ impl FontChooserDialog {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct FontChooserDialogBuilder {
     use_header_bar: Option<i32>,
     accept_focus: Option<bool>,
@@ -104,7 +108,6 @@ pub struct FontChooserDialogBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -112,77 +115,19 @@ pub struct FontChooserDialogBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    font: Option<String>,
+    font_desc: Option<pango::FontDescription>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    language: Option<String>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    level: Option<FontChooserLevel>,
+    preview_text: Option<String>,
+    show_preview_entry: Option<bool>,
 }
 
 impl FontChooserDialogBuilder {
     pub fn new() -> Self {
-        Self {
-            use_header_bar: None,
-            accept_focus: None,
-            application: None,
-            attached_to: None,
-            decorated: None,
-            default_height: None,
-            default_width: None,
-            deletable: None,
-            destroy_with_parent: None,
-            focus_on_map: None,
-            focus_visible: None,
-            gravity: None,
-            hide_titlebar_when_maximized: None,
-            icon: None,
-            icon_name: None,
-            mnemonics_visible: None,
-            modal: None,
-            resizable: None,
-            role: None,
-            screen: None,
-            skip_pager_hint: None,
-            skip_taskbar_hint: None,
-            startup_id: None,
-            title: None,
-            transient_for: None,
-            type_: None,
-            type_hint: None,
-            urgency_hint: None,
-            window_position: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> FontChooserDialog {
@@ -382,6 +327,30 @@ impl FontChooserDialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref font) = self.font {
+            properties.push(("font", font));
+        }
+        if let Some(ref font_desc) = self.font_desc {
+            properties.push(("font-desc", font_desc));
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref language) = self.language {
+                properties.push(("language", language));
+            }
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref level) = self.level {
+                properties.push(("level", level));
+            }
+        }
+        if let Some(ref preview_text) = self.preview_text {
+            properties.push(("preview-text", preview_text));
+        }
+        if let Some(ref show_preview_entry) = self.show_preview_entry {
+            properties.push(("show-preview-entry", show_preview_entry));
+        }
         glib::Object::new(FontChooserDialog::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -398,13 +367,13 @@ impl FontChooserDialogBuilder {
         self
     }
 
-    pub fn application(mut self, application: &Application) -> Self {
-        self.application = Some(application.clone());
+    pub fn application<P: IsA<Application>>(mut self, application: &P) -> Self {
+        self.application = Some(application.clone().upcast());
         self
     }
 
-    pub fn attached_to(mut self, attached_to: &Widget) -> Self {
-        self.attached_to = Some(attached_to.clone());
+    pub fn attached_to<P: IsA<Widget>>(mut self, attached_to: &P) -> Self {
+        self.attached_to = Some(attached_to.clone().upcast());
         self
     }
 
@@ -508,8 +477,8 @@ impl FontChooserDialogBuilder {
         self
     }
 
-    pub fn transient_for(mut self, transient_for: &Window) -> Self {
-        self.transient_for = Some(transient_for.clone());
+    pub fn transient_for<P: IsA<Window>>(mut self, transient_for: &P) -> Self {
+        self.transient_for = Some(transient_for.clone().upcast());
         self
     }
 
@@ -538,8 +507,8 @@ impl FontChooserDialogBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -659,8 +628,8 @@ impl FontChooserDialogBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -706,6 +675,38 @@ impl FontChooserDialogBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn font(mut self, font: &str) -> Self {
+        self.font = Some(font.to_string());
+        self
+    }
+
+    pub fn font_desc(mut self, font_desc: &pango::FontDescription) -> Self {
+        self.font_desc = Some(font_desc.clone());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn language(mut self, language: &str) -> Self {
+        self.language = Some(language.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn level(mut self, level: FontChooserLevel) -> Self {
+        self.level = Some(level);
+        self
+    }
+
+    pub fn preview_text(mut self, preview_text: &str) -> Self {
+        self.preview_text = Some(preview_text.to_string());
+        self
+    }
+
+    pub fn show_preview_entry(mut self, show_preview_entry: bool) -> Self {
+        self.show_preview_entry = Some(show_preview_entry);
         self
     }
 }

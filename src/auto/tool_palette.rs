@@ -17,14 +17,17 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
+use Adjustment;
 use Align;
 use Buildable;
 use Container;
 use DestDefaults;
 use IconSize;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Scrollable;
+use ScrollablePolicy;
 use SelectionData;
 use TargetEntry;
 use ToolItem;
@@ -64,6 +67,7 @@ impl Default for ToolPalette {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ToolPaletteBuilder {
     icon_size: Option<IconSize>,
     icon_size_set: Option<bool>,
@@ -97,7 +101,6 @@ pub struct ToolPaletteBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -105,51 +108,16 @@ pub struct ToolPaletteBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    hadjustment: Option<Adjustment>,
+    hscroll_policy: Option<ScrollablePolicy>,
+    vadjustment: Option<Adjustment>,
+    vscroll_policy: Option<ScrollablePolicy>,
 }
 
 impl ToolPaletteBuilder {
     pub fn new() -> Self {
-        Self {
-            icon_size: None,
-            icon_size_set: None,
-            toolbar_style: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ToolPalette {
@@ -271,6 +239,21 @@ impl ToolPaletteBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref hadjustment) = self.hadjustment {
+            properties.push(("hadjustment", hadjustment));
+        }
+        if let Some(ref hscroll_policy) = self.hscroll_policy {
+            properties.push(("hscroll-policy", hscroll_policy));
+        }
+        if let Some(ref vadjustment) = self.vadjustment {
+            properties.push(("vadjustment", vadjustment));
+        }
+        if let Some(ref vscroll_policy) = self.vscroll_policy {
+            properties.push(("vscroll-policy", vscroll_policy));
+        }
         glib::Object::new(ToolPalette::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -297,8 +280,8 @@ impl ToolPaletteBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -418,8 +401,8 @@ impl ToolPaletteBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -465,6 +448,31 @@ impl ToolPaletteBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
+        self
+    }
+
+    pub fn hscroll_policy(mut self, hscroll_policy: ScrollablePolicy) -> Self {
+        self.hscroll_policy = Some(hscroll_policy);
+        self
+    }
+
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
+        self
+    }
+
+    pub fn vscroll_policy(mut self, vscroll_policy: ScrollablePolicy) -> Self {
+        self.vscroll_policy = Some(vscroll_policy);
         self
     }
 }
@@ -698,7 +706,10 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
                 b"icon-size-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `icon-size-set` getter")
+                .unwrap()
         }
     }
 
@@ -720,7 +731,10 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
                 b"toolbar-style\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `toolbar-style` getter")
+                .unwrap()
         }
     }
 

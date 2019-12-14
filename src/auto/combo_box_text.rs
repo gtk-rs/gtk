@@ -52,6 +52,7 @@ impl Default for ComboBoxText {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ComboBoxTextBuilder {
     active: Option<i32>,
     active_id: Option<String>,
@@ -95,7 +96,6 @@ pub struct ComboBoxTextBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -103,61 +103,12 @@ pub struct ComboBoxTextBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
 }
 
 impl ComboBoxTextBuilder {
     pub fn new() -> Self {
-        Self {
-            active: None,
-            active_id: None,
-            button_sensitivity: None,
-            cell_area: None,
-            column_span_column: None,
-            entry_text_column: None,
-            has_entry: None,
-            has_frame: None,
-            id_column: None,
-            model: None,
-            popup_fixed_width: None,
-            row_span_column: None,
-            wrap_width: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ComboBoxText {
@@ -309,6 +260,9 @@ impl ComboBoxTextBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
+        }
         glib::Object::new(ComboBoxText::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -330,8 +284,8 @@ impl ComboBoxTextBuilder {
         self
     }
 
-    pub fn cell_area(mut self, cell_area: &CellArea) -> Self {
-        self.cell_area = Some(cell_area.clone());
+    pub fn cell_area<P: IsA<CellArea>>(mut self, cell_area: &P) -> Self {
+        self.cell_area = Some(cell_area.clone().upcast());
         self
     }
 
@@ -360,8 +314,8 @@ impl ComboBoxTextBuilder {
         self
     }
 
-    pub fn model(mut self, model: &TreeModel) -> Self {
-        self.model = Some(model.clone());
+    pub fn model<P: IsA<TreeModel>>(mut self, model: &P) -> Self {
+        self.model = Some(model.clone().upcast());
         self
     }
 
@@ -385,8 +339,8 @@ impl ComboBoxTextBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -506,8 +460,8 @@ impl ComboBoxTextBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -553,6 +507,11 @@ impl ComboBoxTextBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
         self
     }
 }

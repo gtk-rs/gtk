@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
@@ -42,6 +43,7 @@ impl RadioToolButton {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct RadioToolButtonBuilder {
     active: Option<bool>,
     icon_name: Option<String>,
@@ -81,7 +83,6 @@ pub struct RadioToolButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -89,57 +90,13 @@ pub struct RadioToolButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    action_name: Option<String>,
+    action_target: Option<glib::Variant>,
 }
 
 impl RadioToolButtonBuilder {
     pub fn new() -> Self {
-        Self {
-            active: None,
-            icon_name: None,
-            icon_widget: None,
-            label: None,
-            label_widget: None,
-            use_underline: None,
-            is_important: None,
-            visible_horizontal: None,
-            visible_vertical: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> RadioToolButton {
@@ -279,6 +236,12 @@ impl RadioToolButtonBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref action_name) = self.action_name {
+            properties.push(("action-name", action_name));
+        }
+        if let Some(ref action_target) = self.action_target {
+            properties.push(("action-target", action_target));
+        }
         glib::Object::new(RadioToolButton::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -295,8 +258,8 @@ impl RadioToolButtonBuilder {
         self
     }
 
-    pub fn icon_widget(mut self, icon_widget: &Widget) -> Self {
-        self.icon_widget = Some(icon_widget.clone());
+    pub fn icon_widget<P: IsA<Widget>>(mut self, icon_widget: &P) -> Self {
+        self.icon_widget = Some(icon_widget.clone().upcast());
         self
     }
 
@@ -305,8 +268,8 @@ impl RadioToolButtonBuilder {
         self
     }
 
-    pub fn label_widget(mut self, label_widget: &Widget) -> Self {
-        self.label_widget = Some(label_widget.clone());
+    pub fn label_widget<P: IsA<Widget>>(mut self, label_widget: &P) -> Self {
+        self.label_widget = Some(label_widget.clone().upcast());
         self
     }
 
@@ -335,8 +298,8 @@ impl RadioToolButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -456,8 +419,8 @@ impl RadioToolButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -503,6 +466,16 @@ impl RadioToolButtonBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn action_name(mut self, action_name: &str) -> Self {
+        self.action_name = Some(action_name.to_string());
+        self
+    }
+
+    pub fn action_target(mut self, action_target: &glib::Variant) -> Self {
+        self.action_target = Some(action_target.clone());
         self
     }
 }

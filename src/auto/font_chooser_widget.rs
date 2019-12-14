@@ -12,6 +12,7 @@ use glib::StaticType;
 use glib::ToValue;
 use glib_sys;
 use gtk_sys;
+use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -21,7 +22,10 @@ use Box;
 use Buildable;
 use Container;
 use FontChooser;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+use FontChooserLevel;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Widget;
 
@@ -46,6 +50,7 @@ impl Default for FontChooserWidget {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct FontChooserWidgetBuilder {
     baseline_position: Option<BaselinePosition>,
     homogeneous: Option<bool>,
@@ -79,7 +84,6 @@ pub struct FontChooserWidgetBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -87,51 +91,20 @@ pub struct FontChooserWidgetBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
+    font: Option<String>,
+    font_desc: Option<pango::FontDescription>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    language: Option<String>,
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    level: Option<FontChooserLevel>,
+    preview_text: Option<String>,
+    show_preview_entry: Option<bool>,
 }
 
 impl FontChooserWidgetBuilder {
     pub fn new() -> Self {
-        Self {
-            baseline_position: None,
-            homogeneous: None,
-            spacing: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> FontChooserWidget {
@@ -253,6 +226,33 @@ impl FontChooserWidgetBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
+        if let Some(ref font) = self.font {
+            properties.push(("font", font));
+        }
+        if let Some(ref font_desc) = self.font_desc {
+            properties.push(("font-desc", font_desc));
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref language) = self.language {
+                properties.push(("language", language));
+            }
+        }
+        #[cfg(any(feature = "v3_24", feature = "dox"))]
+        {
+            if let Some(ref level) = self.level {
+                properties.push(("level", level));
+            }
+        }
+        if let Some(ref preview_text) = self.preview_text {
+            properties.push(("preview-text", preview_text));
+        }
+        if let Some(ref show_preview_entry) = self.show_preview_entry {
+            properties.push(("show-preview-entry", show_preview_entry));
+        }
         glib::Object::new(FontChooserWidget::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -279,8 +279,8 @@ impl FontChooserWidgetBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -400,8 +400,8 @@ impl FontChooserWidgetBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -449,6 +449,43 @@ impl FontChooserWidgetBuilder {
         self.width_request = Some(width_request);
         self
     }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
+
+    pub fn font(mut self, font: &str) -> Self {
+        self.font = Some(font.to_string());
+        self
+    }
+
+    pub fn font_desc(mut self, font_desc: &pango::FontDescription) -> Self {
+        self.font_desc = Some(font_desc.clone());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn language(mut self, language: &str) -> Self {
+        self.language = Some(language.to_string());
+        self
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn level(mut self, level: FontChooserLevel) -> Self {
+        self.level = Some(level);
+        self
+    }
+
+    pub fn preview_text(mut self, preview_text: &str) -> Self {
+        self.preview_text = Some(preview_text.to_string());
+        self
+    }
+
+    pub fn show_preview_entry(mut self, show_preview_entry: bool) -> Self {
+        self.show_preview_entry = Some(show_preview_entry);
+        self
+    }
 }
 
 pub const NONE_FONT_CHOOSER_WIDGET: Option<&FontChooserWidget> = None;
@@ -465,7 +502,7 @@ impl<O: IsA<FontChooserWidget>> FontChooserWidgetExt for O {
     //    unsafe {
     //        let mut value = Value::from_type(</*Unknown type*/ as StaticType>::static_type());
     //        gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"tweak-action\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-    //        value.get()
+    //        value.get().expect("Return Value for property `tweak-action` getter")
     //    }
     //}
 

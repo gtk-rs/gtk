@@ -6,16 +6,16 @@ use gdk;
 use gdk::{DragAction, Event, ModifierType};
 use gdk_sys;
 use glib::object::{Cast, IsA, WeakRef};
-use glib::signal::{connect_raw, SignalHandlerId};
+use glib::signal::{connect_raw, Inhibit, SignalHandlerId};
 use glib::translate::*;
 use glib::ObjectExt;
 use glib_sys::gboolean;
 use gtk_sys;
-use pango;
 use std::mem::transmute;
 use std::ptr;
 
-use {Continue, DestDefaults, Inhibit, Rectangle, TargetEntry, Widget};
+use glib::Continue;
+use {DestDefaults, Rectangle, TargetEntry, Widget};
 
 pub struct TickCallbackId {
     id: u32,
@@ -43,8 +43,6 @@ pub trait WidgetExtManual: 'static {
     );
 
     fn intersect(&self, area: &Rectangle, intersection: Option<&mut Rectangle>) -> bool;
-
-    fn override_font(&self, font: &pango::FontDescription);
 
     fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F)
         -> SignalHandlerId;
@@ -115,12 +113,6 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
                 area.to_glib_none().0,
                 intersection.to_glib_none_mut().0,
             ))
-        }
-    }
-
-    fn override_font(&self, font: &pango::FontDescription) {
-        unsafe {
-            gtk_sys::gtk_widget_override_font(self.as_ref().to_glib_none().0, font.to_glib_none().0)
         }
     }
 

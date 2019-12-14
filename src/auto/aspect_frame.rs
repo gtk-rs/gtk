@@ -56,6 +56,7 @@ impl AspectFrame {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct AspectFrameBuilder {
     obey_child: Option<bool>,
     ratio: Option<f32>,
@@ -95,7 +96,6 @@ pub struct AspectFrameBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -107,53 +107,7 @@ pub struct AspectFrameBuilder {
 
 impl AspectFrameBuilder {
     pub fn new() -> Self {
-        Self {
-            obey_child: None,
-            ratio: None,
-            xalign: None,
-            yalign: None,
-            label: None,
-            label_widget: None,
-            label_xalign: None,
-            label_yalign: None,
-            shadow_type: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> AspectFrame {
@@ -324,8 +278,8 @@ impl AspectFrameBuilder {
         self
     }
 
-    pub fn label_widget(mut self, label_widget: &Widget) -> Self {
-        self.label_widget = Some(label_widget.clone());
+    pub fn label_widget<P: IsA<Widget>>(mut self, label_widget: &P) -> Self {
+        self.label_widget = Some(label_widget.clone().upcast());
         self
     }
 
@@ -349,8 +303,8 @@ impl AspectFrameBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -470,8 +424,8 @@ impl AspectFrameBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -572,7 +526,10 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
                 b"obey-child\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `obey-child` getter")
+                .unwrap()
         }
     }
 
@@ -594,7 +551,10 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
                 b"ratio\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `ratio` getter")
+                .unwrap()
         }
     }
 
@@ -616,7 +576,10 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
                 b"xalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `xalign` getter")
+                .unwrap()
         }
     }
 
@@ -638,7 +601,10 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
                 b"yalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `yalign` getter")
+                .unwrap()
         }
     }
 

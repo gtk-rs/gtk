@@ -21,6 +21,7 @@ use std::mem::transmute;
 use CellRenderer;
 use CellRendererMode;
 use Orientable;
+use Orientation;
 
 glib_wrapper! {
     pub struct CellRendererProgress(Object<gtk_sys::GtkCellRendererProgress, gtk_sys::GtkCellRendererProgressClass, CellRendererProgressClass>) @extends CellRenderer, @implements Orientable;
@@ -45,6 +46,7 @@ impl Default for CellRendererProgress {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererProgressBuilder {
     inverted: Option<bool>,
     pulse: Option<i32>,
@@ -66,32 +68,12 @@ pub struct CellRendererProgressBuilder {
     xpad: Option<u32>,
     yalign: Option<f32>,
     ypad: Option<u32>,
+    orientation: Option<Orientation>,
 }
 
 impl CellRendererProgressBuilder {
     pub fn new() -> Self {
-        Self {
-            inverted: None,
-            pulse: None,
-            text: None,
-            text_xalign: None,
-            text_yalign: None,
-            value: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererProgress {
@@ -155,6 +137,9 @@ impl CellRendererProgressBuilder {
         }
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
         }
         glib::Object::new(CellRendererProgress::static_type(), &properties)
             .expect("object new")
@@ -261,6 +246,11 @@ impl CellRendererProgressBuilder {
         self.ypad = Some(ypad);
         self
     }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
+        self
+    }
 }
 
 pub const NONE_CELL_RENDERER_PROGRESS: Option<&CellRendererProgress> = None;
@@ -312,7 +302,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"inverted\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `inverted` getter")
+                .unwrap()
         }
     }
 
@@ -334,7 +327,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"pulse\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pulse` getter")
+                .unwrap()
         }
     }
 
@@ -356,7 +352,9 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `text` getter")
         }
     }
 
@@ -378,7 +376,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"text-xalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `text-xalign` getter")
+                .unwrap()
         }
     }
 
@@ -400,7 +401,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"text-yalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `text-yalign` getter")
+                .unwrap()
         }
     }
 
@@ -422,7 +426,10 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
                 b"value\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `value` getter")
+                .unwrap()
         }
     }
 

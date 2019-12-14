@@ -13,6 +13,7 @@ use glib::object::ObjectExt;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::GString;
 use glib::StaticType;
 use glib::ToValue;
@@ -75,6 +76,7 @@ impl Default for Entry {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct EntryBuilder {
     activates_default: Option<bool>,
     attributes: Option<pango::AttrList>,
@@ -112,6 +114,7 @@ pub struct EntryBuilder {
     secondary_icon_tooltip_text: Option<String>,
     shadow_type: Option<ShadowType>,
     show_emoji_icon: Option<bool>,
+    tabs: Option<pango::TabArray>,
     text: Option<String>,
     truncate_multiline: Option<bool>,
     visibility: Option<bool>,
@@ -143,7 +146,6 @@ pub struct EntryBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -151,86 +153,12 @@ pub struct EntryBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
 }
 
 impl EntryBuilder {
     pub fn new() -> Self {
-        Self {
-            activates_default: None,
-            attributes: None,
-            buffer: None,
-            caps_lock_warning: None,
-            completion: None,
-            editable: None,
-            enable_emoji_completion: None,
-            has_frame: None,
-            im_module: None,
-            input_hints: None,
-            input_purpose: None,
-            invisible_char: None,
-            invisible_char_set: None,
-            max_length: None,
-            max_width_chars: None,
-            overwrite_mode: None,
-            placeholder_text: None,
-            populate_all: None,
-            primary_icon_activatable: None,
-            primary_icon_gicon: None,
-            primary_icon_name: None,
-            primary_icon_pixbuf: None,
-            primary_icon_sensitive: None,
-            primary_icon_tooltip_markup: None,
-            primary_icon_tooltip_text: None,
-            progress_fraction: None,
-            progress_pulse_step: None,
-            secondary_icon_activatable: None,
-            secondary_icon_gicon: None,
-            secondary_icon_name: None,
-            secondary_icon_pixbuf: None,
-            secondary_icon_sensitive: None,
-            secondary_icon_tooltip_markup: None,
-            secondary_icon_tooltip_text: None,
-            shadow_type: None,
-            show_emoji_icon: None,
-            text: None,
-            truncate_multiline: None,
-            visibility: None,
-            width_chars: None,
-            xalign: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Entry {
@@ -346,6 +274,9 @@ impl EntryBuilder {
         if let Some(ref show_emoji_icon) = self.show_emoji_icon {
             properties.push(("show-emoji-icon", show_emoji_icon));
         }
+        if let Some(ref tabs) = self.tabs {
+            properties.push(("tabs", tabs));
+        }
         if let Some(ref text) = self.text {
             properties.push(("text", text));
         }
@@ -460,6 +391,9 @@ impl EntryBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
+        }
         glib::Object::new(Entry::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -476,8 +410,8 @@ impl EntryBuilder {
         self
     }
 
-    pub fn buffer(mut self, buffer: &EntryBuffer) -> Self {
-        self.buffer = Some(buffer.clone());
+    pub fn buffer<P: IsA<EntryBuffer>>(mut self, buffer: &P) -> Self {
+        self.buffer = Some(buffer.clone().upcast());
         self
     }
 
@@ -486,8 +420,8 @@ impl EntryBuilder {
         self
     }
 
-    pub fn completion(mut self, completion: &EntryCompletion) -> Self {
-        self.completion = Some(completion.clone());
+    pub fn completion<P: IsA<EntryCompletion>>(mut self, completion: &P) -> Self {
+        self.completion = Some(completion.clone().upcast());
         self
     }
 
@@ -561,8 +495,8 @@ impl EntryBuilder {
         self
     }
 
-    pub fn primary_icon_gicon(mut self, primary_icon_gicon: &gio::Icon) -> Self {
-        self.primary_icon_gicon = Some(primary_icon_gicon.clone());
+    pub fn primary_icon_gicon<P: IsA<gio::Icon>>(mut self, primary_icon_gicon: &P) -> Self {
+        self.primary_icon_gicon = Some(primary_icon_gicon.clone().upcast());
         self
     }
 
@@ -606,8 +540,8 @@ impl EntryBuilder {
         self
     }
 
-    pub fn secondary_icon_gicon(mut self, secondary_icon_gicon: &gio::Icon) -> Self {
-        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone());
+    pub fn secondary_icon_gicon<P: IsA<gio::Icon>>(mut self, secondary_icon_gicon: &P) -> Self {
+        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone().upcast());
         self
     }
 
@@ -643,6 +577,11 @@ impl EntryBuilder {
 
     pub fn show_emoji_icon(mut self, show_emoji_icon: bool) -> Self {
         self.show_emoji_icon = Some(show_emoji_icon);
+        self
+    }
+
+    pub fn tabs(mut self, tabs: &pango::TabArray) -> Self {
+        self.tabs = Some(tabs.clone());
         self
     }
 
@@ -782,8 +721,8 @@ impl EntryBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -829,6 +768,11 @@ impl EntryBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
         self
     }
 }
@@ -1014,7 +958,10 @@ pub trait EntryExt: 'static {
 
     fn get_property_primary_icon_gicon(&self) -> Option<gio::Icon>;
 
-    fn set_property_primary_icon_gicon(&self, primary_icon_gicon: Option<&gio::Icon>);
+    fn set_property_primary_icon_gicon<P: IsA<gio::Icon> + SetValueOptional>(
+        &self,
+        primary_icon_gicon: Option<&P>,
+    );
 
     fn get_property_primary_icon_name(&self) -> Option<GString>;
 
@@ -1046,7 +993,10 @@ pub trait EntryExt: 'static {
 
     fn get_property_secondary_icon_gicon(&self) -> Option<gio::Icon>;
 
-    fn set_property_secondary_icon_gicon(&self, secondary_icon_gicon: Option<&gio::Icon>);
+    fn set_property_secondary_icon_gicon<P: IsA<gio::Icon> + SetValueOptional>(
+        &self,
+        secondary_icon_gicon: Option<&P>,
+    );
 
     fn get_property_secondary_icon_name(&self) -> Option<GString>;
 
@@ -1337,6 +1287,8 @@ pub trait EntryExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
+    fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_text_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -1532,9 +1484,15 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn get_layout_offsets(&self) -> (i32, i32) {
         unsafe {
-            let mut x = mem::uninitialized();
-            let mut y = mem::uninitialized();
-            gtk_sys::gtk_entry_get_layout_offsets(self.as_ref().to_glib_none().0, &mut x, &mut y);
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_entry_get_layout_offsets(
+                self.as_ref().to_glib_none().0,
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
+            );
+            let x = x.assume_init();
+            let y = y.assume_init();
             (x, y)
         }
     }
@@ -1904,7 +1862,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"caps-lock-warning\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `caps-lock-warning` getter")
+                .unwrap()
         }
     }
 
@@ -1926,7 +1887,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"cursor-position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `cursor-position` getter")
+                .unwrap()
         }
     }
 
@@ -1938,7 +1902,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"enable-emoji-completion\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `enable-emoji-completion` getter")
+                .unwrap()
         }
     }
 
@@ -1960,7 +1927,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"im-module\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `im-module` getter")
         }
     }
 
@@ -1982,7 +1951,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"invisible-char-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `invisible-char-set` getter")
+                .unwrap()
         }
     }
 
@@ -2004,7 +1976,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"populate-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `populate-all` getter")
+                .unwrap()
         }
     }
 
@@ -2026,7 +2001,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-activatable\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-activatable` getter")
+                .unwrap()
         }
     }
 
@@ -2048,11 +2026,16 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-gicon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-gicon` getter")
         }
     }
 
-    fn set_property_primary_icon_gicon(&self, primary_icon_gicon: Option<&gio::Icon>) {
+    fn set_property_primary_icon_gicon<P: IsA<gio::Icon> + SetValueOptional>(
+        &self,
+        primary_icon_gicon: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -2070,7 +2053,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-name` getter")
         }
     }
 
@@ -2092,7 +2077,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-pixbuf\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-pixbuf` getter")
         }
     }
 
@@ -2114,7 +2101,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-sensitive\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-sensitive` getter")
+                .unwrap()
         }
     }
 
@@ -2136,7 +2126,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-storage-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-storage-type` getter")
+                .unwrap()
         }
     }
 
@@ -2148,7 +2141,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-tooltip-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-tooltip-markup` getter")
         }
     }
 
@@ -2170,7 +2165,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"primary-icon-tooltip-text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `primary-icon-tooltip-text` getter")
         }
     }
 
@@ -2192,7 +2189,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"scroll-offset\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `scroll-offset` getter")
+                .unwrap()
         }
     }
 
@@ -2204,7 +2204,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-activatable\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-activatable` getter")
+                .unwrap()
         }
     }
 
@@ -2226,11 +2229,16 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-gicon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-gicon` getter")
         }
     }
 
-    fn set_property_secondary_icon_gicon(&self, secondary_icon_gicon: Option<&gio::Icon>) {
+    fn set_property_secondary_icon_gicon<P: IsA<gio::Icon> + SetValueOptional>(
+        &self,
+        secondary_icon_gicon: Option<&P>,
+    ) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -2248,7 +2256,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-name` getter")
         }
     }
 
@@ -2270,7 +2280,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-pixbuf\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-pixbuf` getter")
         }
     }
 
@@ -2295,7 +2307,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-sensitive\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-sensitive` getter")
+                .unwrap()
         }
     }
 
@@ -2317,7 +2332,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-storage-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-storage-type` getter")
+                .unwrap()
         }
     }
 
@@ -2329,7 +2347,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-tooltip-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-tooltip-markup` getter")
         }
     }
 
@@ -2354,7 +2374,9 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"secondary-icon-tooltip-text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-icon-tooltip-text` getter")
         }
     }
 
@@ -2376,7 +2398,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"selection-bound\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `selection-bound` getter")
+                .unwrap()
         }
     }
 
@@ -2388,7 +2413,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"shadow-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `shadow-type` getter")
+                .unwrap()
         }
     }
 
@@ -2410,7 +2438,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"show-emoji-icon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-emoji-icon` getter")
+                .unwrap()
         }
     }
 
@@ -2432,7 +2463,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"truncate-multiline\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `truncate-multiline` getter")
+                .unwrap()
         }
     }
 
@@ -2454,7 +2488,10 @@ impl<O: IsA<Entry>> EntryExt for O {
                 b"xalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `xalign` getter")
+                .unwrap()
         }
     }
 
@@ -3974,6 +4011,28 @@ impl<O: IsA<Entry>> EntryExt for O {
                 Some(transmute(
                     notify_show_emoji_icon_trampoline::<Self, F> as usize,
                 )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_tabs_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkEntry,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Entry>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Entry::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::tabs\0".as_ptr() as *const _,
+                Some(transmute(notify_tabs_trampoline::<Self, F> as usize)),
                 Box_::into_raw(f),
             )
         }

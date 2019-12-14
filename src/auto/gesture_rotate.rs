@@ -70,6 +70,7 @@ impl GestureRotate {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureRotateBuilder {
     n_points: Option<u32>,
     window: Option<gdk::Window>,
@@ -79,12 +80,7 @@ pub struct GestureRotateBuilder {
 
 impl GestureRotateBuilder {
     pub fn new() -> Self {
-        Self {
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureRotate {
@@ -112,8 +108,8 @@ impl GestureRotateBuilder {
         self
     }
 
-    pub fn window(mut self, window: &gdk::Window) -> Self {
-        self.window = Some(window.clone());
+    pub fn window<P: IsA<gdk::Window>>(mut self, window: &P) -> Self {
+        self.window = Some(window.clone().upcast());
         self
     }
 
@@ -122,8 +118,8 @@ impl GestureRotateBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }

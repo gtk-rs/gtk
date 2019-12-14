@@ -108,13 +108,15 @@ impl<O: IsA<Gesture>> GestureExt for O {
 
     fn get_bounding_box_center(&self) -> Option<(f64, f64)> {
         unsafe {
-            let mut x = mem::uninitialized();
-            let mut y = mem::uninitialized();
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_gesture_get_bounding_box_center(
                 self.as_ref().to_glib_none().0,
-                &mut x,
-                &mut y,
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
             ));
+            let x = x.assume_init();
+            let y = y.assume_init();
             if ret {
                 Some((x, y))
             } else {
@@ -158,14 +160,16 @@ impl<O: IsA<Gesture>> GestureExt for O {
 
     fn get_point(&self, sequence: Option<&gdk::EventSequence>) -> Option<(f64, f64)> {
         unsafe {
-            let mut x = mem::uninitialized();
-            let mut y = mem::uninitialized();
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_gesture_get_point(
                 self.as_ref().to_glib_none().0,
                 mut_override(sequence.to_glib_none().0),
-                &mut x,
-                &mut y,
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
             ));
+            let x = x.assume_init();
+            let y = y.assume_init();
             if ret {
                 Some((x, y))
             } else {
@@ -284,7 +288,10 @@ impl<O: IsA<Gesture>> GestureExt for O {
                 b"n-points\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `n-points` getter")
+                .unwrap()
         }
     }
 

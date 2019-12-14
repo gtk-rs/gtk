@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::StaticType;
 use glib::Value;
 use glib_sys;
@@ -92,7 +93,7 @@ pub trait ContainerExt: 'static {
     #[cfg_attr(feature = "v3_24", deprecated)]
     fn unset_focus_chain(&self);
 
-    fn set_property_child(&self, child: Option<&Widget>);
+    fn set_property_child<P: IsA<Widget> + SetValueOptional>(&self, child: Option<&P>);
 
     fn get_property_resize_mode(&self) -> ResizeMode;
 
@@ -331,7 +332,7 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    fn set_property_child(&self, child: Option<&Widget>) {
+    fn set_property_child<P: IsA<Widget> + SetValueOptional>(&self, child: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -349,7 +350,10 @@ impl<O: IsA<Container>> ContainerExt for O {
                 b"resize-mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `resize-mode` getter")
+                .unwrap()
         }
     }
 

@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+use glib::value::SetValueOptional;
 use glib::GString;
 use glib::StaticType;
 use glib::ToValue;
@@ -46,6 +47,7 @@ impl Default for CellRendererPixbuf {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererPixbufBuilder {
     follow_state: Option<bool>,
     gicon: Option<gio::Icon>,
@@ -73,30 +75,7 @@ pub struct CellRendererPixbufBuilder {
 
 impl CellRendererPixbufBuilder {
     pub fn new() -> Self {
-        Self {
-            follow_state: None,
-            gicon: None,
-            icon_name: None,
-            pixbuf: None,
-            pixbuf_expander_closed: None,
-            pixbuf_expander_open: None,
-            stock_detail: None,
-            stock_size: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererPixbuf {
@@ -178,8 +157,8 @@ impl CellRendererPixbufBuilder {
         self
     }
 
-    pub fn gicon(mut self, gicon: &gio::Icon) -> Self {
-        self.gicon = Some(gicon.clone());
+    pub fn gicon<P: IsA<gio::Icon>>(mut self, gicon: &P) -> Self {
+        self.gicon = Some(gicon.clone().upcast());
         self
     }
 
@@ -295,7 +274,7 @@ pub trait CellRendererPixbufExt: 'static {
 
     fn get_property_gicon(&self) -> Option<gio::Icon>;
 
-    fn set_property_gicon(&self, gicon: Option<&gio::Icon>);
+    fn set_property_gicon<P: IsA<gio::Icon> + SetValueOptional>(&self, gicon: Option<&P>);
 
     fn get_property_icon_name(&self) -> Option<GString>;
 
@@ -355,7 +334,10 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"follow-state\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `follow-state` getter")
+                .unwrap()
         }
     }
 
@@ -377,11 +359,13 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"gicon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `gicon` getter")
         }
     }
 
-    fn set_property_gicon(&self, gicon: Option<&gio::Icon>) {
+    fn set_property_gicon<P: IsA<gio::Icon> + SetValueOptional>(&self, gicon: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
@@ -399,7 +383,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"icon-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `icon-name` getter")
         }
     }
 
@@ -421,7 +407,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"pixbuf\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `pixbuf` getter")
         }
     }
 
@@ -443,7 +431,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"pixbuf-expander-closed\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `pixbuf-expander-closed` getter")
         }
     }
 
@@ -468,7 +458,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"pixbuf-expander-open\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `pixbuf-expander-open` getter")
         }
     }
 
@@ -490,7 +482,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
                 b"stock-detail\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `stock-detail` getter")
         }
     }
 

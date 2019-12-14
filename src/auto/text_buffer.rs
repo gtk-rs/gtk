@@ -5,6 +5,7 @@
 use gdk;
 use gdk_pixbuf;
 use gdk_pixbuf_sys;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -23,7 +24,6 @@ use std::mem;
 use std::mem::transmute;
 use std::ptr;
 use Clipboard;
-use Error;
 use TargetList;
 use TextChildAnchor;
 use TextIter;
@@ -50,6 +50,7 @@ impl TextBuffer {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct TextBufferBuilder {
     tag_table: Option<TextTagTable>,
     text: Option<String>,
@@ -57,10 +58,7 @@ pub struct TextBufferBuilder {
 
 impl TextBufferBuilder {
     pub fn new() -> Self {
-        Self {
-            tag_table: None,
-            text: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> TextBuffer {
@@ -77,8 +75,8 @@ impl TextBufferBuilder {
             .expect("downcast")
     }
 
-    pub fn tag_table(mut self, tag_table: &TextTagTable) -> Self {
-        self.tag_table = Some(tag_table.clone());
+    pub fn tag_table<P: IsA<TextTagTable>>(mut self, tag_table: &P) -> Self {
+        self.tag_table = Some(tag_table.clone().upcast());
         self
     }
 
@@ -139,7 +137,7 @@ pub trait TextBufferExt: 'static {
         format: &gdk::Atom,
         iter: &mut TextIter,
         data: &[u8],
-    ) -> Result<(), Error>;
+    ) -> Result<(), glib::Error>;
 
     fn deserialize_get_can_create_tags(&self, format: &gdk::Atom) -> bool;
 
@@ -247,7 +245,7 @@ pub trait TextBufferExt: 'static {
 
     fn place_cursor(&self, where_: &TextIter);
 
-    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom>;
+    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&glib::Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom>;
 
     fn register_deserialize_tagset(&self, tagset_name: Option<&str>) -> gdk::Atom;
 
@@ -513,7 +511,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         format: &gdk::Atom,
         iter: &mut TextIter,
         data: &[u8],
-    ) -> Result<(), Error> {
+    ) -> Result<(), glib::Error> {
         let length = data.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
@@ -586,13 +584,13 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
 
     fn get_deserialize_formats(&self) -> Vec<gdk::Atom> {
         unsafe {
-            let mut n_formats = mem::uninitialized();
+            let mut n_formats = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_container_num(
                 gtk_sys::gtk_text_buffer_get_deserialize_formats(
                     self.as_ref().to_glib_none().0,
-                    &mut n_formats,
+                    n_formats.as_mut_ptr(),
                 ),
-                n_formats as usize,
+                n_formats.assume_init() as usize,
             );
             ret
         }
@@ -755,13 +753,13 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
 
     fn get_serialize_formats(&self) -> Vec<gdk::Atom> {
         unsafe {
-            let mut n_formats = mem::uninitialized();
+            let mut n_formats = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_container_num(
                 gtk_sys::gtk_text_buffer_get_serialize_formats(
                     self.as_ref().to_glib_none().0,
-                    &mut n_formats,
+                    n_formats.as_mut_ptr(),
                 ),
-                n_formats as usize,
+                n_formats.assume_init() as usize,
             );
             ret
         }
@@ -981,7 +979,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom> {
+    //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, Option<&glib::Error>) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom> {
     //    unsafe { TODO: call gtk_sys:gtk_text_buffer_register_deserialize_format() }
     //}
 
@@ -1062,7 +1060,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         end: &TextIter,
     ) -> Vec<u8> {
         unsafe {
-            let mut length = mem::uninitialized();
+            let mut length = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
                 gtk_sys::gtk_text_buffer_serialize(
                     self.as_ref().to_glib_none().0,
@@ -1070,9 +1068,9 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
                     format.to_glib_none().0,
                     start.to_glib_none().0,
                     end.to_glib_none().0,
-                    &mut length,
+                    length.as_mut_ptr(),
                 ),
-                length as usize,
+                length.assume_init() as usize,
             );
             ret
         }
@@ -1124,7 +1122,10 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
                 b"cursor-position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `cursor-position` getter")
+                .unwrap()
         }
     }
 

@@ -76,7 +76,9 @@ impl PadController {
                 b"action-group\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `action-group` getter")
         }
     }
 
@@ -88,11 +90,12 @@ impl PadController {
                 b"pad\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value.get().expect("Return Value for property `pad` getter")
         }
     }
 }
 
+#[derive(Clone, Default)]
 pub struct PadControllerBuilder {
     action_group: Option<gio::ActionGroup>,
     pad: Option<gdk::Device>,
@@ -102,12 +105,7 @@ pub struct PadControllerBuilder {
 
 impl PadControllerBuilder {
     pub fn new() -> Self {
-        Self {
-            action_group: None,
-            pad: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> PadController {
@@ -130,8 +128,8 @@ impl PadControllerBuilder {
             .expect("downcast")
     }
 
-    pub fn action_group(mut self, action_group: &gio::ActionGroup) -> Self {
-        self.action_group = Some(action_group.clone());
+    pub fn action_group<P: IsA<gio::ActionGroup>>(mut self, action_group: &P) -> Self {
+        self.action_group = Some(action_group.clone().upcast());
         self
     }
 
@@ -145,8 +143,8 @@ impl PadControllerBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }

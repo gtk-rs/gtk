@@ -33,6 +33,7 @@ use EntryCompletion;
 use InputHints;
 use InputPurpose;
 use Orientable;
+use Orientation;
 use ShadowType;
 use SpinButtonUpdatePolicy;
 use SpinType;
@@ -72,6 +73,7 @@ impl SpinButton {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct SpinButtonBuilder {
     adjustment: Option<Adjustment>,
     climb_rate: Option<f64>,
@@ -149,7 +151,6 @@ pub struct SpinButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -157,95 +158,13 @@ pub struct SpinButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
+    orientation: Option<Orientation>,
 }
 
 impl SpinButtonBuilder {
     pub fn new() -> Self {
-        Self {
-            adjustment: None,
-            climb_rate: None,
-            digits: None,
-            numeric: None,
-            snap_to_ticks: None,
-            update_policy: None,
-            value: None,
-            wrap: None,
-            activates_default: None,
-            attributes: None,
-            buffer: None,
-            caps_lock_warning: None,
-            completion: None,
-            editable: None,
-            enable_emoji_completion: None,
-            has_frame: None,
-            im_module: None,
-            input_hints: None,
-            input_purpose: None,
-            invisible_char: None,
-            invisible_char_set: None,
-            max_length: None,
-            max_width_chars: None,
-            overwrite_mode: None,
-            placeholder_text: None,
-            populate_all: None,
-            primary_icon_activatable: None,
-            primary_icon_gicon: None,
-            primary_icon_name: None,
-            primary_icon_pixbuf: None,
-            primary_icon_sensitive: None,
-            primary_icon_tooltip_markup: None,
-            primary_icon_tooltip_text: None,
-            progress_fraction: None,
-            progress_pulse_step: None,
-            secondary_icon_activatable: None,
-            secondary_icon_gicon: None,
-            secondary_icon_name: None,
-            secondary_icon_pixbuf: None,
-            secondary_icon_sensitive: None,
-            secondary_icon_tooltip_markup: None,
-            secondary_icon_tooltip_text: None,
-            shadow_type: None,
-            show_emoji_icon: None,
-            tabs: None,
-            text: None,
-            truncate_multiline: None,
-            visibility: None,
-            width_chars: None,
-            xalign: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> SpinButton {
@@ -502,14 +421,20 @@ impl SpinButtonBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
+        }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
         glib::Object::new(SpinButton::static_type(), &properties)
             .expect("object new")
             .downcast()
             .expect("downcast")
     }
 
-    pub fn adjustment(mut self, adjustment: &Adjustment) -> Self {
-        self.adjustment = Some(adjustment.clone());
+    pub fn adjustment<P: IsA<Adjustment>>(mut self, adjustment: &P) -> Self {
+        self.adjustment = Some(adjustment.clone().upcast());
         self
     }
 
@@ -558,8 +483,8 @@ impl SpinButtonBuilder {
         self
     }
 
-    pub fn buffer(mut self, buffer: &EntryBuffer) -> Self {
-        self.buffer = Some(buffer.clone());
+    pub fn buffer<P: IsA<EntryBuffer>>(mut self, buffer: &P) -> Self {
+        self.buffer = Some(buffer.clone().upcast());
         self
     }
 
@@ -568,8 +493,8 @@ impl SpinButtonBuilder {
         self
     }
 
-    pub fn completion(mut self, completion: &EntryCompletion) -> Self {
-        self.completion = Some(completion.clone());
+    pub fn completion<P: IsA<EntryCompletion>>(mut self, completion: &P) -> Self {
+        self.completion = Some(completion.clone().upcast());
         self
     }
 
@@ -643,8 +568,8 @@ impl SpinButtonBuilder {
         self
     }
 
-    pub fn primary_icon_gicon(mut self, primary_icon_gicon: &gio::Icon) -> Self {
-        self.primary_icon_gicon = Some(primary_icon_gicon.clone());
+    pub fn primary_icon_gicon<P: IsA<gio::Icon>>(mut self, primary_icon_gicon: &P) -> Self {
+        self.primary_icon_gicon = Some(primary_icon_gicon.clone().upcast());
         self
     }
 
@@ -688,8 +613,8 @@ impl SpinButtonBuilder {
         self
     }
 
-    pub fn secondary_icon_gicon(mut self, secondary_icon_gicon: &gio::Icon) -> Self {
-        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone());
+    pub fn secondary_icon_gicon<P: IsA<gio::Icon>>(mut self, secondary_icon_gicon: &P) -> Self {
+        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone().upcast());
         self
     }
 
@@ -869,8 +794,8 @@ impl SpinButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -916,6 +841,16 @@ impl SpinButtonBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
@@ -1020,13 +955,15 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
 
     fn get_increments(&self) -> (f64, f64) {
         unsafe {
-            let mut step = mem::uninitialized();
-            let mut page = mem::uninitialized();
+            let mut step = mem::MaybeUninit::uninit();
+            let mut page = mem::MaybeUninit::uninit();
             gtk_sys::gtk_spin_button_get_increments(
                 self.as_ref().to_glib_none().0,
-                &mut step,
-                &mut page,
+                step.as_mut_ptr(),
+                page.as_mut_ptr(),
             );
+            let step = step.assume_init();
+            let page = page.assume_init();
             (step, page)
         }
     }
@@ -1041,9 +978,15 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
 
     fn get_range(&self) -> (f64, f64) {
         unsafe {
-            let mut min = mem::uninitialized();
-            let mut max = mem::uninitialized();
-            gtk_sys::gtk_spin_button_get_range(self.as_ref().to_glib_none().0, &mut min, &mut max);
+            let mut min = mem::MaybeUninit::uninit();
+            let mut max = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_spin_button_get_range(
+                self.as_ref().to_glib_none().0,
+                min.as_mut_ptr(),
+                max.as_mut_ptr(),
+            );
+            let min = min.assume_init();
+            let max = max.assume_init();
             (min, max)
         }
     }
@@ -1167,7 +1110,10 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
                 b"climb-rate\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `climb-rate` getter")
+                .unwrap()
         }
     }
 

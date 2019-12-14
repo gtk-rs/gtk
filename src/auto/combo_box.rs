@@ -102,6 +102,7 @@ impl Default for ComboBox {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ComboBoxBuilder {
     active: Option<i32>,
     active_id: Option<String>,
@@ -145,7 +146,6 @@ pub struct ComboBoxBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -153,61 +153,12 @@ pub struct ComboBoxBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
 }
 
 impl ComboBoxBuilder {
     pub fn new() -> Self {
-        Self {
-            active: None,
-            active_id: None,
-            button_sensitivity: None,
-            cell_area: None,
-            column_span_column: None,
-            entry_text_column: None,
-            has_entry: None,
-            has_frame: None,
-            id_column: None,
-            model: None,
-            popup_fixed_width: None,
-            row_span_column: None,
-            wrap_width: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ComboBox {
@@ -359,6 +310,9 @@ impl ComboBoxBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
+        }
         glib::Object::new(ComboBox::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -380,8 +334,8 @@ impl ComboBoxBuilder {
         self
     }
 
-    pub fn cell_area(mut self, cell_area: &CellArea) -> Self {
-        self.cell_area = Some(cell_area.clone());
+    pub fn cell_area<P: IsA<CellArea>>(mut self, cell_area: &P) -> Self {
+        self.cell_area = Some(cell_area.clone().upcast());
         self
     }
 
@@ -410,8 +364,8 @@ impl ComboBoxBuilder {
         self
     }
 
-    pub fn model(mut self, model: &TreeModel) -> Self {
-        self.model = Some(model.clone());
+    pub fn model<P: IsA<TreeModel>>(mut self, model: &P) -> Self {
+        self.model = Some(model.clone().upcast());
         self
     }
 
@@ -435,8 +389,8 @@ impl ComboBoxBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -556,8 +510,8 @@ impl ComboBoxBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -605,6 +559,11 @@ impl ComboBoxBuilder {
         self.width_request = Some(width_request);
         self
     }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
+        self
+    }
 }
 
 pub const NONE_COMBO_BOX: Option<&ComboBox> = None;
@@ -634,7 +593,7 @@ pub trait ComboBoxExt: 'static {
 
     fn get_popup_fixed_width(&self) -> bool;
 
-    //fn get_row_separator_func(&self) -> Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>;
+    //fn get_row_separator_func(&self) -> Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>;
 
     fn get_row_span_column(&self) -> i32;
 
@@ -824,7 +783,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    //fn get_row_separator_func(&self) -> Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> {
+    //fn get_row_separator_func(&self) -> Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_combo_box_get_row_separator_func() }
     //}
 
@@ -937,7 +896,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
     }
 
     fn set_row_separator_func<P: Fn(&TreeModel, &TreeIter) -> bool + 'static>(&self, func: P) {
-        let func_data: Box_<P> = Box::new(func);
+        let func_data: Box_<P> = Box_::new(func);
         unsafe extern "C" fn func_func<P: Fn(&TreeModel, &TreeIter) -> bool + 'static>(
             model: *mut gtk_sys::GtkTreeModel,
             iter: *mut gtk_sys::GtkTreeIter,
@@ -961,7 +920,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             gtk_sys::gtk_combo_box_set_row_separator_func(
                 self.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -987,7 +946,9 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 b"cell-area\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-area` getter")
         }
     }
 
@@ -999,7 +960,10 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 b"has-frame\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `has-frame` getter")
+                .unwrap()
         }
     }
 
@@ -1021,7 +985,10 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 b"popup-shown\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `popup-shown` getter")
+                .unwrap()
         }
     }
 
@@ -1137,7 +1104,10 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
                 .emit("popdown", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_popdown`")
+            .unwrap()
     }
 
     fn connect_popup<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

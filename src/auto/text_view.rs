@@ -19,12 +19,11 @@ use gobject_sys;
 use gtk_sys;
 use libc;
 use pango;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
+use Adjustment;
 use Align;
 use Buildable;
 use Container;
@@ -36,6 +35,7 @@ use MovementStep;
 use ResizeMode;
 use ScrollStep;
 use Scrollable;
+use ScrollablePolicy;
 use TextAttributes;
 use TextBuffer;
 use TextChildAnchor;
@@ -78,6 +78,7 @@ impl Default for TextView {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct TextViewBuilder {
     accepts_tab: Option<bool>,
     #[cfg(any(feature = "v3_18", feature = "dox"))]
@@ -131,7 +132,6 @@ pub struct TextViewBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -139,71 +139,15 @@ pub struct TextViewBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    hadjustment: Option<Adjustment>,
+    hscroll_policy: Option<ScrollablePolicy>,
+    vadjustment: Option<Adjustment>,
+    vscroll_policy: Option<ScrollablePolicy>,
 }
 
 impl TextViewBuilder {
     pub fn new() -> Self {
-        Self {
-            accepts_tab: None,
-            #[cfg(any(feature = "v3_18", feature = "dox"))]
-            bottom_margin: None,
-            buffer: None,
-            cursor_visible: None,
-            editable: None,
-            im_module: None,
-            indent: None,
-            input_hints: None,
-            input_purpose: None,
-            justification: None,
-            left_margin: None,
-            monospace: None,
-            overwrite: None,
-            pixels_above_lines: None,
-            pixels_below_lines: None,
-            pixels_inside_wrap: None,
-            populate_all: None,
-            right_margin: None,
-            tabs: None,
-            #[cfg(any(feature = "v3_18", feature = "dox"))]
-            top_margin: None,
-            wrap_mode: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> TextView {
@@ -385,6 +329,18 @@ impl TextViewBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref hadjustment) = self.hadjustment {
+            properties.push(("hadjustment", hadjustment));
+        }
+        if let Some(ref hscroll_policy) = self.hscroll_policy {
+            properties.push(("hscroll-policy", hscroll_policy));
+        }
+        if let Some(ref vadjustment) = self.vadjustment {
+            properties.push(("vadjustment", vadjustment));
+        }
+        if let Some(ref vscroll_policy) = self.vscroll_policy {
+            properties.push(("vscroll-policy", vscroll_policy));
+        }
         glib::Object::new(TextView::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -402,8 +358,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn buffer(mut self, buffer: &TextBuffer) -> Self {
-        self.buffer = Some(buffer.clone());
+    pub fn buffer<P: IsA<TextBuffer>>(mut self, buffer: &P) -> Self {
+        self.buffer = Some(buffer.clone().upcast());
         self
     }
 
@@ -503,8 +459,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -624,8 +580,8 @@ impl TextViewBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -671,6 +627,26 @@ impl TextViewBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
+        self
+    }
+
+    pub fn hscroll_policy(mut self, hscroll_policy: ScrollablePolicy) -> Self {
+        self.hscroll_policy = Some(hscroll_policy);
+        self
+    }
+
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
+        self
+    }
+
+    pub fn vscroll_policy(mut self, vscroll_policy: ScrollablePolicy) -> Self {
+        self.vscroll_policy = Some(vscroll_policy);
         self
     }
 }
@@ -886,7 +862,8 @@ pub trait TextViewExt: 'static {
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_extend_selection<
-        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static,
+        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> glib::signal::Inhibit
+            + 'static,
     >(
         &self,
         f: F,
@@ -1064,16 +1041,18 @@ impl<O: IsA<TextView>> TextViewExt for O {
         buffer_y: i32,
     ) -> (i32, i32) {
         unsafe {
-            let mut window_x = mem::uninitialized();
-            let mut window_y = mem::uninitialized();
+            let mut window_x = mem::MaybeUninit::uninit();
+            let mut window_y = mem::MaybeUninit::uninit();
             gtk_sys::gtk_text_view_buffer_to_window_coords(
                 self.as_ref().to_glib_none().0,
                 win.to_glib(),
                 buffer_x,
                 buffer_y,
-                &mut window_x,
-                &mut window_y,
+                window_x.as_mut_ptr(),
+                window_y.as_mut_ptr(),
             );
+            let window_x = window_x.assume_init();
+            let window_y = window_y.assume_init();
             (window_x, window_y)
         }
     }
@@ -1204,14 +1183,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
     fn get_iter_at_position(&self, x: i32, y: i32) -> Option<(TextIter, i32)> {
         unsafe {
             let mut iter = TextIter::uninitialized();
-            let mut trailing = mem::uninitialized();
+            let mut trailing = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_text_view_get_iter_at_position(
                 self.as_ref().to_glib_none().0,
                 iter.to_glib_none_mut().0,
-                &mut trailing,
+                trailing.as_mut_ptr(),
                 x,
                 y,
             ));
+            let trailing = trailing.assume_init();
             if ret {
                 Some((iter, trailing))
             } else {
@@ -1247,27 +1227,30 @@ impl<O: IsA<TextView>> TextViewExt for O {
     fn get_line_at_y(&self, y: i32) -> (TextIter, i32) {
         unsafe {
             let mut target_iter = TextIter::uninitialized();
-            let mut line_top = mem::uninitialized();
+            let mut line_top = mem::MaybeUninit::uninit();
             gtk_sys::gtk_text_view_get_line_at_y(
                 self.as_ref().to_glib_none().0,
                 target_iter.to_glib_none_mut().0,
                 y,
-                &mut line_top,
+                line_top.as_mut_ptr(),
             );
+            let line_top = line_top.assume_init();
             (target_iter, line_top)
         }
     }
 
     fn get_line_yrange(&self, iter: &TextIter) -> (i32, i32) {
         unsafe {
-            let mut y = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut y = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_text_view_get_line_yrange(
                 self.as_ref().to_glib_none().0,
                 iter.to_glib_none().0,
-                &mut y,
-                &mut height,
+                y.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let y = y.assume_init();
+            let height = height.assume_init();
             (y, height)
         }
     }
@@ -1643,16 +1626,18 @@ impl<O: IsA<TextView>> TextViewExt for O {
         window_y: i32,
     ) -> (i32, i32) {
         unsafe {
-            let mut buffer_x = mem::uninitialized();
-            let mut buffer_y = mem::uninitialized();
+            let mut buffer_x = mem::MaybeUninit::uninit();
+            let mut buffer_y = mem::MaybeUninit::uninit();
             gtk_sys::gtk_text_view_window_to_buffer_coords(
                 self.as_ref().to_glib_none().0,
                 win.to_glib(),
                 window_x,
                 window_y,
-                &mut buffer_x,
-                &mut buffer_y,
+                buffer_x.as_mut_ptr(),
+                buffer_y.as_mut_ptr(),
             );
+            let buffer_x = buffer_x.assume_init();
+            let buffer_y = buffer_y.assume_init();
             (buffer_x, buffer_y)
         }
     }
@@ -1665,7 +1650,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
                 b"im-module\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `im-module` getter")
         }
     }
 
@@ -1687,7 +1674,10 @@ impl<O: IsA<TextView>> TextViewExt for O {
                 b"monospace\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `monospace` getter")
+                .unwrap()
         }
     }
 
@@ -1709,7 +1699,10 @@ impl<O: IsA<TextView>> TextViewExt for O {
                 b"populate-all\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `populate-all` getter")
+                .unwrap()
         }
     }
 
@@ -1853,14 +1846,22 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_extend_selection<
-        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static,
+        F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> glib::signal::Inhibit
+            + 'static,
     >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn extend_selection_trampoline<
             P,
-            F: Fn(&P, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static,
+            F: Fn(
+                    &P,
+                    TextExtendSelection,
+                    &TextIter,
+                    &TextIter,
+                    &TextIter,
+                ) -> glib::signal::Inhibit
+                + 'static,
         >(
             this: *mut gtk_sys::GtkTextView,
             granularity: gtk_sys::GtkTextExtendSelection,

@@ -8,7 +8,8 @@ pub use glib::signal::Inhibit;
 use glib::signal::SignalHandlerId;
 use glib::SourceId;
 
-use {Continue, ScrollType, Widget};
+use glib::Continue;
+use {ScrollType, Widget};
 
 /// Adds a closure to be called by the default main loop when it's idle.
 ///
@@ -75,6 +76,7 @@ mod editable {
     use glib::object::Cast;
     use glib::signal::{connect_raw, SignalHandlerId};
     use glib::translate::*;
+    use glib::IsA;
     use gtk_sys::GtkEditable;
     use libc::{c_char, c_int, c_uchar};
     use std::ffi::CStr;
@@ -82,7 +84,6 @@ mod editable {
     use std::slice;
     use std::str;
     use Editable;
-    use IsA;
 
     impl<T: IsA<Editable>> super::EditableSignals for T {
         fn connect_changed<F>(&self, changed_func: F) -> SignalHandlerId
@@ -344,11 +345,11 @@ mod overlay {
     use glib::object::Cast;
     use glib::signal::{connect_raw, SignalHandlerId};
     use glib::translate::*;
+    use glib::IsA;
     use glib_sys::{gboolean, gpointer};
     use gtk_sys::{GtkOverlay, GtkWidget};
     use std::mem::transmute;
     use std::ptr;
-    use IsA;
     use Overlay;
     use Widget;
 

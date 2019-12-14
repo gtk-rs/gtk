@@ -22,7 +22,9 @@ use Container;
 use Menu;
 use MenuShell;
 use RecentChooser;
+use RecentFilter;
 use RecentManager;
+use RecentSortType;
 use ResizeMode;
 use Widget;
 
@@ -57,6 +59,7 @@ impl Default for RecentChooserMenu {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct RecentChooserMenuBuilder {
     show_numbers: Option<bool>,
     accel_group: Option<AccelGroup>,
@@ -103,7 +106,6 @@ pub struct RecentChooserMenuBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -111,64 +113,21 @@ pub struct RecentChooserMenuBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    filter: Option<RecentFilter>,
+    limit: Option<i32>,
+    local_only: Option<bool>,
+    recent_manager: Option<RecentManager>,
+    select_multiple: Option<bool>,
+    show_icons: Option<bool>,
+    show_not_found: Option<bool>,
+    show_private: Option<bool>,
+    show_tips: Option<bool>,
+    sort_type: Option<RecentSortType>,
 }
 
 impl RecentChooserMenuBuilder {
     pub fn new() -> Self {
-        Self {
-            show_numbers: None,
-            accel_group: None,
-            accel_path: None,
-            active: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            anchor_hints: None,
-            attach_widget: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            menu_type_hint: None,
-            monitor: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            rect_anchor_dx: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            rect_anchor_dy: None,
-            reserve_toggle_size: None,
-            take_focus: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> RecentChooserMenu {
@@ -329,6 +288,36 @@ impl RecentChooserMenuBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref filter) = self.filter {
+            properties.push(("filter", filter));
+        }
+        if let Some(ref limit) = self.limit {
+            properties.push(("limit", limit));
+        }
+        if let Some(ref local_only) = self.local_only {
+            properties.push(("local-only", local_only));
+        }
+        if let Some(ref recent_manager) = self.recent_manager {
+            properties.push(("recent-manager", recent_manager));
+        }
+        if let Some(ref select_multiple) = self.select_multiple {
+            properties.push(("select-multiple", select_multiple));
+        }
+        if let Some(ref show_icons) = self.show_icons {
+            properties.push(("show-icons", show_icons));
+        }
+        if let Some(ref show_not_found) = self.show_not_found {
+            properties.push(("show-not-found", show_not_found));
+        }
+        if let Some(ref show_private) = self.show_private {
+            properties.push(("show-private", show_private));
+        }
+        if let Some(ref show_tips) = self.show_tips {
+            properties.push(("show-tips", show_tips));
+        }
+        if let Some(ref sort_type) = self.sort_type {
+            properties.push(("sort-type", sort_type));
+        }
         glib::Object::new(RecentChooserMenu::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -340,8 +329,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn accel_group(mut self, accel_group: &AccelGroup) -> Self {
-        self.accel_group = Some(accel_group.clone());
+    pub fn accel_group<P: IsA<AccelGroup>>(mut self, accel_group: &P) -> Self {
+        self.accel_group = Some(accel_group.clone().upcast());
         self
     }
 
@@ -361,8 +350,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn attach_widget(mut self, attach_widget: &Widget) -> Self {
-        self.attach_widget = Some(attach_widget.clone());
+    pub fn attach_widget<P: IsA<Widget>>(mut self, attach_widget: &P) -> Self {
+        self.attach_widget = Some(attach_widget.clone().upcast());
         self
     }
 
@@ -404,8 +393,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -525,8 +514,8 @@ impl RecentChooserMenuBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -572,6 +561,56 @@ impl RecentChooserMenuBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn filter(mut self, filter: &RecentFilter) -> Self {
+        self.filter = Some(filter.clone());
+        self
+    }
+
+    pub fn limit(mut self, limit: i32) -> Self {
+        self.limit = Some(limit);
+        self
+    }
+
+    pub fn local_only(mut self, local_only: bool) -> Self {
+        self.local_only = Some(local_only);
+        self
+    }
+
+    pub fn recent_manager<P: IsA<RecentManager>>(mut self, recent_manager: &P) -> Self {
+        self.recent_manager = Some(recent_manager.clone().upcast());
+        self
+    }
+
+    pub fn select_multiple(mut self, select_multiple: bool) -> Self {
+        self.select_multiple = Some(select_multiple);
+        self
+    }
+
+    pub fn show_icons(mut self, show_icons: bool) -> Self {
+        self.show_icons = Some(show_icons);
+        self
+    }
+
+    pub fn show_not_found(mut self, show_not_found: bool) -> Self {
+        self.show_not_found = Some(show_not_found);
+        self
+    }
+
+    pub fn show_private(mut self, show_private: bool) -> Self {
+        self.show_private = Some(show_private);
+        self
+    }
+
+    pub fn show_tips(mut self, show_tips: bool) -> Self {
+        self.show_tips = Some(show_tips);
+        self
+    }
+
+    pub fn sort_type(mut self, sort_type: RecentSortType) -> Self {
+        self.sort_type = Some(sort_type);
         self
     }
 }

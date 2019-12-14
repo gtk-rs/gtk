@@ -31,10 +31,9 @@ impl<T: GtkApplicationImpl + ObjectImpl> GtkApplicationImplExt for T {
             let data = self.get_type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkApplicationClass;
-            let f = (*parent_class)
-                .window_added
-                .expect("No parent class implementation for \"window_added\"");
-            f(application.to_glib_none().0, window.to_glib_none().0)
+            if let Some(f) = (*parent_class).window_added {
+                f(application.to_glib_none().0, window.to_glib_none().0)
+            }
         }
     }
 
@@ -43,10 +42,9 @@ impl<T: GtkApplicationImpl + ObjectImpl> GtkApplicationImplExt for T {
             let data = self.get_type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkApplicationClass;
-            let f = (*parent_class)
-                .window_removed
-                .expect("No parent class implementation for \"window_added\"");
-            f(application.to_glib_none().0, window.to_glib_none().0)
+            if let Some(f) = (*parent_class).window_removed {
+                f(application.to_glib_none().0, window.to_glib_none().0)
+            }
         }
     }
 }

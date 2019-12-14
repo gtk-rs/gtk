@@ -5,6 +5,8 @@
 use gdk;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use gdk_sys;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -20,8 +22,6 @@ use gtk_sys;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use libc;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-use signal::Inhibit;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -31,8 +31,6 @@ use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-use Error;
 use Widget;
 
 glib_wrapper! {
@@ -58,6 +56,7 @@ impl Default for GLArea {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GLAreaBuilder {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     auto_render: Option<bool>,
@@ -95,7 +94,6 @@ pub struct GLAreaBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -107,51 +105,7 @@ pub struct GLAreaBuilder {
 
 impl GLAreaBuilder {
     pub fn new() -> Self {
-        Self {
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            auto_render: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            has_alpha: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            has_depth_buffer: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            has_stencil_buffer: None,
-            #[cfg(any(feature = "v3_22", feature = "dox"))]
-            use_es: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GLArea {
@@ -432,8 +386,8 @@ impl GLAreaBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -496,7 +450,7 @@ pub trait GLAreaExt: 'static {
     fn get_context(&self) -> Option<gdk::GLContext>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_error(&self) -> Option<Error>;
+    fn get_error(&self) -> Option<glib::Error>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_has_alpha(&self) -> bool;
@@ -523,7 +477,7 @@ pub trait GLAreaExt: 'static {
     fn set_auto_render(&self, auto_render: bool);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_error(&self, error: Option<&Error>);
+    fn set_error(&self, error: Option<&glib::Error>);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_has_alpha(&self, has_alpha: bool);
@@ -547,7 +501,7 @@ pub trait GLAreaExt: 'static {
     ) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_render<F: Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>(
+    fn connect_render<F: Fn(&Self, &gdk::GLContext) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -607,7 +561,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_error(&self) -> Option<Error> {
+    fn get_error(&self) -> Option<glib::Error> {
         unsafe {
             from_glib_none(gtk_sys::gtk_gl_area_get_error(
                 self.as_ref().to_glib_none().0,
@@ -645,13 +599,15 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_required_version(&self) -> (i32, i32) {
         unsafe {
-            let mut major = mem::uninitialized();
-            let mut minor = mem::uninitialized();
+            let mut major = mem::MaybeUninit::uninit();
+            let mut minor = mem::MaybeUninit::uninit();
             gtk_sys::gtk_gl_area_get_required_version(
                 self.as_ref().to_glib_none().0,
-                &mut major,
-                &mut minor,
+                major.as_mut_ptr(),
+                minor.as_mut_ptr(),
             );
+            let major = major.assume_init();
+            let minor = minor.assume_init();
             (major, minor)
         }
     }
@@ -690,7 +646,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_error(&self, error: Option<&Error>) {
+    fn set_error(&self, error: Option<&glib::Error>) {
         unsafe {
             gtk_sys::gtk_gl_area_set_error(self.as_ref().to_glib_none().0, error.to_glib_none().0);
         }
@@ -767,11 +723,14 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_render<F: Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>(
+    fn connect_render<F: Fn(&Self, &gdk::GLContext) -> glib::signal::Inhibit + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
-        unsafe extern "C" fn render_trampoline<P, F: Fn(&P, &gdk::GLContext) -> Inhibit + 'static>(
+        unsafe extern "C" fn render_trampoline<
+            P,
+            F: Fn(&P, &gdk::GLContext) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkGLArea,
             context: *mut gdk_sys::GdkGLContext,
             f: glib_sys::gpointer,

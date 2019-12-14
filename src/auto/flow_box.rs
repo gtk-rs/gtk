@@ -28,6 +28,7 @@ use Container;
 use FlowBoxChild;
 use MovementStep;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use SelectionMode;
 use Widget;
@@ -53,6 +54,7 @@ impl Default for FlowBox {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct FlowBoxBuilder {
     activate_on_single_click: Option<bool>,
     column_spacing: Option<u32>,
@@ -90,7 +92,6 @@ pub struct FlowBoxBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -98,55 +99,12 @@ pub struct FlowBoxBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
 }
 
 impl FlowBoxBuilder {
     pub fn new() -> Self {
-        Self {
-            activate_on_single_click: None,
-            column_spacing: None,
-            homogeneous: None,
-            max_children_per_line: None,
-            min_children_per_line: None,
-            row_spacing: None,
-            selection_mode: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> FlowBox {
@@ -280,6 +238,9 @@ impl FlowBoxBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
         glib::Object::new(FlowBox::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -326,8 +287,8 @@ impl FlowBoxBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -447,8 +408,8 @@ impl FlowBoxBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -494,6 +455,11 @@ impl FlowBoxBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
@@ -545,7 +511,7 @@ pub trait FlowBoxExt: 'static {
 
     fn set_column_spacing(&self, spacing: u32);
 
-    fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>);
+    fn set_filter_func(&self, filter_func: Option<Box_<dyn Fn(&FlowBoxChild) -> bool + 'static>>);
 
     fn set_hadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
 
@@ -561,7 +527,7 @@ pub trait FlowBoxExt: 'static {
 
     fn set_sort_func(
         &self,
-        sort_func: Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
+        sort_func: Option<Box_<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
     );
 
     fn set_vadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
@@ -637,7 +603,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         model: Option<&P>,
         create_widget_func: Q,
     ) {
-        let create_widget_func_data: Box_<Q> = Box::new(create_widget_func);
+        let create_widget_func_data: Box_<Q> = Box_::new(create_widget_func);
         unsafe extern "C" fn create_widget_func_func<
             P: IsA<gio::ListModel>,
             Q: Fn(&glib::Object) -> Widget + 'static,
@@ -666,7 +632,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
                 self.as_ref().to_glib_none().0,
                 model.map(|p| p.as_ref()).to_glib_none().0,
                 create_widget_func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call4,
             );
         }
@@ -815,15 +781,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>) {
-        let filter_func_data: Box_<Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>> =
-            Box::new(filter_func);
+    fn set_filter_func(&self, filter_func: Option<Box_<dyn Fn(&FlowBoxChild) -> bool + 'static>>) {
+        let filter_func_data: Box_<Option<Box_<dyn Fn(&FlowBoxChild) -> bool + 'static>>> =
+            Box_::new(filter_func);
         unsafe extern "C" fn filter_func_func(
             child: *mut gtk_sys::GtkFlowBoxChild,
             user_data: glib_sys::gpointer,
         ) -> glib_sys::gboolean {
             let child = from_glib_borrow(child);
-            let callback: &Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>> =
+            let callback: &Option<Box_<dyn Fn(&FlowBoxChild) -> bool + 'static>> =
                 &*(user_data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&child)
@@ -838,17 +804,17 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             None
         };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
-            let _callback: Box_<Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>> =
+            let _callback: Box_<Option<Box_<dyn Fn(&FlowBoxChild) -> bool + 'static>>> =
                 Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
-        let super_callback0: Box_<Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>> =
+        let super_callback0: Box_<Option<Box_<dyn Fn(&FlowBoxChild) -> bool + 'static>>> =
             filter_func_data;
         unsafe {
             gtk_sys::gtk_flow_box_set_filter_func(
                 self.as_ref().to_glib_none().0,
                 filter_func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -907,11 +873,11 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn set_sort_func(
         &self,
-        sort_func: Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
+        sort_func: Option<Box_<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
     ) {
         let sort_func_data: Box_<
-            Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
-        > = Box::new(sort_func);
+            Option<Box_<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
+        > = Box_::new(sort_func);
         unsafe extern "C" fn sort_func_func(
             child1: *mut gtk_sys::GtkFlowBoxChild,
             child2: *mut gtk_sys::GtkFlowBoxChild,
@@ -919,7 +885,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         ) -> libc::c_int {
             let child1 = from_glib_borrow(child1);
             let child2 = from_glib_borrow(child2);
-            let callback: &Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>> =
+            let callback: &Option<Box_<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>> =
                 &*(user_data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&child1, &child2)
@@ -935,18 +901,18 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
             let _callback: Box_<
-                Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
+                Option<Box_<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
             > = Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
         let super_callback0: Box_<
-            Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
+            Option<Box_<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>,
         > = sort_func_data;
         unsafe {
             gtk_sys::gtk_flow_box_set_sort_func(
                 self.as_ref().to_glib_none().0,
                 sort_func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -1076,7 +1042,10 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
                 .emit("move-cursor", &[&step, &count])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_move_cursor`")
+            .unwrap()
     }
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

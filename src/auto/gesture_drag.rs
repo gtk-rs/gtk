@@ -43,6 +43,7 @@ impl GestureDrag {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct GestureDragBuilder {
     button: Option<u32>,
     exclusive: Option<bool>,
@@ -55,15 +56,7 @@ pub struct GestureDragBuilder {
 
 impl GestureDragBuilder {
     pub fn new() -> Self {
-        Self {
-            button: None,
-            exclusive: None,
-            touch_only: None,
-            n_points: None,
-            window: None,
-            propagation_phase: None,
-            widget: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> GestureDrag {
@@ -115,8 +108,8 @@ impl GestureDragBuilder {
         self
     }
 
-    pub fn window(mut self, window: &gdk::Window) -> Self {
-        self.window = Some(window.clone());
+    pub fn window<P: IsA<gdk::Window>>(mut self, window: &P) -> Self {
+        self.window = Some(window.clone().upcast());
         self
     }
 
@@ -125,8 +118,8 @@ impl GestureDragBuilder {
         self
     }
 
-    pub fn widget(mut self, widget: &Widget) -> Self {
-        self.widget = Some(widget.clone());
+    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
+        self.widget = Some(widget.clone().upcast());
         self
     }
 }
@@ -148,13 +141,15 @@ pub trait GestureDragExt: 'static {
 impl<O: IsA<GestureDrag>> GestureDragExt for O {
     fn get_offset(&self) -> Option<(f64, f64)> {
         unsafe {
-            let mut x = mem::uninitialized();
-            let mut y = mem::uninitialized();
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_gesture_drag_get_offset(
                 self.as_ref().to_glib_none().0,
-                &mut x,
-                &mut y,
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
             ));
+            let x = x.assume_init();
+            let y = y.assume_init();
             if ret {
                 Some((x, y))
             } else {
@@ -165,13 +160,15 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
 
     fn get_start_point(&self) -> Option<(f64, f64)> {
         unsafe {
-            let mut x = mem::uninitialized();
-            let mut y = mem::uninitialized();
+            let mut x = mem::MaybeUninit::uninit();
+            let mut y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_gesture_drag_get_start_point(
                 self.as_ref().to_glib_none().0,
-                &mut x,
-                &mut y,
+                x.as_mut_ptr(),
+                y.as_mut_ptr(),
             ));
+            let x = x.assume_init();
+            let y = y.assume_init();
             if ret {
                 Some((x, y))
             } else {

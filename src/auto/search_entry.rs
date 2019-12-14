@@ -58,6 +58,7 @@ impl Default for SearchEntry {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct SearchEntryBuilder {
     activates_default: Option<bool>,
     attributes: Option<pango::AttrList>,
@@ -127,7 +128,6 @@ pub struct SearchEntryBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -135,87 +135,12 @@ pub struct SearchEntryBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    editing_canceled: Option<bool>,
 }
 
 impl SearchEntryBuilder {
     pub fn new() -> Self {
-        Self {
-            activates_default: None,
-            attributes: None,
-            buffer: None,
-            caps_lock_warning: None,
-            completion: None,
-            editable: None,
-            enable_emoji_completion: None,
-            has_frame: None,
-            im_module: None,
-            input_hints: None,
-            input_purpose: None,
-            invisible_char: None,
-            invisible_char_set: None,
-            max_length: None,
-            max_width_chars: None,
-            overwrite_mode: None,
-            placeholder_text: None,
-            populate_all: None,
-            primary_icon_activatable: None,
-            primary_icon_gicon: None,
-            primary_icon_name: None,
-            primary_icon_pixbuf: None,
-            primary_icon_sensitive: None,
-            primary_icon_tooltip_markup: None,
-            primary_icon_tooltip_text: None,
-            progress_fraction: None,
-            progress_pulse_step: None,
-            secondary_icon_activatable: None,
-            secondary_icon_gicon: None,
-            secondary_icon_name: None,
-            secondary_icon_pixbuf: None,
-            secondary_icon_sensitive: None,
-            secondary_icon_tooltip_markup: None,
-            secondary_icon_tooltip_text: None,
-            shadow_type: None,
-            show_emoji_icon: None,
-            tabs: None,
-            text: None,
-            truncate_multiline: None,
-            visibility: None,
-            width_chars: None,
-            xalign: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> SearchEntry {
@@ -448,6 +373,9 @@ impl SearchEntryBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref editing_canceled) = self.editing_canceled {
+            properties.push(("editing-canceled", editing_canceled));
+        }
         glib::Object::new(SearchEntry::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -464,8 +392,8 @@ impl SearchEntryBuilder {
         self
     }
 
-    pub fn buffer(mut self, buffer: &EntryBuffer) -> Self {
-        self.buffer = Some(buffer.clone());
+    pub fn buffer<P: IsA<EntryBuffer>>(mut self, buffer: &P) -> Self {
+        self.buffer = Some(buffer.clone().upcast());
         self
     }
 
@@ -474,8 +402,8 @@ impl SearchEntryBuilder {
         self
     }
 
-    pub fn completion(mut self, completion: &EntryCompletion) -> Self {
-        self.completion = Some(completion.clone());
+    pub fn completion<P: IsA<EntryCompletion>>(mut self, completion: &P) -> Self {
+        self.completion = Some(completion.clone().upcast());
         self
     }
 
@@ -549,8 +477,8 @@ impl SearchEntryBuilder {
         self
     }
 
-    pub fn primary_icon_gicon(mut self, primary_icon_gicon: &gio::Icon) -> Self {
-        self.primary_icon_gicon = Some(primary_icon_gicon.clone());
+    pub fn primary_icon_gicon<P: IsA<gio::Icon>>(mut self, primary_icon_gicon: &P) -> Self {
+        self.primary_icon_gicon = Some(primary_icon_gicon.clone().upcast());
         self
     }
 
@@ -594,8 +522,8 @@ impl SearchEntryBuilder {
         self
     }
 
-    pub fn secondary_icon_gicon(mut self, secondary_icon_gicon: &gio::Icon) -> Self {
-        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone());
+    pub fn secondary_icon_gicon<P: IsA<gio::Icon>>(mut self, secondary_icon_gicon: &P) -> Self {
+        self.secondary_icon_gicon = Some(secondary_icon_gicon.clone().upcast());
         self
     }
 
@@ -775,8 +703,8 @@ impl SearchEntryBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -822,6 +750,11 @@ impl SearchEntryBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn editing_canceled(mut self, editing_canceled: bool) -> Self {
+        self.editing_canceled = Some(editing_canceled);
         self
     }
 }

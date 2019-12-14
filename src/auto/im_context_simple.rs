@@ -33,6 +33,7 @@ impl Default for IMContextSimple {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct IMContextSimpleBuilder {
     input_hints: Option<InputHints>,
     input_purpose: Option<InputPurpose>,
@@ -40,10 +41,7 @@ pub struct IMContextSimpleBuilder {
 
 impl IMContextSimpleBuilder {
     pub fn new() -> Self {
-        Self {
-            input_hints: None,
-            input_purpose: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> IMContextSimple {

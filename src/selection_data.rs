@@ -10,13 +10,13 @@ use SelectionData;
 impl SelectionData {
     pub fn get_data(&self) -> Vec<u8> {
         unsafe {
-            let mut length = mem::uninitialized();
+            let mut length = mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_none_num(
                 gtk_sys::gtk_selection_data_get_data_with_length(
                     self.to_glib_none().0,
-                    &mut length,
+                    length.as_mut_ptr(),
                 ),
-                length as usize,
+                length.assume_init() as usize,
             );
             ret
         }

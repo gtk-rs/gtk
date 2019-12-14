@@ -40,6 +40,7 @@ impl MountOperation {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct MountOperationBuilder {
     parent: Option<Window>,
     screen: Option<gdk::Screen>,
@@ -56,18 +57,7 @@ pub struct MountOperationBuilder {
 
 impl MountOperationBuilder {
     pub fn new() -> Self {
-        Self {
-            parent: None,
-            screen: None,
-            anonymous: None,
-            choice: None,
-            domain: None,
-            is_tcrypt_hidden_volume: None,
-            is_tcrypt_system_volume: None,
-            password: None,
-            pim: None,
-            username: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> MountOperation {
@@ -108,8 +98,8 @@ impl MountOperationBuilder {
             .expect("downcast")
     }
 
-    pub fn parent(mut self, parent: &Window) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Window>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -232,7 +222,10 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
                 b"is-showing\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-showing` getter")
+                .unwrap()
         }
     }
 

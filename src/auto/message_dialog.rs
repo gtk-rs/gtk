@@ -51,6 +51,7 @@ impl MessageDialog {
     //}
 }
 
+#[derive(Clone, Default)]
 pub struct MessageDialogBuilder {
     buttons: Option<ButtonsType>,
     message_type: Option<MessageType>,
@@ -116,7 +117,6 @@ pub struct MessageDialogBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -128,79 +128,7 @@ pub struct MessageDialogBuilder {
 
 impl MessageDialogBuilder {
     pub fn new() -> Self {
-        Self {
-            buttons: None,
-            message_type: None,
-            secondary_text: None,
-            secondary_use_markup: None,
-            text: None,
-            use_markup: None,
-            use_header_bar: None,
-            accept_focus: None,
-            application: None,
-            attached_to: None,
-            decorated: None,
-            default_height: None,
-            default_width: None,
-            deletable: None,
-            destroy_with_parent: None,
-            focus_on_map: None,
-            focus_visible: None,
-            gravity: None,
-            hide_titlebar_when_maximized: None,
-            icon: None,
-            icon_name: None,
-            mnemonics_visible: None,
-            modal: None,
-            resizable: None,
-            role: None,
-            screen: None,
-            skip_pager_hint: None,
-            skip_taskbar_hint: None,
-            startup_id: None,
-            title: None,
-            transient_for: None,
-            type_: None,
-            type_hint: None,
-            urgency_hint: None,
-            window_position: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> MessageDialog {
@@ -464,13 +392,13 @@ impl MessageDialogBuilder {
         self
     }
 
-    pub fn application(mut self, application: &Application) -> Self {
-        self.application = Some(application.clone());
+    pub fn application<P: IsA<Application>>(mut self, application: &P) -> Self {
+        self.application = Some(application.clone().upcast());
         self
     }
 
-    pub fn attached_to(mut self, attached_to: &Widget) -> Self {
-        self.attached_to = Some(attached_to.clone());
+    pub fn attached_to<P: IsA<Widget>>(mut self, attached_to: &P) -> Self {
+        self.attached_to = Some(attached_to.clone().upcast());
         self
     }
 
@@ -574,8 +502,8 @@ impl MessageDialogBuilder {
         self
     }
 
-    pub fn transient_for(mut self, transient_for: &Window) -> Self {
-        self.transient_for = Some(transient_for.clone());
+    pub fn transient_for<P: IsA<Window>>(mut self, transient_for: &P) -> Self {
+        self.transient_for = Some(transient_for.clone().upcast());
         self
     }
 
@@ -604,8 +532,8 @@ impl MessageDialogBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -725,8 +653,8 @@ impl MessageDialogBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -862,7 +790,10 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
                 b"message-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `message-type` getter")
+                .unwrap()
         }
     }
 
@@ -884,7 +815,9 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
                 b"secondary-text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `secondary-text` getter")
         }
     }
 
@@ -906,7 +839,10 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
                 b"secondary-use-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `secondary-use-markup` getter")
+                .unwrap()
         }
     }
 
@@ -928,7 +864,9 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
                 b"text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `text` getter")
         }
     }
 
@@ -950,7 +888,10 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
                 b"use-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `use-markup` getter")
+                .unwrap()
         }
     }
 

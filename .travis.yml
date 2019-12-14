@@ -4,10 +4,10 @@ matrix:
   include:
     - os: linux
       rust: nightly
-      env: GTK=3.14 FEATURES=futures
+      env: GTK=3.14 FEATURES=
     - os: linux
       rust: nightly
-      env: GTK=3.24 FEATURES=v3_16,futures
+      env: GTK=3.24 FEATURES=v3_16
     - os: linux
       rust: beta
       env: GTK=3.14 FEATURES=
@@ -15,14 +15,20 @@ matrix:
       rust: beta
       env: GTK=3.24 FEATURES=v3_16
     - os: linux
-      rust: 1.34.0
+      rust: stable
       env: GTK=3.14 FEATURES=
     - os: linux
-      rust: 1.34.0
+      rust: stable
+      env: GTK=3.24 FEATURES=v3_16
+    - os: linux
+      rust: 1.39.0
+      env: GTK=3.14 FEATURES=
+    - os: linux
+      rust: 1.39.0
       env: GTK=3.24 FEATURES=v3_16
     - os: osx
       rust: nightly
-      env: GTK=3.14 FEATURES=futures
+      env: GTK=3.14 FEATURES=
     # - os: osx
     #   rust: nightly
     #   env: GTK=3.24 FEATURES=v3_16
@@ -46,12 +52,9 @@ addons:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi gtk+3 cairo atk; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig:/usr/local/opt/libffi/lib/pkgconfig;
-    fi
 script:
   - rustc --version
-  - if [ "$TRAVIS_RUST_VERSION" == "nightly" ] && [ "$GTK" == "3.14" ]; then
+  - if [ "$TRAVIS_RUST_VERSION" == "stable" ] && [ "$GTK" == "3.14" ]; then
     rustup component add rustfmt;
     make regen_check;
     fi

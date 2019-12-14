@@ -257,68 +257,78 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
 
     fn get_alignment(&self) -> (f32, f32) {
         unsafe {
-            let mut xalign = mem::uninitialized();
-            let mut yalign = mem::uninitialized();
+            let mut xalign = mem::MaybeUninit::uninit();
+            let mut yalign = mem::MaybeUninit::uninit();
             gtk_sys::gtk_cell_renderer_get_alignment(
                 self.as_ref().to_glib_none().0,
-                &mut xalign,
-                &mut yalign,
+                xalign.as_mut_ptr(),
+                yalign.as_mut_ptr(),
             );
+            let xalign = xalign.assume_init();
+            let yalign = yalign.assume_init();
             (xalign, yalign)
         }
     }
 
     fn get_fixed_size(&self) -> (i32, i32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_cell_renderer_get_fixed_size(
                 self.as_ref().to_glib_none().0,
-                &mut width,
-                &mut height,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
             );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
 
     fn get_padding(&self) -> (i32, i32) {
         unsafe {
-            let mut xpad = mem::uninitialized();
-            let mut ypad = mem::uninitialized();
+            let mut xpad = mem::MaybeUninit::uninit();
+            let mut ypad = mem::MaybeUninit::uninit();
             gtk_sys::gtk_cell_renderer_get_padding(
                 self.as_ref().to_glib_none().0,
-                &mut xpad,
-                &mut ypad,
+                xpad.as_mut_ptr(),
+                ypad.as_mut_ptr(),
             );
+            let xpad = xpad.assume_init();
+            let ypad = ypad.assume_init();
             (xpad, ypad)
         }
     }
 
     fn get_preferred_height<P: IsA<Widget>>(&self, widget: &P) -> (i32, i32) {
         unsafe {
-            let mut minimum_size = mem::uninitialized();
-            let mut natural_size = mem::uninitialized();
+            let mut minimum_size = mem::MaybeUninit::uninit();
+            let mut natural_size = mem::MaybeUninit::uninit();
             gtk_sys::gtk_cell_renderer_get_preferred_height(
                 self.as_ref().to_glib_none().0,
                 widget.as_ref().to_glib_none().0,
-                &mut minimum_size,
-                &mut natural_size,
+                minimum_size.as_mut_ptr(),
+                natural_size.as_mut_ptr(),
             );
+            let minimum_size = minimum_size.assume_init();
+            let natural_size = natural_size.assume_init();
             (minimum_size, natural_size)
         }
     }
 
     fn get_preferred_height_for_width<P: IsA<Widget>>(&self, widget: &P, width: i32) -> (i32, i32) {
         unsafe {
-            let mut minimum_height = mem::uninitialized();
-            let mut natural_height = mem::uninitialized();
+            let mut minimum_height = mem::MaybeUninit::uninit();
+            let mut natural_height = mem::MaybeUninit::uninit();
             gtk_sys::gtk_cell_renderer_get_preferred_height_for_width(
                 self.as_ref().to_glib_none().0,
                 widget.as_ref().to_glib_none().0,
                 width,
-                &mut minimum_height,
-                &mut natural_height,
+                minimum_height.as_mut_ptr(),
+                natural_height.as_mut_ptr(),
             );
+            let minimum_height = minimum_height.assume_init();
+            let natural_height = natural_height.assume_init();
             (minimum_height, natural_height)
         }
     }
@@ -339,14 +349,16 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
 
     fn get_preferred_width<P: IsA<Widget>>(&self, widget: &P) -> (i32, i32) {
         unsafe {
-            let mut minimum_size = mem::uninitialized();
-            let mut natural_size = mem::uninitialized();
+            let mut minimum_size = mem::MaybeUninit::uninit();
+            let mut natural_size = mem::MaybeUninit::uninit();
             gtk_sys::gtk_cell_renderer_get_preferred_width(
                 self.as_ref().to_glib_none().0,
                 widget.as_ref().to_glib_none().0,
-                &mut minimum_size,
-                &mut natural_size,
+                minimum_size.as_mut_ptr(),
+                natural_size.as_mut_ptr(),
             );
+            let minimum_size = minimum_size.assume_init();
+            let natural_size = natural_size.assume_init();
             (minimum_size, natural_size)
         }
     }
@@ -357,15 +369,17 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
         height: i32,
     ) -> (i32, i32) {
         unsafe {
-            let mut minimum_width = mem::uninitialized();
-            let mut natural_width = mem::uninitialized();
+            let mut minimum_width = mem::MaybeUninit::uninit();
+            let mut natural_width = mem::MaybeUninit::uninit();
             gtk_sys::gtk_cell_renderer_get_preferred_width_for_height(
                 self.as_ref().to_glib_none().0,
                 widget.as_ref().to_glib_none().0,
                 height,
-                &mut minimum_width,
-                &mut natural_width,
+                minimum_width.as_mut_ptr(),
+                natural_width.as_mut_ptr(),
             );
+            let minimum_width = minimum_width.assume_init();
+            let natural_width = natural_width.assume_init();
             (minimum_width, natural_width)
         }
     }
@@ -529,7 +543,9 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"cell-background-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-background-rgba` getter")
         }
     }
 
@@ -551,7 +567,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"cell-background-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `cell-background-set` getter")
+                .unwrap()
         }
     }
 
@@ -573,7 +592,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"editing\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `editing` getter")
+                .unwrap()
         }
     }
 
@@ -585,7 +607,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"height\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `height` getter")
+                .unwrap()
         }
     }
 
@@ -607,7 +632,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"is-expanded\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-expanded` getter")
+                .unwrap()
         }
     }
 
@@ -629,7 +657,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"is-expander\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `is-expander` getter")
+                .unwrap()
         }
     }
 
@@ -651,7 +682,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `mode` getter")
+                .unwrap()
         }
     }
 
@@ -673,7 +707,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"width\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `width` getter")
+                .unwrap()
         }
     }
 
@@ -695,7 +732,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"xalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `xalign` getter")
+                .unwrap()
         }
     }
 
@@ -717,7 +757,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"xpad\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `xpad` getter")
+                .unwrap()
         }
     }
 
@@ -739,7 +782,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"yalign\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `yalign` getter")
+                .unwrap()
         }
     }
 
@@ -761,7 +807,10 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
                 b"ypad\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `ypad` getter")
+                .unwrap()
         }
     }
 

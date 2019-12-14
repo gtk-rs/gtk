@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -61,6 +62,7 @@ impl Default for ColorButton {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ColorButtonBuilder {
     alpha: Option<u32>,
     rgba: Option<gdk::RGBA>,
@@ -103,7 +105,6 @@ pub struct ColorButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -111,60 +112,13 @@ pub struct ColorButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    action_name: Option<String>,
+    action_target: Option<glib::Variant>,
 }
 
 impl ColorButtonBuilder {
     pub fn new() -> Self {
-        Self {
-            alpha: None,
-            rgba: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            show_editor: None,
-            title: None,
-            use_alpha: None,
-            always_show_image: None,
-            image: None,
-            image_position: None,
-            label: None,
-            relief: None,
-            use_underline: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ColorButton {
@@ -313,6 +267,12 @@ impl ColorButtonBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref action_name) = self.action_name {
+            properties.push(("action-name", action_name));
+        }
+        if let Some(ref action_target) = self.action_target {
+            properties.push(("action-target", action_target));
+        }
         glib::Object::new(ColorButton::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -350,8 +310,8 @@ impl ColorButtonBuilder {
         self
     }
 
-    pub fn image(mut self, image: &Widget) -> Self {
-        self.image = Some(image.clone());
+    pub fn image<P: IsA<Widget>>(mut self, image: &P) -> Self {
+        self.image = Some(image.clone().upcast());
         self
     }
 
@@ -380,8 +340,8 @@ impl ColorButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -501,8 +461,8 @@ impl ColorButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -550,14 +510,22 @@ impl ColorButtonBuilder {
         self.width_request = Some(width_request);
         self
     }
+
+    pub fn action_name(mut self, action_name: &str) -> Self {
+        self.action_name = Some(action_name.to_string());
+        self
+    }
+
+    pub fn action_target(mut self, action_target: &glib::Variant) -> Self {
+        self.action_target = Some(action_target.clone());
+        self
+    }
 }
 
 pub const NONE_COLOR_BUTTON: Option<&ColorButton> = None;
 
 pub trait ColorButtonExt: 'static {
     fn get_title(&self) -> Option<GString>;
-
-    //fn set_color(&self, color: /*Ignored*/&gdk::Color);
 
     fn set_title(&self, title: &str);
 
@@ -594,10 +562,6 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
         }
     }
 
-    //fn set_color(&self, color: /*Ignored*/&gdk::Color) {
-    //    unsafe { TODO: call gtk_sys:gtk_color_button_set_color() }
-    //}
-
     fn set_title(&self, title: &str) {
         unsafe {
             gtk_sys::gtk_color_button_set_title(
@@ -615,7 +579,10 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
                 b"alpha\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `alpha` getter")
+                .unwrap()
         }
     }
 
@@ -638,7 +605,10 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
                 b"show-editor\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `show-editor` getter")
+                .unwrap()
         }
     }
 

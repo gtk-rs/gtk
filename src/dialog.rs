@@ -5,11 +5,11 @@
 use auto::DialogExt;
 use glib::object::Cast;
 use glib::translate::*;
+use glib::IsA;
 use gtk_sys;
 use std::ptr;
 use Dialog;
 use DialogFlags;
-use IsA;
 use ResponseType;
 use Widget;
 use Window;

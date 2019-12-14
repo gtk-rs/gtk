@@ -5,7 +5,9 @@
 use gdk;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use gio;
+use glib;
 use glib::object::Cast;
+use glib::object::IsA;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::object::ObjectType as ObjectType_;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -13,6 +15,8 @@ use glib::signal::connect_raw;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use glib::value::SetValueOptional;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::GString;
 use glib::StaticType;
@@ -66,7 +70,10 @@ impl ModelButton {
                 b"active\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `active` getter")
+                .unwrap()
         }
     }
 
@@ -90,7 +97,10 @@ impl ModelButton {
                 b"centered\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `centered` getter")
+                .unwrap()
         }
     }
 
@@ -114,12 +124,14 @@ impl ModelButton {
                 b"icon\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `icon` getter")
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn set_property_icon(&self, icon: Option<&gio::Icon>) {
+    pub fn set_property_icon<P: IsA<gio::Icon> + SetValueOptional>(&self, icon: Option<&P>) {
         unsafe {
             gobject_sys::g_object_set_property(
                 self.as_ptr() as *mut gobject_sys::GObject,
@@ -138,7 +150,10 @@ impl ModelButton {
                 b"iconic\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `iconic` getter")
+                .unwrap()
         }
     }
 
@@ -162,7 +177,10 @@ impl ModelButton {
                 b"inverted\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `inverted` getter")
+                .unwrap()
         }
     }
 
@@ -186,7 +204,9 @@ impl ModelButton {
                 b"menu-name\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `menu-name` getter")
         }
     }
 
@@ -210,7 +230,10 @@ impl ModelButton {
                 b"role\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `role` getter")
+                .unwrap()
         }
     }
 
@@ -234,7 +257,9 @@ impl ModelButton {
                 b"text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `text` getter")
         }
     }
 
@@ -258,7 +283,10 @@ impl ModelButton {
                 b"use-markup\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `use-markup` getter")
+                .unwrap()
         }
     }
 
@@ -497,6 +525,7 @@ impl Default for ModelButton {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct ModelButtonBuilder {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     active: Option<bool>,
@@ -551,7 +580,6 @@ pub struct ModelButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -559,72 +587,13 @@ pub struct ModelButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    action_name: Option<String>,
+    action_target: Option<glib::Variant>,
 }
 
 impl ModelButtonBuilder {
     pub fn new() -> Self {
-        Self {
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            active: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            centered: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            icon: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            iconic: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            inverted: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            menu_name: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            role: None,
-            #[cfg(any(feature = "v3_16", feature = "dox"))]
-            text: None,
-            #[cfg(any(feature = "v3_24", feature = "dox"))]
-            use_markup: None,
-            always_show_image: None,
-            image: None,
-            image_position: None,
-            label: None,
-            relief: None,
-            use_underline: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> ModelButton {
@@ -809,6 +778,12 @@ impl ModelButtonBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref action_name) = self.action_name {
+            properties.push(("action-name", action_name));
+        }
+        if let Some(ref action_target) = self.action_target {
+            properties.push(("action-target", action_target));
+        }
         glib::Object::new(ModelButton::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -828,8 +803,8 @@ impl ModelButtonBuilder {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn icon(mut self, icon: &gio::Icon) -> Self {
-        self.icon = Some(icon.clone());
+    pub fn icon<P: IsA<gio::Icon>>(mut self, icon: &P) -> Self {
+        self.icon = Some(icon.clone().upcast());
         self
     }
 
@@ -874,8 +849,8 @@ impl ModelButtonBuilder {
         self
     }
 
-    pub fn image(mut self, image: &Widget) -> Self {
-        self.image = Some(image.clone());
+    pub fn image<P: IsA<Widget>>(mut self, image: &P) -> Self {
+        self.image = Some(image.clone().upcast());
         self
     }
 
@@ -904,8 +879,8 @@ impl ModelButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -1025,8 +1000,8 @@ impl ModelButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -1072,6 +1047,16 @@ impl ModelButtonBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn action_name(mut self, action_name: &str) -> Self {
+        self.action_name = Some(action_name.to_string());
+        self
+    }
+
+    pub fn action_target(mut self, action_target: &glib::Variant) -> Self {
+        self.action_target = Some(action_target.clone());
         self
     }
 }

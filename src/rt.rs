@@ -11,6 +11,11 @@ use std::cell::Cell;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering, ATOMIC_BOOL_INIT};
 
+#[cfg(target_os = "macos")]
+extern "C" {
+    fn pthread_main_np() -> i32;
+}
+
 thread_local! {
     static IS_MAIN_THREAD: Cell<bool> = Cell::new(false)
 }
@@ -67,6 +72,15 @@ pub unsafe fn set_initialized() {
     } else if is_initialized() {
         panic!("Attempted to initialize GTK from two different threads.");
     }
+
+    //  OS X has its own notion of the main thread and init must be called on that thread.
+    #[cfg(target_os = "macos")]
+    {
+        if pthread_main_np() == 0 {
+            panic!("Attempted to initialize GTK on OSX from non-main thread");
+        }
+    }
+
     gdk::set_initialized();
     INITIALIZED.store(true, Ordering::Release);
     IS_MAIN_THREAD.with(|c| c.set(true));

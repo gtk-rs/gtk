@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -13,7 +14,6 @@ use glib::StaticType;
 use glib::ToValue;
 use glib_sys;
 use gtk_sys;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -56,6 +56,7 @@ impl LinkButton {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct LinkButtonBuilder {
     uri: Option<String>,
     visited: Option<bool>,
@@ -94,7 +95,6 @@ pub struct LinkButtonBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -102,56 +102,13 @@ pub struct LinkButtonBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    action_name: Option<String>,
+    action_target: Option<glib::Variant>,
 }
 
 impl LinkButtonBuilder {
     pub fn new() -> Self {
-        Self {
-            uri: None,
-            visited: None,
-            always_show_image: None,
-            image: None,
-            image_position: None,
-            label: None,
-            relief: None,
-            use_underline: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> LinkButton {
@@ -288,6 +245,12 @@ impl LinkButtonBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref action_name) = self.action_name {
+            properties.push(("action-name", action_name));
+        }
+        if let Some(ref action_target) = self.action_target {
+            properties.push(("action-target", action_target));
+        }
         glib::Object::new(LinkButton::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -309,8 +272,8 @@ impl LinkButtonBuilder {
         self
     }
 
-    pub fn image(mut self, image: &Widget) -> Self {
-        self.image = Some(image.clone());
+    pub fn image<P: IsA<Widget>>(mut self, image: &P) -> Self {
+        self.image = Some(image.clone().upcast());
         self
     }
 
@@ -339,8 +302,8 @@ impl LinkButtonBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -460,8 +423,8 @@ impl LinkButtonBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -509,6 +472,16 @@ impl LinkButtonBuilder {
         self.width_request = Some(width_request);
         self
     }
+
+    pub fn action_name(mut self, action_name: &str) -> Self {
+        self.action_name = Some(action_name.to_string());
+        self
+    }
+
+    pub fn action_target(mut self, action_target: &glib::Variant) -> Self {
+        self.action_target = Some(action_target.clone());
+        self
+    }
 }
 
 pub const NONE_LINK_BUTTON: Option<&LinkButton> = None;
@@ -522,7 +495,10 @@ pub trait LinkButtonExt: 'static {
 
     fn set_visited(&self, visited: bool);
 
-    fn connect_activate_link<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_activate_link<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -558,8 +534,14 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
         }
     }
 
-    fn connect_activate_link<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P) -> Inhibit + 'static>(
+    fn connect_activate_link<F: Fn(&Self) -> glib::signal::Inhibit + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn activate_link_trampoline<
+            P,
+            F: Fn(&P) -> glib::signal::Inhibit + 'static,
+        >(
             this: *mut gtk_sys::GtkLinkButton,
             f: glib_sys::gpointer,
         ) -> glib_sys::gboolean

@@ -45,6 +45,7 @@ impl Box {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct BoxBuilder {
     baseline_position: Option<BaselinePosition>,
     homogeneous: Option<bool>,
@@ -78,7 +79,6 @@ pub struct BoxBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -86,51 +86,12 @@ pub struct BoxBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
 }
 
 impl BoxBuilder {
     pub fn new() -> Self {
-        Self {
-            baseline_position: None,
-            homogeneous: None,
-            spacing: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Box {
@@ -252,6 +213,9 @@ impl BoxBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
         glib::Object::new(Box::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -278,8 +242,8 @@ impl BoxBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -399,8 +363,8 @@ impl BoxBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -446,6 +410,11 @@ impl BoxBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
@@ -579,18 +548,22 @@ impl<O: IsA<Box>> BoxExt for O {
 
     fn query_child_packing<P: IsA<Widget>>(&self, child: &P) -> (bool, bool, u32, PackType) {
         unsafe {
-            let mut expand = mem::uninitialized();
-            let mut fill = mem::uninitialized();
-            let mut padding = mem::uninitialized();
-            let mut pack_type = mem::uninitialized();
+            let mut expand = mem::MaybeUninit::uninit();
+            let mut fill = mem::MaybeUninit::uninit();
+            let mut padding = mem::MaybeUninit::uninit();
+            let mut pack_type = mem::MaybeUninit::uninit();
             gtk_sys::gtk_box_query_child_packing(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
-                &mut expand,
-                &mut fill,
-                &mut padding,
-                &mut pack_type,
+                expand.as_mut_ptr(),
+                fill.as_mut_ptr(),
+                padding.as_mut_ptr(),
+                pack_type.as_mut_ptr(),
             );
+            let expand = expand.assume_init();
+            let fill = fill.assume_init();
+            let padding = padding.assume_init();
+            let pack_type = pack_type.assume_init();
             (
                 from_glib(expand),
                 from_glib(fill),
@@ -670,7 +643,10 @@ impl<O: IsA<Box>> BoxExt for O {
                 b"expand\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `expand` getter")
+                .unwrap()
         }
     }
 
@@ -696,7 +672,10 @@ impl<O: IsA<Box>> BoxExt for O {
                 b"fill\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `fill` getter")
+                .unwrap()
         }
     }
 
@@ -722,7 +701,10 @@ impl<O: IsA<Box>> BoxExt for O {
                 b"pack-type\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `pack-type` getter")
+                .unwrap()
         }
     }
 
@@ -748,7 +730,10 @@ impl<O: IsA<Box>> BoxExt for O {
                 b"padding\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `padding` getter")
+                .unwrap()
         }
     }
 
@@ -773,7 +758,10 @@ impl<O: IsA<Box>> BoxExt for O {
                 b"position\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `position` getter")
+                .unwrap()
         }
     }
 

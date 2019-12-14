@@ -24,6 +24,7 @@ use Buildable;
 use Container;
 use ResizeMode;
 use Scrollable;
+use ScrollablePolicy;
 use Widget;
 
 glib_wrapper! {
@@ -50,6 +51,7 @@ impl Layout {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct LayoutBuilder {
     height: Option<u32>,
     width: Option<u32>,
@@ -82,7 +84,6 @@ pub struct LayoutBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -90,50 +91,15 @@ pub struct LayoutBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    hadjustment: Option<Adjustment>,
+    hscroll_policy: Option<ScrollablePolicy>,
+    vadjustment: Option<Adjustment>,
+    vscroll_policy: Option<ScrollablePolicy>,
 }
 
 impl LayoutBuilder {
     pub fn new() -> Self {
-        Self {
-            height: None,
-            width: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> Layout {
@@ -252,6 +218,18 @@ impl LayoutBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref hadjustment) = self.hadjustment {
+            properties.push(("hadjustment", hadjustment));
+        }
+        if let Some(ref hscroll_policy) = self.hscroll_policy {
+            properties.push(("hscroll-policy", hscroll_policy));
+        }
+        if let Some(ref vadjustment) = self.vadjustment {
+            properties.push(("vadjustment", vadjustment));
+        }
+        if let Some(ref vscroll_policy) = self.vscroll_policy {
+            properties.push(("vscroll-policy", vscroll_policy));
+        }
         glib::Object::new(Layout::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -273,8 +251,8 @@ impl LayoutBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -394,8 +372,8 @@ impl LayoutBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -441,6 +419,26 @@ impl LayoutBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
+        self
+    }
+
+    pub fn hscroll_policy(mut self, hscroll_policy: ScrollablePolicy) -> Self {
+        self.hscroll_policy = Some(hscroll_policy);
+        self
+    }
+
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
+        self
+    }
+
+    pub fn vscroll_policy(mut self, vscroll_policy: ScrollablePolicy) -> Self {
+        self.vscroll_policy = Some(vscroll_policy);
         self
     }
 }
@@ -490,9 +488,15 @@ impl<O: IsA<Layout>> LayoutExt for O {
 
     fn get_size(&self) -> (u32, u32) {
         unsafe {
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
-            gtk_sys::gtk_layout_get_size(self.as_ref().to_glib_none().0, &mut width, &mut height);
+            let mut width = mem::MaybeUninit::uninit();
+            let mut height = mem::MaybeUninit::uninit();
+            gtk_sys::gtk_layout_get_size(
+                self.as_ref().to_glib_none().0,
+                width.as_mut_ptr(),
+                height.as_mut_ptr(),
+            );
+            let width = width.assume_init();
+            let height = height.assume_init();
             (width, height)
         }
     }
@@ -533,7 +537,10 @@ impl<O: IsA<Layout>> LayoutExt for O {
                 b"height\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `height` getter")
+                .unwrap()
         }
     }
 
@@ -555,7 +562,10 @@ impl<O: IsA<Layout>> LayoutExt for O {
                 b"width\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `width` getter")
+                .unwrap()
         }
     }
 
@@ -578,7 +588,10 @@ impl<O: IsA<Layout>> LayoutExt for O {
                 b"x\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `x` getter")
+                .unwrap()
         }
     }
 
@@ -602,7 +615,10 @@ impl<O: IsA<Layout>> LayoutExt for O {
                 b"y\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `y` getter")
+                .unwrap()
         }
     }
 

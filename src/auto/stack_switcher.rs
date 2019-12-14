@@ -25,6 +25,7 @@ use Box;
 use Buildable;
 use Container;
 use Orientable;
+use Orientation;
 use ResizeMode;
 use Stack;
 use Widget;
@@ -50,6 +51,7 @@ impl Default for StackSwitcher {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct StackSwitcherBuilder {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     icon_size: Option<i32>,
@@ -86,7 +88,6 @@ pub struct StackSwitcherBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -94,54 +95,12 @@ pub struct StackSwitcherBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    orientation: Option<Orientation>,
 }
 
 impl StackSwitcherBuilder {
     pub fn new() -> Self {
-        Self {
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            icon_size: None,
-            stack: None,
-            baseline_position: None,
-            homogeneous: None,
-            spacing: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> StackSwitcher {
@@ -272,6 +231,9 @@ impl StackSwitcherBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref orientation) = self.orientation {
+            properties.push(("orientation", orientation));
+        }
         glib::Object::new(StackSwitcher::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -284,8 +246,8 @@ impl StackSwitcherBuilder {
         self
     }
 
-    pub fn stack(mut self, stack: &Stack) -> Self {
-        self.stack = Some(stack.clone());
+    pub fn stack<P: IsA<Stack>>(mut self, stack: &P) -> Self {
+        self.stack = Some(stack.clone().upcast());
         self
     }
 
@@ -309,8 +271,8 @@ impl StackSwitcherBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -430,8 +392,8 @@ impl StackSwitcherBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -477,6 +439,11 @@ impl StackSwitcherBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn orientation(mut self, orientation: Orientation) -> Self {
+        self.orientation = Some(orientation);
         self
     }
 }
@@ -527,7 +494,10 @@ impl<O: IsA<StackSwitcher>> StackSwitcherExt for O {
                 b"icon-size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `icon-size` getter")
+                .unwrap()
         }
     }
 

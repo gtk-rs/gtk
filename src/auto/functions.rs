@@ -15,7 +15,6 @@ use std::boxed::Box as Box_;
 use std::mem;
 use std::ptr;
 use AccelGroup;
-use Error;
 use Orientation;
 use PageSetup;
 use PositionType;
@@ -122,13 +121,15 @@ pub fn accelerator_name_with_keycode(
 pub fn accelerator_parse(accelerator: &str) -> (u32, gdk::ModifierType) {
     assert_initialized_main_thread!();
     unsafe {
-        let mut accelerator_key = mem::uninitialized();
-        let mut accelerator_mods = mem::uninitialized();
+        let mut accelerator_key = mem::MaybeUninit::uninit();
+        let mut accelerator_mods = mem::MaybeUninit::uninit();
         gtk_sys::gtk_accelerator_parse(
             accelerator.to_glib_none().0,
-            &mut accelerator_key,
-            &mut accelerator_mods,
+            accelerator_key.as_mut_ptr(),
+            accelerator_mods.as_mut_ptr(),
         );
+        let accelerator_key = accelerator_key.assume_init();
+        let accelerator_mods = accelerator_mods.assume_init();
         (accelerator_key, from_glib(accelerator_mods))
     }
 }
@@ -254,8 +255,9 @@ pub fn get_current_event_device() -> Option<gdk::Device> {
 pub fn get_current_event_state() -> Option<gdk::ModifierType> {
     assert_initialized_main_thread!();
     unsafe {
-        let mut state = mem::uninitialized();
-        let ret = from_glib(gtk_sys::gtk_get_current_event_state(&mut state));
+        let mut state = mem::MaybeUninit::uninit();
+        let ret = from_glib(gtk_sys::gtk_get_current_event_state(state.as_mut_ptr()));
+        let state = state.assume_init();
         if ret {
             Some(from_glib(state))
         } else {
@@ -302,7 +304,7 @@ pub fn grab_get_current() -> Option<Widget> {
 //    unsafe { TODO: call gtk_sys:gtk_init_check() }
 //}
 
-//pub fn init_with_args(argv: /*Unimplemented*/Vec<GString>, parameter_string: Option<&str>, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Option<&str>) -> Result<(), Error> {
+//pub fn init_with_args(argv: /*Unimplemented*/Vec<GString>, parameter_string: Option<&str>, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Option<&str>) -> Result<(), glib::Error> {
 //    unsafe { TODO: call gtk_sys:gtk_init_with_args() }
 //}
 
@@ -364,7 +366,7 @@ pub fn print_run_page_setup_dialog_async<
     done_cb: Q,
 ) {
     skip_assert_initialized!();
-    let done_cb_data: Box_<Q> = Box::new(done_cb);
+    let done_cb_data: Box_<Q> = Box_::new(done_cb);
     unsafe extern "C" fn done_cb_func<
         P: IsA<Window>,
         Q: FnOnce(&PageSetup) + Send + Sync + 'static,
@@ -384,7 +386,7 @@ pub fn print_run_page_setup_dialog_async<
             page_setup.to_glib_none().0,
             settings.to_glib_none().0,
             done_cb,
-            Box::into_raw(super_callback0) as *mut _,
+            Box_::into_raw(super_callback0) as *mut _,
         );
     }
 }
@@ -786,10 +788,13 @@ pub fn render_slider<P: IsA<StyleContext>>(
 pub fn rgb_to_hsv(r: f64, g: f64, b: f64) -> (f64, f64, f64) {
     assert_initialized_main_thread!();
     unsafe {
-        let mut h = mem::uninitialized();
-        let mut s = mem::uninitialized();
-        let mut v = mem::uninitialized();
-        gtk_sys::gtk_rgb_to_hsv(r, g, b, &mut h, &mut s, &mut v);
+        let mut h = mem::MaybeUninit::uninit();
+        let mut s = mem::MaybeUninit::uninit();
+        let mut v = mem::MaybeUninit::uninit();
+        gtk_sys::gtk_rgb_to_hsv(r, g, b, h.as_mut_ptr(), s.as_mut_ptr(), v.as_mut_ptr());
+        let h = h.assume_init();
+        let s = s.assume_init();
+        let v = v.assume_init();
         (h, s, v)
     }
 }
@@ -888,7 +893,11 @@ pub fn set_debug_flags(flags: u32) {
 //    unsafe { TODO: call gtk_sys:gtk_show_about_dialog() }
 //}
 
-pub fn show_uri(screen: Option<&gdk::Screen>, uri: &str, timestamp: u32) -> Result<(), Error> {
+pub fn show_uri(
+    screen: Option<&gdk::Screen>,
+    uri: &str,
+    timestamp: u32,
+) -> Result<(), glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();
@@ -911,7 +920,7 @@ pub fn show_uri_on_window<P: IsA<Window>>(
     parent: Option<&P>,
     uri: &str,
     timestamp: u32,
-) -> Result<(), Error> {
+) -> Result<(), glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
         let mut error = ptr::null_mut();

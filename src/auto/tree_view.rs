@@ -19,12 +19,12 @@ use glib_sys;
 use gobject_sys;
 use gtk_sys;
 use libc;
-use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
+use Adjustment;
 use Align;
 use Buildable;
 use CellRenderer;
@@ -33,6 +33,7 @@ use Entry;
 use MovementStep;
 use ResizeMode;
 use Scrollable;
+use ScrollablePolicy;
 use Tooltip;
 use TreeIter;
 use TreeModel;
@@ -74,6 +75,7 @@ impl Default for TreeView {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct TreeViewBuilder {
     activate_on_single_click: Option<bool>,
     enable_grid_lines: Option<TreeViewGridLines>,
@@ -122,7 +124,6 @@ pub struct TreeViewBuilder {
     parent: Option<Container>,
     receives_default: Option<bool>,
     sensitive: Option<bool>,
-    //style: /*Unknown type*/,
     tooltip_markup: Option<String>,
     tooltip_text: Option<String>,
     valign: Option<Align>,
@@ -130,66 +131,15 @@ pub struct TreeViewBuilder {
     vexpand_set: Option<bool>,
     visible: Option<bool>,
     width_request: Option<i32>,
+    hadjustment: Option<Adjustment>,
+    hscroll_policy: Option<ScrollablePolicy>,
+    vadjustment: Option<Adjustment>,
+    vscroll_policy: Option<ScrollablePolicy>,
 }
 
 impl TreeViewBuilder {
     pub fn new() -> Self {
-        Self {
-            activate_on_single_click: None,
-            enable_grid_lines: None,
-            enable_search: None,
-            enable_tree_lines: None,
-            expander_column: None,
-            fixed_height_mode: None,
-            headers_clickable: None,
-            headers_visible: None,
-            hover_expand: None,
-            hover_selection: None,
-            level_indentation: None,
-            model: None,
-            reorderable: None,
-            rubber_banding: None,
-            search_column: None,
-            show_expanders: None,
-            tooltip_column: None,
-            ubuntu_almost_fixed_height_mode: None,
-            border_width: None,
-            child: None,
-            resize_mode: None,
-            app_paintable: None,
-            can_default: None,
-            can_focus: None,
-            events: None,
-            expand: None,
-            #[cfg(any(feature = "v3_20", feature = "dox"))]
-            focus_on_click: None,
-            halign: None,
-            has_default: None,
-            has_focus: None,
-            has_tooltip: None,
-            height_request: None,
-            hexpand: None,
-            hexpand_set: None,
-            is_focus: None,
-            margin: None,
-            margin_bottom: None,
-            margin_end: None,
-            margin_start: None,
-            margin_top: None,
-            name: None,
-            no_show_all: None,
-            opacity: None,
-            parent: None,
-            receives_default: None,
-            sensitive: None,
-            tooltip_markup: None,
-            tooltip_text: None,
-            valign: None,
-            vexpand: None,
-            vexpand_set: None,
-            visible: None,
-            width_request: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> TreeView {
@@ -359,6 +309,18 @@ impl TreeViewBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
+        if let Some(ref hadjustment) = self.hadjustment {
+            properties.push(("hadjustment", hadjustment));
+        }
+        if let Some(ref hscroll_policy) = self.hscroll_policy {
+            properties.push(("hscroll-policy", hscroll_policy));
+        }
+        if let Some(ref vadjustment) = self.vadjustment {
+            properties.push(("vadjustment", vadjustment));
+        }
+        if let Some(ref vscroll_policy) = self.vscroll_policy {
+            properties.push(("vscroll-policy", vscroll_policy));
+        }
         glib::Object::new(TreeView::static_type(), &properties)
             .expect("object new")
             .downcast()
@@ -385,8 +347,8 @@ impl TreeViewBuilder {
         self
     }
 
-    pub fn expander_column(mut self, expander_column: &TreeViewColumn) -> Self {
-        self.expander_column = Some(expander_column.clone());
+    pub fn expander_column<P: IsA<TreeViewColumn>>(mut self, expander_column: &P) -> Self {
+        self.expander_column = Some(expander_column.clone().upcast());
         self
     }
 
@@ -420,8 +382,8 @@ impl TreeViewBuilder {
         self
     }
 
-    pub fn model(mut self, model: &TreeModel) -> Self {
-        self.model = Some(model.clone());
+    pub fn model<P: IsA<TreeModel>>(mut self, model: &P) -> Self {
+        self.model = Some(model.clone().upcast());
         self
     }
 
@@ -463,8 +425,8 @@ impl TreeViewBuilder {
         self
     }
 
-    pub fn child(mut self, child: &Widget) -> Self {
-        self.child = Some(child.clone());
+    pub fn child<P: IsA<Widget>>(mut self, child: &P) -> Self {
+        self.child = Some(child.clone().upcast());
         self
     }
 
@@ -584,8 +546,8 @@ impl TreeViewBuilder {
         self
     }
 
-    pub fn parent(mut self, parent: &Container) -> Self {
-        self.parent = Some(parent.clone());
+    pub fn parent<P: IsA<Container>>(mut self, parent: &P) -> Self {
+        self.parent = Some(parent.clone().upcast());
         self
     }
 
@@ -631,6 +593,26 @@ impl TreeViewBuilder {
 
     pub fn width_request(mut self, width_request: i32) -> Self {
         self.width_request = Some(width_request);
+        self
+    }
+
+    pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {
+        self.hadjustment = Some(hadjustment.clone().upcast());
+        self
+    }
+
+    pub fn hscroll_policy(mut self, hscroll_policy: ScrollablePolicy) -> Self {
+        self.hscroll_policy = Some(hscroll_policy);
+        self
+    }
+
+    pub fn vadjustment<P: IsA<Adjustment>>(mut self, vadjustment: &P) -> Self {
+        self.vadjustment = Some(vadjustment.clone().upcast());
+        self
+    }
+
+    pub fn vscroll_policy(mut self, vscroll_policy: ScrollablePolicy) -> Self {
+        self.vscroll_policy = Some(vscroll_policy);
         self
     }
 }
@@ -728,7 +710,7 @@ pub trait TreeViewExt: 'static {
 
     fn get_reorderable(&self) -> bool;
 
-    //fn get_row_separator_func(&self) -> Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>;
+    //fn get_row_separator_func(&self) -> Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>;
 
     fn get_rubber_banding(&self) -> bool;
 
@@ -736,9 +718,9 @@ pub trait TreeViewExt: 'static {
 
     fn get_search_entry(&self) -> Option<Entry>;
 
-    //fn get_search_equal_func(&self) -> Option<Box<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>>;
+    //fn get_search_equal_func(&self) -> Option<Box_<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>>;
 
-    //fn get_search_position_func(&self) -> Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>;
+    //fn get_search_position_func(&self) -> Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>;
 
     fn get_selection(&self) -> TreeSelection;
 
@@ -810,7 +792,7 @@ pub trait TreeViewExt: 'static {
     fn set_column_drag_function(
         &self,
         func: Option<
-            Box<
+            Box_<
                 dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                     + 'static,
             >,
@@ -860,7 +842,7 @@ pub trait TreeViewExt: 'static {
 
     fn set_row_separator_func(
         &self,
-        func: Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
+        func: Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
     );
 
     fn set_rubber_banding(&self, enable: bool);
@@ -874,7 +856,7 @@ pub trait TreeViewExt: 'static {
         search_equal_func: P,
     );
 
-    fn set_search_position_func(&self, func: Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>);
+    fn set_search_position_func(&self, func: Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>);
 
     fn set_show_expanders(&self, enabled: bool);
 
@@ -958,12 +940,16 @@ pub trait TreeViewExt: 'static {
 
     fn emit_start_interactive_search(&self) -> bool;
 
-    fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(
+    fn connect_test_collapse_row<
+        F: Fn(&Self, &TreeIter, &TreePath) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(
+    fn connect_test_expand_row<
+        F: Fn(&Self, &TreeIter, &TreePath) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -1092,90 +1078,102 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
 
     fn convert_bin_window_to_tree_coords(&self, bx: i32, by: i32) -> (i32, i32) {
         unsafe {
-            let mut tx = mem::uninitialized();
-            let mut ty = mem::uninitialized();
+            let mut tx = mem::MaybeUninit::uninit();
+            let mut ty = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_convert_bin_window_to_tree_coords(
                 self.as_ref().to_glib_none().0,
                 bx,
                 by,
-                &mut tx,
-                &mut ty,
+                tx.as_mut_ptr(),
+                ty.as_mut_ptr(),
             );
+            let tx = tx.assume_init();
+            let ty = ty.assume_init();
             (tx, ty)
         }
     }
 
     fn convert_bin_window_to_widget_coords(&self, bx: i32, by: i32) -> (i32, i32) {
         unsafe {
-            let mut wx = mem::uninitialized();
-            let mut wy = mem::uninitialized();
+            let mut wx = mem::MaybeUninit::uninit();
+            let mut wy = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_convert_bin_window_to_widget_coords(
                 self.as_ref().to_glib_none().0,
                 bx,
                 by,
-                &mut wx,
-                &mut wy,
+                wx.as_mut_ptr(),
+                wy.as_mut_ptr(),
             );
+            let wx = wx.assume_init();
+            let wy = wy.assume_init();
             (wx, wy)
         }
     }
 
     fn convert_tree_to_bin_window_coords(&self, tx: i32, ty: i32) -> (i32, i32) {
         unsafe {
-            let mut bx = mem::uninitialized();
-            let mut by = mem::uninitialized();
+            let mut bx = mem::MaybeUninit::uninit();
+            let mut by = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_convert_tree_to_bin_window_coords(
                 self.as_ref().to_glib_none().0,
                 tx,
                 ty,
-                &mut bx,
-                &mut by,
+                bx.as_mut_ptr(),
+                by.as_mut_ptr(),
             );
+            let bx = bx.assume_init();
+            let by = by.assume_init();
             (bx, by)
         }
     }
 
     fn convert_tree_to_widget_coords(&self, tx: i32, ty: i32) -> (i32, i32) {
         unsafe {
-            let mut wx = mem::uninitialized();
-            let mut wy = mem::uninitialized();
+            let mut wx = mem::MaybeUninit::uninit();
+            let mut wy = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_convert_tree_to_widget_coords(
                 self.as_ref().to_glib_none().0,
                 tx,
                 ty,
-                &mut wx,
-                &mut wy,
+                wx.as_mut_ptr(),
+                wy.as_mut_ptr(),
             );
+            let wx = wx.assume_init();
+            let wy = wy.assume_init();
             (wx, wy)
         }
     }
 
     fn convert_widget_to_bin_window_coords(&self, wx: i32, wy: i32) -> (i32, i32) {
         unsafe {
-            let mut bx = mem::uninitialized();
-            let mut by = mem::uninitialized();
+            let mut bx = mem::MaybeUninit::uninit();
+            let mut by = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_convert_widget_to_bin_window_coords(
                 self.as_ref().to_glib_none().0,
                 wx,
                 wy,
-                &mut bx,
-                &mut by,
+                bx.as_mut_ptr(),
+                by.as_mut_ptr(),
             );
+            let bx = bx.assume_init();
+            let by = by.assume_init();
             (bx, by)
         }
     }
 
     fn convert_widget_to_tree_coords(&self, wx: i32, wy: i32) -> (i32, i32) {
         unsafe {
-            let mut tx = mem::uninitialized();
-            let mut ty = mem::uninitialized();
+            let mut tx = mem::MaybeUninit::uninit();
+            let mut ty = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_convert_widget_to_tree_coords(
                 self.as_ref().to_glib_none().0,
                 wx,
                 wy,
-                &mut tx,
-                &mut ty,
+                tx.as_mut_ptr(),
+                ty.as_mut_ptr(),
             );
+            let tx = tx.assume_init();
+            let ty = ty.assume_init();
             (tx, ty)
         }
     }
@@ -1301,14 +1299,15 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
     ) -> Option<(Option<TreePath>, TreeViewDropPosition)> {
         unsafe {
             let mut path = ptr::null_mut();
-            let mut pos = mem::uninitialized();
+            let mut pos = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_tree_view_get_dest_row_at_pos(
                 self.as_ref().to_glib_none().0,
                 drag_x,
                 drag_y,
                 &mut path,
-                &mut pos,
+                pos.as_mut_ptr(),
             ));
+            let pos = pos.assume_init();
             if ret {
                 Some((from_glib_full(path), from_glib(pos)))
             } else {
@@ -1320,12 +1319,13 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
     fn get_drag_dest_row(&self) -> (Option<TreePath>, TreeViewDropPosition) {
         unsafe {
             let mut path = ptr::null_mut();
-            let mut pos = mem::uninitialized();
+            let mut pos = mem::MaybeUninit::uninit();
             gtk_sys::gtk_tree_view_get_drag_dest_row(
                 self.as_ref().to_glib_none().0,
                 &mut path,
-                &mut pos,
+                pos.as_mut_ptr(),
             );
+            let pos = pos.assume_init();
             (from_glib_full(path), from_glib(pos))
         }
     }
@@ -1426,17 +1426,19 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         unsafe {
             let mut path = ptr::null_mut();
             let mut column = ptr::null_mut();
-            let mut cell_x = mem::uninitialized();
-            let mut cell_y = mem::uninitialized();
+            let mut cell_x = mem::MaybeUninit::uninit();
+            let mut cell_y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_tree_view_get_path_at_pos(
                 self.as_ref().to_glib_none().0,
                 x,
                 y,
                 &mut path,
                 &mut column,
-                &mut cell_x,
-                &mut cell_y,
+                cell_x.as_mut_ptr(),
+                cell_y.as_mut_ptr(),
             ));
+            let cell_x = cell_x.assume_init();
+            let cell_y = cell_y.assume_init();
             if ret {
                 Some((from_glib_full(path), from_glib_none(column), cell_x, cell_y))
             } else {
@@ -1453,7 +1455,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    //fn get_row_separator_func(&self) -> Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> {
+    //fn get_row_separator_func(&self) -> Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_get_row_separator_func() }
     //}
 
@@ -1477,11 +1479,11 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    //fn get_search_equal_func(&self) -> Option<Box<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>> {
+    //fn get_search_equal_func(&self) -> Option<Box_<dyn Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_get_search_equal_func() }
     //}
 
-    //fn get_search_position_func(&self) -> Option<Box<dyn Fn(&TreeView, &Widget) + 'static>> {
+    //fn get_search_position_func(&self) -> Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>> {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_get_search_position_func() }
     //}
 
@@ -1584,7 +1586,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         cell: &P,
         func: Q,
     ) -> i32 {
-        let func_data: Box_<Q> = Box::new(func);
+        let func_data: Box_<Q> = Box_::new(func);
         unsafe extern "C" fn func_func<
             P: IsA<CellRenderer>,
             Q: Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static,
@@ -1620,7 +1622,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 title.to_glib_none().0,
                 cell.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call6,
             )
         }
@@ -1634,17 +1636,19 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         unsafe {
             let mut path = ptr::null_mut();
             let mut column = ptr::null_mut();
-            let mut cell_x = mem::uninitialized();
-            let mut cell_y = mem::uninitialized();
+            let mut cell_x = mem::MaybeUninit::uninit();
+            let mut cell_y = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_tree_view_is_blank_at_pos(
                 self.as_ref().to_glib_none().0,
                 x,
                 y,
                 &mut path,
                 &mut column,
-                &mut cell_x,
-                &mut cell_y,
+                cell_x.as_mut_ptr(),
+                cell_y.as_mut_ptr(),
             ));
+            let cell_x = cell_x.assume_init();
+            let cell_y = cell_y.assume_init();
             if ret {
                 Some((from_glib_full(path), from_glib_none(column), cell_x, cell_y))
             } else {
@@ -1764,7 +1768,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
     fn set_column_drag_function(
         &self,
         func: Option<
-            Box<
+            Box_<
                 dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                     + 'static,
             >,
@@ -1772,12 +1776,12 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
     ) {
         let func_data: Box_<
             Option<
-                Box<
+                Box_<
                     dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                         + 'static,
                 >,
             >,
-        > = Box::new(func);
+        > = Box_::new(func);
         unsafe extern "C" fn func_func(
             tree_view: *mut gtk_sys::GtkTreeView,
             column: *mut gtk_sys::GtkTreeViewColumn,
@@ -1790,7 +1794,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             let prev_column = from_glib_borrow(prev_column);
             let next_column = from_glib_borrow(next_column);
             let callback: &Option<
-                Box<
+                Box_<
                     dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                         + 'static,
                 >,
@@ -1810,13 +1814,8 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
             let _callback: Box_<
                 Option<
-                    Box<
-                        dyn Fn(
-                                &TreeView,
-                                &TreeViewColumn,
-                                &TreeViewColumn,
-                                &TreeViewColumn,
-                            ) -> bool
+                    Box_<
+                        dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                             + 'static,
                     >,
                 >,
@@ -1825,7 +1824,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         let destroy_call3 = Some(destroy_func as _);
         let super_callback0: Box_<
             Option<
-                Box<
+                Box_<
                     dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool
                         + 'static,
                 >,
@@ -1835,7 +1834,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             gtk_sys::gtk_tree_view_set_column_drag_function(
                 self.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -1995,10 +1994,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
 
     fn set_row_separator_func(
         &self,
-        func: Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
+        func: Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>,
     ) {
-        let func_data: Box_<Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
-            Box::new(func);
+        let func_data: Box_<Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
+            Box_::new(func);
         unsafe extern "C" fn func_func(
             model: *mut gtk_sys::GtkTreeModel,
             iter: *mut gtk_sys::GtkTreeIter,
@@ -2006,7 +2005,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         ) -> glib_sys::gboolean {
             let model = from_glib_borrow(model);
             let iter = from_glib_borrow(iter);
-            let callback: &Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> =
+            let callback: &Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>> =
                 &*(data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&model, &iter)
@@ -2021,17 +2020,17 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             None
         };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
-            let _callback: Box_<Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
+            let _callback: Box_<Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
                 Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
-        let super_callback0: Box_<Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
+        let super_callback0: Box_<Option<Box_<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>> =
             func_data;
         unsafe {
             gtk_sys::gtk_tree_view_set_row_separator_func(
                 self.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -2065,7 +2064,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         &self,
         search_equal_func: P,
     ) {
-        let search_equal_func_data: Box_<P> = Box::new(search_equal_func);
+        let search_equal_func_data: Box_<P> = Box_::new(search_equal_func);
         unsafe extern "C" fn search_equal_func_func<
             P: Fn(&TreeModel, i32, &str, &TreeIter) -> bool + 'static,
         >(
@@ -2096,14 +2095,14 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             gtk_sys::gtk_tree_view_set_search_equal_func(
                 self.as_ref().to_glib_none().0,
                 search_equal_func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
     }
 
-    fn set_search_position_func(&self, func: Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>) {
-        let func_data: Box_<Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>> = Box::new(func);
+    fn set_search_position_func(&self, func: Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>) {
+        let func_data: Box_<Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>> = Box_::new(func);
         unsafe extern "C" fn func_func(
             tree_view: *mut gtk_sys::GtkTreeView,
             search_dialog: *mut gtk_sys::GtkWidget,
@@ -2111,7 +2110,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         ) {
             let tree_view = from_glib_borrow(tree_view);
             let search_dialog = from_glib_borrow(search_dialog);
-            let callback: &Option<Box<dyn Fn(&TreeView, &Widget) + 'static>> =
+            let callback: &Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>> =
                 &*(user_data as *mut _);
             if let Some(ref callback) = *callback {
                 callback(&tree_view, &search_dialog)
@@ -2125,16 +2124,16 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             None
         };
         unsafe extern "C" fn destroy_func(data: glib_sys::gpointer) {
-            let _callback: Box_<Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>> =
+            let _callback: Box_<Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>> =
                 Box_::from_raw(data as *mut _);
         }
         let destroy_call3 = Some(destroy_func as _);
-        let super_callback0: Box_<Option<Box<dyn Fn(&TreeView, &Widget) + 'static>>> = func_data;
+        let super_callback0: Box_<Option<Box_<dyn Fn(&TreeView, &Widget) + 'static>>> = func_data;
         unsafe {
             gtk_sys::gtk_tree_view_set_search_position_func(
                 self.as_ref().to_glib_none().0,
                 func,
-                Box::into_raw(super_callback0) as *mut _,
+                Box_::into_raw(super_callback0) as *mut _,
                 destroy_call3,
             );
         }
@@ -2203,7 +2202,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 b"enable-grid-lines\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `enable-grid-lines` getter")
+                .unwrap()
         }
     }
 
@@ -2316,7 +2318,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("expand-collapse-cursor-row", &[&object, &p0, &p1])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_expand_collapse_cursor_row`")
+            .unwrap()
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) -> bool + 'static>(
@@ -2360,7 +2365,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("move-cursor", &[&step, &direction])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_move_cursor`")
+            .unwrap()
     }
 
     fn connect_row_activated<F: Fn(&Self, &TreePath, &TreeViewColumn) + 'static>(
@@ -2495,7 +2503,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("select-all", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_select_all`")
+            .unwrap()
     }
 
     fn connect_select_cursor_parent<F: Fn(&Self) -> bool + 'static>(
@@ -2531,7 +2542,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("select-cursor-parent", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_select_cursor_parent`")
+            .unwrap()
     }
 
     fn connect_select_cursor_row<F: Fn(&Self, bool) -> bool + 'static>(
@@ -2570,7 +2584,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("select-cursor-row", &[&object])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_select_cursor_row`")
+            .unwrap()
     }
 
     fn connect_start_interactive_search<F: Fn(&Self) -> bool + 'static>(
@@ -2606,16 +2623,21 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("start-interactive-search", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_start_interactive_search`")
+            .unwrap()
     }
 
-    fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(
+    fn connect_test_collapse_row<
+        F: Fn(&Self, &TreeIter, &TreePath) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn test_collapse_row_trampoline<
             P,
-            F: Fn(&P, &TreeIter, &TreePath) -> Inhibit + 'static,
+            F: Fn(&P, &TreeIter, &TreePath) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkTreeView,
             iter: *mut gtk_sys::GtkTreeIter,
@@ -2644,13 +2666,15 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(
+    fn connect_test_expand_row<
+        F: Fn(&Self, &TreeIter, &TreePath) -> glib::signal::Inhibit + 'static,
+    >(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn test_expand_row_trampoline<
             P,
-            F: Fn(&P, &TreeIter, &TreePath) -> Inhibit + 'static,
+            F: Fn(&P, &TreeIter, &TreePath) -> glib::signal::Inhibit + 'static,
         >(
             this: *mut gtk_sys::GtkTreeView,
             iter: *mut gtk_sys::GtkTreeIter,
@@ -2707,7 +2731,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("toggle-cursor-row", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_toggle_cursor_row`")
+            .unwrap()
     }
 
     fn connect_unselect_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
@@ -2738,7 +2765,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
                 .emit("unselect-all", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_unselect_all`")
+            .unwrap()
     }
 
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(

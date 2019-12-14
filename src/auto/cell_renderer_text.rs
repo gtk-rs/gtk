@@ -45,9 +45,11 @@ impl Default for CellRendererText {
     }
 }
 
+#[derive(Clone, Default)]
 pub struct CellRendererTextBuilder {
     align_set: Option<bool>,
     alignment: Option<pango::Alignment>,
+    attributes: Option<pango::AttrList>,
     background: Option<String>,
     background_rgba: Option<gdk::RGBA>,
     background_set: Option<bool>,
@@ -58,6 +60,7 @@ pub struct CellRendererTextBuilder {
     family: Option<String>,
     family_set: Option<bool>,
     font: Option<String>,
+    font_desc: Option<pango::FontDescription>,
     foreground: Option<String>,
     foreground_rgba: Option<gdk::RGBA>,
     foreground_set: Option<bool>,
@@ -108,66 +111,7 @@ pub struct CellRendererTextBuilder {
 
 impl CellRendererTextBuilder {
     pub fn new() -> Self {
-        Self {
-            align_set: None,
-            alignment: None,
-            background: None,
-            background_rgba: None,
-            background_set: None,
-            editable: None,
-            editable_set: None,
-            ellipsize: None,
-            ellipsize_set: None,
-            family: None,
-            family_set: None,
-            font: None,
-            foreground: None,
-            foreground_rgba: None,
-            foreground_set: None,
-            language: None,
-            language_set: None,
-            markup: None,
-            max_width_chars: None,
-            placeholder_text: None,
-            rise: None,
-            rise_set: None,
-            scale: None,
-            scale_set: None,
-            single_paragraph_mode: None,
-            size: None,
-            size_points: None,
-            size_set: None,
-            stretch: None,
-            stretch_set: None,
-            strikethrough: None,
-            strikethrough_set: None,
-            style: None,
-            style_set: None,
-            text: None,
-            underline: None,
-            underline_set: None,
-            variant: None,
-            variant_set: None,
-            weight: None,
-            weight_set: None,
-            width_chars: None,
-            wrap_mode: None,
-            wrap_width: None,
-            cell_background: None,
-            cell_background_rgba: None,
-            cell_background_set: None,
-            height: None,
-            is_expanded: None,
-            is_expander: None,
-            mode: None,
-            sensitive: None,
-            visible: None,
-            width: None,
-            xalign: None,
-            xpad: None,
-            yalign: None,
-            ypad: None,
-        }
+        Self::default()
     }
 
     pub fn build(self) -> CellRendererText {
@@ -177,6 +121,9 @@ impl CellRendererTextBuilder {
         }
         if let Some(ref alignment) = self.alignment {
             properties.push(("alignment", alignment));
+        }
+        if let Some(ref attributes) = self.attributes {
+            properties.push(("attributes", attributes));
         }
         if let Some(ref background) = self.background {
             properties.push(("background", background));
@@ -207,6 +154,9 @@ impl CellRendererTextBuilder {
         }
         if let Some(ref font) = self.font {
             properties.push(("font", font));
+        }
+        if let Some(ref font_desc) = self.font_desc {
+            properties.push(("font-desc", font_desc));
         }
         if let Some(ref foreground) = self.foreground {
             properties.push(("foreground", foreground));
@@ -362,6 +312,11 @@ impl CellRendererTextBuilder {
         self
     }
 
+    pub fn attributes(mut self, attributes: &pango::AttrList) -> Self {
+        self.attributes = Some(attributes.clone());
+        self
+    }
+
     pub fn background(mut self, background: &str) -> Self {
         self.background = Some(background.to_string());
         self
@@ -409,6 +364,11 @@ impl CellRendererTextBuilder {
 
     pub fn font(mut self, font: &str) -> Self {
         self.font = Some(font.to_string());
+        self
+    }
+
+    pub fn font_desc(mut self, font_desc: &pango::FontDescription) -> Self {
+        self.font_desc = Some(font_desc.clone());
         self
     }
 
@@ -656,6 +616,10 @@ pub trait CellRendererTextExt: 'static {
 
     fn set_property_alignment(&self, alignment: pango::Alignment);
 
+    fn get_property_attributes(&self) -> Option<pango::AttrList>;
+
+    fn set_property_attributes(&self, attributes: Option<&pango::AttrList>);
+
     fn set_property_background(&self, background: Option<&str>);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
@@ -693,6 +657,10 @@ pub trait CellRendererTextExt: 'static {
     fn get_property_font(&self) -> Option<GString>;
 
     fn set_property_font(&self, font: Option<&str>);
+
+    fn get_property_font_desc(&self) -> Option<pango::FontDescription>;
+
+    fn set_property_font_desc(&self, font_desc: Option<&pango::FontDescription>);
 
     fn set_property_foreground(&self, foreground: Option<&str>);
 
@@ -824,6 +792,8 @@ pub trait CellRendererTextExt: 'static {
 
     fn connect_property_alignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
     fn connect_property_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_background_rgba_notify<F: Fn(&Self) + 'static>(
@@ -853,6 +823,8 @@ pub trait CellRendererTextExt: 'static {
     fn connect_property_family_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_foreground_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -962,7 +934,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"align-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `align-set` getter")
+                .unwrap()
         }
     }
 
@@ -984,7 +959,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"alignment\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `alignment` getter")
+                .unwrap()
         }
     }
 
@@ -994,6 +972,30 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"alignment\0".as_ptr() as *const _,
                 Value::from(&alignment).to_glib_none().0,
+            );
+        }
+    }
+
+    fn get_property_attributes(&self) -> Option<pango::AttrList> {
+        unsafe {
+            let mut value = Value::from_type(<pango::AttrList as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"attributes\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `attributes` getter")
+        }
+    }
+
+    fn set_property_attributes(&self, attributes: Option<&pango::AttrList>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"attributes\0".as_ptr() as *const _,
+                Value::from(attributes).to_glib_none().0,
             );
         }
     }
@@ -1016,7 +1018,9 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"background-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `background-rgba` getter")
         }
     }
 
@@ -1038,7 +1042,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"background-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `background-set` getter")
+                .unwrap()
         }
     }
 
@@ -1060,7 +1067,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"editable\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `editable` getter")
+                .unwrap()
         }
     }
 
@@ -1082,7 +1092,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"editable-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `editable-set` getter")
+                .unwrap()
         }
     }
 
@@ -1104,7 +1117,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"ellipsize\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `ellipsize` getter")
+                .unwrap()
         }
     }
 
@@ -1126,7 +1142,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"ellipsize-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `ellipsize-set` getter")
+                .unwrap()
         }
     }
 
@@ -1148,7 +1167,9 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"family\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `family` getter")
         }
     }
 
@@ -1170,7 +1191,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"family-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `family-set` getter")
+                .unwrap()
         }
     }
 
@@ -1192,7 +1216,9 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"font\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `font` getter")
         }
     }
 
@@ -1202,6 +1228,30 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 self.to_glib_none().0 as *mut gobject_sys::GObject,
                 b"font\0".as_ptr() as *const _,
                 Value::from(font).to_glib_none().0,
+            );
+        }
+    }
+
+    fn get_property_font_desc(&self) -> Option<pango::FontDescription> {
+        unsafe {
+            let mut value = Value::from_type(<pango::FontDescription as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"font-desc\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `font-desc` getter")
+        }
+    }
+
+    fn set_property_font_desc(&self, font_desc: Option<&pango::FontDescription>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"font-desc\0".as_ptr() as *const _,
+                Value::from(font_desc).to_glib_none().0,
             );
         }
     }
@@ -1224,7 +1274,9 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"foreground-rgba\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `foreground-rgba` getter")
         }
     }
 
@@ -1246,7 +1298,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"foreground-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `foreground-set` getter")
+                .unwrap()
         }
     }
 
@@ -1268,7 +1323,9 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"language\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `language` getter")
         }
     }
 
@@ -1290,7 +1347,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"language-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `language-set` getter")
+                .unwrap()
         }
     }
 
@@ -1322,7 +1382,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"max-width-chars\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `max-width-chars` getter")
+                .unwrap()
         }
     }
 
@@ -1344,7 +1407,9 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"placeholder-text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `placeholder-text` getter")
         }
     }
 
@@ -1366,7 +1431,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"rise\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `rise` getter")
+                .unwrap()
         }
     }
 
@@ -1388,7 +1456,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"rise-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `rise-set` getter")
+                .unwrap()
         }
     }
 
@@ -1410,7 +1481,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"scale\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `scale` getter")
+                .unwrap()
         }
     }
 
@@ -1432,7 +1506,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"scale-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `scale-set` getter")
+                .unwrap()
         }
     }
 
@@ -1454,7 +1531,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"single-paragraph-mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `single-paragraph-mode` getter")
+                .unwrap()
         }
     }
 
@@ -1476,7 +1556,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"size\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size` getter")
+                .unwrap()
         }
     }
 
@@ -1498,7 +1581,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"size-points\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size-points` getter")
+                .unwrap()
         }
     }
 
@@ -1520,7 +1606,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"size-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `size-set` getter")
+                .unwrap()
         }
     }
 
@@ -1542,7 +1631,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"stretch\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `stretch` getter")
+                .unwrap()
         }
     }
 
@@ -1564,7 +1656,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"stretch-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `stretch-set` getter")
+                .unwrap()
         }
     }
 
@@ -1586,7 +1681,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"strikethrough\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `strikethrough` getter")
+                .unwrap()
         }
     }
 
@@ -1608,7 +1706,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"strikethrough-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `strikethrough-set` getter")
+                .unwrap()
         }
     }
 
@@ -1630,7 +1731,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"style\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `style` getter")
+                .unwrap()
         }
     }
 
@@ -1652,7 +1756,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"style-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `style-set` getter")
+                .unwrap()
         }
     }
 
@@ -1674,7 +1781,9 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"text\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `text` getter")
         }
     }
 
@@ -1696,7 +1805,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"underline\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `underline` getter")
+                .unwrap()
         }
     }
 
@@ -1718,7 +1830,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"underline-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `underline-set` getter")
+                .unwrap()
         }
     }
 
@@ -1740,7 +1855,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"variant\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `variant` getter")
+                .unwrap()
         }
     }
 
@@ -1762,7 +1880,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"variant-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `variant-set` getter")
+                .unwrap()
         }
     }
 
@@ -1784,7 +1905,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"weight\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `weight` getter")
+                .unwrap()
         }
     }
 
@@ -1806,7 +1930,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"weight-set\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `weight-set` getter")
+                .unwrap()
         }
     }
 
@@ -1828,7 +1955,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"width-chars\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `width-chars` getter")
+                .unwrap()
         }
     }
 
@@ -1850,7 +1980,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"wrap-mode\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `wrap-mode` getter")
+                .unwrap()
         }
     }
 
@@ -1872,7 +2005,10 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 b"wrap-width\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get().unwrap()
+            value
+                .get()
+                .expect("Return Value for property `wrap-width` getter")
+                .unwrap()
         }
     }
 
@@ -1953,6 +2089,28 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 self.as_ptr() as *mut _,
                 b"notify::alignment\0".as_ptr() as *const _,
                 Some(transmute(notify_alignment_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererText,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererText>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::attributes\0".as_ptr() as *const _,
+                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)),
                 Box_::into_raw(f),
             )
         }
@@ -2193,6 +2351,28 @@ impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
                 self.as_ptr() as *mut _,
                 b"notify::font\0".as_ptr() as *const _,
                 Some(transmute(notify_font_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_font_desc_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkCellRendererText,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<CellRendererText>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::font-desc\0".as_ptr() as *const _,
+                Some(transmute(notify_font_desc_trampoline::<Self, F> as usize)),
                 Box_::into_raw(f),
             )
         }

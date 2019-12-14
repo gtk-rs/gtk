@@ -315,15 +315,17 @@ pub trait IconViewExt: 'static {
 impl<O: IsA<IconView>> IconViewExt for O {
     fn convert_widget_to_bin_window_coords(&self, wx: i32, wy: i32) -> (i32, i32) {
         unsafe {
-            let mut bx = mem::uninitialized();
-            let mut by = mem::uninitialized();
+            let mut bx = mem::MaybeUninit::uninit();
+            let mut by = mem::MaybeUninit::uninit();
             gtk_sys::gtk_icon_view_convert_widget_to_bin_window_coords(
                 self.as_ref().to_glib_none().0,
                 wx,
                 wy,
-                &mut bx,
-                &mut by,
+                bx.as_mut_ptr(),
+                by.as_mut_ptr(),
             );
+            let bx = bx.assume_init();
+            let by = by.assume_init();
             (bx, by)
         }
     }
@@ -398,14 +400,15 @@ impl<O: IsA<IconView>> IconViewExt for O {
     ) -> Option<(TreePath, IconViewDropPosition)> {
         unsafe {
             let mut path = ptr::null_mut();
-            let mut pos = mem::uninitialized();
+            let mut pos = mem::MaybeUninit::uninit();
             let ret = from_glib(gtk_sys::gtk_icon_view_get_dest_item_at_pos(
                 self.as_ref().to_glib_none().0,
                 drag_x,
                 drag_y,
                 &mut path,
-                &mut pos,
+                pos.as_mut_ptr(),
             ));
+            let pos = pos.assume_init();
             if ret {
                 Some((from_glib_full(path), from_glib(pos)))
             } else {
@@ -417,12 +420,13 @@ impl<O: IsA<IconView>> IconViewExt for O {
     fn get_drag_dest_item(&self) -> (TreePath, IconViewDropPosition) {
         unsafe {
             let mut path = ptr::null_mut();
-            let mut pos = mem::uninitialized();
+            let mut pos = mem::MaybeUninit::uninit();
             gtk_sys::gtk_icon_view_get_drag_dest_item(
                 self.as_ref().to_glib_none().0,
                 &mut path,
-                &mut pos,
+                pos.as_mut_ptr(),
             );
+            let pos = pos.assume_init();
             (from_glib_full(path), from_glib(pos))
         }
     }
@@ -863,7 +867,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
                 b"cell-area\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
-            value.get()
+            value
+                .get()
+                .expect("Return Value for property `cell-area` getter")
         }
     }
 
@@ -900,7 +906,10 @@ impl<O: IsA<IconView>> IconViewExt for O {
                 .emit("activate-cursor-item", &[])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_activate_cursor_item`")
+            .unwrap()
     }
 
     fn connect_item_activated<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -969,7 +978,10 @@ impl<O: IsA<IconView>> IconViewExt for O {
                 .emit("move-cursor", &[&step, &count])
                 .unwrap()
         };
-        res.unwrap().get().unwrap()
+        res.unwrap()
+            .get()
+            .expect("Return Value for `emit_move_cursor`")
+            .unwrap()
     }
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {

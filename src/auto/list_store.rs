@@ -58,8 +58,6 @@ pub trait GtkListStoreExt: 'static {
 
     fn remove(&self, iter: &TreeIter) -> bool;
 
-    //fn reorder(&self, new_order: &[i32]);
-
     //fn set(&self, iter: &TreeIter, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     //fn set_column_types(&self, types: /*Unimplemented*/&CArray TypeId { ns_id: 0, id: 30 });
@@ -181,10 +179,6 @@ impl<O: IsA<ListStore>> GtkListStoreExt for O {
             ))
         }
     }
-
-    //fn reorder(&self, new_order: &[i32]) {
-    //    unsafe { TODO: call gtk_sys:gtk_list_store_reorder() }
-    //}
 
     //fn set(&self, iter: &TreeIter, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call gtk_sys:gtk_list_store_set() }
