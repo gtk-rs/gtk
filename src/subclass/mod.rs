@@ -10,6 +10,7 @@ pub mod container;
 pub mod dialog;
 pub mod event_box;
 pub mod header_bar;
+pub mod icon_view;
 pub mod stack;
 pub mod widget;
 pub mod window;
@@ -23,6 +24,7 @@ pub mod prelude {
     pub use super::dialog::DialogImpl;
     pub use super::event_box::EventBoxImpl;
     pub use super::header_bar::HeaderBarImpl;
+    pub use super::icon_view::IconViewImpl;
     pub use super::stack::StackImpl;
     pub use super::widget::WidgetImpl;
     pub use super::window::WindowImpl;
