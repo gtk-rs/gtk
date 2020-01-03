@@ -506,11 +506,11 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
             if let Some(f) = (*parent_class).dispatch_child_properties_changed {
-                let pspecs_ptr = pspecs
+                let mut pspecs_array = pspecs
                     .iter()
                     .map(|p| p.to_glib_none().0)
-                    .collect::<Vec<_>>()
-                    .as_mut_ptr();
+                    .collect::<Vec<_>>();
+                let pspecs_ptr = pspecs_array.as_mut_ptr();
                 f(widget.to_glib_none().0, pspecs.len() as u32, pspecs_ptr)
             }
         }
