@@ -6,6 +6,8 @@ pub mod application;
 pub mod application_window;
 pub mod bin;
 pub mod box_;
+pub mod cell_renderer;
+pub mod cell_renderer_pixbuf;
 pub mod container;
 pub mod dialog;
 pub mod event_box;
@@ -20,6 +22,8 @@ pub mod prelude {
     pub use super::application_window::ApplicationWindowImpl;
     pub use super::bin::BinImpl;
     pub use super::box_::BoxImpl;
+    pub use super::cell_renderer::CellRendererImpl;
+    pub use super::cell_renderer_pixbuf::CellRendererPixbufImpl;
     pub use super::container::ContainerImpl;
     pub use super::dialog::DialogImpl;
     pub use super::event_box::EventBoxImpl;
