@@ -1,5 +1,8 @@
 use gtk_sys;
 
+use libc::c_int;
+use std::mem;
+
 use glib::translate::*;
 
 use glib::subclass::prelude::*;
@@ -12,6 +15,7 @@ use crate::SelectionData;
 use crate::TextDirection;
 use cairo;
 use cairo_sys;
+use SizeRequestMode;
 use Widget;
 use WidgetClass;
 use WidgetExt;
@@ -185,6 +189,26 @@ pub trait WidgetImpl: WidgetImplExt + ObjectImpl + 'static {
     // fn can_activate_accel(&self, widget: &Widget, signal_id: u32) -> bool {
     //     self.parent_can_activate_accel(widget, signal_id)
     // }
+
+    fn get_request_mode(&self, widget: &Widget) -> SizeRequestMode {
+        self.parent_get_request_mode(widget)
+    }
+
+    fn get_preferred_width(&self, widget: &Widget) -> (i32, i32) {
+        self.parent_get_preferred_width(widget)
+    }
+
+    fn get_preferred_width_for_height(&self, widget: &Widget, height: i32) -> (i32, i32) {
+        self.parent_get_preferred_width_for_height(widget, height)
+    }
+
+    fn get_preferred_height(&self, widget: &Widget) -> (i32, i32) {
+        self.parent_get_preferred_height(widget)
+    }
+
+    fn get_preferred_height_for_width(&self, widget: &Widget, width: i32) -> (i32, i32) {
+        self.parent_get_preferred_height_for_width(widget, width)
+    }
 }
 
 pub trait WidgetImplExt {
@@ -269,6 +293,11 @@ pub trait WidgetImplExt {
         time: u32,
     ) -> Inhibit;
     fn parent_draw(&self, widget: &Widget, cr: &cairo::Context) -> Inhibit;
+    fn parent_get_request_mode(&self, widget: &Widget) -> SizeRequestMode;
+    fn parent_get_preferred_width(&self, widget: &Widget) -> (i32, i32);
+    fn parent_get_preferred_width_for_height(&self, widget: &Widget, height: i32) -> (i32, i32);
+    fn parent_get_preferred_height(&self, widget: &Widget) -> (i32, i32);
+    fn parent_get_preferred_height_for_width(&self, widget: &Widget, width: i32) -> (i32, i32);
 }
 
 impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
@@ -690,6 +719,81 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
             }
         }
     }
+
+    fn parent_get_request_mode(&self, widget: &Widget) -> SizeRequestMode {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            let f = (*parent_class).get_request_mode.unwrap();
+            from_glib(f(widget.to_glib_none().0))
+        }
+    }
+
+    fn parent_get_preferred_width(&self, widget: &Widget) -> (i32, i32) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            let f = (*parent_class).get_preferred_width.unwrap();
+
+            let mut minimum_size = mem::MaybeUninit::uninit();
+            let mut natural_size = mem::MaybeUninit::uninit();
+            f(
+                widget.to_glib_none().0,
+                minimum_size.as_mut_ptr(),
+                natural_size.as_mut_ptr(),
+            );
+            (minimum_size.assume_init(), natural_size.assume_init())
+        }
+    }
+
+    fn parent_get_preferred_width_for_height(&self, widget: &Widget, height: i32) -> (i32, i32) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            let f = (*parent_class).get_preferred_width_for_height.unwrap();
+
+            let mut minimum_size = mem::MaybeUninit::uninit();
+            let mut natural_size = mem::MaybeUninit::uninit();
+            f(
+                widget.to_glib_none().0,
+                height,
+                minimum_size.as_mut_ptr(),
+                natural_size.as_mut_ptr(),
+            );
+            (minimum_size.assume_init(), natural_size.assume_init())
+        }
+    }
+    fn parent_get_preferred_height(&self, widget: &Widget) -> (i32, i32) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            let f = (*parent_class).get_preferred_height.unwrap();
+            let mut minimum_size = mem::MaybeUninit::uninit();
+            let mut natural_size = mem::MaybeUninit::uninit();
+            f(
+                widget.to_glib_none().0,
+                minimum_size.as_mut_ptr(),
+                natural_size.as_mut_ptr(),
+            );
+            (minimum_size.assume_init(), natural_size.assume_init())
+        }
+    }
+    fn parent_get_preferred_height_for_width(&self, widget: &Widget, width: i32) -> (i32, i32) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            let f = (*parent_class).get_preferred_height_for_width.unwrap();
+            let mut minimum_size = mem::MaybeUninit::uninit();
+            let mut natural_size = mem::MaybeUninit::uninit();
+            f(
+                widget.to_glib_none().0,
+                width,
+                minimum_size.as_mut_ptr(),
+                natural_size.as_mut_ptr(),
+            );
+            (minimum_size.assume_init(), natural_size.assume_init())
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
@@ -725,6 +829,11 @@ unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
             klass.drag_leave = Some(widget_drag_leave::<T>);
             klass.drag_motion = Some(widget_drag_motion::<T>);
             klass.draw = Some(widget_draw::<T>);
+            klass.get_request_mode = Some(widget_get_request_mode::<T>);
+            klass.get_preferred_width = Some(widget_get_preferred_width::<T>);
+            klass.get_preferred_height_for_width = Some(widget_get_preferred_height_for_width::<T>);
+            klass.get_preferred_height = Some(widget_get_preferred_height::<T>);
+            klass.get_preferred_width_for_height = Some(widget_get_preferred_width_for_height::<T>);
         }
     }
 }
@@ -1145,4 +1254,98 @@ where
     let cr: cairo::Context = from_glib_borrow(cr_ptr);
 
     imp.draw(&wrap, &cr).to_glib()
+}
+
+unsafe extern "C" fn widget_get_request_mode<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+) -> gtk_sys::GtkSizeRequestMode
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+
+    imp.get_request_mode(&wrap).to_glib()
+}
+
+unsafe extern "C" fn widget_get_preferred_height<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    minptr: *mut c_int,
+    natptr: *mut c_int,
+) where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+
+    let (min_size, nat_size) = imp.get_preferred_height(&wrap);
+    if !minptr.is_null() {
+        *minptr = min_size;
+    }
+    if !natptr.is_null() {
+        *natptr = nat_size;
+    }
+}
+
+unsafe extern "C" fn widget_get_preferred_width_for_height<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    height: c_int,
+    min_width_ptr: *mut c_int,
+    nat_width_ptr: *mut c_int,
+) where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+
+    let (min_width, nat_width) = imp.get_preferred_width_for_height(&wrap, height);
+    if !min_width_ptr.is_null() {
+        *min_width_ptr = min_width;
+    }
+    if !nat_width_ptr.is_null() {
+        *nat_width_ptr = nat_width;
+    }
+}
+
+unsafe extern "C" fn widget_get_preferred_width<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    minptr: *mut c_int,
+    natptr: *mut c_int,
+) where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+    let (min_size, nat_size) = imp.get_preferred_width(&wrap);
+    if !minptr.is_null() {
+        *minptr = min_size;
+    }
+    if !natptr.is_null() {
+        *natptr = nat_size;
+    }
+}
+
+unsafe extern "C" fn widget_get_preferred_height_for_width<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    width: c_int,
+    min_height_ptr: *mut c_int,
+    nat_height_ptr: *mut c_int,
+) where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+
+    let (min_height, nat_height) = imp.get_preferred_height_for_width(&wrap, width);
+    if !min_height_ptr.is_null() {
+        *min_height_ptr = min_height;
+    }
+    if !nat_height_ptr.is_null() {
+        *nat_height_ptr = nat_height;
+    }
 }
