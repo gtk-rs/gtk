@@ -84,7 +84,7 @@ pub trait CellRendererImpl: CellRendererImplExt + ObjectImpl + 'static {
     fn activate<P: IsA<Widget>>(
         &self,
         renderer: &CellRenderer,
-        event: &gdk::Event,
+        event: Option<&gdk::Event>,
         widget: &P,
         path: &str,
         background_area: &gdk::Rectangle,
@@ -175,7 +175,7 @@ pub trait CellRendererImplExt {
     fn parent_activate<P: IsA<Widget>>(
         &self,
         renderer: &CellRenderer,
-        event: &gdk::Event,
+        event: Option<&gdk::Event>,
         widget: &P,
         path: &str,
         background_area: &gdk::Rectangle,
@@ -352,7 +352,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
     fn parent_activate<P: IsA<Widget>>(
         &self,
         renderer: &CellRenderer,
-        event: &gdk::Event,
+        event: Option<&gdk::Event>,
         widget: &P,
         path: &str,
         background_area: &gdk::Rectangle,
@@ -626,11 +626,11 @@ where
     let imp = instance.get_impl();
     let wrap: CellRenderer = from_glib_borrow(ptr);
     let widget: Widget = from_glib_borrow(wdgtptr);
-    let evt: gdk::Event = from_glib_borrow(evtptr);
+    let evt: Option<gdk::Event> = from_glib_borrow(evtptr);
 
     imp.activate(
         &wrap,
-        &evt,
+        evt.as_ref(),
         &widget,
         &GString::from_glib_borrow(pathptr),
         &from_glib_borrow(bgptr),
