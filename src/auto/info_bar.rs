@@ -473,8 +473,6 @@ pub trait InfoBarExt: 'static {
 
     fn get_action_area(&self) -> Option<Widget>;
 
-    fn get_content_area(&self) -> Option<Widget>;
-
     fn get_message_type(&self) -> MessageType;
 
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
@@ -541,14 +539,6 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
     fn get_action_area(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(gtk_sys::gtk_info_bar_get_action_area(
-                self.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    fn get_content_area(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(gtk_sys::gtk_info_bar_get_content_area(
                 self.as_ref().to_glib_none().0,
             ))
         }

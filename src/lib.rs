@@ -221,6 +221,7 @@ mod fixed;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 mod flow_box;
 mod im_context_simple;
+mod info_bar;
 mod invisible;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 mod list_box;
