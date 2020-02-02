@@ -11,12 +11,23 @@ use Widget;
 
 pub trait InfoBarExtManual: 'static {
     fn get_content_area(&self) -> Box;
+    fn get_action_area(&self) -> Box;
 }
 
 impl<T: IsA<InfoBar>> InfoBarExtManual for T {
     fn get_content_area(&self) -> Box {
         unsafe {
             let widget: Widget = from_glib_none(gtk_sys::gtk_info_bar_get_content_area(
+                self.as_ref().to_glib_none().0,
+            ));
+            widget
+                .downcast()
+                .expect("gtk_info_bar_get_content_area returns not GtkBox")
+        }
+    }
+    fn get_action_area(&self) -> Box {
+        unsafe {
+            let widget: Widget = from_glib_none(gtk_sys::gtk_info_bar_get_action_area(
                 self.as_ref().to_glib_none().0,
             ));
             widget

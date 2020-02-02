@@ -1222,6 +1222,9 @@ status = "generate"
         [object.function.return]
         nullable = false
         type = "Gtk.Box"
+    [[object.function]]
+    name = "get_action_area"
+    ignore = true
 
 [[object]]
 name = "Gtk.InputHints"
