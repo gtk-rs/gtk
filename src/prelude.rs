@@ -24,6 +24,7 @@ pub use fixed::FixedExtManual;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 pub use flow_box::FlowBoxExtManual;
 pub use im_context_simple::IMContextSimpleExtManual;
+pub use info_bar::InfoBarExtManual;
 pub use invisible::InvisibleExtManual;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use list_box::ListBoxExtManual;
