@@ -5,6 +5,7 @@
 use cairo;
 use gdk;
 use gdk_sys;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -87,9 +88,22 @@ pub trait CellAreaExt: 'static {
 
     //fn cell_get<P: IsA<CellRenderer>>(&self, renderer: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    fn cell_get_property<P: IsA<CellRenderer>>(
+        &self,
+        renderer: &P,
+        property_name: &str,
+    ) -> glib::Value;
+
     //fn cell_get_valist<P: IsA<CellRenderer>>(&self, renderer: &P, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     //fn cell_set<P: IsA<CellRenderer>>(&self, renderer: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+
+    fn cell_set_property<P: IsA<CellRenderer>>(
+        &self,
+        renderer: &P,
+        property_name: &str,
+        value: &glib::Value,
+    );
 
     //fn cell_set_valist<P: IsA<CellRenderer>>(&self, renderer: &P, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -377,6 +391,23 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
     //    unsafe { TODO: call gtk_sys:gtk_cell_area_cell_get() }
     //}
 
+    fn cell_get_property<P: IsA<CellRenderer>>(
+        &self,
+        renderer: &P,
+        property_name: &str,
+    ) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            gtk_sys::gtk_cell_area_cell_get_property(
+                self.as_ref().to_glib_none().0,
+                renderer.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
+
     //fn cell_get_valist<P: IsA<CellRenderer>>(&self, renderer: &P, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call gtk_sys:gtk_cell_area_cell_get_valist() }
     //}
@@ -384,6 +415,22 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
     //fn cell_set<P: IsA<CellRenderer>>(&self, renderer: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call gtk_sys:gtk_cell_area_cell_set() }
     //}
+
+    fn cell_set_property<P: IsA<CellRenderer>>(
+        &self,
+        renderer: &P,
+        property_name: &str,
+        value: &glib::Value,
+    ) {
+        unsafe {
+            gtk_sys::gtk_cell_area_cell_set_property(
+                self.as_ref().to_glib_none().0,
+                renderer.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
 
     //fn cell_set_valist<P: IsA<CellRenderer>>(&self, renderer: &P, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call gtk_sys:gtk_cell_area_cell_set_valist() }

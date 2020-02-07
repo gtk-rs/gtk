@@ -554,6 +554,8 @@ pub trait WidgetExt: 'static {
 
     //fn style_get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
+    fn style_get_property(&self, property_name: &str) -> glib::Value;
+
     //fn style_get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
     fn thaw_child_notify(&self);
@@ -2750,6 +2752,18 @@ impl<O: IsA<Widget>> WidgetExt for O {
     //fn style_get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call gtk_sys:gtk_widget_style_get() }
     //}
+
+    fn style_get_property(&self, property_name: &str) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            gtk_sys::gtk_widget_style_get_property(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
 
     //fn style_get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call gtk_sys:gtk_widget_style_get_valist() }

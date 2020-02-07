@@ -667,9 +667,6 @@ version = "3.16"
 name = "Gtk.CellArea"
 status = "generate"
     [[object.function]]
-    pattern = "cell_[gs]et_property"
-    ignore = true
-    [[object.function]]
     name = "render"
         [[object.function.parameter]]
         name = "cr"
@@ -1297,9 +1294,6 @@ manual_traits = ["GtkListStoreExtManual"]
         name = "position"
         const = true
     [[object.function]]
-    name = "set_value"
-    ignore = true
-    [[object.function]]
     name = "swap"
         [[object.function.parameter]]
         name = "a"
@@ -1783,9 +1777,6 @@ status = "ignore"
 name = "Gtk.StyleContext"
 status = "generate"
 manual_traits = ["StyleContextExtManual"]
-    [[object.function]]
-    pattern = "get_(style_)?property"
-    ignore = true
     [[object.property]]
     name = "paint-clock"
     version = "3.8"
@@ -2299,9 +2290,6 @@ manual_traits = ["WidgetExtManual"]
         [[object.function.parameter]]
         name = "event"
         const = true
-    [[object.function]]
-    name = "style_get_property"
-    ignore = true
     [[object.function]]
     name = "get_path"
         [object.function.return]
