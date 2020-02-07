@@ -1782,6 +1782,7 @@ status = "ignore"
 [[object]]
 name = "Gtk.StyleContext"
 status = "generate"
+manual_traits = ["StyleContextExtManual"]
     [[object.function]]
     pattern = "get_(style_)?property"
     ignore = true

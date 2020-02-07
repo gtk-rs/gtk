@@ -31,6 +31,7 @@ pub use list_box::ListBoxExtManual;
 pub use list_store::GtkListStoreExtManual;
 pub use menu::GtkMenuExtManual;
 pub use notebook::NotebookExtManual;
+pub use style_context::StyleContextExtManual;
 pub use switch::SwitchExtManual;
 pub use text_buffer::TextBufferExtManual;
 pub use tree_sortable::TreeSortableExtManual;
