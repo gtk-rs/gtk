@@ -454,6 +454,11 @@ manual = [
 ]
 
 [[object]]
+name = "GObject.ParamSpec"
+status = "manual"
+final_type = true
+
+[[object]]
 name = "Gtk.*"
 status = "generate"
     [[object.function]]

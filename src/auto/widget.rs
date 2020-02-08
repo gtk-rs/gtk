@@ -630,7 +630,10 @@ pub trait WidgetExt: 'static {
         f: F,
     ) -> SignalHandlerId;
 
-    //fn connect_child_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
+    fn connect_child_notify<F: Fn(&Self, &glib::ParamSpec) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v3_22", deprecated)]
     fn connect_composited_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -3152,9 +3155,33 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    //fn connect_child_notify<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Ignored child_property: GObject.ParamSpec
-    //}
+    fn connect_child_notify<F: Fn(&Self, &glib::ParamSpec) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn child_notify_trampoline<P, F: Fn(&P, &glib::ParamSpec) + 'static>(
+            this: *mut gtk_sys::GtkWidget,
+            child_property: *mut gobject_sys::GParamSpec,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Widget>,
+        {
+            let f: &F = &*(f as *const F);
+            f(
+                &Widget::from_glib_borrow(this).unsafe_cast(),
+                &from_glib_borrow(child_property),
+            )
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"child-notify\0".as_ptr() as *const _,
+                Some(transmute(child_notify_trampoline::<Self, F> as usize)),
+                Box_::into_raw(f),
+            )
+        }
+    }
 
     fn connect_composited_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn composited_changed_trampoline<P, F: Fn(&P) + 'static>(

@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -43,13 +44,16 @@ impl Settings {
         }
     }
 
-    //#[cfg_attr(feature = "v3_16", deprecated)]
-    //pub fn install_property(pspec: /*Ignored*/&glib::ParamSpec) {
-    //    unsafe { TODO: call gtk_sys:gtk_settings_install_property() }
-    //}
+    #[cfg_attr(feature = "v3_16", deprecated)]
+    pub fn install_property(pspec: &glib::ParamSpec) {
+        assert_initialized_main_thread!();
+        unsafe {
+            gtk_sys::gtk_settings_install_property(pspec.to_glib_none().0);
+        }
+    }
 
     //#[cfg_attr(feature = "v3_16", deprecated)]
-    //pub fn install_property_parser(pspec: /*Ignored*/&glib::ParamSpec, parser: /*Unimplemented*/FnMut(/*Ignored*/glib::ParamSpec, /*Ignored*/glib::String, &glib::Value) -> bool) {
+    //pub fn install_property_parser(pspec: &glib::ParamSpec, parser: /*Unimplemented*/FnMut(&glib::ParamSpec, /*Ignored*/glib::String, &glib::Value) -> bool) {
     //    unsafe { TODO: call gtk_sys:gtk_settings_install_property_parser() }
     //}
 }
