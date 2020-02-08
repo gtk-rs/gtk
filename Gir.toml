@@ -161,7 +161,6 @@ generate = [
     "Gtk.Separator",
     "Gtk.SeparatorMenuItem",
     "Gtk.SeparatorToolItem",
-    "Gtk.Settings",
     "Gtk.ShadowType",
     "Gtk.SizeGroup",
     "Gtk.SizeGroupMode",
@@ -1725,6 +1724,14 @@ status = "generate"
     ignore = true
     [[object.function]]
     name = "get_data_with_length"
+    ignore = true
+
+[[object]]
+name = "Gtk.Settings"
+status = "generate"
+    [[object.function]]
+    pattern = "install_property.*"
+    #deprecated in 3.16
     ignore = true
 
 [[object]]
