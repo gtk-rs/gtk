@@ -527,6 +527,7 @@ status = "generate"
 [[object]]
 name = "Gtk.AccelGroup"
 status = "generate"
+manual_traits = ["AccelGroupExtManual"]
     [[object.function]]
     name = "query"
     # It's not a part of public API
