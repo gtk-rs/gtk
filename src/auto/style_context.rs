@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -166,6 +167,8 @@ pub trait StyleContextExt: 'static {
 
     fn get_path(&self) -> Option<WidgetPath>;
 
+    fn get_property(&self, property: &str, state: StateFlags) -> glib::Value;
+
     fn get_scale(&self) -> i32;
 
     fn get_screen(&self) -> Option<gdk::Screen>;
@@ -175,6 +178,8 @@ pub trait StyleContextExt: 'static {
     fn get_state(&self) -> StateFlags;
 
     //fn get_style(&self, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+
+    fn get_style_property(&self, property_name: &str) -> glib::Value;
 
     //fn get_style_valist(&self, args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -361,6 +366,19 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
+    fn get_property(&self, property: &str, state: StateFlags) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            gtk_sys::gtk_style_context_get_property(
+                self.as_ref().to_glib_none().0,
+                property.to_glib_none().0,
+                state.to_glib(),
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
+
     fn get_scale(&self) -> i32 {
         unsafe { gtk_sys::gtk_style_context_get_scale(self.as_ref().to_glib_none().0) }
     }
@@ -393,6 +411,18 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
     //fn get_style(&self, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call gtk_sys:gtk_style_context_get_style() }
     //}
+
+    fn get_style_property(&self, property_name: &str) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            gtk_sys::gtk_style_context_get_style_property(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
 
     //fn get_style_valist(&self, args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call gtk_sys:gtk_style_context_get_style_valist() }

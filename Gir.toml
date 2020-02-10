@@ -161,7 +161,6 @@ generate = [
     "Gtk.Separator",
     "Gtk.SeparatorMenuItem",
     "Gtk.SeparatorToolItem",
-    "Gtk.Settings",
     "Gtk.ShadowType",
     "Gtk.SizeGroup",
     "Gtk.SizeGroupMode",
@@ -454,6 +453,11 @@ manual = [
 ]
 
 [[object]]
+name = "GObject.ParamSpec"
+status = "manual"
+final_type = true
+
+[[object]]
 name = "Gtk.*"
 status = "generate"
     [[object.function]]
@@ -522,6 +526,7 @@ status = "generate"
 [[object]]
 name = "Gtk.AccelGroup"
 status = "generate"
+manual_traits = ["AccelGroupExtManual"]
     [[object.function]]
     name = "query"
     # It's not a part of public API
@@ -666,9 +671,6 @@ version = "3.16"
 [[object]]
 name = "Gtk.CellArea"
 status = "generate"
-    [[object.function]]
-    pattern = "cell_[gs]et_property"
-    ignore = true
     [[object.function]]
     name = "render"
         [[object.function.parameter]]
@@ -1297,9 +1299,6 @@ manual_traits = ["GtkListStoreExtManual"]
         name = "position"
         const = true
     [[object.function]]
-    name = "set_value"
-    ignore = true
-    [[object.function]]
     name = "swap"
         [[object.function.parameter]]
         name = "a"
@@ -1728,6 +1727,14 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.Settings"
+status = "generate"
+    [[object.function]]
+    pattern = "install_property.*"
+    #deprecated in 3.16
+    ignore = true
+
+[[object]]
 name = "Gtk.ShortcutLabel"
 status = "generate"
 version = "3.22"
@@ -1782,9 +1789,7 @@ status = "ignore"
 [[object]]
 name = "Gtk.StyleContext"
 status = "generate"
-    [[object.function]]
-    pattern = "get_(style_)?property"
-    ignore = true
+manual_traits = ["StyleContextExtManual"]
     [[object.property]]
     name = "paint-clock"
     version = "3.8"
@@ -2298,9 +2303,6 @@ manual_traits = ["WidgetExtManual"]
         [[object.function.parameter]]
         name = "event"
         const = true
-    [[object.function]]
-    name = "style_get_property"
-    ignore = true
     [[object.function]]
     name = "get_path"
         [object.function.return]

@@ -47,8 +47,8 @@ pub trait ContainerExt: 'static {
 
     fn child_notify<P: IsA<Widget>>(&self, child: &P, child_property: &str);
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: /*Ignored*/&glib::ParamSpec);
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: &glib::ParamSpec);
 
     //fn child_set<P: IsA<Widget>>(&self, child: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -153,10 +153,16 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: /*Ignored*/&glib::ParamSpec) {
-    //    unsafe { TODO: call gtk_sys:gtk_container_child_notify_by_pspec() }
-    //}
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: &glib::ParamSpec) {
+        unsafe {
+            gtk_sys::gtk_container_child_notify_by_pspec(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                pspec.to_glib_none().0,
+            );
+        }
+    }
 
     //fn child_set<P: IsA<Widget>>(&self, child: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call gtk_sys:gtk_container_child_set() }
