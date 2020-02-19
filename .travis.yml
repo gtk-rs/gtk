@@ -59,7 +59,6 @@ script:
     rustup component add rustfmt;
     make regen_check;
     fi
-  - ./check_init_asserts
   - cargo doc --features "dox,embed-lgpl-docs"
   - cargo test --features "$FEATURES,embed-lgpl-docs"
   # catch any sneaked in lgpl docs
@@ -71,3 +70,10 @@ script:
   - git clone -q --depth 50 -b pending https://github.com/gtk-rs/examples _examples
   - cd _examples
   - ./build_travis.sh
+  - if [ "$TRAVIS_RUST_VERSION" == "stable" ] && [ "$GTK" == "3.14" ]; then
+    cd ..;
+    git clone https://github.com/gtk-rs/checker;
+    cd checker && cargo build --release;
+    cd .. && ./checker/target/release/checker .;
+    ./checker/check_init_asserts;
+    fi
