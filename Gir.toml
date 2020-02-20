@@ -1215,6 +1215,7 @@ manual_traits = ["IMContextSimpleExtManual"]
 [[object]]
 name = "Gtk.InfoBar"
 status = "generate"
+manual_traits = ["InfoBarExtManual"]
     [[object.property]]
     name = "revealed"
     version = "3.22.29"
