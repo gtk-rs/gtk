@@ -19,6 +19,7 @@ pub mod container;
 pub mod dialog;
 pub mod drawing_area;
 pub mod event_box;
+pub mod fixed;
 pub mod header_bar;
 pub mod icon_view;
 pub mod stack;
@@ -43,6 +44,7 @@ pub mod prelude {
     pub use super::dialog::DialogImpl;
     pub use super::drawing_area::DrawingAreaImpl;
     pub use super::event_box::EventBoxImpl;
+    pub use super::fixed::FixedImpl;
     pub use super::header_bar::HeaderBarImpl;
     pub use super::icon_view::IconViewImpl;
     pub use super::stack::StackImpl;
