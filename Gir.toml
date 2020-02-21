@@ -2459,6 +2459,10 @@ manual_traits = ["WidgetExtManual"]
     [[object.function]]
     name = "get_name"
     rename = "get_widget_name"
+    [[object.function]]
+    name = "destroy"
+    # needs to be marked as unsafe
+    ignore = true
 
 [[object]]
 name = "Gtk.Window"

@@ -60,6 +60,8 @@ pub trait WidgetExtManual: 'static {
     fn add_events(&self, events: gdk::EventMask);
     fn get_events(&self) -> gdk::EventMask;
     fn set_events(&self, events: gdk::EventMask);
+
+    unsafe fn destroy(&self);
 }
 
 impl<O: IsA<Widget>> WidgetExtManual for O {
@@ -235,5 +237,9 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
         unsafe {
             gtk_sys::gtk_widget_set_events(self.as_ref().to_glib_none().0, events.to_glib() as i32);
         }
+    }
+
+    unsafe fn destroy(&self) {
+        gtk_sys::gtk_widget_destroy(self.as_ref().to_glib_none().0);
     }
 }

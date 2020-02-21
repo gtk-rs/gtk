@@ -106,8 +106,6 @@ pub trait WidgetExt: 'static {
 
     fn create_pango_layout(&self, text: Option<&str>) -> Option<pango::Layout>;
 
-    fn destroy(&self);
-
     //fn destroyed<P: IsA<Widget>>(&self, widget_pointer: &P);
 
     fn device_is_shadowed(&self, device: &gdk::Device) -> bool;
@@ -1114,12 +1112,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
                 self.as_ref().to_glib_none().0,
                 text.to_glib_none().0,
             ))
-        }
-    }
-
-    fn destroy(&self) {
-        unsafe {
-            gtk_sys::gtk_widget_destroy(self.as_ref().to_glib_none().0);
         }
     }
 
