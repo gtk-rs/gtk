@@ -1,49 +1,20 @@
 dist: xenial
 language: rust
-matrix:
-  include:
-    - os: linux
-      rust: nightly
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: nightly
-      env: GTK=3.24 FEATURES=v3_16
-    - os: linux
-      rust: beta
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: beta
-      env: GTK=3.24 FEATURES=v3_16
-    - os: linux
-      rust: stable
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: stable
-      env: GTK=3.24 FEATURES=v3_16
-    - os: linux
-      rust: 1.39.0
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: 1.39.0
-      env: GTK=3.24 FEATURES=v3_16
+os:
+  - linux
+  - osx
+rust:
+  - nightly
+  - beta
+  - stable
+  - 1.39.0
+env:
+  - GTK=3.14 FEATURES=
+  - GTK=3.24 FEATURES=v3_16
+jobs:
+  exclude:
     - os: osx
-      rust: nightly
-      env: GTK=3.14 FEATURES=
-    # - os: osx
-    #   rust: nightly
-    #   env: GTK=3.24 FEATURES=v3_16
-    - os: osx
-      rust: beta
-      env: GTK=3.14 FEATURES=
-    # - os: osx
-    #   rust: beta
-    #   env: GTK=3.24 FEATURES=v3_16
-    - os: osx
-      rust: stable
-      env: GTK=3.14 FEATURES=
-    # - os: osx
-    #   rust: stable
-    #   env: GTK=3.24 FEATURES=v3_16
+      env: GTK=3.24 FEATURES=v3_16
 addons:
   apt:
     packages:
@@ -56,8 +27,8 @@ before_install:
 script:
   - rustc --version
   - if [ "$TRAVIS_RUST_VERSION" == "stable" ] && [ "$GTK" == "3.14" ]; then
-    rustup component add rustfmt;
-    make regen_check;
+      rustup component add rustfmt;
+      make regen_check;
     fi
   - cargo doc --features "dox,embed-lgpl-docs"
   - cargo test --features "$FEATURES,embed-lgpl-docs"
@@ -71,9 +42,9 @@ script:
   - cd _examples
   - ./build_travis.sh
   - if [ "$TRAVIS_RUST_VERSION" == "stable" ] && [ "$GTK" == "3.14" ]; then
-    cd ..;
-    git clone https://github.com/gtk-rs/checker;
-    cd checker && cargo build --release;
-    cd .. && ./checker/target/release/checker .;
-    ./checker/check_init_asserts;
+      cd ..;
+      git clone https://github.com/gtk-rs/checker;
+      cd checker && cargo build --release;
+      cd .. && ./checker/target/release/checker .;
+      ./checker/check_init_asserts;
     fi
