@@ -15,6 +15,7 @@ use crate::SelectionData;
 use crate::TextDirection;
 use cairo;
 use cairo_sys;
+use Allocation;
 use SizeRequestMode;
 use Widget;
 use WidgetClass;
@@ -209,6 +210,10 @@ pub trait WidgetImpl: WidgetImplExt + ObjectImpl + 'static {
     fn get_preferred_height_for_width(&self, widget: &Widget, width: i32) -> (i32, i32) {
         self.parent_get_preferred_height_for_width(widget, width)
     }
+
+    fn size_allocate(&self, widget: &Widget, allocation: &Allocation) {
+        self.parent_size_allocate(widget, allocation)
+    }
 }
 
 pub trait WidgetImplExt {
@@ -298,6 +303,7 @@ pub trait WidgetImplExt {
     fn parent_get_preferred_width_for_height(&self, widget: &Widget, height: i32) -> (i32, i32);
     fn parent_get_preferred_height(&self, widget: &Widget) -> (i32, i32);
     fn parent_get_preferred_height_for_width(&self, widget: &Widget, width: i32) -> (i32, i32);
+    fn parent_size_allocate(&self, widget: &Widget, allocation: &Allocation);
 }
 
 impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
@@ -794,6 +800,20 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
             (minimum_size.assume_init(), natural_size.assume_init())
         }
     }
+
+    fn parent_size_allocate(&self, widget: &Widget, allocation: &Allocation) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            let f = (*parent_class)
+                .size_allocate
+                .expect("No parent class impl for \"size_allocate\"");
+            f(
+                widget.to_glib_none().0,
+                mut_override(allocation.to_glib_none().0),
+            );
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
@@ -834,6 +854,7 @@ unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
             klass.get_preferred_height_for_width = Some(widget_get_preferred_height_for_width::<T>);
             klass.get_preferred_height = Some(widget_get_preferred_height::<T>);
             klass.get_preferred_width_for_height = Some(widget_get_preferred_width_for_height::<T>);
+            klass.size_allocate = Some(widget_size_allocate::<T>);
         }
     }
 }
@@ -1348,4 +1369,18 @@ unsafe extern "C" fn widget_get_preferred_height_for_width<T: ObjectSubclass>(
     if !nat_height_ptr.is_null() {
         *nat_height_ptr = nat_height;
     }
+}
+
+unsafe extern "C" fn widget_size_allocate<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    allocation: *mut gtk_sys::GtkAllocation,
+) where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+    let allocate: &Allocation = &from_glib_none(allocation);
+
+    imp.size_allocate(&wrap, allocate);
 }

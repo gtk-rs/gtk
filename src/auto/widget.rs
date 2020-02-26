@@ -546,7 +546,7 @@ pub trait WidgetExt: 'static {
 
     fn show_now(&self);
 
-    fn size_allocate(&self, allocation: &mut Allocation);
+    fn size_allocate(&self, allocation: &Allocation);
 
     fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32);
 
@@ -2725,11 +2725,11 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn size_allocate(&self, allocation: &mut Allocation) {
+    fn size_allocate(&self, allocation: &Allocation) {
         unsafe {
             gtk_sys::gtk_widget_size_allocate(
                 self.as_ref().to_glib_none().0,
-                allocation.to_glib_none_mut().0,
+                mut_override(allocation.to_glib_none().0),
             );
         }
     }

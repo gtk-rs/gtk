@@ -2331,6 +2331,11 @@ manual_traits = ["WidgetExtManual"]
     name = "get_style_context"
         [object.function.return]
         nullable = false
+    [[object.function]]
+    name = "size_allocate"
+        [[object.function.parameter]]
+        name = "allocation"
+        const = true
     [[object.signal]]
     name = "button-press-event"
     inhibit = true
