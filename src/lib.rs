@@ -15,7 +15,7 @@
 //!
 //! See also:
 //!
-//! - [Gtk-rs documentation overview](http://gtk-rs.org/docs/)
+//! - [Gtk-rs documentation overview](https://gtk-rs.org/docs-src/)
 //!
 //! - [General `GLib` family types and object system overview](../glib/index.html)
 //!
