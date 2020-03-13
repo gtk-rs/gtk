@@ -843,10 +843,9 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
-            let f = (*parent_class)
-                .realize
-                .expect("No parent class impl for \"realize\"");
-            f(widget.to_glib_none().0)
+            if let Some(f) = (*parent_class).realize {
+                f(widget.to_glib_none().0);
+            }
         }
     }
 
@@ -854,10 +853,9 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
-            let f = (*parent_class)
-                .unrealize
-                .expect("No parent class impl for \"unrealize\"");
-            f(widget.to_glib_none().0)
+            if let Some(f) = (*parent_class).unrealize {
+                f(widget.to_glib_none().0);
+            }
         }
     }
 
@@ -865,10 +863,9 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
-            let f = (*parent_class)
-                .map
-                .expect("No parent class impl for \"map\"");
-            f(widget.to_glib_none().0)
+            if let Some(f) = (*parent_class).map {
+                f(widget.to_glib_none().0);
+            }
         }
     }
 
@@ -876,10 +873,9 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
-            let f = (*parent_class)
-                .unmap
-                .expect("No parent class impl for \"unmap\"");
-            f(widget.to_glib_none().0)
+            if let Some(f) = (*parent_class).unmap {
+                f(widget.to_glib_none().0);
+            }
         }
     }
 
@@ -887,13 +883,14 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
-            let f = (*parent_class)
-                .motion_notify_event
-                .expect("No parent class impl for \"motion_notify_event\"");
-            Inhibit(from_glib(f(
-                widget.to_glib_none().0,
-                mut_override(event.to_glib_none().0),
-            )))
+            if let Some(f) = (*parent_class).motion_notify_event {
+                Inhibit(from_glib(f(
+                    widget.to_glib_none().0,
+                    mut_override(event.to_glib_none().0),
+                )))
+            } else {
+                Inhibit(false)
+            }
         }
     }
 }
