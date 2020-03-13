@@ -230,7 +230,7 @@ pub trait WidgetImpl: WidgetImplExt + ObjectImpl + 'static {
         self.parent_unmap(widget);
     }
 
-    fn motion_notify_event(&self, widget: &Widget, event: &mut gdk::EventMotion) -> Inhibit {
+    fn motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit {
         self.parent_motion_notify_event(widget, event)
     }
 }
@@ -327,7 +327,7 @@ pub trait WidgetImplExt {
     fn parent_unrealize(&self, widget: &Widget);
     fn parent_map(&self, widget: &Widget);
     fn parent_unmap(&self, widget: &Widget);
-    fn parent_motion_notify_event(&self, widget: &Widget, event: &mut gdk::EventMotion) -> Inhibit;
+    fn parent_motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit;
 }
 
 impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
@@ -883,7 +883,7 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
         }
     }
 
-    fn parent_motion_notify_event(&self, widget: &Widget, event: &mut gdk::EventMotion) -> Inhibit {
+    fn parent_motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit {
         unsafe {
             let data = self.get_type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
@@ -892,7 +892,7 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
                 .expect("No parent class impl for \"motion_notify_event\"");
             Inhibit(from_glib(f(
                 widget.to_glib_none().0,
-                event.to_glib_none_mut().0,
+                mut_override(event.to_glib_none().0),
             )))
         }
     }
@@ -1524,7 +1524,7 @@ where
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Widget = from_glib_borrow(ptr);
-    let mut alloc: gdk::EventMotion = from_glib_borrow(mptr);
+    let event: gdk::EventMotion = from_glib_borrow(mptr);
 
-    imp.motion_notify_event(&wrap, &mut alloc).to_glib()
+    imp.motion_notify_event(&wrap, &event).to_glib()
 }
