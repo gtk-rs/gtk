@@ -214,6 +214,25 @@ pub trait WidgetImpl: WidgetImplExt + ObjectImpl + 'static {
     fn size_allocate(&self, widget: &Widget, allocation: &Allocation) {
         self.parent_size_allocate(widget, allocation)
     }
+
+    fn realize(&self, widget: &Widget) {
+        self.parent_realize(widget);
+    }
+
+    fn unrealize(&self, widget: &Widget) {
+        self.parent_unrealize(widget);
+    }
+    fn map(&self, widget: &Widget) {
+        self.parent_map(widget);
+    }
+
+    fn unmap(&self, widget: &Widget) {
+        self.parent_unmap(widget);
+    }
+
+    fn motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit {
+        self.parent_motion_notify_event(widget, event)
+    }
 }
 
 pub trait WidgetImplExt {
@@ -304,6 +323,11 @@ pub trait WidgetImplExt {
     fn parent_get_preferred_height(&self, widget: &Widget) -> (i32, i32);
     fn parent_get_preferred_height_for_width(&self, widget: &Widget, width: i32) -> (i32, i32);
     fn parent_size_allocate(&self, widget: &Widget, allocation: &Allocation);
+    fn parent_realize(&self, widget: &Widget);
+    fn parent_unrealize(&self, widget: &Widget);
+    fn parent_map(&self, widget: &Widget);
+    fn parent_unmap(&self, widget: &Widget);
+    fn parent_motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit;
 }
 
 impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
@@ -814,6 +838,61 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
             );
         }
     }
+
+    fn parent_realize(&self, widget: &Widget) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            if let Some(f) = (*parent_class).realize {
+                f(widget.to_glib_none().0);
+            }
+        }
+    }
+
+    fn parent_unrealize(&self, widget: &Widget) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            if let Some(f) = (*parent_class).unrealize {
+                f(widget.to_glib_none().0);
+            }
+        }
+    }
+
+    fn parent_map(&self, widget: &Widget) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            if let Some(f) = (*parent_class).map {
+                f(widget.to_glib_none().0);
+            }
+        }
+    }
+
+    fn parent_unmap(&self, widget: &Widget) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            if let Some(f) = (*parent_class).unmap {
+                f(widget.to_glib_none().0);
+            }
+        }
+    }
+
+    fn parent_motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            if let Some(f) = (*parent_class).motion_notify_event {
+                Inhibit(from_glib(f(
+                    widget.to_glib_none().0,
+                    mut_override(event.to_glib_none().0),
+                )))
+            } else {
+                Inhibit(false)
+            }
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
@@ -855,6 +934,11 @@ unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
             klass.get_preferred_height = Some(widget_get_preferred_height::<T>);
             klass.get_preferred_width_for_height = Some(widget_get_preferred_width_for_height::<T>);
             klass.size_allocate = Some(widget_size_allocate::<T>);
+            klass.realize = Some(widget_realize::<T>);
+            klass.unrealize = Some(widget_unrealize::<T>);
+            klass.map = Some(widget_map::<T>);
+            klass.unmap = Some(widget_unmap::<T>);
+            klass.motion_notify_event = Some(widget_motion_notify_event::<T>);
         }
     }
 }
@@ -1383,4 +1467,61 @@ unsafe extern "C" fn widget_size_allocate<T: ObjectSubclass>(
     let allocate: &Allocation = &from_glib_none(allocation);
 
     imp.size_allocate(&wrap, allocate);
+}
+
+pub unsafe extern "C" fn widget_realize<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+
+    imp.realize(&wrap);
+}
+
+pub unsafe extern "C" fn widget_unrealize<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+
+    imp.unrealize(&wrap);
+}
+
+pub unsafe extern "C" fn widget_map<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+    imp.map(&wrap);
+}
+
+pub unsafe extern "C" fn widget_unmap<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+    imp.unmap(&wrap);
+}
+
+pub unsafe extern "C" fn widget_motion_notify_event<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    mptr: *mut gdk_sys::GdkEventMotion,
+) -> glib_sys::gboolean
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+    let event: gdk::EventMotion = from_glib_borrow(mptr);
+
+    imp.motion_notify_event(&wrap, &event).to_glib()
 }
