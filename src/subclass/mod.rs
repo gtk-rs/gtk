@@ -23,6 +23,7 @@ pub mod fixed;
 pub mod header_bar;
 pub mod icon_view;
 pub mod stack;
+pub mod tree_view;
 pub mod widget;
 pub mod window;
 
@@ -48,6 +49,7 @@ pub mod prelude {
     pub use super::header_bar::HeaderBarImpl;
     pub use super::icon_view::{IconViewImpl, IconViewImplExt};
     pub use super::stack::StackImpl;
+    pub use super::tree_view::TreeViewImpl;
     pub use super::widget::{WidgetImpl, WidgetImplExt};
     pub use super::window::{WindowImpl, WindowImplExt};
     pub use gio::subclass::prelude::*;
