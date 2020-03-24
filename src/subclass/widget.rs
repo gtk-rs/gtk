@@ -233,6 +233,10 @@ pub trait WidgetImpl: WidgetImplExt + ObjectImpl + 'static {
     fn motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit {
         self.parent_motion_notify_event(widget, event)
     }
+
+    fn scroll_event(&self, widget: &Widget, event: &gdk::EventScroll) -> Inhibit {
+        self.parent_scroll_event(widget, event)
+    }
 }
 
 pub trait WidgetImplExt {
@@ -328,6 +332,7 @@ pub trait WidgetImplExt {
     fn parent_map(&self, widget: &Widget);
     fn parent_unmap(&self, widget: &Widget);
     fn parent_motion_notify_event(&self, widget: &Widget, event: &gdk::EventMotion) -> Inhibit;
+    fn parent_scroll_event(&self, widget: &Widget, event: &gdk::EventScroll) -> Inhibit;
 }
 
 impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
@@ -893,6 +898,21 @@ impl<T: WidgetImpl + ObjectImpl> WidgetImplExt for T {
             }
         }
     }
+
+    fn parent_scroll_event(&self, widget: &Widget, event: &gdk::EventScroll) -> Inhibit {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkWidgetClass;
+            if let Some(f) = (*parent_class).scroll_event {
+                Inhibit(from_glib(f(
+                    widget.to_glib_none().0,
+                    mut_override(event.to_glib_none().0),
+                )))
+            } else {
+                Inhibit(false)
+            }
+        }
+    }
 }
 
 unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
@@ -939,6 +959,7 @@ unsafe impl<T: ObjectSubclass + WidgetImpl> IsSubclassable<T> for WidgetClass {
             klass.map = Some(widget_map::<T>);
             klass.unmap = Some(widget_unmap::<T>);
             klass.motion_notify_event = Some(widget_motion_notify_event::<T>);
+            klass.scroll_event = Some(widget_scroll_event::<T>);
         }
     }
 }
@@ -1524,4 +1545,19 @@ where
     let event: gdk::EventMotion = from_glib_borrow(mptr);
 
     imp.motion_notify_event(&wrap, &event).to_glib()
+}
+
+pub unsafe extern "C" fn widget_scroll_event<T: ObjectSubclass>(
+    ptr: *mut gtk_sys::GtkWidget,
+    mptr: *mut gdk_sys::GdkEventScroll,
+) -> glib_sys::gboolean
+where
+    T: WidgetImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Widget = from_glib_borrow(ptr);
+    let event: gdk::EventScroll = from_glib_borrow(mptr);
+
+    imp.scroll_event(&wrap, &event).to_glib()
 }
