@@ -410,7 +410,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
             P: IsA<Application>,
         {
             let f: &F = &*(f as *const F);
-            f(&Application::from_glib_borrow(this).unsafe_cast())
+            f(&Application::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -433,7 +433,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Application::from_glib_borrow(this).unsafe_cast(),
+                &Application::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(window),
             )
         }
@@ -458,7 +458,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Application::from_glib_borrow(this).unsafe_cast(),
+                &Application::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(window),
             )
         }
@@ -485,7 +485,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
             P: IsA<Application>,
         {
             let f: &F = &*(f as *const F);
-            f(&Application::from_glib_borrow(this).unsafe_cast())
+            f(&Application::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -509,7 +509,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
             P: IsA<Application>,
         {
             let f: &F = &*(f as *const F);
-            f(&Application::from_glib_borrow(this).unsafe_cast())
+            f(&Application::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -531,7 +531,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
             P: IsA<Application>,
         {
             let f: &F = &*(f as *const F);
-            f(&Application::from_glib_borrow(this).unsafe_cast())
+            f(&Application::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -556,7 +556,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
             P: IsA<Application>,
         {
             let f: &F = &*(f as *const F);
-            f(&Application::from_glib_borrow(this).unsafe_cast())
+            f(&Application::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -584,7 +584,7 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
             P: IsA<Application>,
         {
             let f: &F = &*(f as *const F);
-            f(&Application::from_glib_borrow(this).unsafe_cast())
+            f(&Application::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

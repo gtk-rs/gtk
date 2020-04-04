@@ -544,7 +544,7 @@ impl<O: IsA<ButtonBox>> ButtonBoxExt for O {
             P: IsA<ButtonBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ButtonBox::from_glib_borrow(this).unsafe_cast())
+            f(&ButtonBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

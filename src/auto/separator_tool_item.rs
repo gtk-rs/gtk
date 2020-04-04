@@ -455,7 +455,7 @@ impl<O: IsA<SeparatorToolItem>> SeparatorToolItemExt for O {
             P: IsA<SeparatorToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&SeparatorToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&SeparatorToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

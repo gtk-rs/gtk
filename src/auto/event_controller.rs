@@ -96,7 +96,7 @@ impl<O: IsA<EventController>> EventControllerExt for O {
             P: IsA<EventController>,
         {
             let f: &F = &*(f as *const F);
-            f(&EventController::from_glib_borrow(this).unsafe_cast())
+            f(&EventController::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

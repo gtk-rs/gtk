@@ -314,7 +314,7 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
             P: IsA<TreeSelection>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeSelection::from_glib_borrow(this).unsafe_cast())
+            f(&TreeSelection::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -336,7 +336,7 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
             P: IsA<TreeSelection>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeSelection::from_glib_borrow(this).unsafe_cast())
+            f(&TreeSelection::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

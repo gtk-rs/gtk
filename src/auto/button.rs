@@ -697,7 +697,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -726,7 +726,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -759,7 +759,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -783,7 +783,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -808,7 +808,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -832,7 +832,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -854,7 +854,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -879,7 +879,7 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

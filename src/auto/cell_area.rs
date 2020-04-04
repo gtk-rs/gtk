@@ -896,7 +896,7 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path));
             f(
-                &CellArea::from_glib_borrow(this).unsafe_cast(),
+                &CellArea::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(renderer),
                 &from_glib_borrow(editable),
                 &from_glib_borrow(cell_area),
@@ -933,7 +933,7 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &CellArea::from_glib_borrow(this).unsafe_cast(),
+                &CellArea::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(model),
                 &from_glib_borrow(iter),
                 from_glib(is_expander),
@@ -969,7 +969,7 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path));
             f(
-                &CellArea::from_glib_borrow(this).unsafe_cast(),
+                &CellArea::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(renderer),
                 path,
             )
@@ -1002,7 +1002,7 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &CellArea::from_glib_borrow(this).unsafe_cast(),
+                &CellArea::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(renderer),
                 &from_glib_borrow(editable),
             )
@@ -1027,7 +1027,7 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             P: IsA<CellArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellArea::from_glib_borrow(this).unsafe_cast())
+            f(&CellArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1049,7 +1049,7 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             P: IsA<CellArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellArea::from_glib_borrow(this).unsafe_cast())
+            f(&CellArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1071,7 +1071,7 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             P: IsA<CellArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellArea::from_glib_borrow(this).unsafe_cast())
+            f(&CellArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -367,7 +367,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
             P: IsA<IconTheme>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconTheme::from_glib_borrow(this).unsafe_cast())
+            f(&IconTheme::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

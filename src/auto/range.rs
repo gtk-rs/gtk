@@ -355,7 +355,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast(), value)
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref(), value)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -386,7 +386,7 @@ impl<O: IsA<Range>> RangeExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Range::from_glib_borrow(this).unsafe_cast(),
+                &Range::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(scroll),
                 value,
             )
@@ -413,7 +413,7 @@ impl<O: IsA<Range>> RangeExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Range::from_glib_borrow(this).unsafe_cast(),
+                &Range::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
             )
         }
@@ -444,7 +444,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -466,7 +466,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -488,7 +488,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -510,7 +510,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -535,7 +535,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -562,7 +562,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -589,7 +589,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -616,7 +616,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -643,7 +643,7 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

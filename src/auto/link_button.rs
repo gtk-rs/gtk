@@ -549,7 +549,7 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
             P: IsA<LinkButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&LinkButton::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&LinkButton::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -571,7 +571,7 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
             P: IsA<LinkButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&LinkButton::from_glib_borrow(this).unsafe_cast())
+            f(&LinkButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -593,7 +593,7 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
             P: IsA<LinkButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&LinkButton::from_glib_borrow(this).unsafe_cast())
+            f(&LinkButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

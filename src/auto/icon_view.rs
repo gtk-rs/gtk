@@ -885,7 +885,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -922,7 +922,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &IconView::from_glib_borrow(this).unsafe_cast(),
+                &IconView::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(path),
             )
         }
@@ -955,7 +955,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &IconView::from_glib_borrow(this).unsafe_cast(),
+                &IconView::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
             )
@@ -992,7 +992,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1021,7 +1021,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1050,7 +1050,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1071,7 +1071,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1100,7 +1100,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1133,7 +1133,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1160,7 +1160,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1184,7 +1184,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1209,7 +1209,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1236,7 +1236,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1260,7 +1260,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1282,7 +1282,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1307,7 +1307,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1331,7 +1331,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1356,7 +1356,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1380,7 +1380,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1402,7 +1402,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1427,7 +1427,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1451,7 +1451,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1473,7 +1473,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1498,7 +1498,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
             P: IsA<IconView>,
         {
             let f: &F = &*(f as *const F);
-            f(&IconView::from_glib_borrow(this).unsafe_cast())
+            f(&IconView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

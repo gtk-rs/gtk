@@ -188,7 +188,7 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                &GestureDrag::from_glib_borrow(this).unsafe_cast_ref(),
                 start_x,
                 start_y,
             )
@@ -215,7 +215,7 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                &GestureDrag::from_glib_borrow(this).unsafe_cast_ref(),
                 offset_x,
                 offset_y,
             )
@@ -242,7 +242,7 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                &GestureDrag::from_glib_borrow(this).unsafe_cast_ref(),
                 offset_x,
                 offset_y,
             )

@@ -305,7 +305,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Gesture::from_glib_borrow(this).unsafe_cast(),
+                &Gesture::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(sequence),
             )
         }
@@ -330,7 +330,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Gesture::from_glib_borrow(this).unsafe_cast(),
+                &Gesture::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(sequence),
             )
         }
@@ -355,7 +355,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Gesture::from_glib_borrow(this).unsafe_cast(),
+                &Gesture::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(sequence),
             )
         }
@@ -389,7 +389,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Gesture::from_glib_borrow(this).unsafe_cast(),
+                &Gesture::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(sequence),
                 from_glib(state),
             )
@@ -417,7 +417,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Gesture::from_glib_borrow(this).unsafe_cast(),
+                &Gesture::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(sequence),
             )
         }
@@ -441,7 +441,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
             P: IsA<Gesture>,
         {
             let f: &F = &*(f as *const F);
-            f(&Gesture::from_glib_borrow(this).unsafe_cast())
+            f(&Gesture::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

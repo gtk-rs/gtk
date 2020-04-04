@@ -425,7 +425,7 @@ impl<O: IsA<FlowBoxChild>> FlowBoxChildExt for O {
             P: IsA<FlowBoxChild>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBoxChild::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBoxChild::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

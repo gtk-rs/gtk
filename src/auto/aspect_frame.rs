@@ -627,7 +627,7 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
             P: IsA<AspectFrame>,
         {
             let f: &F = &*(f as *const F);
-            f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
+            f(&AspectFrame::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -649,7 +649,7 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
             P: IsA<AspectFrame>,
         {
             let f: &F = &*(f as *const F);
-            f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
+            f(&AspectFrame::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -671,7 +671,7 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
             P: IsA<AspectFrame>,
         {
             let f: &F = &*(f as *const F);
-            f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
+            f(&AspectFrame::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -693,7 +693,7 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
             P: IsA<AspectFrame>,
         {
             let f: &F = &*(f as *const F);
-            f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
+            f(&AspectFrame::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

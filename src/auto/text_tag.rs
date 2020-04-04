@@ -3078,7 +3078,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextTag::from_glib_borrow(this).unsafe_cast(),
+                &TextTag::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
                 &from_glib_none(event),
                 &from_glib_borrow(iter),
@@ -3108,7 +3108,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3132,7 +3132,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3157,7 +3157,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3184,7 +3184,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3211,7 +3211,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3238,7 +3238,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3262,7 +3262,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3284,7 +3284,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3309,7 +3309,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3334,7 +3334,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3359,7 +3359,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3383,7 +3383,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3405,7 +3405,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3427,7 +3427,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3449,7 +3449,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3475,7 +3475,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3502,7 +3502,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3526,7 +3526,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3551,7 +3551,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3578,7 +3578,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3602,7 +3602,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3624,7 +3624,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3646,7 +3646,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3671,7 +3671,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3698,7 +3698,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3725,7 +3725,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3749,7 +3749,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3774,7 +3774,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3798,7 +3798,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3823,7 +3823,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3851,7 +3851,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3878,7 +3878,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3905,7 +3905,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3932,7 +3932,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3959,7 +3959,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3986,7 +3986,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4013,7 +4013,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4040,7 +4040,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4067,7 +4067,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4094,7 +4094,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4121,7 +4121,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4148,7 +4148,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4175,7 +4175,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4199,7 +4199,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4221,7 +4221,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4243,7 +4243,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4265,7 +4265,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4287,7 +4287,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4309,7 +4309,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4331,7 +4331,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4353,7 +4353,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4375,7 +4375,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4400,7 +4400,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4428,7 +4428,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4456,7 +4456,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4483,7 +4483,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4507,7 +4507,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4529,7 +4529,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4551,7 +4551,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4573,7 +4573,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4595,7 +4595,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4621,7 +4621,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4649,7 +4649,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4676,7 +4676,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4700,7 +4700,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4722,7 +4722,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4744,7 +4744,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4766,7 +4766,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4788,7 +4788,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -4813,7 +4813,7 @@ impl<O: IsA<TextTag>> TextTagExt for O {
             P: IsA<TextTag>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextTag::from_glib_borrow(this).unsafe_cast())
+            f(&TextTag::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

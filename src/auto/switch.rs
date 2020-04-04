@@ -454,7 +454,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
             P: IsA<Switch>,
         {
             let f: &F = &*(f as *const F);
-            f(&Switch::from_glib_borrow(this).unsafe_cast())
+            f(&Switch::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -492,7 +492,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Switch::from_glib_borrow(this).unsafe_cast(),
+                &Switch::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(state),
             )
             .to_glib()
@@ -517,7 +517,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
             P: IsA<Switch>,
         {
             let f: &F = &*(f as *const F);
-            f(&Switch::from_glib_borrow(this).unsafe_cast())
+            f(&Switch::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -539,7 +539,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
             P: IsA<Switch>,
         {
             let f: &F = &*(f as *const F);
-            f(&Switch::from_glib_borrow(this).unsafe_cast())
+            f(&Switch::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

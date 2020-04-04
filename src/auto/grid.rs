@@ -807,7 +807,7 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -834,7 +834,7 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -861,7 +861,7 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -888,7 +888,7 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -912,7 +912,7 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

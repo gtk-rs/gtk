@@ -950,7 +950,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -986,7 +986,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &FlowBox::from_glib_borrow(this).unsafe_cast(),
+                &FlowBox::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
             )
         }
@@ -1019,7 +1019,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &FlowBox::from_glib_borrow(this).unsafe_cast(),
+                &FlowBox::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
             )
@@ -1056,7 +1056,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1085,7 +1085,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1108,7 +1108,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1139,7 +1139,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1172,7 +1172,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1199,7 +1199,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1223,7 +1223,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1248,7 +1248,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1275,7 +1275,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1299,7 +1299,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1324,7 +1324,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

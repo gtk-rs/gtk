@@ -790,7 +790,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path_string));
             f(
-                &CellRendererAccel::from_glib_borrow(this).unsafe_cast(),
+                &CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref(),
                 path,
             )
         }
@@ -825,7 +825,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path_string));
             f(
-                &CellRendererAccel::from_glib_borrow(this).unsafe_cast(),
+                &CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref(),
                 path,
                 accel_key,
                 from_glib(accel_mods),
@@ -852,7 +852,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -874,7 +874,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -896,7 +896,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -918,7 +918,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

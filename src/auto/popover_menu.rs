@@ -587,7 +587,7 @@ impl<O: IsA<PopoverMenu>> PopoverMenuExt for O {
             P: IsA<PopoverMenu>,
         {
             let f: &F = &*(f as *const F);
-            f(&PopoverMenu::from_glib_borrow(this).unsafe_cast())
+            f(&PopoverMenu::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

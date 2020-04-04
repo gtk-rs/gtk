@@ -1078,7 +1078,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1099,7 +1099,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1120,7 +1120,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1141,7 +1141,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1172,7 +1172,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Assistant::from_glib_borrow(this).unsafe_cast(),
+                &Assistant::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(page),
             )
         }

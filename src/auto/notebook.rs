@@ -1141,7 +1141,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast(), object).to_glib()
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref(), object).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1187,7 +1187,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(page),
                 x,
                 y,
@@ -1220,7 +1220,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
             )
             .to_glib()
@@ -1261,7 +1261,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
             )
         }
@@ -1295,7 +1295,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
                 page_num,
             )
@@ -1322,7 +1322,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
                 page_num,
             )
@@ -1352,7 +1352,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
                 page_num,
             )
@@ -1386,7 +1386,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
                 from_glib(p0),
             )
@@ -1426,7 +1426,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
             )
             .to_glib()
@@ -1465,7 +1465,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(page),
                 page_num,
             )
@@ -1493,7 +1493,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1517,7 +1517,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1539,7 +1539,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1561,7 +1561,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1583,7 +1583,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1605,7 +1605,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1627,7 +1627,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

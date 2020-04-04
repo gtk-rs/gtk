@@ -1829,7 +1829,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1856,7 +1856,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1886,7 +1886,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1913,7 +1913,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1940,7 +1940,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1967,7 +1967,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1994,7 +1994,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2021,7 +2021,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2048,7 +2048,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2075,7 +2075,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2102,7 +2102,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2129,7 +2129,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2156,7 +2156,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2183,7 +2183,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2210,7 +2210,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2237,7 +2237,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2267,7 +2267,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2294,7 +2294,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2324,7 +2324,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2351,7 +2351,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2378,7 +2378,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2405,7 +2405,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2432,7 +2432,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2459,7 +2459,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2486,7 +2486,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2513,7 +2513,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2541,7 +2541,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2568,7 +2568,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2595,7 +2595,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2619,7 +2619,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2645,7 +2645,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2675,7 +2675,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2702,7 +2702,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2729,7 +2729,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2756,7 +2756,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2783,7 +2783,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2810,7 +2810,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2837,7 +2837,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2864,7 +2864,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2891,7 +2891,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2918,7 +2918,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2945,7 +2945,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2972,7 +2972,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2999,7 +2999,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3026,7 +3026,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3053,7 +3053,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3077,7 +3077,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3102,7 +3102,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3129,7 +3129,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3156,7 +3156,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
             P: IsA<Settings>,
         {
             let f: &F = &*(f as *const F);
-            f(&Settings::from_glib_borrow(this).unsafe_cast())
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

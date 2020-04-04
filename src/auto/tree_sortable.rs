@@ -55,7 +55,7 @@ impl<O: IsA<TreeSortable>> TreeSortableExt for O {
             P: IsA<TreeSortable>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeSortable::from_glib_borrow(this).unsafe_cast())
+            f(&TreeSortable::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
