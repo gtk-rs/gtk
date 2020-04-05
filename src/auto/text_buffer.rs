@@ -1147,7 +1147,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(tag),
                 &from_glib_borrow(start),
                 &from_glib_borrow(end),
@@ -1172,7 +1172,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1193,7 +1193,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1220,7 +1220,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(start),
                 &from_glib_borrow(end),
             )
@@ -1244,7 +1244,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1274,7 +1274,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(location),
                 &from_glib_borrow(anchor),
             )
@@ -1309,7 +1309,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(location),
                 &from_glib_borrow(pixbuf),
             )
@@ -1335,7 +1335,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(mark),
             )
         }
@@ -1364,7 +1364,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(location),
                 &from_glib_borrow(mark),
             )
@@ -1388,7 +1388,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1411,7 +1411,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(clipboard),
             )
         }
@@ -1444,7 +1444,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextBuffer::from_glib_borrow(this).unsafe_cast(),
+                &TextBuffer::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(tag),
                 &from_glib_borrow(start),
                 &from_glib_borrow(end),
@@ -1473,7 +1473,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1500,7 +1500,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1527,7 +1527,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1554,7 +1554,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1578,7 +1578,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             P: IsA<TextBuffer>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
+            f(&TextBuffer::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

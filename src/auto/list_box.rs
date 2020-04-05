@@ -779,11 +779,11 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             user_data: glib_sys::gpointer,
         ) {
             let row = from_glib_borrow(row);
-            let before: Option<ListBoxRow> = from_glib_borrow(before);
+            let before: Borrowed<Option<ListBoxRow>> = from_glib_borrow(before);
             let callback: &Option<Box_<dyn Fn(&ListBoxRow, Option<&ListBoxRow>) + 'static>> =
                 &*(user_data as *mut _);
             if let Some(ref callback) = *callback {
-                callback(&row, before.as_ref())
+                callback(&row, before.as_ref().as_ref())
             } else {
                 panic!("cannot get closure...")
             };
@@ -896,7 +896,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -933,7 +933,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &ListBox::from_glib_borrow(this).unsafe_cast(),
+                &ListBox::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
                 p0,
             )
@@ -967,7 +967,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &ListBox::from_glib_borrow(this).unsafe_cast(),
+                &ListBox::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(row),
             )
         }
@@ -995,8 +995,10 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &ListBox::from_glib_borrow(this).unsafe_cast(),
-                Option::<ListBoxRow>::from_glib_borrow(row).as_ref(),
+                &ListBox::from_glib_borrow(this).unsafe_cast_ref(),
+                Option::<ListBoxRow>::from_glib_borrow(row)
+                    .as_ref()
+                    .as_ref(),
             )
         }
         unsafe {
@@ -1018,7 +1020,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1047,7 +1049,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1070,7 +1072,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1099,7 +1101,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1132,7 +1134,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1159,7 +1161,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

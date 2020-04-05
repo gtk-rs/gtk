@@ -59,7 +59,7 @@ unsafe impl<T: ObjectSubclass + GtkApplicationImpl> IsSubclassable<T> for Applic
         {
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
-            let wrap: Application = from_glib_borrow(ptr);
+            let wrap: Borrowed<Application> = from_glib_borrow(ptr);
 
             imp.window_added(&wrap, &from_glib_borrow(wptr))
         }
@@ -71,7 +71,7 @@ unsafe impl<T: ObjectSubclass + GtkApplicationImpl> IsSubclassable<T> for Applic
         {
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
-            let wrap: Application = from_glib_borrow(ptr);
+            let wrap: Borrowed<Application> = from_glib_borrow(ptr);
 
             imp.window_removed(&wrap, &from_glib_borrow(wptr))
         }

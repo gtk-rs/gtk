@@ -136,7 +136,7 @@ mod editable {
     where
         T: IsA<Editable>,
     {
-        f(&Editable::from_glib_borrow(this).unsafe_cast());
+        f(&Editable::from_glib_borrow(this).unsafe_cast_ref());
     }
 
     unsafe extern "C" fn delete_trampoline<T, F: Fn(&T, i32, i32) + 'static>(
@@ -148,7 +148,7 @@ mod editable {
         T: IsA<Editable>,
     {
         f(
-            &Editable::from_glib_borrow(this).unsafe_cast(),
+            &Editable::from_glib_borrow(this).unsafe_cast_ref(),
             start_pos,
             end_pos,
         );
@@ -170,7 +170,7 @@ mod editable {
         };
         let string = str::from_utf8(buf).unwrap();
         f(
-            &Editable::from_glib_borrow(this).unsafe_cast(),
+            &Editable::from_glib_borrow(this).unsafe_cast_ref(),
             string,
             transmute(position),
         );
@@ -294,7 +294,10 @@ mod spin_button {
     ) where
         T: IsA<SpinButton>,
     {
-        f(&SpinButton::from_glib_borrow(this).unsafe_cast(), scroll)
+        f(
+            &SpinButton::from_glib_borrow(this).unsafe_cast_ref(),
+            scroll,
+        )
     }
 
     unsafe extern "C" fn input_trampoline<T, F: Fn(&T) -> Option<Result<f64, ()>> + 'static>(
@@ -305,7 +308,7 @@ mod spin_button {
     where
         T: IsA<SpinButton>,
     {
-        match f(&SpinButton::from_glib_borrow(this).unsafe_cast()) {
+        match f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref()) {
             Some(Ok(v)) => {
                 *new_value = v;
                 GTRUE
@@ -322,14 +325,14 @@ mod spin_button {
     where
         T: IsA<SpinButton>,
     {
-        f(&SpinButton::from_glib_borrow(this).unsafe_cast()).to_glib()
+        f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
     }
 
     unsafe extern "C" fn trampoline<T, F: Fn(&T) + 'static>(this: *mut GtkSpinButton, f: &F)
     where
         T: IsA<SpinButton>,
     {
-        f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
     }
 }
 
@@ -384,7 +387,7 @@ mod overlay {
     {
         let f: &F = &*(f as *const F);
         match f(
-            &Overlay::from_glib_borrow(this).unsafe_cast(),
+            &Overlay::from_glib_borrow(this).unsafe_cast_ref(),
             &from_glib_borrow(widget),
         ) {
             Some(rect) => {

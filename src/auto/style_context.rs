@@ -628,7 +628,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -650,7 +650,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -672,7 +672,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -694,7 +694,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -716,7 +716,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

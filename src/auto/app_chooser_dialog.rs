@@ -765,7 +765,7 @@ impl<O: IsA<AppChooserDialog>> AppChooserDialogExt for O {
             P: IsA<AppChooserDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AppChooserDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AppChooserDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

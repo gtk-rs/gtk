@@ -85,9 +85,9 @@ impl<O: IsA<Builder>> BuilderExtManual for O {
             );
 
             let builder = from_glib_borrow(builder);
-            let object: glib::Object = from_glib_borrow(object);
-            let signal_name: GString = from_glib_borrow(signal_name);
-            let handler_name: GString = from_glib_borrow(handler_name);
+            let object: Borrowed<glib::Object> = from_glib_borrow(object);
+            let signal_name: Borrowed<GString> = from_glib_borrow(signal_name);
+            let handler_name: Borrowed<GString> = from_glib_borrow(handler_name);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             let func = (*callback)(&builder, handler_name.as_str());
             object

@@ -375,7 +375,7 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
             P: IsA<FileChooserNative>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -402,7 +402,7 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
             P: IsA<FileChooserNative>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

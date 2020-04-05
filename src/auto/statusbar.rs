@@ -499,7 +499,7 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Statusbar::from_glib_borrow(this).unsafe_cast(),
+                &Statusbar::from_glib_borrow(this).unsafe_cast_ref(),
                 context_id,
                 &GString::from_glib_borrow(text),
             )
@@ -526,7 +526,7 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Statusbar::from_glib_borrow(this).unsafe_cast(),
+                &Statusbar::from_glib_borrow(this).unsafe_cast_ref(),
                 context_id,
                 &GString::from_glib_borrow(text),
             )

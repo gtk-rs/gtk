@@ -704,7 +704,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -729,7 +729,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -756,7 +756,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -783,7 +783,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -807,7 +807,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -829,7 +829,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

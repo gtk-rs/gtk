@@ -510,7 +510,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -534,7 +534,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -556,7 +556,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -578,7 +578,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -603,7 +603,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -630,7 +630,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -657,7 +657,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -681,7 +681,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             P: IsA<CellRendererPixbuf>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererPixbuf::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

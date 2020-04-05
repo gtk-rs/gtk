@@ -93,8 +93,8 @@ impl PrintSettings {
             value: *const libc::c_char,
             user_data: glib_sys::gpointer,
         ) {
-            let key: GString = from_glib_borrow(key);
-            let value: GString = from_glib_borrow(value);
+            let key: Borrowed<GString> = from_glib_borrow(key);
+            let value: Borrowed<GString> = from_glib_borrow(value);
             let callback: *mut P = user_data as *const _ as usize as *mut P;
             (*callback)(key.as_str(), value.as_str());
         }

@@ -387,7 +387,7 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path));
             f(
-                &CellRendererToggle::from_glib_borrow(this).unsafe_cast(),
+                &CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref(),
                 path,
             )
         }
@@ -411,7 +411,7 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -433,7 +433,7 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -458,7 +458,7 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -485,7 +485,7 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -509,7 +509,7 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

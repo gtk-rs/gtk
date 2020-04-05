@@ -702,7 +702,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -723,7 +723,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -750,7 +750,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -777,7 +777,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -804,7 +804,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

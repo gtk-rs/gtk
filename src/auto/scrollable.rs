@@ -156,7 +156,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             P: IsA<Scrollable>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scrollable::from_glib_borrow(this).unsafe_cast())
+            f(&Scrollable::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -181,7 +181,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             P: IsA<Scrollable>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scrollable::from_glib_borrow(this).unsafe_cast())
+            f(&Scrollable::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -205,7 +205,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             P: IsA<Scrollable>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scrollable::from_glib_borrow(this).unsafe_cast())
+            f(&Scrollable::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -230,7 +230,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             P: IsA<Scrollable>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scrollable::from_glib_borrow(this).unsafe_cast())
+            f(&Scrollable::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

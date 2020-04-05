@@ -157,7 +157,7 @@ impl<O: IsA<CellAreaBox>> CellAreaBoxExt for O {
             P: IsA<CellAreaBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellAreaBox::from_glib_borrow(this).unsafe_cast())
+            f(&CellAreaBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

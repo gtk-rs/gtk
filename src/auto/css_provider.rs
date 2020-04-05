@@ -162,7 +162,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &CssProvider::from_glib_borrow(this).unsafe_cast(),
+                &CssProvider::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(section),
                 &from_glib_borrow(error),
             )

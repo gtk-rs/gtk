@@ -632,7 +632,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast(), value).to_glib_full()
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref(), value).to_glib_full()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -654,7 +654,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -676,7 +676,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -698,7 +698,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -720,7 +720,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

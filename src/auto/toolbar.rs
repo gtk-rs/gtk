@@ -719,7 +719,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Toolbar::from_glib_borrow(this).unsafe_cast(),
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(focus_home),
             )
             .to_glib()
@@ -760,7 +760,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Toolbar::from_glib_borrow(this).unsafe_cast(),
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(orientation),
             )
         }
@@ -797,7 +797,13 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast(), x, y, button).to_glib()
+            f(
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
+                x,
+                y,
+                button,
+            )
+            .to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -820,7 +826,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Toolbar::from_glib_borrow(this).unsafe_cast(),
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(style),
             )
         }
@@ -844,7 +850,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -869,7 +875,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -893,7 +899,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -918,7 +924,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

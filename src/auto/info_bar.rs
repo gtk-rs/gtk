@@ -617,7 +617,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -648,7 +648,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &InfoBar::from_glib_borrow(this).unsafe_cast(),
+                &InfoBar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(response_id),
             )
         }
@@ -675,7 +675,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -700,7 +700,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -725,7 +725,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

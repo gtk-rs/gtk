@@ -1196,7 +1196,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1236,7 +1236,7 @@ impl<O: IsA<Label>> LabelExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Label::from_glib_borrow(this).unsafe_cast(),
+                &Label::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(uri),
             )
             .to_glib()
@@ -1260,7 +1260,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1299,7 +1299,7 @@ impl<O: IsA<Label>> LabelExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Label::from_glib_borrow(this).unsafe_cast(),
+                &Label::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
                 from_glib(extend_selection),
@@ -1334,7 +1334,7 @@ impl<O: IsA<Label>> LabelExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Label::from_glib_borrow(this).unsafe_cast(),
+                &Label::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(menu),
             )
         }
@@ -1358,7 +1358,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1380,7 +1380,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1405,7 +1405,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1429,7 +1429,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1451,7 +1451,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1473,7 +1473,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1495,7 +1495,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1520,7 +1520,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1547,7 +1547,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1574,7 +1574,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1598,7 +1598,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1620,7 +1620,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1645,7 +1645,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1672,7 +1672,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1699,7 +1699,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1723,7 +1723,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1748,7 +1748,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1772,7 +1772,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1794,7 +1794,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1816,7 +1816,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1839,7 +1839,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1862,7 +1862,7 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

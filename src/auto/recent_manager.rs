@@ -239,7 +239,7 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
             P: IsA<RecentManager>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentManager::from_glib_borrow(this).unsafe_cast())
+            f(&RecentManager::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -261,7 +261,7 @@ impl<O: IsA<RecentManager>> RecentManagerExt for O {
             P: IsA<RecentManager>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentManager::from_glib_borrow(this).unsafe_cast())
+            f(&RecentManager::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
