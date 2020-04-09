@@ -20,7 +20,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use BaselinePosition;
 use Box;
@@ -651,7 +650,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"desktop-folder\0".as_ptr() as *const _,
-                Some(transmute(desktop_folder_trampoline::<Self, F> as usize)),
+                Some(*(&desktop_folder_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -680,7 +679,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"down-folder\0".as_ptr() as *const _,
-                Some(transmute(down_folder_trampoline::<Self, F> as usize)),
+                Some(*(&down_folder_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -709,7 +708,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"home-folder\0".as_ptr() as *const _,
-                Some(transmute(home_folder_trampoline::<Self, F> as usize)),
+                Some(*(&home_folder_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -742,7 +741,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"location-popup\0".as_ptr() as *const _,
-                Some(transmute(location_popup_trampoline::<Self, F> as usize)),
+                Some(*(&location_popup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -771,9 +770,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"location-popup-on-paste\0".as_ptr() as *const _,
-                Some(transmute(
-                    location_popup_on_paste_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&location_popup_on_paste_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -802,9 +799,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"location-toggle-popup\0".as_ptr() as *const _,
-                Some(transmute(
-                    location_toggle_popup_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&location_toggle_popup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -833,7 +828,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"places-shortcut\0".as_ptr() as *const _,
-                Some(transmute(places_shortcut_trampoline::<Self, F> as usize)),
+                Some(*(&places_shortcut_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -866,7 +861,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"quick-bookmark\0".as_ptr() as *const _,
-                Some(transmute(quick_bookmark_trampoline::<Self, F> as usize)),
+                Some(*(&quick_bookmark_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -895,7 +890,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"recent-shortcut\0".as_ptr() as *const _,
-                Some(transmute(recent_shortcut_trampoline::<Self, F> as usize)),
+                Some(*(&recent_shortcut_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -924,7 +919,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search-shortcut\0".as_ptr() as *const _,
-                Some(transmute(search_shortcut_trampoline::<Self, F> as usize)),
+                Some(*(&search_shortcut_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -953,7 +948,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-hidden\0".as_ptr() as *const _,
-                Some(transmute(show_hidden_trampoline::<Self, F> as usize)),
+                Some(*(&show_hidden_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -982,7 +977,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"up-folder\0".as_ptr() as *const _,
-                Some(transmute(up_folder_trampoline::<Self, F> as usize)),
+                Some(*(&up_folder_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1012,7 +1007,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::search-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_search_mode_trampoline::<Self, F> as usize)),
+                Some(*(&notify_search_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1034,7 +1029,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute(notify_subtitle_trampoline::<Self, F> as usize)),
+                Some(*(&notify_subtitle_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

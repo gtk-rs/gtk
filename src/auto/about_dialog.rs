@@ -17,7 +17,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Application;
 use Bin;
@@ -1192,7 +1191,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-link\0".as_ptr() as *const _,
-                Some(transmute(activate_link_trampoline::<Self, F> as usize)),
+                Some(*(&activate_link_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1214,7 +1213,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::artists\0".as_ptr() as *const _,
-                Some(transmute(notify_artists_trampoline::<Self, F> as usize)),
+                Some(*(&notify_artists_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1236,7 +1235,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::authors\0".as_ptr() as *const _,
-                Some(transmute(notify_authors_trampoline::<Self, F> as usize)),
+                Some(*(&notify_authors_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1258,7 +1257,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::comments\0".as_ptr() as *const _,
-                Some(transmute(notify_comments_trampoline::<Self, F> as usize)),
+                Some(*(&notify_comments_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1280,7 +1279,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::copyright\0".as_ptr() as *const _,
-                Some(transmute(notify_copyright_trampoline::<Self, F> as usize)),
+                Some(*(&notify_copyright_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1302,7 +1301,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::documenters\0".as_ptr() as *const _,
-                Some(transmute(notify_documenters_trampoline::<Self, F> as usize)),
+                Some(*(&notify_documenters_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1324,7 +1323,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::license\0".as_ptr() as *const _,
-                Some(transmute(notify_license_trampoline::<Self, F> as usize)),
+                Some(*(&notify_license_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1349,9 +1348,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::license-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_license_type_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_license_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1373,7 +1370,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::logo\0".as_ptr() as *const _,
-                Some(transmute(notify_logo_trampoline::<Self, F> as usize)),
+                Some(*(&notify_logo_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1398,9 +1395,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::logo-icon-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_logo_icon_name_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_logo_icon_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1425,9 +1420,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::program-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_program_name_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_program_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1452,9 +1445,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::translator-credits\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_translator_credits_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_translator_credits_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1476,7 +1467,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::version\0".as_ptr() as *const _,
-                Some(transmute(notify_version_trampoline::<Self, F> as usize)),
+                Some(*(&notify_version_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1498,7 +1489,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::website\0".as_ptr() as *const _,
-                Some(transmute(notify_website_trampoline::<Self, F> as usize)),
+                Some(*(&notify_website_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1523,9 +1514,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::website-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_website_label_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_website_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1550,9 +1539,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-license\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_wrap_license_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_wrap_license_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

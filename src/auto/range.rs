@@ -17,7 +17,6 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Adjustment;
 use Buildable;
 use Orientable;
@@ -362,7 +361,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"adjust-bounds\0".as_ptr() as *const _,
-                Some(transmute(adjust_bounds_trampoline::<Self, F> as usize)),
+                Some(*(&adjust_bounds_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -397,7 +396,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"change-value\0".as_ptr() as *const _,
-                Some(transmute(change_value_trampoline::<Self, F> as usize)),
+                Some(*(&change_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -422,7 +421,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-slider\0".as_ptr() as *const _,
-                Some(transmute(move_slider_trampoline::<Self, F> as usize)),
+                Some(*(&move_slider_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -451,7 +450,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"value-changed\0".as_ptr() as *const _,
-                Some(transmute(value_changed_trampoline::<Self, F> as usize)),
+                Some(*(&value_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -473,7 +472,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::adjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_adjustment_trampoline::<Self, F> as usize)),
+                Some(*(&notify_adjustment_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -495,7 +494,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fill-level\0".as_ptr() as *const _,
-                Some(transmute(notify_fill_level_trampoline::<Self, F> as usize)),
+                Some(*(&notify_fill_level_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -517,7 +516,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)),
+                Some(*(&notify_inverted_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -542,9 +541,10 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lower-stepper-sensitivity\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_lower_stepper_sensitivity_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_lower_stepper_sensitivity_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -569,9 +569,9 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::restrict-to-fill-level\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_restrict_to_fill_level_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_restrict_to_fill_level_trampoline::<Self, F> as *const _ as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -596,9 +596,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::round-digits\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_round_digits_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_round_digits_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -623,9 +621,7 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-fill-level\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_fill_level_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_show_fill_level_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -650,9 +646,10 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::upper-stepper-sensitivity\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_upper_stepper_sensitivity_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_upper_stepper_sensitivity_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }

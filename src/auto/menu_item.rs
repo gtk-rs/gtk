@@ -20,7 +20,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Actionable;
 use Align;
 use Bin;
@@ -688,7 +687,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(transmute(activate_trampoline::<Self, F> as usize)),
+                Some(*(&activate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -717,7 +716,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-item\0".as_ptr() as *const _,
-                Some(transmute(activate_item_trampoline::<Self, F> as usize)),
+                Some(*(&activate_item_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -738,7 +737,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"deselect\0".as_ptr() as *const _,
-                Some(transmute(deselect_trampoline::<Self, F> as usize)),
+                Some(*(&deselect_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -759,7 +758,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select\0".as_ptr() as *const _,
-                Some(transmute(select_trampoline::<Self, F> as usize)),
+                Some(*(&select_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -781,9 +780,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-size-allocate\0".as_ptr() as *const _,
-                Some(transmute(
-                    toggle_size_allocate_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&toggle_size_allocate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -809,7 +806,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-path\0".as_ptr() as *const _,
-                Some(transmute(notify_accel_path_trampoline::<Self, F> as usize)),
+                Some(*(&notify_accel_path_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -831,7 +828,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(*(&notify_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -856,9 +853,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::right-justified\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_right_justified_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_right_justified_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -880,7 +875,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::submenu\0".as_ptr() as *const _,
-                Some(transmute(notify_submenu_trampoline::<Self, F> as usize)),
+                Some(*(&notify_submenu_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -905,9 +900,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_underline_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_use_underline_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

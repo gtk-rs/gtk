@@ -16,7 +16,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct AccelGroup(Object<gtk_sys::GtkAccelGroup, gtk_sys::GtkAccelGroupClass, AccelGroupClass>);
@@ -196,7 +195,7 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accel-activate\0".as_ptr() as *const _,
-                Some(transmute(accel_activate_trampoline::<Self, F> as usize)),
+                Some(*(&accel_activate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -231,7 +230,7 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accel-changed\0".as_ptr() as *const _,
-                Some(transmute(accel_changed_trampoline::<Self, F> as usize)),
+                Some(*(&accel_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -253,7 +252,7 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-locked\0".as_ptr() as *const _,
-                Some(transmute(notify_is_locked_trampoline::<Self, F> as usize)),
+                Some(*(&notify_is_locked_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -278,9 +277,7 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modifier-mask\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_modifier_mask_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_modifier_mask_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

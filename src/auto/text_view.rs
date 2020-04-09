@@ -22,7 +22,6 @@ use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Adjustment;
 use Align;
 use Buildable;
@@ -1731,7 +1730,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"backspace\0".as_ptr() as *const _,
-                Some(transmute(backspace_trampoline::<Self, F> as usize)),
+                Some(*(&backspace_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1760,7 +1759,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"copy-clipboard\0".as_ptr() as *const _,
-                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)),
+                Some(*(&copy_clipboard_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1789,7 +1788,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cut-clipboard\0".as_ptr() as *const _,
-                Some(transmute(cut_clipboard_trampoline::<Self, F> as usize)),
+                Some(*(&cut_clipboard_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1830,7 +1829,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"delete-from-cursor\0".as_ptr() as *const _,
-                Some(transmute(delete_from_cursor_trampoline::<Self, F> as usize)),
+                Some(*(&delete_from_cursor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1888,7 +1887,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"extend-selection\0".as_ptr() as *const _,
-                Some(transmute(extend_selection_trampoline::<Self, F> as usize)),
+                Some(*(&extend_selection_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1913,7 +1912,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-at-cursor\0".as_ptr() as *const _,
-                Some(transmute(insert_at_cursor_trampoline::<Self, F> as usize)),
+                Some(*(&insert_at_cursor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1943,7 +1942,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-emoji\0".as_ptr() as *const _,
-                Some(transmute(insert_emoji_trampoline::<Self, F> as usize)),
+                Some(*(&insert_emoji_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1987,7 +1986,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(*(&move_cursor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2025,7 +2024,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-viewport\0".as_ptr() as *const _,
-                Some(transmute(move_viewport_trampoline::<Self, F> as usize)),
+                Some(*(&move_viewport_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2054,7 +2053,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paste-clipboard\0".as_ptr() as *const _,
-                Some(transmute(paste_clipboard_trampoline::<Self, F> as usize)),
+                Some(*(&paste_clipboard_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2087,7 +2086,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"populate-popup\0".as_ptr() as *const _,
-                Some(transmute(populate_popup_trampoline::<Self, F> as usize)),
+                Some(*(&populate_popup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2112,7 +2111,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preedit-changed\0".as_ptr() as *const _,
-                Some(transmute(preedit_changed_trampoline::<Self, F> as usize)),
+                Some(*(&preedit_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2145,7 +2144,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(transmute(select_all_trampoline::<Self, F> as usize)),
+                Some(*(&select_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2174,7 +2173,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"set-anchor\0".as_ptr() as *const _,
-                Some(transmute(set_anchor_trampoline::<Self, F> as usize)),
+                Some(*(&set_anchor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2203,9 +2202,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-visible\0".as_ptr() as *const _,
-                Some(transmute(
-                    toggle_cursor_visible_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&toggle_cursor_visible_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2234,7 +2231,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-overwrite\0".as_ptr() as *const _,
-                Some(transmute(toggle_overwrite_trampoline::<Self, F> as usize)),
+                Some(*(&toggle_overwrite_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2264,7 +2261,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accepts-tab\0".as_ptr() as *const _,
-                Some(transmute(notify_accepts_tab_trampoline::<Self, F> as usize)),
+                Some(*(&notify_accepts_tab_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2290,9 +2287,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bottom-margin\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_bottom_margin_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_bottom_margin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2314,7 +2309,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_trampoline::<Self, F> as usize)),
+                Some(*(&notify_buffer_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2339,9 +2334,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor-visible\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cursor_visible_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_cursor_visible_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2363,7 +2356,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::editable\0".as_ptr() as *const _,
-                Some(transmute(notify_editable_trampoline::<Self, F> as usize)),
+                Some(*(&notify_editable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2385,7 +2378,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::im-module\0".as_ptr() as *const _,
-                Some(transmute(notify_im_module_trampoline::<Self, F> as usize)),
+                Some(*(&notify_im_module_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2407,7 +2400,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::indent\0".as_ptr() as *const _,
-                Some(transmute(notify_indent_trampoline::<Self, F> as usize)),
+                Some(*(&notify_indent_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2429,7 +2422,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-hints\0".as_ptr() as *const _,
-                Some(transmute(notify_input_hints_trampoline::<Self, F> as usize)),
+                Some(*(&notify_input_hints_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2454,9 +2447,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-purpose\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_input_purpose_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_input_purpose_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2481,9 +2472,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::justification\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_justification_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_justification_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2505,7 +2494,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::left-margin\0".as_ptr() as *const _,
-                Some(transmute(notify_left_margin_trampoline::<Self, F> as usize)),
+                Some(*(&notify_left_margin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2527,7 +2516,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::monospace\0".as_ptr() as *const _,
-                Some(transmute(notify_monospace_trampoline::<Self, F> as usize)),
+                Some(*(&notify_monospace_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2549,7 +2538,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::overwrite\0".as_ptr() as *const _,
-                Some(transmute(notify_overwrite_trampoline::<Self, F> as usize)),
+                Some(*(&notify_overwrite_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2574,9 +2563,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-above-lines\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixels_above_lines_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_pixels_above_lines_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2601,9 +2588,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-below-lines\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixels_below_lines_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_pixels_below_lines_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2628,9 +2613,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-inside-wrap\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixels_inside_wrap_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_pixels_inside_wrap_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2655,9 +2638,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::populate-all\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_populate_all_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_populate_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2682,9 +2663,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::right-margin\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_right_margin_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_right_margin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2706,7 +2685,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tabs\0".as_ptr() as *const _,
-                Some(transmute(notify_tabs_trampoline::<Self, F> as usize)),
+                Some(*(&notify_tabs_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2729,7 +2708,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::top-margin\0".as_ptr() as *const _,
-                Some(transmute(notify_top_margin_trampoline::<Self, F> as usize)),
+                Some(*(&notify_top_margin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2751,7 +2730,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)),
+                Some(*(&notify_wrap_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

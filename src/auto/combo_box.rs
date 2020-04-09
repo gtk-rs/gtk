@@ -21,7 +21,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Bin;
 use Buildable;
@@ -1007,7 +1006,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(transmute(changed_trampoline::<Self, F> as usize)),
+                Some(*(&changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1037,7 +1036,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"format-entry-text\0".as_ptr() as *const _,
-                Some(transmute(format_entry_text_trampoline::<Self, F> as usize)),
+                Some(*(&format_entry_text_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1062,7 +1061,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-active\0".as_ptr() as *const _,
-                Some(transmute(move_active_trampoline::<Self, F> as usize)),
+                Some(*(&move_active_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1092,7 +1091,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"popdown\0".as_ptr() as *const _,
-                Some(transmute(popdown_trampoline::<Self, F> as usize)),
+                Some(*(&popdown_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1125,7 +1124,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"popup\0".as_ptr() as *const _,
-                Some(transmute(popup_trampoline::<Self, F> as usize)),
+                Some(*(&popup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1155,7 +1154,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(*(&notify_active_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1177,7 +1176,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active-id\0".as_ptr() as *const _,
-                Some(transmute(notify_active_id_trampoline::<Self, F> as usize)),
+                Some(*(&notify_active_id_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1202,9 +1201,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::button-sensitivity\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_button_sensitivity_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_button_sensitivity_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1229,9 +1226,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::column-span-column\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_column_span_column_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_column_span_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1256,9 +1251,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::entry-text-column\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_entry_text_column_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_entry_text_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1280,7 +1273,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-frame\0".as_ptr() as *const _,
-                Some(transmute(notify_has_frame_trampoline::<Self, F> as usize)),
+                Some(*(&notify_has_frame_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1302,7 +1295,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::id-column\0".as_ptr() as *const _,
-                Some(transmute(notify_id_column_trampoline::<Self, F> as usize)),
+                Some(*(&notify_id_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1324,7 +1317,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Some(*(&notify_model_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1349,9 +1342,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-fixed-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_popup_fixed_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_popup_fixed_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1373,7 +1364,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-shown\0".as_ptr() as *const _,
-                Some(transmute(notify_popup_shown_trampoline::<Self, F> as usize)),
+                Some(*(&notify_popup_shown_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1398,9 +1389,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::row-span-column\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_row_span_column_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_row_span_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1422,7 +1411,7 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-width\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_width_trampoline::<Self, F> as usize)),
+                Some(*(&notify_wrap_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

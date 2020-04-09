@@ -20,7 +20,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Application;
 use AssistantPageType;
@@ -1085,7 +1084,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"apply\0".as_ptr() as *const _,
-                Some(transmute(apply_trampoline::<Self, F> as usize)),
+                Some(*(&apply_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1106,7 +1105,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel\0".as_ptr() as *const _,
-                Some(transmute(cancel_trampoline::<Self, F> as usize)),
+                Some(*(&cancel_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1127,7 +1126,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(transmute(close_trampoline::<Self, F> as usize)),
+                Some(*(&close_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1148,7 +1147,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"escape\0".as_ptr() as *const _,
-                Some(transmute(escape_trampoline::<Self, F> as usize)),
+                Some(*(&escape_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1181,7 +1180,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"prepare\0".as_ptr() as *const _,
-                Some(transmute(prepare_trampoline::<Self, F> as usize)),
+                Some(*(&prepare_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -27,7 +27,6 @@ use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use AccelFlags;
 use AccelGroup;
 use Align;
@@ -3041,9 +3040,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accel-closures-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    accel_closures_changed_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&accel_closures_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3078,7 +3075,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"button-press-event\0".as_ptr() as *const _,
-                Some(transmute(button_press_event_trampoline::<Self, F> as usize)),
+                Some(*(&button_press_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3113,9 +3110,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"button-release-event\0".as_ptr() as *const _,
-                Some(transmute(
-                    button_release_event_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&button_release_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3141,7 +3136,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"can-activate-accel\0".as_ptr() as *const _,
-                Some(transmute(can_activate_accel_trampoline::<Self, F> as usize)),
+                Some(*(&can_activate_accel_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3169,7 +3164,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-notify\0".as_ptr() as *const _,
-                Some(transmute(child_notify_trampoline::<Self, F> as usize)),
+                Some(*(&child_notify_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3190,7 +3185,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"composited-changed\0".as_ptr() as *const _,
-                Some(transmute(composited_changed_trampoline::<Self, F> as usize)),
+                Some(*(&composited_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3231,7 +3226,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"configure-event\0".as_ptr() as *const _,
-                Some(transmute(configure_event_trampoline::<Self, F> as usize)),
+                Some(*(&configure_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3264,7 +3259,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"damage-event\0".as_ptr() as *const _,
-                Some(transmute(damage_event_trampoline::<Self, F> as usize)),
+                Some(*(&damage_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3297,7 +3292,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"delete-event\0".as_ptr() as *const _,
-                Some(transmute(delete_event_trampoline::<Self, F> as usize)),
+                Some(*(&delete_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3318,7 +3313,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"destroy\0".as_ptr() as *const _,
-                Some(transmute(destroy_trampoline::<Self, F> as usize)),
+                Some(*(&destroy_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3351,7 +3346,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"destroy-event\0".as_ptr() as *const _,
-                Some(transmute(destroy_event_trampoline::<Self, F> as usize)),
+                Some(*(&destroy_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3379,7 +3374,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"direction-changed\0".as_ptr() as *const _,
-                Some(transmute(direction_changed_trampoline::<Self, F> as usize)),
+                Some(*(&direction_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3407,7 +3402,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-begin\0".as_ptr() as *const _,
-                Some(transmute(drag_begin_trampoline::<Self, F> as usize)),
+                Some(*(&drag_begin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3438,7 +3433,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-data-delete\0".as_ptr() as *const _,
-                Some(transmute(drag_data_delete_trampoline::<Self, F> as usize)),
+                Some(*(&drag_data_delete_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3477,7 +3472,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-data-get\0".as_ptr() as *const _,
-                Some(transmute(drag_data_get_trampoline::<Self, F> as usize)),
+                Some(*(&drag_data_get_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3520,7 +3515,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-data-received\0".as_ptr() as *const _,
-                Some(transmute(drag_data_received_trampoline::<Self, F> as usize)),
+                Some(*(&drag_data_received_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3561,7 +3556,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-drop\0".as_ptr() as *const _,
-                Some(transmute(drag_drop_trampoline::<Self, F> as usize)),
+                Some(*(&drag_drop_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3586,7 +3581,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-end\0".as_ptr() as *const _,
-                Some(transmute(drag_end_trampoline::<Self, F> as usize)),
+                Some(*(&drag_end_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3623,7 +3618,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-failed\0".as_ptr() as *const _,
-                Some(transmute(drag_failed_trampoline::<Self, F> as usize)),
+                Some(*(&drag_failed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3653,7 +3648,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-leave\0".as_ptr() as *const _,
-                Some(transmute(drag_leave_trampoline::<Self, F> as usize)),
+                Some(*(&drag_leave_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3694,7 +3689,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-motion\0".as_ptr() as *const _,
-                Some(transmute(drag_motion_trampoline::<Self, F> as usize)),
+                Some(*(&drag_motion_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3727,7 +3722,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"draw\0".as_ptr() as *const _,
-                Some(transmute(draw_trampoline::<Self, F> as usize)),
+                Some(*(&draw_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3762,7 +3757,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"enter-notify-event\0".as_ptr() as *const _,
-                Some(transmute(enter_notify_event_trampoline::<Self, F> as usize)),
+                Some(*(&enter_notify_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3795,7 +3790,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"event\0".as_ptr() as *const _,
-                Some(transmute(event_trampoline::<Self, F> as usize)),
+                Some(*(&event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3820,7 +3815,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"event-after\0".as_ptr() as *const _,
-                Some(transmute(event_after_trampoline::<Self, F> as usize)),
+                Some(*(&event_after_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3853,7 +3848,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus\0".as_ptr() as *const _,
-                Some(transmute(focus_trampoline::<Self, F> as usize)),
+                Some(*(&focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3886,7 +3881,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-in-event\0".as_ptr() as *const _,
-                Some(transmute(focus_in_event_trampoline::<Self, F> as usize)),
+                Some(*(&focus_in_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3921,7 +3916,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-out-event\0".as_ptr() as *const _,
-                Some(transmute(focus_out_event_trampoline::<Self, F> as usize)),
+                Some(*(&focus_out_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3956,7 +3951,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"grab-broken-event\0".as_ptr() as *const _,
-                Some(transmute(grab_broken_event_trampoline::<Self, F> as usize)),
+                Some(*(&grab_broken_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3977,7 +3972,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"grab-focus\0".as_ptr() as *const _,
-                Some(transmute(grab_focus_trampoline::<Self, F> as usize)),
+                Some(*(&grab_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4010,7 +4005,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"grab-notify\0".as_ptr() as *const _,
-                Some(transmute(grab_notify_trampoline::<Self, F> as usize)),
+                Some(*(&grab_notify_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4031,7 +4026,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"hide\0".as_ptr() as *const _,
-                Some(transmute(hide_trampoline::<Self, F> as usize)),
+                Some(*(&hide_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4061,7 +4056,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"hierarchy-changed\0".as_ptr() as *const _,
-                Some(transmute(hierarchy_changed_trampoline::<Self, F> as usize)),
+                Some(*(&hierarchy_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4094,7 +4089,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"key-press-event\0".as_ptr() as *const _,
-                Some(transmute(key_press_event_trampoline::<Self, F> as usize)),
+                Some(*(&key_press_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4129,7 +4124,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"key-release-event\0".as_ptr() as *const _,
-                Some(transmute(key_release_event_trampoline::<Self, F> as usize)),
+                Some(*(&key_release_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4162,7 +4157,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"keynav-failed\0".as_ptr() as *const _,
-                Some(transmute(keynav_failed_trampoline::<Self, F> as usize)),
+                Some(*(&keynav_failed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4197,7 +4192,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"leave-notify-event\0".as_ptr() as *const _,
-                Some(transmute(leave_notify_event_trampoline::<Self, F> as usize)),
+                Some(*(&leave_notify_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4218,7 +4213,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"map\0".as_ptr() as *const _,
-                Some(transmute(map_trampoline::<Self, F> as usize)),
+                Some(*(&map_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4251,7 +4246,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mnemonic-activate\0".as_ptr() as *const _,
-                Some(transmute(mnemonic_activate_trampoline::<Self, F> as usize)),
+                Some(*(&mnemonic_activate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4286,9 +4281,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"motion-notify-event\0".as_ptr() as *const _,
-                Some(transmute(
-                    motion_notify_event_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&motion_notify_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4313,7 +4306,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-focus\0".as_ptr() as *const _,
-                Some(transmute(move_focus_trampoline::<Self, F> as usize)),
+                Some(*(&move_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4348,7 +4341,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"parent-set\0".as_ptr() as *const _,
-                Some(transmute(parent_set_trampoline::<Self, F> as usize)),
+                Some(*(&parent_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4370,7 +4363,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"popup-menu\0".as_ptr() as *const _,
-                Some(transmute(popup_menu_trampoline::<Self, F> as usize)),
+                Some(*(&popup_menu_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4417,9 +4410,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"property-notify-event\0".as_ptr() as *const _,
-                Some(transmute(
-                    property_notify_event_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&property_notify_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4454,7 +4445,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"proximity-in-event\0".as_ptr() as *const _,
-                Some(transmute(proximity_in_event_trampoline::<Self, F> as usize)),
+                Some(*(&proximity_in_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4489,9 +4480,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"proximity-out-event\0".as_ptr() as *const _,
-                Some(transmute(
-                    proximity_out_event_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&proximity_out_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4530,7 +4519,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"query-tooltip\0".as_ptr() as *const _,
-                Some(transmute(query_tooltip_trampoline::<Self, F> as usize)),
+                Some(*(&query_tooltip_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4551,7 +4540,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"realize\0".as_ptr() as *const _,
-                Some(transmute(realize_trampoline::<Self, F> as usize)),
+                Some(*(&realize_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4584,7 +4573,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"screen-changed\0".as_ptr() as *const _,
-                Some(transmute(screen_changed_trampoline::<Self, F> as usize)),
+                Some(*(&screen_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4617,7 +4606,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"scroll-event\0".as_ptr() as *const _,
-                Some(transmute(scroll_event_trampoline::<Self, F> as usize)),
+                Some(*(&scroll_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4652,9 +4641,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-clear-event\0".as_ptr() as *const _,
-                Some(transmute(
-                    selection_clear_event_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&selection_clear_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4689,7 +4676,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-get\0".as_ptr() as *const _,
-                Some(transmute(selection_get_trampoline::<Self, F> as usize)),
+                Some(*(&selection_get_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4724,9 +4711,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-notify-event\0".as_ptr() as *const _,
-                Some(transmute(
-                    selection_notify_event_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&selection_notify_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4759,7 +4744,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-received\0".as_ptr() as *const _,
-                Some(transmute(selection_received_trampoline::<Self, F> as usize)),
+                Some(*(&selection_received_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4794,9 +4779,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-request-event\0".as_ptr() as *const _,
-                Some(transmute(
-                    selection_request_event_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&selection_request_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4817,7 +4800,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show\0".as_ptr() as *const _,
-                Some(transmute(show_trampoline::<Self, F> as usize)),
+                Some(*(&show_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4847,7 +4830,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-help\0".as_ptr() as *const _,
-                Some(transmute(show_help_trampoline::<Self, F> as usize)),
+                Some(*(&show_help_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4884,7 +4867,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"size-allocate\0".as_ptr() as *const _,
-                Some(transmute(size_allocate_trampoline::<Self, F> as usize)),
+                Some(*(&size_allocate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4912,9 +4895,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"state-flags-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    state_flags_changed_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&state_flags_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4935,7 +4916,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"style-updated\0".as_ptr() as *const _,
-                Some(transmute(style_updated_trampoline::<Self, F> as usize)),
+                Some(*(&style_updated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4968,7 +4949,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"touch-event\0".as_ptr() as *const _,
-                Some(transmute(touch_event_trampoline::<Self, F> as usize)),
+                Some(*(&touch_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -4989,7 +4970,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unmap\0".as_ptr() as *const _,
-                Some(transmute(unmap_trampoline::<Self, F> as usize)),
+                Some(*(&unmap_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5010,7 +4991,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unrealize\0".as_ptr() as *const _,
-                Some(transmute(unrealize_trampoline::<Self, F> as usize)),
+                Some(*(&unrealize_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5045,7 +5026,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"window-state-event\0".as_ptr() as *const _,
-                Some(transmute(window_state_event_trampoline::<Self, F> as usize)),
+                Some(*(&window_state_event_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5070,9 +5051,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::app-paintable\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_app_paintable_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_app_paintable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5094,7 +5073,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-default\0".as_ptr() as *const _,
-                Some(transmute(notify_can_default_trampoline::<Self, F> as usize)),
+                Some(*(&notify_can_default_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5116,7 +5095,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-focus\0".as_ptr() as *const _,
-                Some(transmute(notify_can_focus_trampoline::<Self, F> as usize)),
+                Some(*(&notify_can_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5141,9 +5120,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::composite-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_composite_child_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_composite_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5165,7 +5142,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::events\0".as_ptr() as *const _,
-                Some(transmute(notify_events_trampoline::<Self, F> as usize)),
+                Some(*(&notify_events_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5187,7 +5164,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::expand\0".as_ptr() as *const _,
-                Some(transmute(notify_expand_trampoline::<Self, F> as usize)),
+                Some(*(&notify_expand_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5213,9 +5190,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-on-click\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_focus_on_click_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_focus_on_click_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5237,7 +5212,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::halign\0".as_ptr() as *const _,
-                Some(transmute(notify_halign_trampoline::<Self, F> as usize)),
+                Some(*(&notify_halign_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5259,7 +5234,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-default\0".as_ptr() as *const _,
-                Some(transmute(notify_has_default_trampoline::<Self, F> as usize)),
+                Some(*(&notify_has_default_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5281,7 +5256,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-focus\0".as_ptr() as *const _,
-                Some(transmute(notify_has_focus_trampoline::<Self, F> as usize)),
+                Some(*(&notify_has_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5303,7 +5278,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-tooltip\0".as_ptr() as *const _,
-                Some(transmute(notify_has_tooltip_trampoline::<Self, F> as usize)),
+                Some(*(&notify_has_tooltip_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5328,9 +5303,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::height-request\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_height_request_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_height_request_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5352,7 +5325,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hexpand\0".as_ptr() as *const _,
-                Some(transmute(notify_hexpand_trampoline::<Self, F> as usize)),
+                Some(*(&notify_hexpand_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5374,7 +5347,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hexpand-set\0".as_ptr() as *const _,
-                Some(transmute(notify_hexpand_set_trampoline::<Self, F> as usize)),
+                Some(*(&notify_hexpand_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5396,7 +5369,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-focus\0".as_ptr() as *const _,
-                Some(transmute(notify_is_focus_trampoline::<Self, F> as usize)),
+                Some(*(&notify_is_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5418,7 +5391,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin\0".as_ptr() as *const _,
-                Some(transmute(notify_margin_trampoline::<Self, F> as usize)),
+                Some(*(&notify_margin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5443,9 +5416,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-bottom\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_margin_bottom_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_margin_bottom_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5467,7 +5438,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-end\0".as_ptr() as *const _,
-                Some(transmute(notify_margin_end_trampoline::<Self, F> as usize)),
+                Some(*(&notify_margin_end_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5492,9 +5463,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-start\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_margin_start_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_margin_start_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5516,7 +5485,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin-top\0".as_ptr() as *const _,
-                Some(transmute(notify_margin_top_trampoline::<Self, F> as usize)),
+                Some(*(&notify_margin_top_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5538,7 +5507,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::name\0".as_ptr() as *const _,
-                Some(transmute(notify_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5560,7 +5529,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::no-show-all\0".as_ptr() as *const _,
-                Some(transmute(notify_no_show_all_trampoline::<Self, F> as usize)),
+                Some(*(&notify_no_show_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5582,7 +5551,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::opacity\0".as_ptr() as *const _,
-                Some(transmute(notify_opacity_trampoline::<Self, F> as usize)),
+                Some(*(&notify_opacity_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5604,7 +5573,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(transmute(notify_parent_trampoline::<Self, F> as usize)),
+                Some(*(&notify_parent_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5629,9 +5598,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::receives-default\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_receives_default_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_receives_default_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5656,9 +5623,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scale-factor\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_scale_factor_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_scale_factor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5680,7 +5645,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sensitive\0".as_ptr() as *const _,
-                Some(transmute(notify_sensitive_trampoline::<Self, F> as usize)),
+                Some(*(&notify_sensitive_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5705,9 +5670,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-markup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_tooltip_markup_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_tooltip_markup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5732,9 +5695,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-text\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_tooltip_text_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_tooltip_text_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5756,7 +5717,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::valign\0".as_ptr() as *const _,
-                Some(transmute(notify_valign_trampoline::<Self, F> as usize)),
+                Some(*(&notify_valign_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5778,7 +5739,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vexpand\0".as_ptr() as *const _,
-                Some(transmute(notify_vexpand_trampoline::<Self, F> as usize)),
+                Some(*(&notify_vexpand_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5800,7 +5761,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vexpand-set\0".as_ptr() as *const _,
-                Some(transmute(notify_vexpand_set_trampoline::<Self, F> as usize)),
+                Some(*(&notify_vexpand_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5822,7 +5783,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible\0".as_ptr() as *const _,
-                Some(transmute(notify_visible_trampoline::<Self, F> as usize)),
+                Some(*(&notify_visible_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5847,9 +5808,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width-request\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_width_request_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_width_request_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -5871,7 +5830,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window\0".as_ptr() as *const _,
-                Some(transmute(notify_window_trampoline::<Self, F> as usize)),
+                Some(*(&notify_window_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

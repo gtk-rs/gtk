@@ -19,7 +19,6 @@ use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -681,9 +680,7 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-closure\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_accel_closure_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_accel_closure_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -708,9 +705,7 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_accel_widget_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_accel_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

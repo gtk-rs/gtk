@@ -15,7 +15,6 @@ use gtk_sys;
 use std;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use std::ptr;
 use FileChooserAction;
 use FileChooserConfirmation;
@@ -819,7 +818,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"confirm-overwrite\0".as_ptr() as *const _,
-                Some(transmute(confirm_overwrite_trampoline::<Self, F> as usize)),
+                Some(*(&confirm_overwrite_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -840,9 +839,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"current-folder-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    current_folder_changed_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&current_folder_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -863,7 +860,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"file-activated\0".as_ptr() as *const _,
-                Some(transmute(file_activated_trampoline::<Self, F> as usize)),
+                Some(*(&file_activated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -884,7 +881,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-changed\0".as_ptr() as *const _,
-                Some(transmute(selection_changed_trampoline::<Self, F> as usize)),
+                Some(*(&selection_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -905,7 +902,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"update-preview\0".as_ptr() as *const _,
-                Some(transmute(update_preview_trampoline::<Self, F> as usize)),
+                Some(*(&update_preview_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -927,7 +924,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::action\0".as_ptr() as *const _,
-                Some(transmute(notify_action_trampoline::<Self, F> as usize)),
+                Some(*(&notify_action_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -952,9 +949,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::create-folders\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_create_folders_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_create_folders_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -979,9 +974,10 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::do-overwrite-confirmation\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_do_overwrite_confirmation_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_do_overwrite_confirmation_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -1006,9 +1002,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::extra-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_extra_widget_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_extra_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1030,7 +1024,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::filter\0".as_ptr() as *const _,
-                Some(transmute(notify_filter_trampoline::<Self, F> as usize)),
+                Some(*(&notify_filter_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1052,7 +1046,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::local-only\0".as_ptr() as *const _,
-                Some(transmute(notify_local_only_trampoline::<Self, F> as usize)),
+                Some(*(&notify_local_only_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1077,9 +1071,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::preview-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_preview_widget_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_preview_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1104,9 +1096,9 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::preview-widget-active\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_preview_widget_active_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_preview_widget_active_trampoline::<Self, F> as *const _ as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -1131,9 +1123,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::select-multiple\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_select_multiple_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_select_multiple_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1155,7 +1145,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-hidden\0".as_ptr() as *const _,
-                Some(transmute(notify_show_hidden_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_hidden_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1180,9 +1170,7 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-preview-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_preview_label_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_use_preview_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

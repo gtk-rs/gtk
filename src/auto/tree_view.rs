@@ -22,7 +22,6 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 use Adjustment;
 use Align;
@@ -2246,7 +2245,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"columns-changed\0".as_ptr() as *const _,
-                Some(transmute(columns_changed_trampoline::<Self, F> as usize)),
+                Some(*(&columns_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2267,7 +2266,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cursor-changed\0".as_ptr() as *const _,
-                Some(transmute(cursor_changed_trampoline::<Self, F> as usize)),
+                Some(*(&cursor_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2304,9 +2303,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"expand-collapse-cursor-row\0".as_ptr() as *const _,
-                Some(transmute(
-                    expand_collapse_cursor_row_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&expand_collapse_cursor_row_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2353,7 +2350,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(*(&move_cursor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2398,7 +2395,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-activated\0".as_ptr() as *const _,
-                Some(transmute(row_activated_trampoline::<Self, F> as usize)),
+                Some(*(&row_activated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2439,7 +2436,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-collapsed\0".as_ptr() as *const _,
-                Some(transmute(row_collapsed_trampoline::<Self, F> as usize)),
+                Some(*(&row_collapsed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2469,7 +2466,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-expanded\0".as_ptr() as *const _,
-                Some(transmute(row_expanded_trampoline::<Self, F> as usize)),
+                Some(*(&row_expanded_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2491,7 +2488,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(transmute(select_all_trampoline::<Self, F> as usize)),
+                Some(*(&select_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2528,9 +2525,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-cursor-parent\0".as_ptr() as *const _,
-                Some(transmute(
-                    select_cursor_parent_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&select_cursor_parent_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2572,7 +2567,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-cursor-row\0".as_ptr() as *const _,
-                Some(transmute(select_cursor_row_trampoline::<Self, F> as usize)),
+                Some(*(&select_cursor_row_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2609,9 +2604,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"start-interactive-search\0".as_ptr() as *const _,
-                Some(transmute(
-                    start_interactive_search_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&start_interactive_search_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2660,7 +2653,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"test-collapse-row\0".as_ptr() as *const _,
-                Some(transmute(test_collapse_row_trampoline::<Self, F> as usize)),
+                Some(*(&test_collapse_row_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2697,7 +2690,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"test-expand-row\0".as_ptr() as *const _,
-                Some(transmute(test_expand_row_trampoline::<Self, F> as usize)),
+                Some(*(&test_expand_row_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2719,7 +2712,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-row\0".as_ptr() as *const _,
-                Some(transmute(toggle_cursor_row_trampoline::<Self, F> as usize)),
+                Some(*(&toggle_cursor_row_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2753,7 +2746,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unselect-all\0".as_ptr() as *const _,
-                Some(transmute(unselect_all_trampoline::<Self, F> as usize)),
+                Some(*(&unselect_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2790,9 +2783,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_activate_on_single_click_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_activate_on_single_click_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -2817,9 +2811,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-grid-lines\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_grid_lines_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_enable_grid_lines_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2844,9 +2836,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-search\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_search_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_enable_search_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2871,9 +2861,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-tree-lines\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_tree_lines_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_enable_tree_lines_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2898,9 +2886,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::expander-column\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_expander_column_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_expander_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2925,9 +2911,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fixed-height-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_fixed_height_mode_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_fixed_height_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2952,9 +2936,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::headers-clickable\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_headers_clickable_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_headers_clickable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2979,9 +2961,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::headers-visible\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_headers_visible_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_headers_visible_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3006,9 +2986,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hover-expand\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hover_expand_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_hover_expand_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3033,9 +3011,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hover-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hover_selection_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_hover_selection_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3060,9 +3036,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::level-indentation\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_level_indentation_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_level_indentation_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3084,7 +3058,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Some(*(&notify_model_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3106,7 +3080,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reorderable\0".as_ptr() as *const _,
-                Some(transmute(notify_reorderable_trampoline::<Self, F> as usize)),
+                Some(*(&notify_reorderable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3131,9 +3105,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::rubber-banding\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_rubber_banding_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_rubber_banding_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3158,9 +3130,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::search-column\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_search_column_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_search_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3185,9 +3155,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-expanders\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_expanders_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_show_expanders_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3212,9 +3180,7 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-column\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_tooltip_column_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_tooltip_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -3242,9 +3208,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ubuntu-almost-fixed-height-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_ubuntu_almost_fixed_height_mode_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_ubuntu_almost_fixed_height_mode_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }

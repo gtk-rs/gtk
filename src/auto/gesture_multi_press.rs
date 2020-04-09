@@ -16,7 +16,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use EventController;
 use Gesture;
 use GestureSingle;
@@ -84,7 +83,7 @@ impl GestureMultiPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pressed\0".as_ptr() as *const _,
-                Some(transmute(pressed_trampoline::<F> as usize)),
+                Some(*(&pressed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -111,7 +110,7 @@ impl GestureMultiPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"released\0".as_ptr() as *const _,
-                Some(transmute(released_trampoline::<F> as usize)),
+                Some(*(&released_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -130,7 +129,7 @@ impl GestureMultiPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stopped\0".as_ptr() as *const _,
-                Some(transmute(stopped_trampoline::<F> as usize)),
+                Some(*(&stopped_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

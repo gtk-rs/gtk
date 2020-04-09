@@ -16,7 +16,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use EventController;
 use Gesture;
 use PropagationPhase;
@@ -62,7 +61,7 @@ impl GestureZoom {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"scale-changed\0".as_ptr() as *const _,
-                Some(transmute(scale_changed_trampoline::<F> as usize)),
+                Some(*(&scale_changed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -16,7 +16,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use CellRenderer;
 use CellRendererMode;
 use IconSize;
@@ -329,7 +328,7 @@ impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(*(&notify_active_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -351,7 +350,7 @@ impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pulse\0".as_ptr() as *const _,
-                Some(transmute(notify_pulse_trampoline::<Self, F> as usize)),
+                Some(*(&notify_pulse_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -373,7 +372,7 @@ impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::size\0".as_ptr() as *const _,
-                Some(transmute(notify_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

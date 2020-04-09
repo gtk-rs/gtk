@@ -18,7 +18,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use EventController;
 use Gesture;
 use GestureSingle;
@@ -82,7 +81,7 @@ impl GestureLongPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancelled\0".as_ptr() as *const _,
-                Some(transmute(cancelled_trampoline::<F> as usize)),
+                Some(*(&cancelled_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -106,7 +105,7 @@ impl GestureLongPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pressed\0".as_ptr() as *const _,
-                Some(transmute(pressed_trampoline::<F> as usize)),
+                Some(*(&pressed_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -129,7 +128,7 @@ impl GestureLongPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::delay-factor\0".as_ptr() as *const _,
-                Some(transmute(notify_delay_factor_trampoline::<F> as usize)),
+                Some(*(&notify_delay_factor_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

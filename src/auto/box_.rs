@@ -16,7 +16,6 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Align;
 use BaselinePosition;
 use Buildable;
@@ -795,9 +794,7 @@ impl<O: IsA<Box>> BoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::baseline-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_baseline_position_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_baseline_position_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -819,7 +816,7 @@ impl<O: IsA<Box>> BoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::homogeneous\0".as_ptr() as *const _,
-                Some(transmute(notify_homogeneous_trampoline::<Self, F> as usize)),
+                Some(*(&notify_homogeneous_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -841,7 +838,7 @@ impl<O: IsA<Box>> BoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(transmute(notify_spacing_trampoline::<Self, F> as usize)),
+                Some(*(&notify_spacing_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

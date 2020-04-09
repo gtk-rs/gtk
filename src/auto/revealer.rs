@@ -14,7 +14,6 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Bin;
 use Buildable;
@@ -517,9 +516,7 @@ impl<O: IsA<Revealer>> RevealerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child-revealed\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_child_revealed_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_child_revealed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -544,9 +541,7 @@ impl<O: IsA<Revealer>> RevealerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reveal-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_reveal_child_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_reveal_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -571,9 +566,7 @@ impl<O: IsA<Revealer>> RevealerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-duration\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_duration_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_transition_duration_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -598,9 +591,7 @@ impl<O: IsA<Revealer>> RevealerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_type_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_transition_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

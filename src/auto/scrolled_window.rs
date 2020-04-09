@@ -19,7 +19,6 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Adjustment;
 use Align;
 use Bin;
@@ -1088,7 +1087,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"edge-overshot\0".as_ptr() as *const _,
-                Some(transmute(edge_overshot_trampoline::<Self, F> as usize)),
+                Some(*(&edge_overshot_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1114,7 +1113,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"edge-reached\0".as_ptr() as *const _,
-                Some(transmute(edge_reached_trampoline::<Self, F> as usize)),
+                Some(*(&edge_reached_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1142,7 +1141,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-focus-out\0".as_ptr() as *const _,
-                Some(transmute(move_focus_out_trampoline::<Self, F> as usize)),
+                Some(*(&move_focus_out_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1185,7 +1184,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"scroll-child\0".as_ptr() as *const _,
-                Some(transmute(scroll_child_trampoline::<Self, F> as usize)),
+                Some(*(&scroll_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1219,7 +1218,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hadjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_hadjustment_trampoline::<Self, F> as usize)),
+                Some(*(&notify_hadjustment_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1244,9 +1243,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hscrollbar-policy\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hscrollbar_policy_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_hscrollbar_policy_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1271,9 +1268,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::kinetic-scrolling\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_kinetic_scrolling_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_kinetic_scrolling_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1299,9 +1294,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-content-height\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_content_height_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_max_content_height_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1327,9 +1320,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-content-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_content_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_max_content_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1354,9 +1345,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-content-height\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_min_content_height_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_min_content_height_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1381,9 +1370,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-content-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_min_content_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_min_content_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1409,9 +1396,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::overlay-scrolling\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_overlay_scrolling_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_overlay_scrolling_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1437,9 +1422,10 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::propagate-natural-height\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_propagate_natural_height_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_propagate_natural_height_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -1465,9 +1451,10 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::propagate-natural-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_propagate_natural_width_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_propagate_natural_width_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -1489,7 +1476,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::shadow-type\0".as_ptr() as *const _,
-                Some(transmute(notify_shadow_type_trampoline::<Self, F> as usize)),
+                Some(*(&notify_shadow_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1511,7 +1498,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vadjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_vadjustment_trampoline::<Self, F> as usize)),
+                Some(*(&notify_vadjustment_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1536,9 +1523,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vscrollbar-policy\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_vscrollbar_policy_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_vscrollbar_policy_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1563,9 +1548,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-placement\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_window_placement_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_window_placement_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

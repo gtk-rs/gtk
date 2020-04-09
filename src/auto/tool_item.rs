@@ -15,7 +15,6 @@ use gtk_sys;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Bin;
 use Buildable;
@@ -709,7 +708,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-menu-proxy\0".as_ptr() as *const _,
-                Some(transmute(create_menu_proxy_trampoline::<Self, F> as usize)),
+                Some(*(&create_menu_proxy_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -730,9 +729,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toolbar-reconfigured\0".as_ptr() as *const _,
-                Some(transmute(
-                    toolbar_reconfigured_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&toolbar_reconfigured_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -757,9 +754,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-important\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_is_important_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_is_important_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -784,9 +779,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-horizontal\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_horizontal_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_visible_horizontal_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -811,9 +804,7 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-vertical\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_vertical_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_visible_vertical_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

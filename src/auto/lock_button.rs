@@ -19,7 +19,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Actionable;
 use Align;
 use Bin;
@@ -716,7 +715,7 @@ impl<O: IsA<LockButton>> LockButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::permission\0".as_ptr() as *const _,
-                Some(transmute(notify_permission_trampoline::<Self, F> as usize)),
+                Some(*(&notify_permission_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -738,7 +737,7 @@ impl<O: IsA<LockButton>> LockButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-lock\0".as_ptr() as *const _,
-                Some(transmute(notify_text_lock_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_lock_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -760,7 +759,7 @@ impl<O: IsA<LockButton>> LockButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-unlock\0".as_ptr() as *const _,
-                Some(transmute(notify_text_unlock_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_unlock_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -785,9 +784,7 @@ impl<O: IsA<LockButton>> LockButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-lock\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_tooltip_lock_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_tooltip_lock_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -812,9 +809,9 @@ impl<O: IsA<LockButton>> LockButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-not-authorized\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_tooltip_not_authorized_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_tooltip_not_authorized_trampoline::<Self, F> as *const _ as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -839,9 +836,7 @@ impl<O: IsA<LockButton>> LockButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-unlock\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_tooltip_unlock_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_tooltip_unlock_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

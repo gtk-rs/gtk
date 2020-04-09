@@ -22,7 +22,6 @@ use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -1203,9 +1202,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-current-link\0".as_ptr() as *const _,
-                Some(transmute(
-                    activate_current_link_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&activate_current_link_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1246,7 +1243,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-link\0".as_ptr() as *const _,
-                Some(transmute(activate_link_trampoline::<Self, F> as usize)),
+                Some(*(&activate_link_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1267,7 +1264,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"copy-clipboard\0".as_ptr() as *const _,
-                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)),
+                Some(*(&copy_clipboard_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1310,7 +1307,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(*(&move_cursor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1343,7 +1340,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"populate-popup\0".as_ptr() as *const _,
-                Some(transmute(populate_popup_trampoline::<Self, F> as usize)),
+                Some(*(&populate_popup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1365,7 +1362,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::angle\0".as_ptr() as *const _,
-                Some(transmute(notify_angle_trampoline::<Self, F> as usize)),
+                Some(*(&notify_angle_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1387,7 +1384,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::attributes\0".as_ptr() as *const _,
-                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)),
+                Some(*(&notify_attributes_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1412,9 +1409,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cursor_position_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_cursor_position_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1436,7 +1431,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ellipsize\0".as_ptr() as *const _,
-                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)),
+                Some(*(&notify_ellipsize_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1458,7 +1453,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::justify\0".as_ptr() as *const _,
-                Some(transmute(notify_justify_trampoline::<Self, F> as usize)),
+                Some(*(&notify_justify_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1480,7 +1475,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(*(&notify_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1502,7 +1497,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lines\0".as_ptr() as *const _,
-                Some(transmute(notify_lines_trampoline::<Self, F> as usize)),
+                Some(*(&notify_lines_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1527,9 +1522,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-width-chars\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_width_chars_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_max_width_chars_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1554,9 +1547,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mnemonic-keyval\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_mnemonic_keyval_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_mnemonic_keyval_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1581,9 +1572,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mnemonic-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_mnemonic_widget_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_mnemonic_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1605,7 +1594,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pattern\0".as_ptr() as *const _,
-                Some(transmute(notify_pattern_trampoline::<Self, F> as usize)),
+                Some(*(&notify_pattern_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1627,7 +1616,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selectable\0".as_ptr() as *const _,
-                Some(transmute(notify_selectable_trampoline::<Self, F> as usize)),
+                Some(*(&notify_selectable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1652,9 +1641,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-bound\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_selection_bound_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_selection_bound_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1679,9 +1666,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::single-line-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_single_line_mode_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_single_line_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1706,9 +1691,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-visited-links\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_track_visited_links_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_track_visited_links_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1730,7 +1713,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)),
+                Some(*(&notify_use_markup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1755,9 +1738,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_underline_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_use_underline_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1779,7 +1760,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)),
+                Some(*(&notify_width_chars_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1801,7 +1782,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_trampoline::<Self, F> as usize)),
+                Some(*(&notify_wrap_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1823,7 +1804,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)),
+                Some(*(&notify_wrap_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1846,7 +1827,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)),
+                Some(*(&notify_xalign_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1869,7 +1850,7 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::yalign\0".as_ptr() as *const _,
-                Some(transmute(notify_yalign_trampoline::<Self, F> as usize)),
+                Some(*(&notify_yalign_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

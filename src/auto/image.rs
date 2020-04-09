@@ -23,7 +23,6 @@ use std;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 use Align;
 use Buildable;
@@ -913,7 +912,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::file\0".as_ptr() as *const _,
-                Some(transmute(notify_file_trampoline::<Self, F> as usize)),
+                Some(*(&notify_file_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -935,7 +934,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::gicon\0".as_ptr() as *const _,
-                Some(transmute(notify_gicon_trampoline::<Self, F> as usize)),
+                Some(*(&notify_gicon_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -957,7 +956,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-name\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -979,7 +978,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-size\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1001,7 +1000,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixbuf\0".as_ptr() as *const _,
-                Some(transmute(notify_pixbuf_trampoline::<Self, F> as usize)),
+                Some(*(&notify_pixbuf_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1026,9 +1025,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixbuf-animation\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixbuf_animation_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_pixbuf_animation_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1050,7 +1047,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixel-size\0".as_ptr() as *const _,
-                Some(transmute(notify_pixel_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_pixel_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1072,7 +1069,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resource\0".as_ptr() as *const _,
-                Some(transmute(notify_resource_trampoline::<Self, F> as usize)),
+                Some(*(&notify_resource_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1097,9 +1094,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::storage-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_storage_type_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_storage_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1124,9 +1119,7 @@ impl<O: IsA<Image>> ImageExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-fallback\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_fallback_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_use_fallback_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

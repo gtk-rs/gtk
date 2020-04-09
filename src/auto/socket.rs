@@ -14,7 +14,6 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use xlib;
 use Align;
 use Buildable;
@@ -429,7 +428,7 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"plug-added\0".as_ptr() as *const _,
-                Some(transmute(plug_added_trampoline::<Self, F> as usize)),
+                Some(*(&plug_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -451,7 +450,7 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"plug-removed\0".as_ptr() as *const _,
-                Some(transmute(plug_removed_trampoline::<Self, F> as usize)),
+                Some(*(&plug_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -15,7 +15,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Buildable;
 use Widget;
 
@@ -112,7 +111,7 @@ impl<O: IsA<CellEditable>> CellEditableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"editing-done\0".as_ptr() as *const _,
-                Some(transmute(editing_done_trampoline::<Self, F> as usize)),
+                Some(*(&editing_done_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -133,7 +132,7 @@ impl<O: IsA<CellEditable>> CellEditableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"remove-widget\0".as_ptr() as *const _,
-                Some(transmute(remove_widget_trampoline::<Self, F> as usize)),
+                Some(*(&remove_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -158,9 +157,7 @@ impl<O: IsA<CellEditable>> CellEditableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::editing-canceled\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_editing_canceled_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_editing_canceled_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -17,7 +17,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use CellRenderer;
 use CellRendererMode;
 use Orientable;
@@ -459,7 +458,7 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)),
+                Some(*(&notify_inverted_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -481,7 +480,7 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pulse\0".as_ptr() as *const _,
-                Some(transmute(notify_pulse_trampoline::<Self, F> as usize)),
+                Some(*(&notify_pulse_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -503,7 +502,7 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -525,7 +524,7 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_text_xalign_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_xalign_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -547,7 +546,7 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-yalign\0".as_ptr() as *const _,
-                Some(transmute(notify_text_yalign_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_yalign_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -569,7 +568,7 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Some(*(&notify_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

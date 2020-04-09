@@ -19,7 +19,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Application;
 use Bin;
@@ -809,7 +808,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(transmute(close_trampoline::<Self, F> as usize)),
+                Some(*(&close_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -842,7 +841,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"response\0".as_ptr() as *const _,
-                Some(transmute(response_trampoline::<Self, F> as usize)),
+                Some(*(&response_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
