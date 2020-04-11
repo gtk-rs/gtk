@@ -17,7 +17,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Actionable;
 use Align;
 use Buildable;
@@ -461,7 +460,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(transmute(activate_trampoline::<Self, F> as usize)),
+                Some(*(&activate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -502,7 +501,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"state-set\0".as_ptr() as *const _,
-                Some(transmute(state_set_trampoline::<Self, F> as usize)),
+                Some(*(&state_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -524,7 +523,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(*(&notify_active_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -546,7 +545,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::state\0".as_ptr() as *const _,
-                Some(transmute(notify_state_trampoline::<Self, F> as usize)),
+                Some(*(&notify_state_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -19,7 +19,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -729,7 +728,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-home-or-end\0".as_ptr() as *const _,
-                Some(transmute(focus_home_or_end_trampoline::<Self, F> as usize)),
+                Some(*(&focus_home_or_end_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -769,9 +768,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"orientation-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    orientation_changed_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&orientation_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -810,7 +807,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"popup-context-menu\0".as_ptr() as *const _,
-                Some(transmute(popup_context_menu_trampoline::<Self, F> as usize)),
+                Some(*(&popup_context_menu_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -835,7 +832,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"style-changed\0".as_ptr() as *const _,
-                Some(transmute(style_changed_trampoline::<Self, F> as usize)),
+                Some(*(&style_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -857,7 +854,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-size\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -882,9 +879,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-size-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_icon_size_set_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_icon_size_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -906,7 +901,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-arrow\0".as_ptr() as *const _,
-                Some(transmute(notify_show_arrow_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_arrow_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -931,9 +926,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::toolbar-style\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_toolbar_style_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_toolbar_style_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

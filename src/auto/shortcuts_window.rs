@@ -17,7 +17,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Bin;
 use Buildable;
 use Container;
@@ -121,7 +120,7 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(transmute(close_trampoline::<Self, F> as usize)),
+                Some(*(&close_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -150,7 +149,7 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search\0".as_ptr() as *const _,
-                Some(transmute(search_trampoline::<Self, F> as usize)),
+                Some(*(&search_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -183,9 +182,7 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::section-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_section_name_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_section_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -207,7 +204,7 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::view-name\0".as_ptr() as *const _,
-                Some(transmute(notify_view_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_view_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

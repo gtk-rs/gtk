@@ -19,7 +19,6 @@ use libc;
 use std;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use std::ptr;
 use PageSetup;
 use PrintContext;
@@ -824,7 +823,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"begin-print\0".as_ptr() as *const _,
-                Some(transmute(begin_print_trampoline::<Self, F> as usize)),
+                Some(*(&begin_print_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -854,9 +853,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-custom-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    create_custom_widget_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&create_custom_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -884,9 +881,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"custom-widget-apply\0".as_ptr() as *const _,
-                Some(transmute(
-                    custom_widget_apply_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&custom_widget_apply_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -911,7 +906,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"done\0".as_ptr() as *const _,
-                Some(transmute(done_trampoline::<Self, F> as usize)),
+                Some(*(&done_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -941,7 +936,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"draw-page\0".as_ptr() as *const _,
-                Some(transmute(draw_page_trampoline::<Self, F> as usize)),
+                Some(*(&draw_page_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -966,7 +961,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end-print\0".as_ptr() as *const _,
-                Some(transmute(end_print_trampoline::<Self, F> as usize)),
+                Some(*(&end_print_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -996,7 +991,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paginate\0".as_ptr() as *const _,
-                Some(transmute(paginate_trampoline::<Self, F> as usize)),
+                Some(*(&paginate_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1035,7 +1030,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preview\0".as_ptr() as *const _,
-                Some(transmute(preview_trampoline::<Self, F> as usize)),
+                Some(*(&preview_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1070,7 +1065,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"request-page-setup\0".as_ptr() as *const _,
-                Some(transmute(request_page_setup_trampoline::<Self, F> as usize)),
+                Some(*(&request_page_setup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1091,7 +1086,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"status-changed\0".as_ptr() as *const _,
-                Some(transmute(status_changed_trampoline::<Self, F> as usize)),
+                Some(*(&status_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1126,9 +1121,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"update-custom-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    update_custom_widget_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&update_custom_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1150,7 +1143,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-async\0".as_ptr() as *const _,
-                Some(transmute(notify_allow_async_trampoline::<Self, F> as usize)),
+                Some(*(&notify_allow_async_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1175,9 +1168,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-page\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_current_page_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_current_page_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1202,9 +1193,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::custom-tab-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_custom_tab_label_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_custom_tab_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1229,9 +1218,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-page-setup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_page_setup_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_default_page_setup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1256,9 +1243,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::embed-page-setup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_embed_page_setup_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_embed_page_setup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1283,9 +1268,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::export-filename\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_export_filename_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_export_filename_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1310,9 +1293,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_selection_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_has_selection_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1334,7 +1315,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::job-name\0".as_ptr() as *const _,
-                Some(transmute(notify_job_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_job_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1356,7 +1337,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-pages\0".as_ptr() as *const _,
-                Some(transmute(notify_n_pages_trampoline::<Self, F> as usize)),
+                Some(*(&notify_n_pages_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1381,9 +1362,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-pages-to-print\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_n_pages_to_print_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_n_pages_to_print_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1408,9 +1387,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::print-settings\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_print_settings_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_print_settings_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1435,9 +1412,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-progress\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_progress_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_show_progress_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1459,7 +1434,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::status\0".as_ptr() as *const _,
-                Some(transmute(notify_status_trampoline::<Self, F> as usize)),
+                Some(*(&notify_status_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1484,9 +1459,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::status-string\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_status_string_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_status_string_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1511,9 +1484,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::support-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_support_selection_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_support_selection_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1538,9 +1509,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-print-status\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_track_print_status_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_track_print_status_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1562,7 +1531,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::unit\0".as_ptr() as *const _,
-                Some(transmute(notify_unit_trampoline::<Self, F> as usize)),
+                Some(*(&notify_unit_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1587,9 +1556,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-full-page\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_full_page_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_use_full_page_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -17,7 +17,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Adjustment;
 use Buildable;
 use ResizeMode;
@@ -392,7 +391,7 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"add\0".as_ptr() as *const _,
-                Some(transmute(add_trampoline::<Self, F> as usize)),
+                Some(*(&add_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -413,7 +412,7 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"check-resize\0".as_ptr() as *const _,
-                Some(transmute(check_resize_trampoline::<Self, F> as usize)),
+                Some(*(&check_resize_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -438,7 +437,7 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"remove\0".as_ptr() as *const _,
-                Some(transmute(remove_trampoline::<Self, F> as usize)),
+                Some(*(&remove_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -463,7 +462,7 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"set-focus-child\0".as_ptr() as *const _,
-                Some(transmute(set_focus_child_trampoline::<Self, F> as usize)),
+                Some(*(&set_focus_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -488,9 +487,7 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::border-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_border_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_border_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -512,7 +509,7 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(transmute(notify_child_trampoline::<Self, F> as usize)),
+                Some(*(&notify_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -534,7 +531,7 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resize-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_resize_mode_trampoline::<Self, F> as usize)),
+                Some(*(&notify_resize_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

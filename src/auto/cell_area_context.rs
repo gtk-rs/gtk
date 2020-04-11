@@ -15,7 +15,6 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use CellArea;
 
 glib_wrapper! {
@@ -275,9 +274,7 @@ impl<O: IsA<CellAreaContext>> CellAreaContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::minimum-height\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_minimum_height_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_minimum_height_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -302,9 +299,7 @@ impl<O: IsA<CellAreaContext>> CellAreaContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::minimum-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_minimum_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_minimum_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -329,9 +324,7 @@ impl<O: IsA<CellAreaContext>> CellAreaContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::natural-height\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_natural_height_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_natural_height_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -356,9 +349,7 @@ impl<O: IsA<CellAreaContext>> CellAreaContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::natural-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_natural_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_natural_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

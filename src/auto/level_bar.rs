@@ -17,7 +17,6 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -578,7 +577,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"offset-changed\0".as_ptr() as *const _,
-                Some(transmute(offset_changed_trampoline::<Self, F> as usize)),
+                Some(*(&offset_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -600,7 +599,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)),
+                Some(*(&notify_inverted_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -622,7 +621,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-value\0".as_ptr() as *const _,
-                Some(transmute(notify_max_value_trampoline::<Self, F> as usize)),
+                Some(*(&notify_max_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -644,7 +643,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-value\0".as_ptr() as *const _,
-                Some(transmute(notify_min_value_trampoline::<Self, F> as usize)),
+                Some(*(&notify_min_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -666,7 +665,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mode\0".as_ptr() as *const _,
-                Some(transmute(notify_mode_trampoline::<Self, F> as usize)),
+                Some(*(&notify_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -688,7 +687,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Some(*(&notify_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

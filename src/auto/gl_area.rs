@@ -26,8 +26,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use std::mem;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -716,7 +714,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-context\0".as_ptr() as *const _,
-                Some(transmute(create_context_trampoline::<Self, F> as usize)),
+                Some(*(&create_context_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -750,7 +748,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"render\0".as_ptr() as *const _,
-                Some(transmute(render_trampoline::<Self, F> as usize)),
+                Some(*(&render_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -778,7 +776,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"resize\0".as_ptr() as *const _,
-                Some(transmute(resize_trampoline::<Self, F> as usize)),
+                Some(*(&resize_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -801,7 +799,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-render\0".as_ptr() as *const _,
-                Some(transmute(notify_auto_render_trampoline::<Self, F> as usize)),
+                Some(*(&notify_auto_render_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -824,7 +822,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::context\0".as_ptr() as *const _,
-                Some(transmute(notify_context_trampoline::<Self, F> as usize)),
+                Some(*(&notify_context_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -847,7 +845,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-alpha\0".as_ptr() as *const _,
-                Some(transmute(notify_has_alpha_trampoline::<Self, F> as usize)),
+                Some(*(&notify_has_alpha_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -873,9 +871,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-depth-buffer\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_depth_buffer_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_has_depth_buffer_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -901,9 +897,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-stencil-buffer\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_stencil_buffer_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_has_stencil_buffer_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -926,7 +920,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-es\0".as_ptr() as *const _,
-                Some(transmute(notify_use_es_trampoline::<Self, F> as usize)),
+                Some(*(&notify_use_es_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

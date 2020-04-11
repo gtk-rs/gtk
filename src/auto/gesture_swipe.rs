@@ -17,7 +17,6 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use EventController;
 use Gesture;
 use GestureSingle;
@@ -77,7 +76,7 @@ impl GestureSwipe {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"swipe\0".as_ptr() as *const _,
-                Some(transmute(swipe_trampoline::<F> as usize)),
+                Some(*(&swipe_trampoline::<F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

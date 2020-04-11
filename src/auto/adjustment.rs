@@ -11,7 +11,6 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct Adjustment(Object<gtk_sys::GtkAdjustment, gtk_sys::GtkAdjustmentClass, AdjustmentClass>);
@@ -240,7 +239,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(transmute(changed_trampoline::<Self, F> as usize)),
+                Some(*(&changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -261,7 +260,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"value-changed\0".as_ptr() as *const _,
-                Some(transmute(value_changed_trampoline::<Self, F> as usize)),
+                Some(*(&value_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -283,7 +282,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lower\0".as_ptr() as *const _,
-                Some(transmute(notify_lower_trampoline::<Self, F> as usize)),
+                Some(*(&notify_lower_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -308,9 +307,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page-increment\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_page_increment_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_page_increment_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -332,7 +329,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page-size\0".as_ptr() as *const _,
-                Some(transmute(notify_page_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_page_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -357,9 +354,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::step-increment\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_step_increment_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_step_increment_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -381,7 +376,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::upper\0".as_ptr() as *const _,
-                Some(transmute(notify_upper_trampoline::<Self, F> as usize)),
+                Some(*(&notify_upper_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -403,7 +398,7 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Some(*(&notify_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

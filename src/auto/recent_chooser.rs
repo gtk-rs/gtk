@@ -14,7 +14,6 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 use RecentFilter;
 use RecentInfo;
@@ -433,7 +432,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"item-activated\0".as_ptr() as *const _,
-                Some(transmute(item_activated_trampoline::<Self, F> as usize)),
+                Some(*(&item_activated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -454,7 +453,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-changed\0".as_ptr() as *const _,
-                Some(transmute(selection_changed_trampoline::<Self, F> as usize)),
+                Some(*(&selection_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -476,7 +475,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::filter\0".as_ptr() as *const _,
-                Some(transmute(notify_filter_trampoline::<Self, F> as usize)),
+                Some(*(&notify_filter_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -498,7 +497,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::limit\0".as_ptr() as *const _,
-                Some(transmute(notify_limit_trampoline::<Self, F> as usize)),
+                Some(*(&notify_limit_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -520,7 +519,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::local-only\0".as_ptr() as *const _,
-                Some(transmute(notify_local_only_trampoline::<Self, F> as usize)),
+                Some(*(&notify_local_only_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -545,9 +544,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::select-multiple\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_select_multiple_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_select_multiple_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -569,7 +566,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-icons\0".as_ptr() as *const _,
-                Some(transmute(notify_show_icons_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_icons_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -594,9 +591,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-not-found\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_not_found_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_show_not_found_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -621,9 +616,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-private\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_private_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_show_private_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -645,7 +638,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-tips\0".as_ptr() as *const _,
-                Some(transmute(notify_show_tips_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_tips_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -667,7 +660,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-type\0".as_ptr() as *const _,
-                Some(transmute(notify_sort_type_trampoline::<Self, F> as usize)),
+                Some(*(&notify_sort_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

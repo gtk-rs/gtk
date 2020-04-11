@@ -18,7 +18,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Application;
 use Bin;
@@ -924,9 +923,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::message-area\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_message_area_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_message_area_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -951,9 +948,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::message-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_message_type_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_message_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -978,9 +973,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-text\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_text_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_secondary_text_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1005,9 +998,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-use-markup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_use_markup_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_secondary_use_markup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1029,7 +1020,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1051,7 +1042,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)),
+                Some(*(&notify_use_markup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

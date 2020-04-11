@@ -80,7 +80,6 @@ mod editable {
     use gtk_sys::GtkEditable;
     use libc::{c_char, c_int, c_uchar};
     use std::ffi::CStr;
-    use std::mem::transmute;
     use std::slice;
     use std::str;
     use Editable;
@@ -95,7 +94,7 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"changed\0".as_ptr() as *mut _,
-                    Some(transmute(trampoline::<Self, F> as usize)),
+                    Some(*(&trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }
@@ -110,7 +109,7 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"delete-text\0".as_ptr() as *mut _,
-                    Some(transmute(delete_trampoline::<Self, F> as usize)),
+                    Some(*(&delete_trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }
@@ -125,7 +124,7 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"insert-text\0".as_ptr() as *mut _,
-                    Some(transmute(insert_trampoline::<Self, F> as usize)),
+                    Some(*(&insert_trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }
@@ -172,7 +171,8 @@ mod editable {
         f(
             &Editable::from_glib_borrow(this).unsafe_cast_ref(),
             string,
-            transmute(position),
+            // To cast a mutable pointer into a mutable reference.
+            &mut *position,
         );
     }
 }
@@ -205,7 +205,6 @@ mod spin_button {
     use gtk_sys::{GtkSpinButton, GTK_INPUT_ERROR};
     use libc::{c_double, c_int};
     use std::boxed::Box as Box_;
-    use std::mem::transmute;
     use Inhibit;
     use ScrollType;
     use SpinButton;
@@ -220,7 +219,7 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"change_value\0".as_ptr() as *mut _,
-                    Some(transmute(change_trampoline::<Self, F> as usize)),
+                    Some(*(&change_trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }
@@ -235,7 +234,7 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"input\0".as_ptr() as *mut _,
-                    Some(transmute(input_trampoline::<Self, F> as usize)),
+                    Some(*(&input_trampoline::<Self, F> as *const _ as *const _)),
                     Box_::into_raw(f),
                 )
             }
@@ -250,7 +249,7 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"output\0".as_ptr() as *mut _,
-                    Some(transmute(output_trampoline::<Self, F> as usize)),
+                    Some(*(&output_trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }
@@ -265,7 +264,7 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"value-changed\0".as_ptr() as *mut _,
-                    Some(transmute(trampoline::<Self, F> as usize)),
+                    Some(*(&trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }
@@ -280,7 +279,7 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"wrapped\0".as_ptr() as *mut _,
-                    Some(transmute(trampoline::<Self, F> as usize)),
+                    Some(*(&trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }
@@ -351,7 +350,6 @@ mod overlay {
     use glib::IsA;
     use glib_sys::{gboolean, gpointer};
     use gtk_sys::{GtkOverlay, GtkWidget};
-    use std::mem::transmute;
     use std::ptr;
     use Overlay;
     use Widget;
@@ -366,7 +364,7 @@ mod overlay {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"get-child-position\0".as_ptr() as *mut _,
-                    Some(transmute(get_child_position_trampoline::<Self, F> as usize)),
+                    Some(*(&get_child_position_trampoline::<Self, F> as *const _ as *const _)),
                     Box::into_raw(f),
                 )
             }

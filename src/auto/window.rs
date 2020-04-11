@@ -22,7 +22,6 @@ use std;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 use AccelGroup;
 use Align;
@@ -2041,7 +2040,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-default\0".as_ptr() as *const _,
-                Some(transmute(activate_default_trampoline::<Self, F> as usize)),
+                Some(*(&activate_default_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2070,7 +2069,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-focus\0".as_ptr() as *const _,
-                Some(transmute(activate_focus_trampoline::<Self, F> as usize)),
+                Some(*(&activate_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2108,7 +2107,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"enable-debugging\0".as_ptr() as *const _,
-                Some(transmute(enable_debugging_trampoline::<Self, F> as usize)),
+                Some(*(&enable_debugging_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2141,7 +2140,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"keys-changed\0".as_ptr() as *const _,
-                Some(transmute(keys_changed_trampoline::<Self, F> as usize)),
+                Some(*(&keys_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2166,7 +2165,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"set-focus\0".as_ptr() as *const _,
-                Some(transmute(set_focus_trampoline::<Self, F> as usize)),
+                Some(*(&set_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2191,9 +2190,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accept-focus\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_accept_focus_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_accept_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2215,7 +2212,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::application\0".as_ptr() as *const _,
-                Some(transmute(notify_application_trampoline::<Self, F> as usize)),
+                Some(*(&notify_application_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2237,7 +2234,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::attached-to\0".as_ptr() as *const _,
-                Some(transmute(notify_attached_to_trampoline::<Self, F> as usize)),
+                Some(*(&notify_attached_to_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2259,7 +2256,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::decorated\0".as_ptr() as *const _,
-                Some(transmute(notify_decorated_trampoline::<Self, F> as usize)),
+                Some(*(&notify_decorated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2284,9 +2281,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-height\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_height_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_default_height_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2311,9 +2306,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_default_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2335,7 +2328,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::deletable\0".as_ptr() as *const _,
-                Some(transmute(notify_deletable_trampoline::<Self, F> as usize)),
+                Some(*(&notify_deletable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2360,9 +2353,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::destroy-with-parent\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_destroy_with_parent_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_destroy_with_parent_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2387,9 +2378,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-on-map\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_focus_on_map_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_focus_on_map_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2414,9 +2403,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-visible\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_focus_visible_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_focus_visible_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2438,7 +2425,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::gravity\0".as_ptr() as *const _,
-                Some(transmute(notify_gravity_trampoline::<Self, F> as usize)),
+                Some(*(&notify_gravity_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2463,9 +2450,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-toplevel-focus\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_toplevel_focus_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_has_toplevel_focus_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2493,9 +2478,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hide-titlebar-when-maximized\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hide_titlebar_when_maximized_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_hide_titlebar_when_maximized_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -2517,7 +2503,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2539,7 +2525,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-name\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2561,7 +2547,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-active\0".as_ptr() as *const _,
-                Some(transmute(notify_is_active_trampoline::<Self, F> as usize)),
+                Some(*(&notify_is_active_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2586,9 +2572,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-maximized\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_is_maximized_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_is_maximized_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2613,9 +2597,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mnemonics-visible\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_mnemonics_visible_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_mnemonics_visible_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2637,7 +2619,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modal\0".as_ptr() as *const _,
-                Some(transmute(notify_modal_trampoline::<Self, F> as usize)),
+                Some(*(&notify_modal_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2659,7 +2641,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resizable\0".as_ptr() as *const _,
-                Some(transmute(notify_resizable_trampoline::<Self, F> as usize)),
+                Some(*(&notify_resizable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2681,7 +2663,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::role\0".as_ptr() as *const _,
-                Some(transmute(notify_role_trampoline::<Self, F> as usize)),
+                Some(*(&notify_role_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2703,7 +2685,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::screen\0".as_ptr() as *const _,
-                Some(transmute(notify_screen_trampoline::<Self, F> as usize)),
+                Some(*(&notify_screen_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2728,9 +2710,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::skip-pager-hint\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_skip_pager_hint_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_skip_pager_hint_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2755,9 +2735,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::skip-taskbar-hint\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_skip_taskbar_hint_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_skip_taskbar_hint_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2779,7 +2757,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::startup-id\0".as_ptr() as *const _,
-                Some(transmute(notify_startup_id_trampoline::<Self, F> as usize)),
+                Some(*(&notify_startup_id_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2801,7 +2779,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(*(&notify_title_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2826,9 +2804,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transient-for\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transient_for_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_transient_for_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2850,7 +2826,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::type-hint\0".as_ptr() as *const _,
-                Some(transmute(notify_type_hint_trampoline::<Self, F> as usize)),
+                Some(*(&notify_type_hint_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2875,9 +2851,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::urgency-hint\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_urgency_hint_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_urgency_hint_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -2902,9 +2876,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_window_position_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_window_position_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

@@ -20,7 +20,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use CellRenderer;
 use CellRendererMode;
 
@@ -517,9 +516,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::follow-state\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_follow_state_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_follow_state_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -541,7 +538,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::gicon\0".as_ptr() as *const _,
-                Some(transmute(notify_gicon_trampoline::<Self, F> as usize)),
+                Some(*(&notify_gicon_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -563,7 +560,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-name\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -585,7 +582,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixbuf\0".as_ptr() as *const _,
-                Some(transmute(notify_pixbuf_trampoline::<Self, F> as usize)),
+                Some(*(&notify_pixbuf_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -610,9 +607,9 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixbuf-expander-closed\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixbuf_expander_closed_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_pixbuf_expander_closed_trampoline::<Self, F> as *const _ as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -637,9 +634,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixbuf-expander-open\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixbuf_expander_open_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_pixbuf_expander_open_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -664,9 +659,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stock-detail\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_stock_detail_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_stock_detail_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -688,7 +681,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stock-size\0".as_ptr() as *const _,
-                Some(transmute(notify_stock_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_stock_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

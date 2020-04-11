@@ -11,7 +11,6 @@ use glib::translate::*;
 use glib::ObjectExt;
 use glib_sys::gboolean;
 use gtk_sys;
-use std::mem::transmute;
 use std::ptr;
 
 use glib::Continue;
@@ -141,7 +140,7 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             connect_raw(
                 self.to_glib_none().0 as *mut _,
                 b"map-event\0".as_ptr() as *mut _,
-                Some(transmute(event_any_trampoline::<Self, F> as usize)),
+                Some(*(&event_any_trampoline::<Self, F> as *const _ as *const _)),
                 Box::into_raw(f),
             )
         }
@@ -170,7 +169,7 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             connect_raw(
                 self.to_glib_none().0 as *mut _,
                 b"unmap-event\0".as_ptr() as *mut _,
-                Some(transmute(event_any_trampoline::<Self, F> as usize)),
+                Some(*(&event_any_trampoline::<Self, F> as *const _ as *const _)),
                 Box::into_raw(f),
             )
         }

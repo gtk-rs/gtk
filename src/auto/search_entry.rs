@@ -23,7 +23,6 @@ use gtk_sys;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use CellEditable;
@@ -813,7 +812,7 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-match\0".as_ptr() as *const _,
-                Some(transmute(next_match_trampoline::<Self, F> as usize)),
+                Some(*(&next_match_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -844,7 +843,7 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"previous-match\0".as_ptr() as *const _,
-                Some(transmute(previous_match_trampoline::<Self, F> as usize)),
+                Some(*(&previous_match_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -874,7 +873,7 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search-changed\0".as_ptr() as *const _,
-                Some(transmute(search_changed_trampoline::<Self, F> as usize)),
+                Some(*(&search_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -896,7 +895,7 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stop-search\0".as_ptr() as *const _,
-                Some(transmute(stop_search_trampoline::<Self, F> as usize)),
+                Some(*(&stop_search_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

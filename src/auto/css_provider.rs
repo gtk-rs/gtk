@@ -14,7 +14,6 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use std::ptr;
 use CssSection;
 use StyleProvider;
@@ -172,7 +171,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"parsing-error\0".as_ptr() as *const _,
-                Some(transmute(parsing_error_trampoline::<Self, F> as usize)),
+                Some(*(&parsing_error_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

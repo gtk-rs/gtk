@@ -20,7 +20,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -1148,9 +1147,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"change-current-page\0".as_ptr() as *const _,
-                Some(transmute(
-                    change_current_page_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&change_current_page_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1200,7 +1197,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-window\0".as_ptr() as *const _,
-                Some(transmute(create_window_trampoline::<Self, F> as usize)),
+                Some(*(&create_window_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1230,7 +1227,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-tab\0".as_ptr() as *const _,
-                Some(transmute(focus_tab_trampoline::<Self, F> as usize)),
+                Some(*(&focus_tab_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1270,7 +1267,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-focus-out\0".as_ptr() as *const _,
-                Some(transmute(move_focus_out_trampoline::<Self, F> as usize)),
+                Some(*(&move_focus_out_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1305,7 +1302,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-added\0".as_ptr() as *const _,
-                Some(transmute(page_added_trampoline::<Self, F> as usize)),
+                Some(*(&page_added_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1332,7 +1329,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-removed\0".as_ptr() as *const _,
-                Some(transmute(page_removed_trampoline::<Self, F> as usize)),
+                Some(*(&page_removed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1362,7 +1359,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-reordered\0".as_ptr() as *const _,
-                Some(transmute(page_reordered_trampoline::<Self, F> as usize)),
+                Some(*(&page_reordered_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1397,7 +1394,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"reorder-tab\0".as_ptr() as *const _,
-                Some(transmute(reorder_tab_trampoline::<Self, F> as usize)),
+                Some(*(&reorder_tab_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1436,7 +1433,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-page\0".as_ptr() as *const _,
-                Some(transmute(select_page_trampoline::<Self, F> as usize)),
+                Some(*(&select_page_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1475,7 +1472,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"switch-page\0".as_ptr() as *const _,
-                Some(transmute(switch_page_trampoline::<Self, F> as usize)),
+                Some(*(&switch_page_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1500,9 +1497,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-popup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_popup_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_enable_popup_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1524,7 +1519,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::group-name\0".as_ptr() as *const _,
-                Some(transmute(notify_group_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_group_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1546,7 +1541,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page\0".as_ptr() as *const _,
-                Some(transmute(notify_page_trampoline::<Self, F> as usize)),
+                Some(*(&notify_page_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1568,7 +1563,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scrollable\0".as_ptr() as *const _,
-                Some(transmute(notify_scrollable_trampoline::<Self, F> as usize)),
+                Some(*(&notify_scrollable_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1590,7 +1585,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-border\0".as_ptr() as *const _,
-                Some(transmute(notify_show_border_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_border_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1612,7 +1607,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-tabs\0".as_ptr() as *const _,
-                Some(transmute(notify_show_tabs_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_tabs_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1634,7 +1629,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tab-pos\0".as_ptr() as *const _,
-                Some(transmute(notify_tab_pos_trampoline::<Self, F> as usize)),
+                Some(*(&notify_tab_pos_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

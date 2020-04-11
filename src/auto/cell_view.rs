@@ -17,7 +17,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use CellArea;
@@ -711,7 +710,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::background\0".as_ptr() as *const _,
-                Some(transmute(notify_background_trampoline::<Self, F> as usize)),
+                Some(*(&notify_background_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -736,9 +735,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::background-rgba\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_background_rgba_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_background_rgba_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -763,9 +760,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::background-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_background_set_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_background_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -790,9 +785,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::draw-sensitive\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_draw_sensitive_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_draw_sensitive_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -814,7 +807,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fit-model\0".as_ptr() as *const _,
-                Some(transmute(notify_fit_model_trampoline::<Self, F> as usize)),
+                Some(*(&notify_fit_model_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -836,7 +829,7 @@ impl<O: IsA<CellView>> CellViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Some(*(&notify_model_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

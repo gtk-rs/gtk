@@ -11,7 +11,6 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Adjustment;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use Border;
@@ -163,7 +162,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hadjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_hadjustment_trampoline::<Self, F> as usize)),
+                Some(*(&notify_hadjustment_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -188,9 +187,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hscroll-policy\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hscroll_policy_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_hscroll_policy_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -212,7 +209,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vadjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_vadjustment_trampoline::<Self, F> as usize)),
+                Some(*(&notify_vadjustment_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -237,9 +234,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vscroll-policy\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_vscroll_policy_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_vscroll_policy_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

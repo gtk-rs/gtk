@@ -17,7 +17,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -943,9 +942,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hhomogeneous\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hhomogeneous_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_hhomogeneous_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -967,7 +964,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::homogeneous\0".as_ptr() as *const _,
-                Some(transmute(notify_homogeneous_trampoline::<Self, F> as usize)),
+                Some(*(&notify_homogeneous_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -992,9 +989,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::interpolate-size\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_interpolate_size_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_interpolate_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1019,9 +1014,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-duration\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_duration_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_transition_duration_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1046,9 +1039,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-running\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_running_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_transition_running_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1073,9 +1064,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_type_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_transition_type_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1101,9 +1090,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vhomogeneous\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_vhomogeneous_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_vhomogeneous_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1128,9 +1115,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_child_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_visible_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1155,9 +1140,7 @@ impl<O: IsA<Stack>> StackExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-child-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_child_name_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_visible_child_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

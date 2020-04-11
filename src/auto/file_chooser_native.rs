@@ -16,7 +16,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use FileChooser;
 use FileChooserAction;
 use FileFilter;
@@ -382,9 +381,7 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accept-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_accept_label_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_accept_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -409,9 +406,7 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cancel-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cancel_label_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_cancel_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

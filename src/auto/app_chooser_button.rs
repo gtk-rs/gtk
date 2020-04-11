@@ -17,7 +17,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Align;
 use AppChooser;
 use Bin;
@@ -685,9 +684,7 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"custom-item-activated\0".as_ptr() as *const _,
-                Some(transmute(
-                    custom_item_activated_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&custom_item_activated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -709,7 +706,7 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::heading\0".as_ptr() as *const _,
-                Some(transmute(notify_heading_trampoline::<Self, F> as usize)),
+                Some(*(&notify_heading_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -734,9 +731,7 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-default-item\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_default_item_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_show_default_item_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -761,9 +756,7 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-dialog-item\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_dialog_item_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_show_dialog_item_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

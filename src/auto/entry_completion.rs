@@ -17,7 +17,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Buildable;
 use CellArea;
 use CellLayout;
@@ -517,7 +516,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"action-activated\0".as_ptr() as *const _,
-                Some(transmute(action_activated_trampoline::<Self, F> as usize)),
+                Some(*(&action_activated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -554,7 +553,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cursor-on-match\0".as_ptr() as *const _,
-                Some(transmute(cursor_on_match_trampoline::<Self, F> as usize)),
+                Some(*(&cursor_on_match_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -587,7 +586,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-prefix\0".as_ptr() as *const _,
-                Some(transmute(insert_prefix_trampoline::<Self, F> as usize)),
+                Some(*(&insert_prefix_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -624,7 +623,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"match-selected\0".as_ptr() as *const _,
-                Some(transmute(match_selected_trampoline::<Self, F> as usize)),
+                Some(*(&match_selected_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -645,7 +644,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"no-matches\0".as_ptr() as *const _,
-                Some(transmute(no_matches_trampoline::<Self, F> as usize)),
+                Some(*(&no_matches_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -670,9 +669,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inline-completion\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_inline_completion_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_inline_completion_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -697,9 +694,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inline-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_inline_selection_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_inline_selection_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -724,9 +719,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::minimum-key-length\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_minimum_key_length_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_minimum_key_length_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -748,7 +741,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Some(*(&notify_model_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -773,9 +766,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-completion\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_popup_completion_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_popup_completion_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -800,9 +791,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-set-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_popup_set_width_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_popup_set_width_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -827,9 +816,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-single-match\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_popup_single_match_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_popup_single_match_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -851,7 +838,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-column\0".as_ptr() as *const _,
-                Some(transmute(notify_text_column_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_column_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

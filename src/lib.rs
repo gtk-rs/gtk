@@ -151,7 +151,6 @@
 #![cfg_attr(feature = "cargo-clippy", allow(let_unit_value))]
 #![cfg_attr(feature = "cargo-clippy", allow(new_without_default))]
 #![cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
-#![cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
 #![cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref))]
 #![cfg_attr(feature = "cargo-clippy", allow(derive_hash_xor_eq))]
 #![allow(deprecated)]

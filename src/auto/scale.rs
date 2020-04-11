@@ -17,7 +17,6 @@ use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use Adjustment;
 use Align;
 use Buildable;
@@ -639,7 +638,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"format-value\0".as_ptr() as *const _,
-                Some(transmute(format_value_trampoline::<Self, F> as usize)),
+                Some(*(&format_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -661,7 +660,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::digits\0".as_ptr() as *const _,
-                Some(transmute(notify_digits_trampoline::<Self, F> as usize)),
+                Some(*(&notify_digits_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -683,7 +682,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::draw-value\0".as_ptr() as *const _,
-                Some(transmute(notify_draw_value_trampoline::<Self, F> as usize)),
+                Some(*(&notify_draw_value_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -705,7 +704,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-origin\0".as_ptr() as *const _,
-                Some(transmute(notify_has_origin_trampoline::<Self, F> as usize)),
+                Some(*(&notify_has_origin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -727,7 +726,7 @@ impl<O: IsA<Scale>> ScaleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value-pos\0".as_ptr() as *const _,
-                Some(transmute(notify_value_pos_trampoline::<Self, F> as usize)),
+                Some(*(&notify_value_pos_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

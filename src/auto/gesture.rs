@@ -17,7 +17,6 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use EventController;
 use EventSequenceState;
 
@@ -314,7 +313,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"begin\0".as_ptr() as *const _,
-                Some(transmute(begin_trampoline::<Self, F> as usize)),
+                Some(*(&begin_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -339,7 +338,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel\0".as_ptr() as *const _,
-                Some(transmute(cancel_trampoline::<Self, F> as usize)),
+                Some(*(&cancel_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -364,7 +363,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end\0".as_ptr() as *const _,
-                Some(transmute(end_trampoline::<Self, F> as usize)),
+                Some(*(&end_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -399,9 +398,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"sequence-state-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    sequence_state_changed_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&sequence_state_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -426,7 +423,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"update\0".as_ptr() as *const _,
-                Some(transmute(update_trampoline::<Self, F> as usize)),
+                Some(*(&update_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -448,7 +445,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window\0".as_ptr() as *const _,
-                Some(transmute(notify_window_trampoline::<Self, F> as usize)),
+                Some(*(&notify_window_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

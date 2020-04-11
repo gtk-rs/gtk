@@ -18,7 +18,6 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Actionable;
 use Align;
 use Bin;
@@ -620,7 +619,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clicked\0".as_ptr() as *const _,
-                Some(transmute(clicked_trampoline::<Self, F> as usize)),
+                Some(*(&clicked_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -650,7 +649,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-name\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -672,7 +671,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-widget\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_widget_trampoline::<Self, F> as usize)),
+                Some(*(&notify_icon_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -694,7 +693,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(*(&notify_label_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -719,9 +718,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_label_widget_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_label_widget_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -746,9 +743,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_underline_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_use_underline_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

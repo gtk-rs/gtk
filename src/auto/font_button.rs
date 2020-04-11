@@ -17,7 +17,6 @@ use gtk_sys;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Actionable;
 use Align;
 use Bin;
@@ -754,7 +753,7 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"font-set\0".as_ptr() as *const _,
-                Some(transmute(font_set_trampoline::<Self, F> as usize)),
+                Some(*(&font_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -776,7 +775,7 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::font-name\0".as_ptr() as *const _,
-                Some(transmute(notify_font_name_trampoline::<Self, F> as usize)),
+                Some(*(&notify_font_name_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -798,7 +797,7 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-size\0".as_ptr() as *const _,
-                Some(transmute(notify_show_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -820,7 +819,7 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-style\0".as_ptr() as *const _,
-                Some(transmute(notify_show_style_trampoline::<Self, F> as usize)),
+                Some(*(&notify_show_style_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -842,7 +841,7 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(*(&notify_title_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -864,7 +863,7 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-font\0".as_ptr() as *const _,
-                Some(transmute(notify_use_font_trampoline::<Self, F> as usize)),
+                Some(*(&notify_use_font_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -886,7 +885,7 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-size\0".as_ptr() as *const _,
-                Some(transmute(notify_use_size_trampoline::<Self, F> as usize)),
+                Some(*(&notify_use_size_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

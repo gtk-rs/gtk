@@ -15,7 +15,6 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Actionable;
 use Align;
 use Bin;
@@ -548,7 +547,7 @@ impl<O: IsA<RadioMenuItem>> RadioMenuItemExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"group-changed\0".as_ptr() as *const _,
-                Some(transmute(group_changed_trampoline::<Self, F> as usize)),
+                Some(*(&group_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

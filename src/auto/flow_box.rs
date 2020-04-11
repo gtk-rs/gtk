@@ -20,7 +20,6 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 use Adjustment;
 use Align;
 use Buildable;
@@ -957,9 +956,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-cursor-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    activate_cursor_child_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&activate_cursor_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -995,7 +992,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-activated\0".as_ptr() as *const _,
-                Some(transmute(child_activated_trampoline::<Self, F> as usize)),
+                Some(*(&child_activated_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1030,7 +1027,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(*(&move_cursor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1063,7 +1060,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(transmute(select_all_trampoline::<Self, F> as usize)),
+                Some(*(&select_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1092,9 +1089,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selected-children-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    selected_children_changed_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&selected_children_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1115,9 +1110,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    toggle_cursor_child_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&toggle_cursor_child_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1146,7 +1139,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unselect-all\0".as_ptr() as *const _,
-                Some(transmute(unselect_all_trampoline::<Self, F> as usize)),
+                Some(*(&unselect_all_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1179,9 +1172,10 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_activate_on_single_click_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_activate_on_single_click_trampoline::<Self, F> as *const _
+                        as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -1206,9 +1200,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::column-spacing\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_column_spacing_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_column_spacing_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1230,7 +1222,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::homogeneous\0".as_ptr() as *const _,
-                Some(transmute(notify_homogeneous_trampoline::<Self, F> as usize)),
+                Some(*(&notify_homogeneous_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1255,9 +1247,9 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-children-per-line\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_children_per_line_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_max_children_per_line_trampoline::<Self, F> as *const _ as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -1282,9 +1274,9 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-children-per-line\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_min_children_per_line_trampoline::<Self, F> as usize,
-                )),
+                Some(
+                    *(&notify_min_children_per_line_trampoline::<Self, F> as *const _ as *const _),
+                ),
                 Box_::into_raw(f),
             )
         }
@@ -1306,7 +1298,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::row-spacing\0".as_ptr() as *const _,
-                Some(transmute(notify_row_spacing_trampoline::<Self, F> as usize)),
+                Some(*(&notify_row_spacing_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1331,9 +1323,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_selection_mode_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_selection_mode_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }

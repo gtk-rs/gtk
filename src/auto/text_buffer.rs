@@ -21,7 +21,6 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 use Clipboard;
 use TargetList;
@@ -1158,7 +1157,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"apply-tag\0".as_ptr() as *const _,
-                Some(transmute(apply_tag_trampoline::<Self, F> as usize)),
+                Some(*(&apply_tag_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1179,7 +1178,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"begin-user-action\0".as_ptr() as *const _,
-                Some(transmute(begin_user_action_trampoline::<Self, F> as usize)),
+                Some(*(&begin_user_action_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1200,7 +1199,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(transmute(changed_trampoline::<Self, F> as usize)),
+                Some(*(&changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1230,7 +1229,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"delete-range\0".as_ptr() as *const _,
-                Some(transmute(delete_range_trampoline::<Self, F> as usize)),
+                Some(*(&delete_range_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1251,7 +1250,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end-user-action\0".as_ptr() as *const _,
-                Some(transmute(end_user_action_trampoline::<Self, F> as usize)),
+                Some(*(&end_user_action_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1284,9 +1283,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-child-anchor\0".as_ptr() as *const _,
-                Some(transmute(
-                    insert_child_anchor_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&insert_child_anchor_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1319,7 +1316,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-pixbuf\0".as_ptr() as *const _,
-                Some(transmute(insert_pixbuf_trampoline::<Self, F> as usize)),
+                Some(*(&insert_pixbuf_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1344,7 +1341,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mark-deleted\0".as_ptr() as *const _,
-                Some(transmute(mark_deleted_trampoline::<Self, F> as usize)),
+                Some(*(&mark_deleted_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1374,7 +1371,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mark-set\0".as_ptr() as *const _,
-                Some(transmute(mark_set_trampoline::<Self, F> as usize)),
+                Some(*(&mark_set_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1395,7 +1392,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"modified-changed\0".as_ptr() as *const _,
-                Some(transmute(modified_changed_trampoline::<Self, F> as usize)),
+                Some(*(&modified_changed_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1420,7 +1417,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paste-done\0".as_ptr() as *const _,
-                Some(transmute(paste_done_trampoline::<Self, F> as usize)),
+                Some(*(&paste_done_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1455,7 +1452,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"remove-tag\0".as_ptr() as *const _,
-                Some(transmute(remove_tag_trampoline::<Self, F> as usize)),
+                Some(*(&remove_tag_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1480,9 +1477,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::copy-target-list\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_copy_target_list_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_copy_target_list_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1507,9 +1502,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cursor_position_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_cursor_position_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1534,9 +1527,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_selection_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_has_selection_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1561,9 +1552,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::paste-target-list\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_paste_target_list_trampoline::<Self, F> as usize,
-                )),
+                Some(*(&notify_paste_target_list_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
@@ -1585,7 +1574,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Some(*(&notify_text_trampoline::<Self, F> as *const _ as *const _)),
                 Box_::into_raw(f),
             )
         }
