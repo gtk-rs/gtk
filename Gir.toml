@@ -2493,3 +2493,8 @@ manual_traits = ["GtkWindowExtManual"]
         [[object.function.parameter]]
         name = "geometry"
         const = true
+    [[object.signal]] # workaround for https://github.com/gtk-rs/gtk/issues/985
+    name = "set-focus"
+        [[object.signal.parameter]]
+        name = "object"
+        nullable = true
