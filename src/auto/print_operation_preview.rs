@@ -11,6 +11,7 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use PageSetup;
 use PrintContext;
 
@@ -91,7 +92,9 @@ impl<O: IsA<PrintOperationPreview>> PrintOperationPreviewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"got-page-size\0".as_ptr() as *const _,
-                Some(*(&got_page_size_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    got_page_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -116,7 +119,9 @@ impl<O: IsA<PrintOperationPreview>> PrintOperationPreviewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"ready\0".as_ptr() as *const _,
-                Some(*(&ready_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    ready_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

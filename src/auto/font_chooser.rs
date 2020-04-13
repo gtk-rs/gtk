@@ -14,6 +14,7 @@ use libc;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 #[cfg(any(feature = "v3_24", feature = "dox"))]
 use FontChooserLevel;
 
@@ -322,7 +323,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"font-activated\0".as_ptr() as *const _,
-                Some(*(&font_activated_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    font_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -344,7 +347,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::font\0".as_ptr() as *const _,
-                Some(*(&notify_font_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_font_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -366,7 +371,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::font-desc\0".as_ptr() as *const _,
-                Some(*(&notify_font_desc_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_font_desc_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -392,7 +399,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::font-features\0".as_ptr() as *const _,
-                Some(*(&notify_font_features_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_font_features_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -415,7 +424,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::language\0".as_ptr() as *const _,
-                Some(*(&notify_language_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_language_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -438,7 +449,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::level\0".as_ptr() as *const _,
-                Some(*(&notify_level_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_level_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -463,7 +476,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::preview-text\0".as_ptr() as *const _,
-                Some(*(&notify_preview_text_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_preview_text_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -488,7 +503,9 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-preview-entry\0".as_ptr() as *const _,
-                Some(*(&notify_show_preview_entry_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_preview_entry_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

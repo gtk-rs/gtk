@@ -17,6 +17,7 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Bin;
 use Buildable;
 use Container;
@@ -120,7 +121,9 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(*(&close_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    close_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -149,7 +152,9 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search\0".as_ptr() as *const _,
-                Some(*(&search_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    search_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -182,7 +187,9 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::section-name\0".as_ptr() as *const _,
-                Some(*(&notify_section_name_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_section_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -204,7 +211,9 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::view-name\0".as_ptr() as *const _,
-                Some(*(&notify_view_name_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_view_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -18,6 +18,7 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Align;
 use Bin;
 use Buildable;
@@ -667,7 +668,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(*(&activate_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -697,7 +700,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::expanded\0".as_ptr() as *const _,
-                Some(*(&notify_expanded_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_expanded_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -719,7 +724,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(*(&notify_label_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -741,7 +748,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-fill\0".as_ptr() as *const _,
-                Some(*(&notify_label_fill_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_fill_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -766,7 +775,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-widget\0".as_ptr() as *const _,
-                Some(*(&notify_label_widget_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -791,7 +802,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resize-toplevel\0".as_ptr() as *const _,
-                Some(*(&notify_resize_toplevel_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_resize_toplevel_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -813,7 +826,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(*(&notify_spacing_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -835,7 +850,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(*(&notify_use_markup_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_markup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -860,7 +877,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(*(&notify_use_underline_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_underline_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -16,6 +16,7 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Buildable;
 use Container;
 use DirectionType;
@@ -243,7 +244,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-current\0".as_ptr() as *const _,
-                Some(*(&activate_current_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_current_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -272,7 +275,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel\0".as_ptr() as *const _,
-                Some(*(&cancel_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cancel_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -305,7 +310,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cycle-focus\0".as_ptr() as *const _,
-                Some(*(&cycle_focus_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cycle_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -334,7 +341,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"deactivate\0".as_ptr() as *const _,
-                Some(*(&deactivate_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    deactivate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -361,7 +370,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert\0".as_ptr() as *const _,
-                Some(*(&insert_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -389,7 +400,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-current\0".as_ptr() as *const _,
-                Some(*(&move_current_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_current_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -430,7 +443,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-selected\0".as_ptr() as *const _,
-                Some(*(&move_selected_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_selected_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -451,7 +466,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-done\0".as_ptr() as *const _,
-                Some(*(&selection_done_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    selection_done_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -473,7 +490,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::take-focus\0".as_ptr() as *const _,
-                Some(*(&notify_take_focus_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_take_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

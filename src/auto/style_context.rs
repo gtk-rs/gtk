@@ -18,6 +18,7 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Border;
 use CssSection;
 use JunctionSides;
@@ -634,7 +635,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(*(&changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -656,7 +659,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::direction\0".as_ptr() as *const _,
-                Some(*(&notify_direction_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_direction_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -678,7 +683,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::paint-clock\0".as_ptr() as *const _,
-                Some(*(&notify_paint_clock_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_paint_clock_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -700,7 +707,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(*(&notify_parent_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_parent_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -722,7 +731,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::screen\0".as_ptr() as *const _,
-                Some(*(&notify_screen_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_screen_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

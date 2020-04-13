@@ -20,6 +20,7 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
+use std::mem::transmute;
 use std::ptr;
 use Buildable;
 use CellArea;
@@ -891,7 +892,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-cursor-item\0".as_ptr() as *const _,
-                Some(*(&activate_cursor_item_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_cursor_item_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -928,7 +931,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"item-activated\0".as_ptr() as *const _,
-                Some(*(&item_activated_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    item_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -963,7 +968,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(*(&move_cursor_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -996,7 +1003,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(*(&select_all_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1025,7 +1034,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-cursor-item\0".as_ptr() as *const _,
-                Some(*(&select_cursor_item_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_cursor_item_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1054,7 +1065,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-changed\0".as_ptr() as *const _,
-                Some(*(&selection_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    selection_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1075,7 +1088,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-item\0".as_ptr() as *const _,
-                Some(*(&toggle_cursor_item_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_cursor_item_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1104,7 +1119,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unselect-all\0".as_ptr() as *const _,
-                Some(*(&unselect_all_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    unselect_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1137,10 +1154,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                Some(
-                    *(&notify_activate_on_single_click_trampoline::<Self, F> as *const _
-                        as *const _),
-                ),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_activate_on_single_click_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1165,7 +1181,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::column-spacing\0".as_ptr() as *const _,
-                Some(*(&notify_column_spacing_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_column_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1187,7 +1205,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::columns\0".as_ptr() as *const _,
-                Some(*(&notify_columns_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_columns_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1212,7 +1232,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::item-orientation\0".as_ptr() as *const _,
-                Some(*(&notify_item_orientation_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_item_orientation_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1237,7 +1259,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::item-padding\0".as_ptr() as *const _,
-                Some(*(&notify_item_padding_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_item_padding_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1259,7 +1283,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::item-width\0".as_ptr() as *const _,
-                Some(*(&notify_item_width_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_item_width_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1281,7 +1307,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::margin\0".as_ptr() as *const _,
-                Some(*(&notify_margin_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_margin_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1306,7 +1334,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::markup-column\0".as_ptr() as *const _,
-                Some(*(&notify_markup_column_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_markup_column_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1328,7 +1358,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(*(&notify_model_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_model_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1353,7 +1385,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixbuf-column\0".as_ptr() as *const _,
-                Some(*(&notify_pixbuf_column_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pixbuf_column_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1375,7 +1409,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reorderable\0".as_ptr() as *const _,
-                Some(*(&notify_reorderable_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_reorderable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1397,7 +1433,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::row-spacing\0".as_ptr() as *const _,
-                Some(*(&notify_row_spacing_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_row_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1422,7 +1460,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-mode\0".as_ptr() as *const _,
-                Some(*(&notify_selection_mode_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selection_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1444,7 +1484,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(*(&notify_spacing_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1466,7 +1508,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-column\0".as_ptr() as *const _,
-                Some(*(&notify_text_column_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_column_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1491,7 +1535,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tooltip-column\0".as_ptr() as *const _,
-                Some(*(&notify_tooltip_column_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_tooltip_column_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

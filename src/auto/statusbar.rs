@@ -16,6 +16,7 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Align;
 use BaselinePosition;
 use Box;
@@ -508,7 +509,9 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"text-popped\0".as_ptr() as *const _,
-                Some(*(&text_popped_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    text_popped_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -535,7 +538,9 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"text-pushed\0".as_ptr() as *const _,
-                Some(*(&text_pushed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    text_pushed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

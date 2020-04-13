@@ -16,6 +16,7 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use EventController;
 use Gesture;
 use GestureDrag;
@@ -77,7 +78,9 @@ impl GesturePan {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pan\0".as_ptr() as *const _,
-                Some(*(&pan_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pan_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -100,7 +103,9 @@ impl GesturePan {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::orientation\0".as_ptr() as *const _,
-                Some(*(&notify_orientation_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_orientation_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

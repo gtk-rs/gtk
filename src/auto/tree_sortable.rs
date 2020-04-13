@@ -11,6 +11,7 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use TreeModel;
 
 glib_wrapper! {
@@ -61,7 +62,9 @@ impl<O: IsA<TreeSortable>> TreeSortableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"sort-column-changed\0".as_ptr() as *const _,
-                Some(*(&sort_column_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    sort_column_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

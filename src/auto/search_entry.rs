@@ -23,6 +23,7 @@ use gtk_sys;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Align;
 use Buildable;
 use CellEditable;
@@ -812,7 +813,9 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-match\0".as_ptr() as *const _,
-                Some(*(&next_match_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    next_match_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -843,7 +846,9 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"previous-match\0".as_ptr() as *const _,
-                Some(*(&previous_match_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    previous_match_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -873,7 +878,9 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search-changed\0".as_ptr() as *const _,
-                Some(*(&search_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    search_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -895,7 +902,9 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stop-search\0".as_ptr() as *const _,
-                Some(*(&stop_search_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    stop_search_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

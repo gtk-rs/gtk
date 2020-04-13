@@ -19,6 +19,7 @@ use libc;
 use std;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use std::ptr;
 use PageSetup;
 use PrintContext;
@@ -823,7 +824,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"begin-print\0".as_ptr() as *const _,
-                Some(*(&begin_print_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    begin_print_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -853,7 +856,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-custom-widget\0".as_ptr() as *const _,
-                Some(*(&create_custom_widget_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    create_custom_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -881,7 +886,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"custom-widget-apply\0".as_ptr() as *const _,
-                Some(*(&custom_widget_apply_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    custom_widget_apply_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -906,7 +913,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"done\0".as_ptr() as *const _,
-                Some(*(&done_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    done_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -936,7 +945,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"draw-page\0".as_ptr() as *const _,
-                Some(*(&draw_page_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    draw_page_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -961,7 +972,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end-print\0".as_ptr() as *const _,
-                Some(*(&end_print_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    end_print_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -991,7 +1004,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paginate\0".as_ptr() as *const _,
-                Some(*(&paginate_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    paginate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1030,7 +1045,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preview\0".as_ptr() as *const _,
-                Some(*(&preview_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    preview_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1065,7 +1082,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"request-page-setup\0".as_ptr() as *const _,
-                Some(*(&request_page_setup_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    request_page_setup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1086,7 +1105,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"status-changed\0".as_ptr() as *const _,
-                Some(*(&status_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    status_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1121,7 +1142,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"update-custom-widget\0".as_ptr() as *const _,
-                Some(*(&update_custom_widget_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    update_custom_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1143,7 +1166,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-async\0".as_ptr() as *const _,
-                Some(*(&notify_allow_async_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_allow_async_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1168,7 +1193,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-page\0".as_ptr() as *const _,
-                Some(*(&notify_current_page_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_current_page_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1193,7 +1220,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::custom-tab-label\0".as_ptr() as *const _,
-                Some(*(&notify_custom_tab_label_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_custom_tab_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1218,7 +1247,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-page-setup\0".as_ptr() as *const _,
-                Some(*(&notify_default_page_setup_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_default_page_setup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1243,7 +1274,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::embed-page-setup\0".as_ptr() as *const _,
-                Some(*(&notify_embed_page_setup_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_embed_page_setup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1268,7 +1301,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::export-filename\0".as_ptr() as *const _,
-                Some(*(&notify_export_filename_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_export_filename_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1293,7 +1328,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-selection\0".as_ptr() as *const _,
-                Some(*(&notify_has_selection_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_selection_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1315,7 +1352,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::job-name\0".as_ptr() as *const _,
-                Some(*(&notify_job_name_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_job_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1337,7 +1376,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-pages\0".as_ptr() as *const _,
-                Some(*(&notify_n_pages_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_n_pages_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1362,7 +1403,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-pages-to-print\0".as_ptr() as *const _,
-                Some(*(&notify_n_pages_to_print_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_n_pages_to_print_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1387,7 +1430,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::print-settings\0".as_ptr() as *const _,
-                Some(*(&notify_print_settings_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_print_settings_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1412,7 +1457,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-progress\0".as_ptr() as *const _,
-                Some(*(&notify_show_progress_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_progress_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1434,7 +1481,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::status\0".as_ptr() as *const _,
-                Some(*(&notify_status_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_status_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1459,7 +1508,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::status-string\0".as_ptr() as *const _,
-                Some(*(&notify_status_string_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_status_string_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1484,7 +1535,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::support-selection\0".as_ptr() as *const _,
-                Some(*(&notify_support_selection_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_support_selection_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1509,7 +1562,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-print-status\0".as_ptr() as *const _,
-                Some(*(&notify_track_print_status_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_track_print_status_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1531,7 +1586,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::unit\0".as_ptr() as *const _,
-                Some(*(&notify_unit_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_unit_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1556,7 +1613,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-full-page\0".as_ptr() as *const _,
-                Some(*(&notify_use_full_page_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_full_page_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
