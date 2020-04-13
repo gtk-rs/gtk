@@ -969,7 +969,7 @@ pub trait GtkWindowExt: 'static {
 
     fn connect_keys_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_set_focus<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_set_focus<F: Fn(&Self, Option<&Widget>) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_accept_focus_notify<F: Fn(&Self) + 'static>(&self, f: F)
         -> SignalHandlerId;
@@ -2146,8 +2146,8 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn connect_set_focus<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn set_focus_trampoline<P, F: Fn(&P, &Widget) + 'static>(
+    fn connect_set_focus<F: Fn(&Self, Option<&Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn set_focus_trampoline<P, F: Fn(&P, Option<&Widget>) + 'static>(
             this: *mut gtk_sys::GtkWindow,
             object: *mut gtk_sys::GtkWidget,
             f: glib_sys::gpointer,
@@ -2157,7 +2157,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             let f: &F = &*(f as *const F);
             f(
                 &Window::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
+                Option::<Widget>::from_glib_borrow(object).as_ref().as_ref(),
             )
         }
         unsafe {
