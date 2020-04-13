@@ -7,7 +7,7 @@ rust:
   - nightly
   - beta
   - stable
-  - 1.39.0
+  - 1.40.0
 env:
   - GTK=3.14 FEATURES=
   - GTK=3.24 FEATURES=v3_16
