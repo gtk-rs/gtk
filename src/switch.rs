@@ -8,6 +8,7 @@ use glib::translate::*;
 use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use Switch;
 
 pub trait SwitchExtManual: 'static {
@@ -31,7 +32,9 @@ impl<O: IsA<Switch>> SwitchExtManual for O {
             connect_raw(
                 self.to_glib_none().0 as *mut _,
                 b"notify::active\0".as_ptr() as *mut _,
-                Some(*(&changed_active_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    changed_active_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
