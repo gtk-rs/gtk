@@ -21,6 +21,7 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use AccelGroup;
 use Align;
 use Buildable;
@@ -1152,7 +1153,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-scroll\0".as_ptr() as *const _,
-                Some(*(&move_scroll_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_scroll_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1188,7 +1191,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-group\0".as_ptr() as *const _,
-                Some(*(&notify_accel_group_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_group_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1210,7 +1215,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-path\0".as_ptr() as *const _,
-                Some(*(&notify_accel_path_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_path_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1232,7 +1239,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(*(&notify_active_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1258,7 +1267,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::anchor-hints\0".as_ptr() as *const _,
-                Some(*(&notify_anchor_hints_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_anchor_hints_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1283,7 +1294,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::attach-widget\0".as_ptr() as *const _,
-                Some(*(&notify_attach_widget_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_attach_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1309,7 +1322,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu-type-hint\0".as_ptr() as *const _,
-                Some(*(&notify_menu_type_hint_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_menu_type_hint_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1331,7 +1346,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::monitor\0".as_ptr() as *const _,
-                Some(*(&notify_monitor_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_monitor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1357,7 +1374,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::rect-anchor-dx\0".as_ptr() as *const _,
-                Some(*(&notify_rect_anchor_dx_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_rect_anchor_dx_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1383,7 +1402,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::rect-anchor-dy\0".as_ptr() as *const _,
-                Some(*(&notify_rect_anchor_dy_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_rect_anchor_dy_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1408,7 +1429,9 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reserve-toggle-size\0".as_ptr() as *const _,
-                Some(*(&notify_reserve_toggle_size_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_reserve_toggle_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

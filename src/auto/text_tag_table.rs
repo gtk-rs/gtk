@@ -11,6 +11,7 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Buildable;
 use TextTag;
 
@@ -127,7 +128,9 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-added\0".as_ptr() as *const _,
-                Some(*(&tag_added_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    tag_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -154,7 +157,9 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-changed\0".as_ptr() as *const _,
-                Some(*(&tag_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    tag_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -179,7 +184,9 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-removed\0".as_ptr() as *const _,
-                Some(*(&tag_removed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    tag_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

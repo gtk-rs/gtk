@@ -17,6 +17,7 @@ use gtk_sys;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -755,7 +756,9 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::collapsed\0".as_ptr() as *const _,
-                Some(*(&notify_collapsed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_collapsed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -777,7 +780,9 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ellipsize\0".as_ptr() as *const _,
-                Some(*(&notify_ellipsize_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_ellipsize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -802,7 +807,9 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::header-relief\0".as_ptr() as *const _,
-                Some(*(&notify_header_relief_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_header_relief_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -824,7 +831,9 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(*(&notify_label_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -849,7 +858,9 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-widget\0".as_ptr() as *const _,
-                Some(*(&notify_label_widget_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

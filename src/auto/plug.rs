@@ -15,6 +15,7 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use xlib;
 use Align;
 use Application;
@@ -718,7 +719,9 @@ impl<O: IsA<Plug>> PlugExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"embedded\0".as_ptr() as *const _,
-                Some(*(&embedded_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    embedded_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -740,7 +743,9 @@ impl<O: IsA<Plug>> PlugExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::embedded\0".as_ptr() as *const _,
-                Some(*(&notify_embedded_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_embedded_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -765,7 +770,9 @@ impl<O: IsA<Plug>> PlugExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::socket-window\0".as_ptr() as *const _,
-                Some(*(&notify_socket_window_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_socket_window_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

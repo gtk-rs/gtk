@@ -9,6 +9,7 @@ use glib_sys;
 use gtk_sys;
 use libc::{c_char, c_int};
 use std::boxed::Box as Box_;
+use std::mem::transmute;
 use std::{slice, str};
 use TextBuffer;
 use TextIter;
@@ -51,7 +52,9 @@ impl<O: IsA<TextBuffer>> TextBufferExtManual for O {
             connect_raw(
                 self.to_glib_none().0 as *mut _,
                 b"insert-text\0".as_ptr() as *mut _,
-                Some(*(&insert_text_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_text_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

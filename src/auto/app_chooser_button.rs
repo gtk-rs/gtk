@@ -17,6 +17,7 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Align;
 use AppChooser;
 use Bin;
@@ -684,7 +685,9 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"custom-item-activated\0".as_ptr() as *const _,
-                Some(*(&custom_item_activated_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    custom_item_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -706,7 +709,9 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::heading\0".as_ptr() as *const _,
-                Some(*(&notify_heading_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_heading_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -731,7 +736,9 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-default-item\0".as_ptr() as *const _,
-                Some(*(&notify_show_default_item_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_default_item_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -756,7 +763,9 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-dialog-item\0".as_ptr() as *const _,
-                Some(*(&notify_show_dialog_item_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_dialog_item_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

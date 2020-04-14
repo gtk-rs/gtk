@@ -80,6 +80,7 @@ mod editable {
     use gtk_sys::GtkEditable;
     use libc::{c_char, c_int, c_uchar};
     use std::ffi::CStr;
+    use std::mem::transmute;
     use std::slice;
     use std::str;
     use Editable;
@@ -94,7 +95,9 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"changed\0".as_ptr() as *mut _,
-                    Some(*(&trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -109,7 +112,9 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"delete-text\0".as_ptr() as *mut _,
-                    Some(*(&delete_trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        delete_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -124,7 +129,9 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"insert-text\0".as_ptr() as *mut _,
-                    Some(*(&insert_trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        insert_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -205,6 +212,7 @@ mod spin_button {
     use gtk_sys::{GtkSpinButton, GTK_INPUT_ERROR};
     use libc::{c_double, c_int};
     use std::boxed::Box as Box_;
+    use std::mem::transmute;
     use Inhibit;
     use ScrollType;
     use SpinButton;
@@ -219,7 +227,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"change_value\0".as_ptr() as *mut _,
-                    Some(*(&change_trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        change_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -234,7 +244,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"input\0".as_ptr() as *mut _,
-                    Some(*(&input_trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        input_trampoline::<Self, F> as *const (),
+                    )),
                     Box_::into_raw(f),
                 )
             }
@@ -249,7 +261,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"output\0".as_ptr() as *mut _,
-                    Some(*(&output_trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        output_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -264,7 +278,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"value-changed\0".as_ptr() as *mut _,
-                    Some(*(&trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -279,7 +295,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"wrapped\0".as_ptr() as *mut _,
-                    Some(*(&trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -350,6 +368,7 @@ mod overlay {
     use glib::IsA;
     use glib_sys::{gboolean, gpointer};
     use gtk_sys::{GtkOverlay, GtkWidget};
+    use std::mem::transmute;
     use std::ptr;
     use Overlay;
     use Widget;
@@ -364,7 +383,9 @@ mod overlay {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"get-child-position\0".as_ptr() as *mut _,
-                    Some(*(&get_child_position_trampoline::<Self, F> as *const _ as *const _)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        get_child_position_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }

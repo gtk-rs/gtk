@@ -19,6 +19,7 @@ use libc;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use CellRenderer;
 use CellRendererAccelMode;
 use CellRendererMode;
@@ -798,7 +799,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accel-cleared\0".as_ptr() as *const _,
-                Some(*(&accel_cleared_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    accel_cleared_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -836,7 +839,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accel-edited\0".as_ptr() as *const _,
-                Some(*(&accel_edited_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    accel_edited_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -858,7 +863,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-key\0".as_ptr() as *const _,
-                Some(*(&notify_accel_key_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_key_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -880,7 +887,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-mode\0".as_ptr() as *const _,
-                Some(*(&notify_accel_mode_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -902,7 +911,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-mods\0".as_ptr() as *const _,
-                Some(*(&notify_accel_mods_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_mods_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -924,7 +935,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::keycode\0".as_ptr() as *const _,
-                Some(*(&notify_keycode_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_keycode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

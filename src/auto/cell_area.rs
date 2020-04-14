@@ -18,6 +18,7 @@ use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
+use std::mem::transmute;
 use Buildable;
 use CellAreaContext;
 use CellEditable;
@@ -907,7 +908,9 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"add-editable\0".as_ptr() as *const _,
-                Some(*(&add_editable_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    add_editable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -944,7 +947,9 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"apply-attributes\0".as_ptr() as *const _,
-                Some(*(&apply_attributes_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    apply_attributes_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -978,7 +983,9 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-changed\0".as_ptr() as *const _,
-                Some(*(&focus_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    focus_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1011,7 +1018,9 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"remove-editable\0".as_ptr() as *const _,
-                Some(*(&remove_editable_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    remove_editable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1033,7 +1042,9 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::edit-widget\0".as_ptr() as *const _,
-                Some(*(&notify_edit_widget_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_edit_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1055,7 +1066,9 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::edited-cell\0".as_ptr() as *const _,
-                Some(*(&notify_edited_cell_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_edited_cell_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1077,7 +1090,9 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::focus-cell\0".as_ptr() as *const _,
-                Some(*(&notify_focus_cell_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_focus_cell_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

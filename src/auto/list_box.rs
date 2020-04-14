@@ -20,6 +20,7 @@ use gtk_sys;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Adjustment;
 use Align;
 use Buildable;
@@ -902,7 +903,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-cursor-row\0".as_ptr() as *const _,
-                Some(*(&activate_cursor_row_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_cursor_row_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -940,7 +943,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(*(&move_cursor_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -973,7 +978,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-activated\0".as_ptr() as *const _,
-                Some(*(&row_activated_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    row_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1003,7 +1010,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-selected\0".as_ptr() as *const _,
-                Some(*(&row_selected_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    row_selected_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1024,7 +1033,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(*(&select_all_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1053,7 +1064,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selected-rows-changed\0".as_ptr() as *const _,
-                Some(*(&selected_rows_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    selected_rows_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1074,7 +1087,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-row\0".as_ptr() as *const _,
-                Some(*(&toggle_cursor_row_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_cursor_row_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1103,7 +1118,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unselect-all\0".as_ptr() as *const _,
-                Some(*(&unselect_all_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    unselect_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1136,10 +1153,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                Some(
-                    *(&notify_activate_on_single_click_trampoline::<Self, F> as *const _
-                        as *const _),
-                ),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_activate_on_single_click_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1164,7 +1180,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-mode\0".as_ptr() as *const _,
-                Some(*(&notify_selection_mode_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selection_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

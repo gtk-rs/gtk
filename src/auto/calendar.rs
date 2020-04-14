@@ -17,6 +17,7 @@ use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
+use std::mem::transmute;
 use Align;
 use Buildable;
 use CalendarDisplayOptions;
@@ -909,7 +910,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"day-selected\0".as_ptr() as *const _,
-                Some(*(&day_selected_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    day_selected_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -930,7 +933,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"day-selected-double-click\0".as_ptr() as *const _,
-                Some(*(&day_selected_double_click_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    day_selected_double_click_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -951,7 +956,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"month-changed\0".as_ptr() as *const _,
-                Some(*(&month_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    month_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -972,7 +979,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-month\0".as_ptr() as *const _,
-                Some(*(&next_month_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    next_month_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -993,7 +1002,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-year\0".as_ptr() as *const _,
-                Some(*(&next_year_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    next_year_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1014,7 +1025,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"prev-month\0".as_ptr() as *const _,
-                Some(*(&prev_month_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    prev_month_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1035,7 +1048,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"prev-year\0".as_ptr() as *const _,
-                Some(*(&prev_year_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    prev_year_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1057,7 +1072,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::day\0".as_ptr() as *const _,
-                Some(*(&notify_day_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_day_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1082,7 +1099,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::detail-height-rows\0".as_ptr() as *const _,
-                Some(*(&notify_detail_height_rows_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_detail_height_rows_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1107,7 +1126,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::detail-width-chars\0".as_ptr() as *const _,
-                Some(*(&notify_detail_width_chars_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_detail_width_chars_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1129,7 +1150,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::month\0".as_ptr() as *const _,
-                Some(*(&notify_month_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_month_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1154,7 +1177,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::no-month-change\0".as_ptr() as *const _,
-                Some(*(&notify_no_month_change_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_no_month_change_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1179,7 +1204,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-day-names\0".as_ptr() as *const _,
-                Some(*(&notify_show_day_names_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_day_names_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1204,7 +1231,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-details\0".as_ptr() as *const _,
-                Some(*(&notify_show_details_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_details_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1229,7 +1258,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-heading\0".as_ptr() as *const _,
-                Some(*(&notify_show_heading_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_heading_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1254,7 +1285,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-week-numbers\0".as_ptr() as *const _,
-                Some(*(&notify_show_week_numbers_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_week_numbers_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1276,7 +1309,9 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::year\0".as_ptr() as *const _,
-                Some(*(&notify_year_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_year_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

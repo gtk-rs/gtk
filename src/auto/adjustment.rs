@@ -11,6 +11,7 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 
 glib_wrapper! {
     pub struct Adjustment(Object<gtk_sys::GtkAdjustment, gtk_sys::GtkAdjustmentClass, AdjustmentClass>);
@@ -239,7 +240,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(*(&changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -260,7 +263,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"value-changed\0".as_ptr() as *const _,
-                Some(*(&value_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    value_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -282,7 +287,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lower\0".as_ptr() as *const _,
-                Some(*(&notify_lower_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_lower_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -307,7 +314,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page-increment\0".as_ptr() as *const _,
-                Some(*(&notify_page_increment_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_page_increment_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -329,7 +338,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page-size\0".as_ptr() as *const _,
-                Some(*(&notify_page_size_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_page_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -354,7 +365,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::step-increment\0".as_ptr() as *const _,
-                Some(*(&notify_step_increment_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_step_increment_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -376,7 +389,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::upper\0".as_ptr() as *const _,
-                Some(*(&notify_upper_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_upper_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -398,7 +413,9 @@ impl<O: IsA<Adjustment>> AdjustmentExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(*(&notify_value_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

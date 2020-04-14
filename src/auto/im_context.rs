@@ -19,6 +19,7 @@ use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
+use std::mem::transmute;
 use std::ptr;
 use InputHints;
 use InputPurpose;
@@ -268,7 +269,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"commit\0".as_ptr() as *const _,
-                Some(*(&commit_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    commit_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -303,7 +306,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"delete-surrounding\0".as_ptr() as *const _,
-                Some(*(&delete_surrounding_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    delete_surrounding_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -324,7 +329,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preedit-changed\0".as_ptr() as *const _,
-                Some(*(&preedit_changed_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    preedit_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -345,7 +352,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preedit-end\0".as_ptr() as *const _,
-                Some(*(&preedit_end_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    preedit_end_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -366,7 +375,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preedit-start\0".as_ptr() as *const _,
-                Some(*(&preedit_start_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    preedit_start_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -391,7 +402,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"retrieve-surrounding\0".as_ptr() as *const _,
-                Some(*(&retrieve_surrounding_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    retrieve_surrounding_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -413,7 +426,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-hints\0".as_ptr() as *const _,
-                Some(*(&notify_input_hints_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_input_hints_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -438,7 +453,9 @@ impl<O: IsA<IMContext>> IMContextExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-purpose\0".as_ptr() as *const _,
-                Some(*(&notify_input_purpose_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_input_purpose_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

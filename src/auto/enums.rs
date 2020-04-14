@@ -16,6 +16,7 @@ use gtk_sys;
 use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum Align {
     Fill,
     Start,
@@ -99,6 +100,7 @@ impl SetValue for Align {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ArrowType {
     Up,
     Down,
@@ -182,6 +184,7 @@ impl SetValue for ArrowType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum AssistantPageType {
     Content,
     Intro,
@@ -269,6 +272,7 @@ impl SetValue for AssistantPageType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum BaselinePosition {
     Top,
     Center,
@@ -344,6 +348,7 @@ impl SetValue for BaselinePosition {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum BorderStyle {
     None,
     Solid,
@@ -447,6 +452,7 @@ impl SetValue for BorderStyle {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum BuilderError {
     InvalidTypeFunction,
     UnhandledTag,
@@ -598,6 +604,7 @@ impl SetValue for BuilderError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ButtonBoxStyle {
     Spread,
     Edge,
@@ -686,6 +693,7 @@ impl SetValue for ButtonBoxStyle {
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ButtonRole {
     Normal,
     Check,
@@ -768,6 +776,7 @@ impl SetValue for ButtonRole {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ButtonsType {
     None,
     Ok,
@@ -855,6 +864,7 @@ impl SetValue for ButtonsType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum CellRendererAccelMode {
     Gtk,
     Other,
@@ -932,6 +942,7 @@ impl SetValue for CellRendererAccelMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum CellRendererMode {
     Inert,
     Activatable,
@@ -1007,6 +1018,7 @@ impl SetValue for CellRendererMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum CornerType {
     TopLeft,
     BottomLeft,
@@ -1086,6 +1098,7 @@ impl SetValue for CornerType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum CssProviderError {
     Failed,
     Syntax,
@@ -1197,6 +1210,7 @@ impl SetValue for CssProviderError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum CssSectionType {
     Document,
     Import,
@@ -1296,6 +1310,7 @@ impl SetValue for CssSectionType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum DeleteType {
     Chars,
     WordEnds,
@@ -1391,6 +1406,7 @@ impl SetValue for DeleteType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum DirectionType {
     TabForward,
     TabBackward,
@@ -1478,6 +1494,7 @@ impl SetValue for DirectionType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum DragResult {
     Success,
     NoTarget,
@@ -1565,6 +1582,7 @@ impl SetValue for DragResult {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum EntryIconPosition {
     Primary,
     Secondary,
@@ -1636,6 +1654,7 @@ impl SetValue for EntryIconPosition {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum EventSequenceState {
     None,
     Claimed,
@@ -1711,6 +1730,7 @@ impl SetValue for EventSequenceState {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum FileChooserAction {
     Open,
     Save,
@@ -1790,6 +1810,7 @@ impl SetValue for FileChooserAction {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum FileChooserConfirmation {
     Confirm,
     AcceptFilename,
@@ -1869,6 +1890,7 @@ impl SetValue for FileChooserConfirmation {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum FileChooserError {
     Nonexistent,
     BadFilename,
@@ -1973,6 +1995,7 @@ impl SetValue for FileChooserError {
 
 #[deprecated]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum IMPreeditStyle {
     Nothing,
     Callback,
@@ -2056,6 +2079,7 @@ impl SetValue for IMPreeditStyle {
 
 #[deprecated]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum IMStatusStyle {
     Nothing,
     Callback,
@@ -2138,6 +2162,7 @@ impl SetValue for IMStatusStyle {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum IconSize {
     Invalid,
     Menu,
@@ -2229,6 +2254,7 @@ impl SetValue for IconSize {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum IconThemeError {
     NotFound,
     Failed,
@@ -2320,6 +2346,7 @@ impl SetValue for IconThemeError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum IconViewDropPosition {
     NoDrop,
     DropInto,
@@ -2407,6 +2434,7 @@ impl SetValue for IconViewDropPosition {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ImageType {
     Empty,
     Pixbuf,
@@ -2502,6 +2530,7 @@ impl SetValue for ImageType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum InputPurpose {
     FreeForm,
     Alpha,
@@ -2605,6 +2634,7 @@ impl SetValue for InputPurpose {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum Justification {
     Left,
     Right,
@@ -2684,6 +2714,7 @@ impl SetValue for Justification {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum LevelBarMode {
     Continuous,
     Discrete,
@@ -2755,6 +2786,7 @@ impl SetValue for LevelBarMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum License {
     Unknown,
     Custom,
@@ -2878,6 +2910,7 @@ impl SetValue for License {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum MenuDirectionType {
     Parent,
     Child,
@@ -2957,6 +2990,7 @@ impl SetValue for MenuDirectionType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum MessageType {
     Info,
     Warning,
@@ -3040,6 +3074,7 @@ impl SetValue for MessageType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum MovementStep {
     LogicalPositions,
     VisualPositions,
@@ -3143,6 +3178,7 @@ impl SetValue for MovementStep {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum NotebookTab {
     First,
     Last,
@@ -3214,6 +3250,7 @@ impl SetValue for NotebookTab {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum NumberUpLayout {
     Lrtb,
     Lrbt,
@@ -3309,6 +3346,7 @@ impl SetValue for NumberUpLayout {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum Orientation {
     Horizontal,
     Vertical,
@@ -3380,6 +3418,7 @@ impl SetValue for Orientation {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PackDirection {
     Ltr,
     Rtl,
@@ -3459,6 +3498,7 @@ impl SetValue for PackDirection {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PackType {
     Start,
     End,
@@ -3531,6 +3571,7 @@ impl SetValue for PackType {
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PadActionType {
     Button,
     Ring,
@@ -3613,6 +3654,7 @@ impl SetValue for PadActionType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PageOrientation {
     Portrait,
     Landscape,
@@ -3692,6 +3734,7 @@ impl SetValue for PageOrientation {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PageSet {
     All,
     Even,
@@ -3767,6 +3810,7 @@ impl SetValue for PageSet {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PanDirection {
     Left,
     Right,
@@ -3846,6 +3890,7 @@ impl SetValue for PanDirection {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PolicyType {
     Always,
     Automatic,
@@ -3926,6 +3971,7 @@ impl SetValue for PolicyType {
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PopoverConstraint {
     None,
     Window,
@@ -4004,6 +4050,7 @@ impl SetValue for PopoverConstraint {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PositionType {
     Left,
     Right,
@@ -4083,6 +4130,7 @@ impl SetValue for PositionType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintDuplex {
     Simplex,
     Horizontal,
@@ -4158,6 +4206,7 @@ impl SetValue for PrintDuplex {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintError {
     General,
     InternalError,
@@ -4259,6 +4308,7 @@ impl SetValue for PrintError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintOperationAction {
     PrintDialog,
     Print,
@@ -4338,6 +4388,7 @@ impl SetValue for PrintOperationAction {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintOperationResult {
     Error,
     Apply,
@@ -4417,6 +4468,7 @@ impl SetValue for PrintOperationResult {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintPages {
     All,
     Current,
@@ -4496,6 +4548,7 @@ impl SetValue for PrintPages {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintQuality {
     Low,
     Normal,
@@ -4575,6 +4628,7 @@ impl SetValue for PrintQuality {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PrintStatus {
     Initial,
     Preparing,
@@ -4674,6 +4728,7 @@ impl SetValue for PrintStatus {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum PropagationPhase {
     None,
     Capture,
@@ -4753,6 +4808,7 @@ impl SetValue for PropagationPhase {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RecentChooserError {
     NotFound,
     InvalidUri,
@@ -4844,6 +4900,7 @@ impl SetValue for RecentChooserError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RecentManagerError {
     NotFound,
     InvalidUri,
@@ -4962,6 +5019,7 @@ impl SetValue for RecentManagerError {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RecentSortType {
     None,
     Mru,
@@ -5041,6 +5099,7 @@ impl SetValue for RecentSortType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ReliefStyle {
     Normal,
     Half,
@@ -5116,6 +5175,7 @@ impl SetValue for ReliefStyle {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ResizeMode {
     Parent,
     Queue,
@@ -5191,6 +5251,7 @@ impl SetValue for ResizeMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum RevealerTransitionType {
     None,
     Crossfade,
@@ -5278,6 +5339,7 @@ impl SetValue for RevealerTransitionType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ScrollStep {
     Steps,
     Pages,
@@ -5365,6 +5427,7 @@ impl SetValue for ScrollStep {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ScrollType {
     None,
     Jump,
@@ -5492,6 +5555,7 @@ impl SetValue for ScrollType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ScrollablePolicy {
     Minimum,
     Natural,
@@ -5563,6 +5627,7 @@ impl SetValue for ScrollablePolicy {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum SelectionMode {
     None,
     Single,
@@ -5642,6 +5707,7 @@ impl SetValue for SelectionMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum SensitivityType {
     Auto,
     On,
@@ -5717,6 +5783,7 @@ impl SetValue for SensitivityType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ShadowType {
     None,
     In,
@@ -5800,6 +5867,7 @@ impl SetValue for ShadowType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum SizeGroupMode {
     None,
     Horizontal,
@@ -5879,6 +5947,7 @@ impl SetValue for SizeGroupMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum SizeRequestMode {
     HeightForWidth,
     WidthForHeight,
@@ -5954,6 +6023,7 @@ impl SetValue for SizeRequestMode {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum SortType {
     Ascending,
     Descending,
@@ -6025,6 +6095,7 @@ impl SetValue for SortType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum SpinButtonUpdatePolicy {
     Always,
     IfValid,
@@ -6096,6 +6167,7 @@ impl SetValue for SpinButtonUpdatePolicy {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum SpinType {
     StepForward,
     StepBackward,
@@ -6187,6 +6259,7 @@ impl SetValue for SpinType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum StackTransitionType {
     None,
     Crossfade,
@@ -6337,6 +6410,7 @@ impl SetValue for StackTransitionType {
 
 #[deprecated]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum StateType {
     Normal,
     Active,
@@ -6435,6 +6509,7 @@ impl SetValue for StateType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum TextDirection {
     None,
     Ltr,
@@ -6511,6 +6586,7 @@ impl SetValue for TextDirection {
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum TextExtendSelection {
     Word,
     Line,
@@ -6589,6 +6665,7 @@ impl SetValue for TextExtendSelection {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum TextViewLayer {
     Below,
     Above,
@@ -6668,6 +6745,7 @@ impl SetValue for TextViewLayer {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum TextWindowType {
     Private,
     Widget,
@@ -6759,6 +6837,7 @@ impl SetValue for TextWindowType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum ToolbarStyle {
     Icons,
     Text,
@@ -6838,6 +6917,7 @@ impl SetValue for ToolbarStyle {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum TreeViewColumnSizing {
     GrowOnly,
     Autosize,
@@ -6913,6 +6993,7 @@ impl SetValue for TreeViewColumnSizing {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum TreeViewDropPosition {
     Before,
     After,
@@ -6992,6 +7073,7 @@ impl SetValue for TreeViewDropPosition {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum TreeViewGridLines {
     None,
     Horizontal,
@@ -7071,6 +7153,7 @@ impl SetValue for TreeViewGridLines {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum Unit {
     None,
     Points,
@@ -7150,6 +7233,7 @@ impl SetValue for Unit {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WidgetHelpType {
     Tooltip,
     WhatsThis,
@@ -7221,6 +7305,7 @@ impl SetValue for WidgetHelpType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WindowPosition {
     None,
     Center,
@@ -7304,6 +7389,7 @@ impl SetValue for WindowPosition {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WindowType {
     Toplevel,
     Popup,
@@ -7375,6 +7461,7 @@ impl SetValue for WindowType {
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 pub enum WrapMode {
     None,
     Char,

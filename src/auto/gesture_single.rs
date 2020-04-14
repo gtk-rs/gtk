@@ -12,6 +12,7 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use EventController;
 use Gesture;
 
@@ -122,7 +123,9 @@ impl<O: IsA<GestureSingle>> GestureSingleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::button\0".as_ptr() as *const _,
-                Some(*(&notify_button_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_button_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -144,7 +147,9 @@ impl<O: IsA<GestureSingle>> GestureSingleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::exclusive\0".as_ptr() as *const _,
-                Some(*(&notify_exclusive_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_exclusive_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -166,7 +171,9 @@ impl<O: IsA<GestureSingle>> GestureSingleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::touch-only\0".as_ptr() as *const _,
-                Some(*(&notify_touch_only_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_touch_only_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

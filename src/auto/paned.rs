@@ -18,6 +18,7 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -730,7 +731,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accept-position\0".as_ptr() as *const _,
-                Some(*(&accept_position_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    accept_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -764,7 +767,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel-position\0".as_ptr() as *const _,
-                Some(*(&cancel_position_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cancel_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -806,7 +811,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cycle-child-focus\0".as_ptr() as *const _,
-                Some(*(&cycle_child_focus_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cycle_child_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -848,7 +855,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cycle-handle-focus\0".as_ptr() as *const _,
-                Some(*(&cycle_handle_focus_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cycle_handle_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -890,7 +899,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-handle\0".as_ptr() as *const _,
-                Some(*(&move_handle_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_handle_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -924,7 +935,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-handle-focus\0".as_ptr() as *const _,
-                Some(*(&toggle_handle_focus_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_handle_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -961,7 +974,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-position\0".as_ptr() as *const _,
-                Some(*(&notify_max_position_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -986,7 +1001,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-position\0".as_ptr() as *const _,
-                Some(*(&notify_min_position_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1008,7 +1025,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position\0".as_ptr() as *const _,
-                Some(*(&notify_position_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1033,7 +1052,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position-set\0".as_ptr() as *const _,
-                Some(*(&notify_position_set_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_position_set_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1056,7 +1077,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wide-handle\0".as_ptr() as *const _,
-                Some(*(&notify_wide_handle_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wide_handle_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

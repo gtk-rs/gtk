@@ -31,6 +31,8 @@ use gtk_sys;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use std::mem::transmute;
 use Actionable;
 use Align;
 use Bin;
@@ -317,7 +319,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(*(&notify_active_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -341,7 +345,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::centered\0".as_ptr() as *const _,
-                Some(*(&notify_centered_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_centered_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -365,7 +371,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(*(&notify_icon_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -389,7 +397,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::iconic\0".as_ptr() as *const _,
-                Some(*(&notify_iconic_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_iconic_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -413,7 +423,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(*(&notify_inverted_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inverted_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -437,7 +449,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu-name\0".as_ptr() as *const _,
-                Some(*(&notify_menu_name_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_menu_name_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -461,7 +475,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::role\0".as_ptr() as *const _,
-                Some(*(&notify_role_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_role_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -485,7 +501,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(*(&notify_text_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -509,7 +527,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(*(&notify_use_markup_trampoline::<F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_markup_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

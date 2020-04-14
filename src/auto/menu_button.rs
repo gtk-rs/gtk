@@ -16,6 +16,7 @@ use glib_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Actionable;
 use Align;
 use ArrowType;
@@ -706,7 +707,9 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::align-widget\0".as_ptr() as *const _,
-                Some(*(&notify_align_widget_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_align_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -728,7 +731,9 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::direction\0".as_ptr() as *const _,
-                Some(*(&notify_direction_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_direction_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -750,7 +755,9 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu-model\0".as_ptr() as *const _,
-                Some(*(&notify_menu_model_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_menu_model_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -772,7 +779,9 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popover\0".as_ptr() as *const _,
-                Some(*(&notify_popover_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_popover_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -794,7 +803,9 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup\0".as_ptr() as *const _,
-                Some(*(&notify_popup_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_popup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -816,7 +827,9 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-popover\0".as_ptr() as *const _,
-                Some(*(&notify_use_popover_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_popover_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

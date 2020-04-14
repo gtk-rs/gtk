@@ -17,6 +17,7 @@ use gobject_sys;
 use gtk_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
+use std::mem::transmute;
 use Actionable;
 use Adjustment;
 use Align;
@@ -574,7 +575,9 @@ impl<O: IsA<VolumeButton>> VolumeButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-symbolic\0".as_ptr() as *const _,
-                Some(*(&notify_use_symbolic_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_symbolic_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

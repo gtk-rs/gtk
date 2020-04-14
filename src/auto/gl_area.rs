@@ -26,6 +26,8 @@ use std::boxed::Box as Box_;
 use std::fmt;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use std::mem;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use std::mem::transmute;
 use Align;
 use Buildable;
 use Container;
@@ -714,7 +716,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-context\0".as_ptr() as *const _,
-                Some(*(&create_context_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    create_context_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -748,7 +752,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"render\0".as_ptr() as *const _,
-                Some(*(&render_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    render_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -776,7 +782,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"resize\0".as_ptr() as *const _,
-                Some(*(&resize_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    resize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -799,7 +807,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-render\0".as_ptr() as *const _,
-                Some(*(&notify_auto_render_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_auto_render_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -822,7 +832,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::context\0".as_ptr() as *const _,
-                Some(*(&notify_context_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_context_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -845,7 +857,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-alpha\0".as_ptr() as *const _,
-                Some(*(&notify_has_alpha_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_alpha_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -871,7 +885,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-depth-buffer\0".as_ptr() as *const _,
-                Some(*(&notify_has_depth_buffer_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_depth_buffer_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -897,7 +913,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-stencil-buffer\0".as_ptr() as *const _,
-                Some(*(&notify_has_stencil_buffer_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_stencil_buffer_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -920,7 +938,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-es\0".as_ptr() as *const _,
-                Some(*(&notify_use_es_trampoline::<Self, F> as *const _ as *const _)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_es_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
