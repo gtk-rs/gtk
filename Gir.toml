@@ -1216,19 +1216,15 @@ manual_traits = ["IMContextSimpleExtManual"]
 [[object]]
 name = "Gtk.InfoBar"
 status = "generate"
-manual_traits = ["InfoBarExtManual"]
     [[object.property]]
     name = "revealed"
     version = "3.22.29"
     [[object.function]]
     name = "get_content_area"
-    ignore = true
         [object.function.return]
         nullable = false
-        type = "Gtk.Box"
     [[object.function]]
     name = "get_action_area"
-    ignore = true
 
 [[object]]
 name = "Gtk.InputHints"
@@ -2064,6 +2060,9 @@ status = "generate"
     name = "get_model"
         [object.function.return]
         nullable = false
+    [[object.function]]
+    name = "new_with_model"
+    rename = "new"
 
 [[object]]
 name = "Gtk.TreePath"

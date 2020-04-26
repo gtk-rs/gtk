@@ -82,8 +82,6 @@ pub trait TreeModelExt: 'static {
         new_order: &[i32],
     );
 
-    fn sort_new_with_model(&self) -> Option<TreeModel>;
-
     fn connect_row_changed<F: Fn(&Self, &TreePath, &TreeIter) + 'static>(
         &self,
         f: F,
@@ -377,14 +375,6 @@ impl<O: IsA<TreeModel>> TreeModelExt for O {
                 new_order.to_glib_none().0,
                 length,
             );
-        }
-    }
-
-    fn sort_new_with_model(&self) -> Option<TreeModel> {
-        unsafe {
-            from_glib_full(gtk_sys::gtk_tree_model_sort_new_with_model(
-                self.as_ref().to_glib_none().0,
-            ))
         }
     }
 

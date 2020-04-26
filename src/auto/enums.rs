@@ -2542,6 +2542,7 @@ pub enum InputPurpose {
     Name,
     Password,
     Pin,
+    Terminal,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2562,6 +2563,7 @@ impl fmt::Display for InputPurpose {
                 InputPurpose::Name => "Name",
                 InputPurpose::Password => "Password",
                 InputPurpose::Pin => "Pin",
+                InputPurpose::Terminal => "Terminal",
                 _ => "Unknown",
             }
         )
@@ -2584,6 +2586,7 @@ impl ToGlib for InputPurpose {
             InputPurpose::Name => gtk_sys::GTK_INPUT_PURPOSE_NAME,
             InputPurpose::Password => gtk_sys::GTK_INPUT_PURPOSE_PASSWORD,
             InputPurpose::Pin => gtk_sys::GTK_INPUT_PURPOSE_PIN,
+            InputPurpose::Terminal => gtk_sys::GTK_INPUT_PURPOSE_TERMINAL,
             InputPurpose::__Unknown(value) => value,
         }
     }
@@ -2604,6 +2607,7 @@ impl FromGlib<gtk_sys::GtkInputPurpose> for InputPurpose {
             7 => InputPurpose::Name,
             8 => InputPurpose::Password,
             9 => InputPurpose::Pin,
+            10 => InputPurpose::Terminal,
             value => InputPurpose::__Unknown(value),
         }
     }

@@ -26,6 +26,7 @@ use Bin;
 use Box;
 use Buildable;
 use Container;
+use HeaderBar;
 use ResizeMode;
 use ResponseType;
 use Widget;
@@ -669,7 +670,7 @@ pub trait DialogExt: 'static {
 
     fn get_content_area(&self) -> Box;
 
-    fn get_header_bar(&self) -> Option<Widget>;
+    fn get_header_bar(&self) -> Option<HeaderBar>;
 
     fn get_response_for_widget<P: IsA<Widget>>(&self, widget: &P) -> ResponseType;
 
@@ -725,7 +726,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
-    fn get_header_bar(&self) -> Option<Widget> {
+    fn get_header_bar(&self) -> Option<HeaderBar> {
         unsafe {
             from_glib_none(gtk_sys::gtk_dialog_get_header_bar(
                 self.as_ref().to_glib_none().0,
