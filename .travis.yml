@@ -48,3 +48,7 @@ script:
       cd .. && ./checker/target/release/checker .;
       ./checker/check_init_asserts;
     fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$TRAVIS_RUST_VERSION" == "stable"] && [ "$GTK" == "3.24" ]; then
+      rustup component add clippy;
+      cargo clippy --features "$FEATURES,embed-lgpl-docs" -- -D warnings;
+    fi
