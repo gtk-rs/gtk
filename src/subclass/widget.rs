@@ -1490,7 +1490,7 @@ unsafe extern "C" fn widget_size_allocate<T: ObjectSubclass>(
     imp.size_allocate(&wrap, allocate);
 }
 
-pub unsafe extern "C" fn widget_realize<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+unsafe extern "C" fn widget_realize<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
 where
     T: WidgetImpl,
 {
@@ -1501,7 +1501,7 @@ where
     imp.realize(&wrap);
 }
 
-pub unsafe extern "C" fn widget_unrealize<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+unsafe extern "C" fn widget_unrealize<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
 where
     T: WidgetImpl,
 {
@@ -1512,7 +1512,7 @@ where
     imp.unrealize(&wrap);
 }
 
-pub unsafe extern "C" fn widget_map<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+unsafe extern "C" fn widget_map<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
 where
     T: WidgetImpl,
 {
@@ -1522,7 +1522,7 @@ where
     imp.map(&wrap);
 }
 
-pub unsafe extern "C" fn widget_unmap<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
+unsafe extern "C" fn widget_unmap<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWidget)
 where
     T: WidgetImpl,
 {
@@ -1532,7 +1532,7 @@ where
     imp.unmap(&wrap);
 }
 
-pub unsafe extern "C" fn widget_motion_notify_event<T: ObjectSubclass>(
+unsafe extern "C" fn widget_motion_notify_event<T: ObjectSubclass>(
     ptr: *mut gtk_sys::GtkWidget,
     mptr: *mut gdk_sys::GdkEventMotion,
 ) -> glib_sys::gboolean
@@ -1547,7 +1547,7 @@ where
     imp.motion_notify_event(&wrap, &event).to_glib()
 }
 
-pub unsafe extern "C" fn widget_scroll_event<T: ObjectSubclass>(
+unsafe extern "C" fn widget_scroll_event<T: ObjectSubclass>(
     ptr: *mut gtk_sys::GtkWidget,
     mptr: *mut gdk_sys::GdkEventScroll,
 ) -> glib_sys::gboolean
