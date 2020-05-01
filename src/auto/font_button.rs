@@ -306,10 +306,11 @@ impl FontButtonBuilder {
         if let Some(ref show_preview_entry) = self.show_preview_entry {
             properties.push(("show-preview-entry", show_preview_entry));
         }
-        glib::Object::new(FontButton::static_type(), &properties)
+        let ret = glib::Object::new(FontButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FontButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn font_name(mut self, font_name: &str) -> Self {

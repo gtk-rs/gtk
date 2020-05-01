@@ -101,10 +101,11 @@ impl EntryCompletionBuilder {
         if let Some(ref text_column) = self.text_column {
             properties.push(("text-column", text_column));
         }
-        glib::Object::new(EntryCompletion::static_type(), &properties)
+        let ret = glib::Object::new(EntryCompletion::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<EntryCompletion>()
+            .expect("downcast");
+        ret
     }
 
     pub fn cell_area<P: IsA<CellArea>>(mut self, cell_area: &P) -> Self {

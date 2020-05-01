@@ -1227,10 +1227,11 @@ impl PlacesSidebarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(PlacesSidebar::static_type(), &properties)
+        let ret = glib::Object::new(PlacesSidebar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<PlacesSidebar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn local_only(mut self, local_only: bool) -> Self {

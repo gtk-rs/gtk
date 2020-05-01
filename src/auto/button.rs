@@ -267,10 +267,11 @@ impl ButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(Button::static_type(), &properties)
+        let ret = glib::Object::new(Button::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Button>()
+            .expect("downcast");
+        ret
     }
 
     pub fn always_show_image(mut self, always_show_image: bool) -> Self {

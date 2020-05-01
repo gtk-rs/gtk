@@ -54,10 +54,11 @@ impl IMMulticontextBuilder {
         if let Some(ref input_purpose) = self.input_purpose {
             properties.push(("input-purpose", input_purpose));
         }
-        glib::Object::new(IMMulticontext::static_type(), &properties)
+        let ret = glib::Object::new(IMMulticontext::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<IMMulticontext>()
+            .expect("downcast");
+        ret
     }
 
     pub fn input_hints(mut self, input_hints: InputHints) -> Self {

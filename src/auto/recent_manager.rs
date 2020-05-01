@@ -63,10 +63,11 @@ impl RecentManagerBuilder {
         if let Some(ref filename) = self.filename {
             properties.push(("filename", filename));
         }
-        glib::Object::new(RecentManager::static_type(), &properties)
+        let ret = glib::Object::new(RecentManager::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<RecentManager>()
+            .expect("downcast");
+        ret
     }
 
     pub fn filename(mut self, filename: &str) -> Self {

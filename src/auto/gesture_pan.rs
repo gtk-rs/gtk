@@ -155,10 +155,11 @@ impl GesturePanBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GesturePan::static_type(), &properties)
+        let ret = glib::Object::new(GesturePan::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GesturePan>()
+            .expect("downcast");
+        ret
     }
 
     pub fn orientation(mut self, orientation: Orientation) -> Self {

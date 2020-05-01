@@ -146,10 +146,11 @@ impl CellRendererPixbufBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererPixbuf::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererPixbuf::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererPixbuf>()
+            .expect("downcast");
+        ret
     }
 
     pub fn follow_state(mut self, follow_state: bool) -> Self {

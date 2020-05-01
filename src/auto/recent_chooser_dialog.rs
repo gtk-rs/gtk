@@ -356,10 +356,11 @@ impl RecentChooserDialogBuilder {
         if let Some(ref sort_type) = self.sort_type {
             properties.push(("sort-type", sort_type));
         }
-        glib::Object::new(RecentChooserDialog::static_type(), &properties)
+        let ret = glib::Object::new(RecentChooserDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<RecentChooserDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn use_header_bar(mut self, use_header_bar: i32) -> Self {

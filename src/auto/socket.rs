@@ -198,10 +198,11 @@ impl SocketBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Socket::static_type(), &properties)
+        let ret = glib::Object::new(Socket::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Socket>()
+            .expect("downcast");
+        ret
     }
 
     pub fn border_width(mut self, border_width: u32) -> Self {

@@ -253,10 +253,11 @@ impl FontChooserWidgetBuilder {
         if let Some(ref show_preview_entry) = self.show_preview_entry {
             properties.push(("show-preview-entry", show_preview_entry));
         }
-        glib::Object::new(FontChooserWidget::static_type(), &properties)
+        let ret = glib::Object::new(FontChooserWidget::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FontChooserWidget>()
+            .expect("downcast");
+        ret
     }
 
     pub fn baseline_position(mut self, baseline_position: BaselinePosition) -> Self {

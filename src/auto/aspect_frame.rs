@@ -247,10 +247,11 @@ impl AspectFrameBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(AspectFrame::static_type(), &properties)
+        let ret = glib::Object::new(AspectFrame::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AspectFrame>()
+            .expect("downcast");
+        ret
     }
 
     pub fn obey_child(mut self, obey_child: bool) -> Self {

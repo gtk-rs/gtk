@@ -234,10 +234,11 @@ impl StackSwitcherBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(StackSwitcher::static_type(), &properties)
+        let ret = glib::Object::new(StackSwitcher::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<StackSwitcher>()
+            .expect("downcast");
+        ret
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]

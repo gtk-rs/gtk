@@ -201,10 +201,11 @@ impl FlowBoxChildBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(FlowBoxChild::static_type(), &properties)
+        let ret = glib::Object::new(FlowBoxChild::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FlowBoxChild>()
+            .expect("downcast");
+        ret
     }
 
     pub fn border_width(mut self, border_width: u32) -> Self {

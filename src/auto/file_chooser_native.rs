@@ -150,10 +150,11 @@ impl FileChooserNativeBuilder {
         if let Some(ref use_preview_label) = self.use_preview_label {
             properties.push(("use-preview-label", use_preview_label));
         }
-        glib::Object::new(FileChooserNative::static_type(), &properties)
+        let ret = glib::Object::new(FileChooserNative::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FileChooserNative>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accept_label(mut self, accept_label: &str) -> Self {

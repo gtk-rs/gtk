@@ -243,10 +243,11 @@ impl InfoBarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(InfoBar::static_type(), &properties)
+        let ret = glib::Object::new(InfoBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<InfoBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn message_type(mut self, message_type: MessageType) -> Self {

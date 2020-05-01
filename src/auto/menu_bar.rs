@@ -222,10 +222,11 @@ impl MenuBarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(MenuBar::static_type(), &properties)
+        let ret = glib::Object::new(MenuBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MenuBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn child_pack_direction(mut self, child_pack_direction: PackDirection) -> Self {

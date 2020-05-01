@@ -185,10 +185,11 @@ impl GestureLongPressBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GestureLongPress::static_type(), &properties)
+        let ret = glib::Object::new(GestureLongPress::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GestureLongPress>()
+            .expect("downcast");
+        ret
     }
 
     pub fn delay_factor(mut self, delay_factor: f64) -> Self {

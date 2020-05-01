@@ -141,10 +141,11 @@ impl CellRendererProgressBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(CellRendererProgress::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererProgress::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererProgress>()
+            .expect("downcast");
+        ret
     }
 
     pub fn inverted(mut self, inverted: bool) -> Self {

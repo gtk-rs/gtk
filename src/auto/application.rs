@@ -72,10 +72,14 @@ impl ApplicationBuilder {
         if let Some(ref resource_base_path) = self.resource_base_path {
             properties.push(("resource-base-path", resource_base_path));
         }
-        glib::Object::new(Application::static_type(), &properties)
+        let ret = glib::Object::new(Application::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Application>()
+            .expect("downcast");
+        {
+            Application::register_startup_hook(&ret);
+        }
+        ret
     }
 
     pub fn app_menu<P: IsA<gio::MenuModel>>(mut self, app_menu: &P) -> Self {

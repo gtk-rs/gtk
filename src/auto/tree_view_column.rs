@@ -142,10 +142,11 @@ impl TreeViewColumnBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(TreeViewColumn::static_type(), &properties)
+        let ret = glib::Object::new(TreeViewColumn::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<TreeViewColumn>()
+            .expect("downcast");
+        ret
     }
 
     pub fn alignment(mut self, alignment: f32) -> Self {

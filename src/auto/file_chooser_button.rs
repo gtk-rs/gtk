@@ -288,10 +288,11 @@ impl FileChooserButtonBuilder {
         if let Some(ref use_preview_label) = self.use_preview_label {
             properties.push(("use-preview-label", use_preview_label));
         }
-        glib::Object::new(FileChooserButton::static_type(), &properties)
+        let ret = glib::Object::new(FileChooserButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FileChooserButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn dialog<P: IsA<FileChooser>>(mut self, dialog: &P) -> Self {

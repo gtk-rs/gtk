@@ -249,10 +249,11 @@ impl AppChooserWidgetBuilder {
         if let Some(ref content_type) = self.content_type {
             properties.push(("content-type", content_type));
         }
-        glib::Object::new(AppChooserWidget::static_type(), &properties)
+        let ret = glib::Object::new(AppChooserWidget::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AppChooserWidget>()
+            .expect("downcast");
+        ret
     }
 
     pub fn default_text(mut self, default_text: &str) -> Self {

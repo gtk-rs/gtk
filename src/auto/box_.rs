@@ -216,10 +216,11 @@ impl BoxBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Box::static_type(), &properties)
+        let ret = glib::Object::new(Box::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Box>()
+            .expect("downcast");
+        ret
     }
 
     pub fn baseline_position(mut self, baseline_position: BaselinePosition) -> Self {

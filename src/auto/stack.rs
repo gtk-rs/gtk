@@ -241,10 +241,11 @@ impl StackBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Stack::static_type(), &properties)
+        let ret = glib::Object::new(Stack::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Stack>()
+            .expect("downcast");
+        ret
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]

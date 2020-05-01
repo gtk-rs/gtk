@@ -318,10 +318,11 @@ impl RecentChooserMenuBuilder {
         if let Some(ref sort_type) = self.sort_type {
             properties.push(("sort-type", sort_type));
         }
-        glib::Object::new(RecentChooserMenu::static_type(), &properties)
+        let ret = glib::Object::new(RecentChooserMenu::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<RecentChooserMenu>()
+            .expect("downcast");
+        ret
     }
 
     pub fn show_numbers(mut self, show_numbers: bool) -> Self {

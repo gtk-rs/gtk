@@ -316,10 +316,11 @@ impl CellRendererAccelBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererAccel::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererAccel::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererAccel>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accel_key(mut self, accel_key: u32) -> Self {

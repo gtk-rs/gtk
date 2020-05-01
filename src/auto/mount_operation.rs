@@ -92,10 +92,11 @@ impl MountOperationBuilder {
         if let Some(ref username) = self.username {
             properties.push(("username", username));
         }
-        glib::Object::new(MountOperation::static_type(), &properties)
+        let ret = glib::Object::new(MountOperation::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MountOperation>()
+            .expect("downcast");
+        ret
     }
 
     pub fn parent<P: IsA<Window>>(mut self, parent: &P) -> Self {

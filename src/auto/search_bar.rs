@@ -209,10 +209,11 @@ impl SearchBarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(SearchBar::static_type(), &properties)
+        let ret = glib::Object::new(SearchBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<SearchBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn search_mode_enabled(mut self, search_mode_enabled: bool) -> Self {

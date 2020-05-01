@@ -383,10 +383,11 @@ impl AboutDialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(AboutDialog::static_type(), &properties)
+        let ret = glib::Object::new(AboutDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AboutDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn artists(mut self, artists: Vec<String>) -> Self {

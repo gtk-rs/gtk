@@ -233,10 +233,11 @@ impl HeaderBarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(HeaderBar::static_type(), &properties)
+        let ret = glib::Object::new(HeaderBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<HeaderBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn custom_title<P: IsA<Widget>>(mut self, custom_title: &P) -> Self {

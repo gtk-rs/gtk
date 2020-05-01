@@ -69,10 +69,11 @@ impl TextBufferBuilder {
         if let Some(ref text) = self.text {
             properties.push(("text", text));
         }
-        glib::Object::new(TextBuffer::static_type(), &properties)
+        let ret = glib::Object::new(TextBuffer::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<TextBuffer>()
+            .expect("downcast");
+        ret
     }
 
     pub fn tag_table<P: IsA<TextTagTable>>(mut self, tag_table: &P) -> Self {

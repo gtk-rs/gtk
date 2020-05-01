@@ -82,10 +82,11 @@ impl GestureDragBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GestureDrag::static_type(), &properties)
+        let ret = glib::Object::new(GestureDrag::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GestureDrag>()
+            .expect("downcast");
+        ret
     }
 
     pub fn button(mut self, button: u32) -> Self {

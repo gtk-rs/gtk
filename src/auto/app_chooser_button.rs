@@ -279,10 +279,11 @@ impl AppChooserButtonBuilder {
         if let Some(ref content_type) = self.content_type {
             properties.push(("content-type", content_type));
         }
-        glib::Object::new(AppChooserButton::static_type(), &properties)
+        let ret = glib::Object::new(AppChooserButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AppChooserButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn heading(mut self, heading: &str) -> Self {

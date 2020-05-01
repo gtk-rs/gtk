@@ -220,10 +220,11 @@ impl PanedBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Paned::static_type(), &properties)
+        let ret = glib::Object::new(Paned::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Paned>()
+            .expect("downcast");
+        ret
     }
 
     pub fn position(mut self, position: i32) -> Self {

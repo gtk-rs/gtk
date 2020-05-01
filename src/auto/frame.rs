@@ -219,10 +219,11 @@ impl FrameBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Frame::static_type(), &properties)
+        let ret = glib::Object::new(Frame::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Frame>()
+            .expect("downcast");
+        ret
     }
 
     pub fn label(mut self, label: &str) -> Self {
