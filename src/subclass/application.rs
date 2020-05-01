@@ -75,11 +75,26 @@ unsafe impl<T: ObjectSubclass + GtkApplicationImpl> IsSubclassable<T> for Applic
 
             imp.window_removed(&wrap, &from_glib_borrow(wptr))
         }
+
+        unsafe extern "C" fn application_startup<T: ObjectSubclass>(ptr: *mut gio_sys::GApplication)
+        where
+            T: GtkApplicationImpl,
+        {
+            let instance = &*(ptr as *mut T::Instance);
+            let imp = instance.get_impl();
+            let wrap: Borrowed<gio::Application> = from_glib_borrow(ptr);
+            crate::rt::set_initialized();
+            imp.startup(&wrap)
+        }
+
         <gio::ApplicationClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
             let klass = &mut *(self as *mut Self as *mut gtk_sys::GtkApplicationClass);
             klass.window_added = Some(application_window_added::<T>);
             klass.window_removed = Some(application_window_removed::<T>);
+            // Chain our startup handler in here
+            let klass = &mut *(self as *mut Self as *mut gio_sys::GApplicationClass);
+            klass.startup = Some(application_startup::<T>);
         }
     }
 }
