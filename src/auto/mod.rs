@@ -588,13 +588,13 @@ mod places_sidebar;
 pub use self::places_sidebar::PlacesSidebarBuilder;
 pub use self::places_sidebar::{PlacesSidebar, PlacesSidebarClass};
 
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 mod plug;
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::plug::PlugBuilder;
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::plug::PlugExt;
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::plug::{Plug, PlugClass, NONE_PLUG};
 
 mod popover;
@@ -757,13 +757,13 @@ pub use self::size_group::SizeGroupBuilder;
 pub use self::size_group::SizeGroupExt;
 pub use self::size_group::{SizeGroup, SizeGroupClass, NONE_SIZE_GROUP};
 
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 mod socket;
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::socket::GtkSocketExt;
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::socket::SocketBuilder;
-#[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::socket::{Socket, SocketClass, NONE_SOCKET};
 
 mod spin_button;
@@ -1331,7 +1331,7 @@ pub mod traits {
     pub use super::GtkListStoreExt;
     pub use super::GtkMenuExt;
     pub use super::GtkMenuItemExt;
-    #[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+    #[cfg(any(gdk_backend = "x11", feature = "dox"))]
     pub use super::GtkSocketExt;
     pub use super::GtkWindowExt;
     pub use super::HeaderBarExt;
@@ -1362,7 +1362,7 @@ pub mod traits {
     pub use super::OrientableExt;
     pub use super::OverlayExt;
     pub use super::PanedExt;
-    #[cfg(any(all(not(windows), not(target_os = "macos")), feature = "dox"))]
+    #[cfg(any(gdk_backend = "x11", feature = "dox"))]
     pub use super::PlugExt;
     pub use super::PopoverExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]

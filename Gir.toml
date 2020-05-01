@@ -1535,7 +1535,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Plug"
 status = "generate"
-cfg_condition = "all(not(windows),not(target_os = \"macos\"))"
+cfg_condition = "gdk_backend = \"x11\""
 
 [[object]]
 name = "Gtk.Popover"
@@ -1748,7 +1748,7 @@ version = "3.20"
 [[object]]
 name = "Gtk.Socket"
 status = "generate"
-cfg_condition = "all(not(windows),not(target_os = \"macos\"))"
+cfg_condition = "gdk_backend = \"x11\""
 trait_name = "GtkSocketExt"
 
 [[object]]
