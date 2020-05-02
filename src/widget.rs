@@ -61,6 +61,14 @@ pub trait WidgetExtManual: 'static {
     fn get_events(&self) -> gdk::EventMask;
     fn set_events(&self, events: gdk::EventMask);
 
+    // rustdoc-stripper-ignore-next
+    /// Calls `gtk_widget_destroy()` on this widget.
+    ///
+    /// # Safety
+    ///
+    /// This will not necessarily entirely remove the widget from existence but
+    /// you must *NOT* query the widget's state subsequently.  Do not call this
+    /// yourself unless you really mean to.
     unsafe fn destroy(&self);
 }
 
