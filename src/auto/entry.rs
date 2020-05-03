@@ -841,7 +841,7 @@ pub trait EntryExt: 'static {
 
     fn get_tabs(&self) -> Option<pango::TabArray>;
 
-    fn get_text(&self) -> Option<GString>;
+    fn get_text(&self) -> GString;
 
     fn get_text_area(&self) -> gdk::Rectangle;
 
@@ -1534,7 +1534,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         unsafe { from_glib_none(gtk_sys::gtk_entry_get_tabs(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_text(&self) -> Option<GString> {
+    fn get_text(&self) -> GString {
         unsafe { from_glib_none(gtk_sys::gtk_entry_get_text(self.as_ref().to_glib_none().0)) }
     }
 
