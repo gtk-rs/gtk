@@ -563,7 +563,7 @@ pub trait LabelExt: 'static {
 
     fn get_justify(&self) -> Justification;
 
-    fn get_label(&self) -> Option<GString>;
+    fn get_label(&self) -> GString;
 
     fn get_layout(&self) -> Option<pango::Layout>;
 
@@ -587,7 +587,7 @@ pub trait LabelExt: 'static {
 
     fn get_single_line_mode(&self) -> bool;
 
-    fn get_text(&self) -> Option<GString>;
+    fn get_text(&self) -> GString;
 
     fn get_track_visited_links(&self) -> bool;
 
@@ -795,7 +795,7 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    fn get_label(&self) -> Option<GString> {
+    fn get_label(&self) -> GString {
         unsafe { from_glib_none(gtk_sys::gtk_label_get_label(self.as_ref().to_glib_none().0)) }
     }
 
@@ -893,7 +893,7 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    fn get_text(&self) -> Option<GString> {
+    fn get_text(&self) -> GString {
         unsafe { from_glib_none(gtk_sys::gtk_label_get_text(self.as_ref().to_glib_none().0)) }
     }
 

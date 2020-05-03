@@ -954,6 +954,10 @@ status = "generate"
         [object.function.return]
         nullable = true
     [[object.function]]
+    name = "get_text"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
     name = "set_invisible_char"
         [[object.function.parameter]]
         name = "ch"
@@ -1252,6 +1256,14 @@ manual_traits = ["InvisibleExtManual"]
 [[object]]
 name = "Gtk.Label"
 status = "generate"
+    [[object.function]]
+    name = "get_label"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_text"
+        [object.function.return]
+        nullable = false
     [[object.signal]]
     name = "activate-link"
     inhibit = true
