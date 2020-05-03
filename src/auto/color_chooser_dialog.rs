@@ -335,10 +335,11 @@ impl ColorChooserDialogBuilder {
         if let Some(ref use_alpha) = self.use_alpha {
             properties.push(("use-alpha", use_alpha));
         }
-        glib::Object::new(ColorChooserDialog::static_type(), &properties)
+        let ret = glib::Object::new(ColorChooserDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ColorChooserDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn show_editor(mut self, show_editor: bool) -> Self {

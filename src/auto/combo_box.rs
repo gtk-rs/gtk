@@ -313,10 +313,11 @@ impl ComboBoxBuilder {
         if let Some(ref editing_canceled) = self.editing_canceled {
             properties.push(("editing-canceled", editing_canceled));
         }
-        glib::Object::new(ComboBox::static_type(), &properties)
+        let ret = glib::Object::new(ComboBox::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ComboBox>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: i32) -> Self {

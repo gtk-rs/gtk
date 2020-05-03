@@ -296,10 +296,11 @@ impl CellRendererTextBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererText::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererText::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererText>()
+            .expect("downcast");
+        ret
     }
 
     pub fn align_set(mut self, align_set: bool) -> Self {

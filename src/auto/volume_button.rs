@@ -266,10 +266,11 @@ impl VolumeButtonBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(VolumeButton::static_type(), &properties)
+        let ret = glib::Object::new(VolumeButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<VolumeButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn use_symbolic(mut self, use_symbolic: bool) -> Self {

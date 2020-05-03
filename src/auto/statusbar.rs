@@ -219,10 +219,11 @@ impl StatusbarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Statusbar::static_type(), &properties)
+        let ret = glib::Object::new(Statusbar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Statusbar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn baseline_position(mut self, baseline_position: BaselinePosition) -> Self {

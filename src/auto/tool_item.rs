@@ -216,10 +216,11 @@ impl ToolItemBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(ToolItem::static_type(), &properties)
+        let ret = glib::Object::new(ToolItem::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ToolItem>()
+            .expect("downcast");
+        ret
     }
 
     pub fn is_important(mut self, is_important: bool) -> Self {

@@ -359,10 +359,11 @@ impl AppChooserDialogBuilder {
         if let Some(ref content_type) = self.content_type {
             properties.push(("content-type", content_type));
         }
-        glib::Object::new(AppChooserDialog::static_type(), &properties)
+        let ret = glib::Object::new(AppChooserDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AppChooserDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn gfile<P: IsA<gio::File>>(mut self, gfile: &P) -> Self {

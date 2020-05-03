@@ -211,10 +211,11 @@ impl RevealerBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Revealer::static_type(), &properties)
+        let ret = glib::Object::new(Revealer::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Revealer>()
+            .expect("downcast");
+        ret
     }
 
     pub fn reveal_child(mut self, reveal_child: bool) -> Self {

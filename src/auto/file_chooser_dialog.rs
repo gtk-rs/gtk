@@ -355,10 +355,11 @@ impl FileChooserDialogBuilder {
         if let Some(ref use_preview_label) = self.use_preview_label {
             properties.push(("use-preview-label", use_preview_label));
         }
-        glib::Object::new(FileChooserDialog::static_type(), &properties)
+        let ret = glib::Object::new(FileChooserDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FileChooserDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn use_header_bar(mut self, use_header_bar: i32) -> Self {

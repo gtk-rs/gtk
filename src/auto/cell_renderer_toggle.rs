@@ -132,10 +132,11 @@ impl CellRendererToggleBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererToggle::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererToggle::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererToggle>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activatable(mut self, activatable: bool) -> Self {

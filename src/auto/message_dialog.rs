@@ -346,10 +346,11 @@ impl MessageDialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(MessageDialog::static_type(), &properties)
+        let ret = glib::Object::new(MessageDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MessageDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn buttons(mut self, buttons: ButtonsType) -> Self {

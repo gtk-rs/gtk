@@ -281,10 +281,11 @@ impl AccelLabelBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(AccelLabel::static_type(), &properties)
+        let ret = glib::Object::new(AccelLabel::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AccelLabel>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accel_closure(mut self, accel_closure: &glib::Closure) -> Self {

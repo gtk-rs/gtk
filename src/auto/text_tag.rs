@@ -364,10 +364,11 @@ impl TextTagBuilder {
         if let Some(ref wrap_mode_set) = self.wrap_mode_set {
             properties.push(("wrap-mode-set", wrap_mode_set));
         }
-        glib::Object::new(TextTag::static_type(), &properties)
+        let ret = glib::Object::new(TextTag::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<TextTag>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accumulative_margin(mut self, accumulative_margin: bool) -> Self {

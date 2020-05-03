@@ -122,10 +122,11 @@ impl PadControllerBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(PadController::static_type(), &properties)
+        let ret = glib::Object::new(PadController::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<PadController>()
+            .expect("downcast");
+        ret
     }
 
     pub fn action_group<P: IsA<gio::ActionGroup>>(mut self, action_group: &P) -> Self {

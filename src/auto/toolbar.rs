@@ -228,10 +228,11 @@ impl ToolbarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Toolbar::static_type(), &properties)
+        let ret = glib::Object::new(Toolbar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Toolbar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn icon_size(mut self, icon_size: IconSize) -> Self {

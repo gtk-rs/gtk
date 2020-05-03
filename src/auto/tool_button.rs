@@ -244,10 +244,11 @@ impl ToolButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(ToolButton::static_type(), &properties)
+        let ret = glib::Object::new(ToolButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ToolButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn icon_name(mut self, icon_name: &str) -> Self {

@@ -243,10 +243,11 @@ impl PopoverMenuBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(PopoverMenu::static_type(), &properties)
+        let ret = glib::Object::new(PopoverMenu::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<PopoverMenu>()
+            .expect("downcast");
+        ret
     }
 
     pub fn visible_submenu(mut self, visible_submenu: &str) -> Self {

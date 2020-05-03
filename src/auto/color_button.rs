@@ -273,10 +273,11 @@ impl ColorButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(ColorButton::static_type(), &properties)
+        let ret = glib::Object::new(ColorButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ColorButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn alpha(mut self, alpha: u32) -> Self {

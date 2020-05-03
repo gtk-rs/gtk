@@ -52,10 +52,11 @@ impl SizeGroupBuilder {
         if let Some(ref mode) = self.mode {
             properties.push(("mode", mode));
         }
-        glib::Object::new(SizeGroup::static_type(), &properties)
+        let ret = glib::Object::new(SizeGroup::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<SizeGroup>()
+            .expect("downcast");
+        ret
     }
 
     pub fn ignore_hidden(mut self, ignore_hidden: bool) -> Self {

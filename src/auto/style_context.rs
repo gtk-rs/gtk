@@ -109,10 +109,11 @@ impl StyleContextBuilder {
         if let Some(ref screen) = self.screen {
             properties.push(("screen", screen));
         }
-        glib::Object::new(StyleContext::static_type(), &properties)
+        let ret = glib::Object::new(StyleContext::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<StyleContext>()
+            .expect("downcast");
+        ret
     }
 
     pub fn direction(mut self, direction: TextDirection) -> Self {

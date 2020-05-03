@@ -241,10 +241,11 @@ impl FlowBoxBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(FlowBox::static_type(), &properties)
+        let ret = glib::Object::new(FlowBox::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FlowBox>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activate_on_single_click(mut self, activate_on_single_click: bool) -> Self {

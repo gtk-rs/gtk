@@ -235,10 +235,11 @@ impl NotebookBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Notebook::static_type(), &properties)
+        let ret = glib::Object::new(Notebook::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Notebook>()
+            .expect("downcast");
+        ret
     }
 
     pub fn enable_popup(mut self, enable_popup: bool) -> Self {

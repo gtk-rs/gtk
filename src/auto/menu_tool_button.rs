@@ -247,10 +247,11 @@ impl MenuToolButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(MenuToolButton::static_type(), &properties)
+        let ret = glib::Object::new(MenuToolButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MenuToolButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn menu<P: IsA<Menu>>(mut self, menu: &P) -> Self {

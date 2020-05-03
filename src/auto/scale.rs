@@ -258,10 +258,11 @@ impl ScaleBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Scale::static_type(), &properties)
+        let ret = glib::Object::new(Scale::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Scale>()
+            .expect("downcast");
+        ret
     }
 
     pub fn digits(mut self, digits: i32) -> Self {

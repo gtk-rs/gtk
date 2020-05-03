@@ -226,10 +226,11 @@ impl GridBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Grid::static_type(), &properties)
+        let ret = glib::Object::new(Grid::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Grid>()
+            .expect("downcast");
+        ret
     }
 
     pub fn baseline_row(mut self, baseline_row: i32) -> Self {

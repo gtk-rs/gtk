@@ -341,10 +341,11 @@ impl TextViewBuilder {
         if let Some(ref vscroll_policy) = self.vscroll_policy {
             properties.push(("vscroll-policy", vscroll_policy));
         }
-        glib::Object::new(TextView::static_type(), &properties)
+        let ret = glib::Object::new(TextView::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<TextView>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accepts_tab(mut self, accepts_tab: bool) -> Self {

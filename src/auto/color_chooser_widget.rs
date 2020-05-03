@@ -232,10 +232,11 @@ impl ColorChooserWidgetBuilder {
         if let Some(ref use_alpha) = self.use_alpha {
             properties.push(("use-alpha", use_alpha));
         }
-        glib::Object::new(ColorChooserWidget::static_type(), &properties)
+        let ret = glib::Object::new(ColorChooserWidget::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ColorChooserWidget>()
+            .expect("downcast");
+        ret
     }
 
     pub fn show_editor(mut self, show_editor: bool) -> Self {

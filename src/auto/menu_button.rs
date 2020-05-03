@@ -276,10 +276,11 @@ impl MenuButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(MenuButton::static_type(), &properties)
+        let ret = glib::Object::new(MenuButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MenuButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn align_widget<P: IsA<Container>>(mut self, align_widget: &P) -> Self {

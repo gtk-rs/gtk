@@ -124,10 +124,11 @@ impl PrintOperationBuilder {
         if let Some(ref use_full_page) = self.use_full_page {
             properties.push(("use-full-page", use_full_page));
         }
-        glib::Object::new(PrintOperation::static_type(), &properties)
+        let ret = glib::Object::new(PrintOperation::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<PrintOperation>()
+            .expect("downcast");
+        ret
     }
 
     pub fn allow_async(mut self, allow_async: bool) -> Self {

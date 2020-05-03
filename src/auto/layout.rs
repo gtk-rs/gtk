@@ -230,10 +230,11 @@ impl LayoutBuilder {
         if let Some(ref vscroll_policy) = self.vscroll_policy {
             properties.push(("vscroll-policy", vscroll_policy));
         }
-        glib::Object::new(Layout::static_type(), &properties)
+        let ret = glib::Object::new(Layout::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Layout>()
+            .expect("downcast");
+        ret
     }
 
     pub fn height(mut self, height: u32) -> Self {

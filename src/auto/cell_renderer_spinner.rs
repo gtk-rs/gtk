@@ -123,10 +123,11 @@ impl CellRendererSpinnerBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererSpinner::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererSpinner::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererSpinner>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {

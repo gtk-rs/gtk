@@ -272,10 +272,11 @@ impl CellViewBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(CellView::static_type(), &properties)
+        let ret = glib::Object::new(CellView::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellView>()
+            .expect("downcast");
+        ret
     }
 
     pub fn background(mut self, background: &str) -> Self {

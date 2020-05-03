@@ -313,10 +313,11 @@ impl CellRendererComboBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererCombo::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererCombo::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererCombo>()
+            .expect("downcast");
+        ret
     }
 
     pub fn has_entry(mut self, has_entry: bool) -> Self {

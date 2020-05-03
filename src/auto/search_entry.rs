@@ -376,10 +376,11 @@ impl SearchEntryBuilder {
         if let Some(ref editing_canceled) = self.editing_canceled {
             properties.push(("editing-canceled", editing_canceled));
         }
-        glib::Object::new(SearchEntry::static_type(), &properties)
+        let ret = glib::Object::new(SearchEntry::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<SearchEntry>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activates_default(mut self, activates_default: bool) -> Self {

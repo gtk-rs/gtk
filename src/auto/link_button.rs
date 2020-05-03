@@ -251,10 +251,11 @@ impl LinkButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(LinkButton::static_type(), &properties)
+        let ret = glib::Object::new(LinkButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<LinkButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn uri(mut self, uri: &str) -> Self {

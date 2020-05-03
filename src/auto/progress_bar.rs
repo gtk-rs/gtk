@@ -216,10 +216,11 @@ impl ProgressBarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(ProgressBar::static_type(), &properties)
+        let ret = glib::Object::new(ProgressBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ProgressBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn ellipsize(mut self, ellipsize: pango::EllipsizeMode) -> Self {

@@ -290,10 +290,11 @@ impl ScrolledWindowBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(ScrolledWindow::static_type(), &properties)
+        let ret = glib::Object::new(ScrolledWindow::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ScrolledWindow>()
+            .expect("downcast");
+        ret
     }
 
     pub fn hadjustment<P: IsA<Adjustment>>(mut self, hadjustment: &P) -> Self {

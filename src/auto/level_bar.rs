@@ -224,10 +224,11 @@ impl LevelBarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(LevelBar::static_type(), &properties)
+        let ret = glib::Object::new(LevelBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<LevelBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn inverted(mut self, inverted: bool) -> Self {

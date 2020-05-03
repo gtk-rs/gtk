@@ -220,10 +220,11 @@ impl ButtonBoxBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(ButtonBox::static_type(), &properties)
+        let ret = glib::Object::new(ButtonBox::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ButtonBox>()
+            .expect("downcast");
+        ret
     }
 
     pub fn layout_style(mut self, layout_style: ButtonBoxStyle) -> Self {

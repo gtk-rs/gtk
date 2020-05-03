@@ -225,10 +225,11 @@ impl ViewportBuilder {
         if let Some(ref vscroll_policy) = self.vscroll_policy {
             properties.push(("vscroll-policy", vscroll_policy));
         }
-        glib::Object::new(Viewport::static_type(), &properties)
+        let ret = glib::Object::new(Viewport::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Viewport>()
+            .expect("downcast");
+        ret
     }
 
     pub fn shadow_type(mut self, shadow_type: ShadowType) -> Self {

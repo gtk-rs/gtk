@@ -287,10 +287,11 @@ impl MenuBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Menu::static_type(), &properties)
+        let ret = glib::Object::new(Menu::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Menu>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accel_group<P: IsA<AccelGroup>>(mut self, accel_group: &P) -> Self {

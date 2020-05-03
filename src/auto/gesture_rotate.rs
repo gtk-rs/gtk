@@ -99,10 +99,11 @@ impl GestureRotateBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GestureRotate::static_type(), &properties)
+        let ret = glib::Object::new(GestureRotate::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GestureRotate>()
+            .expect("downcast");
+        ret
     }
 
     pub fn n_points(mut self, n_points: u32) -> Self {

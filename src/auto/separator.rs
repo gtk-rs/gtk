@@ -181,10 +181,11 @@ impl SeparatorBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Separator::static_type(), &properties)
+        let ret = glib::Object::new(Separator::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Separator>()
+            .expect("downcast");
+        ret
     }
 
     pub fn app_paintable(mut self, app_paintable: bool) -> Self {
