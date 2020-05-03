@@ -102,9 +102,9 @@ pub trait WidgetExt: 'static {
 
     fn compute_expand(&self, orientation: Orientation) -> bool;
 
-    fn create_pango_context(&self) -> Option<pango::Context>;
+    fn create_pango_context(&self) -> pango::Context;
 
-    fn create_pango_layout(&self, text: Option<&str>) -> Option<pango::Layout>;
+    fn create_pango_layout(&self, text: Option<&str>) -> pango::Layout;
 
     //fn destroyed<P: IsA<Widget>>(&self, widget_pointer: &P);
 
@@ -226,7 +226,7 @@ pub trait WidgetExt: 'static {
 
     fn get_direction(&self) -> TextDirection;
 
-    fn get_display(&self) -> Option<gdk::Display>;
+    fn get_display(&self) -> gdk::Display;
 
     fn get_double_buffered(&self) -> bool;
 
@@ -263,13 +263,13 @@ pub trait WidgetExt: 'static {
 
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
 
-    fn get_widget_name(&self) -> Option<GString>;
+    fn get_widget_name(&self) -> GString;
 
     fn get_no_show_all(&self) -> bool;
 
     fn get_opacity(&self) -> f64;
 
-    fn get_pango_context(&self) -> Option<pango::Context>;
+    fn get_pango_context(&self) -> pango::Context;
 
     fn get_parent(&self) -> Option<Widget>;
 
@@ -1098,7 +1098,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn create_pango_context(&self) -> Option<pango::Context> {
+    fn create_pango_context(&self) -> pango::Context {
         unsafe {
             from_glib_full(gtk_sys::gtk_widget_create_pango_context(
                 self.as_ref().to_glib_none().0,
@@ -1106,7 +1106,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn create_pango_layout(&self, text: Option<&str>) -> Option<pango::Layout> {
+    fn create_pango_layout(&self, text: Option<&str>) -> pango::Layout {
         unsafe {
             from_glib_full(gtk_sys::gtk_widget_create_pango_layout(
                 self.as_ref().to_glib_none().0,
@@ -1517,7 +1517,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn get_display(&self) -> Option<gdk::Display> {
+    fn get_display(&self) -> gdk::Display {
         unsafe {
             from_glib_none(gtk_sys::gtk_widget_get_display(
                 self.as_ref().to_glib_none().0,
@@ -1641,7 +1641,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn get_widget_name(&self) -> Option<GString> {
+    fn get_widget_name(&self) -> GString {
         unsafe { from_glib_none(gtk_sys::gtk_widget_get_name(self.as_ref().to_glib_none().0)) }
     }
 
@@ -1657,7 +1657,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         unsafe { gtk_sys::gtk_widget_get_opacity(self.as_ref().to_glib_none().0) }
     }
 
-    fn get_pango_context(&self) -> Option<pango::Context> {
+    fn get_pango_context(&self) -> pango::Context {
         unsafe {
             from_glib_none(gtk_sys::gtk_widget_get_pango_context(
                 self.as_ref().to_glib_none().0,
