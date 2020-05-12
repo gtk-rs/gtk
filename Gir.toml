@@ -2477,10 +2477,28 @@ manual_traits = ["WidgetExtManual"]
     [[object.function]]
     name = "get_name"
     rename = "get_widget_name"
+        [object.function.return]
+        nullable = false
     [[object.function]]
     name = "destroy"
     # needs to be marked as unsafe
     ignore = true
+    [[object.function]]
+    name = "create_pango_context"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "create_pango_layout"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_display"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_pango_context"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gtk.Window"
