@@ -70,6 +70,8 @@ pub trait WidgetExtManual: 'static {
     /// you must *NOT* query the widget's state subsequently.  Do not call this
     /// yourself unless you really mean to.
     unsafe fn destroy(&self);
+
+    fn hide_on_delete(&self) -> Inhibit;
 }
 
 impl<O: IsA<Widget>> WidgetExtManual for O {
@@ -252,5 +254,13 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
 
     unsafe fn destroy(&self) {
         gtk_sys::gtk_widget_destroy(self.as_ref().to_glib_none().0);
+    }
+
+    fn hide_on_delete(&self) -> Inhibit {
+        unsafe {
+            Inhibit(from_glib(gtk_sys::gtk_widget_hide_on_delete(
+                self.as_ref().to_glib_none().0,
+            )))
+        }
     }
 }
