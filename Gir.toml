@@ -2351,6 +2351,7 @@ manual_traits = ["WidgetExtManual"]
         const = true
     [[object.function]]
     name = "hide_on_delete"
+    # return Inhibit instead of bool
     ignore = true
     doc_trait_name = "WidgetExtManual"
     [[object.signal]]
