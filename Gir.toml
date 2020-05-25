@@ -2349,6 +2349,11 @@ manual_traits = ["WidgetExtManual"]
         [[object.function.parameter]]
         name = "allocation"
         const = true
+    [[object.function]]
+    name = "hide_on_delete"
+    # return Inhibit instead of bool
+    ignore = true
+    doc_trait_name = "WidgetExtManual"
     [[object.signal]]
     name = "button-press-event"
     inhibit = true

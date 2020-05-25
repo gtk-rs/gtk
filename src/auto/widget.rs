@@ -359,8 +359,6 @@ pub trait WidgetExt: 'static {
 
     fn hide(&self);
 
-    fn hide_on_delete(&self) -> bool;
-
     fn in_destruction(&self) -> bool;
 
     fn init_template(&self);
@@ -2043,14 +2041,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn hide(&self) {
         unsafe {
             gtk_sys::gtk_widget_hide(self.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn hide_on_delete(&self) -> bool {
-        unsafe {
-            from_glib(gtk_sys::gtk_widget_hide_on_delete(
-                self.as_ref().to_glib_none().0,
-            ))
         }
     }
 
