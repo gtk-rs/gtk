@@ -134,6 +134,7 @@ pub struct ImageBuilder {
     pixbuf_animation: Option<gdk_pixbuf::PixbufAnimation>,
     pixel_size: Option<i32>,
     resource: Option<String>,
+    surface: Option<cairo::Surface>,
     use_fallback: Option<bool>,
     app_paintable: Option<bool>,
     can_default: Option<bool>,
@@ -200,6 +201,9 @@ impl ImageBuilder {
         }
         if let Some(ref resource) = self.resource {
             properties.push(("resource", resource));
+        }
+        if let Some(ref surface) = self.surface {
+            properties.push(("surface", surface));
         }
         if let Some(ref use_fallback) = self.use_fallback {
             properties.push(("use-fallback", use_fallback));
@@ -350,6 +354,11 @@ impl ImageBuilder {
 
     pub fn resource(mut self, resource: &str) -> Self {
         self.resource = Some(resource.to_string());
+        self
+    }
+
+    pub fn surface(mut self, surface: &cairo::Surface) -> Self {
+        self.surface = Some(surface.clone());
         self
     }
 
@@ -578,6 +587,10 @@ pub trait ImageExt: 'static {
 
     fn set_property_resource(&self, resource: Option<&str>);
 
+    fn get_property_surface(&self) -> Option<cairo::Surface>;
+
+    fn set_property_surface(&self, surface: Option<&cairo::Surface>);
+
     fn get_property_use_fallback(&self) -> bool;
 
     fn set_property_use_fallback(&self, use_fallback: bool);
@@ -603,6 +616,8 @@ pub trait ImageExt: 'static {
 
     fn connect_property_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F)
         -> SignalHandlerId;
+
+    fn connect_property_surface_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_use_fallback_notify<F: Fn(&Self) + 'static>(&self, f: F)
         -> SignalHandlerId;
@@ -873,6 +888,30 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
+    fn get_property_surface(&self) -> Option<cairo::Surface> {
+        unsafe {
+            let mut value = Value::from_type(<cairo::Surface as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"surface\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `surface` getter")
+        }
+    }
+
+    fn set_property_surface(&self, surface: Option<&cairo::Surface>) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"surface\0".as_ptr() as *const _,
+                Value::from(surface).to_glib_none().0,
+            );
+        }
+    }
+
     fn get_property_use_fallback(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -1114,6 +1153,30 @@ impl<O: IsA<Image>> ImageExt for O {
                 b"notify::storage-type\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_storage_type_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    fn connect_property_surface_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_surface_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkImage,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Image>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Image::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::surface\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_surface_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
