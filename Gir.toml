@@ -778,8 +778,6 @@ status = "generate"
 manual_traits = ["CellRendererPixbufExtManual"]
     [[object.property]]
     name = "surface"
-    #value cairo::Surface
-    ignore = true
     [[object.property]]
     name = "stock-size"
     #value ImageSize
@@ -1174,8 +1172,6 @@ status = "generate"
     ignore = true
     [[object.property]]
     name = "surface"
-    #value cairo::Surface
-    ignore = true
     [[object.property]]
     name = "icon-set"
     #value IconSet
