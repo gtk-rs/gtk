@@ -1851,13 +1851,40 @@ manual_traits = ["TextBufferExtManual"]
         [[object.function.parameter]]
         name = "override_location"
         const = true
-    [[object.signal]]
-    name = "insert-text"
-    ignore = true
-    doc_trait_name = "TextBufferExtManual"
     [[object.function]]
     name = "register_serialize_format"
+    # actually returns an array of bytes, not a single byte
     ignore = true
+    [[object.signal]]
+    name = "apply-tag"
+    # needs mutable TextIters
+    ignore = true
+    doc_trait_name = "TextBufferExtManual"
+    [[object.signal]]
+    name = "delete-range"
+    # needs mutable TextIters
+    ignore = true
+    doc_trait_name = "TextBufferExtManual"
+    [[object.signal]]
+    name = "insert-child-anchor"
+    # needs mutable TextIters
+    ignore = true
+    doc_trait_name = "TextBufferExtManual"
+    [[object.signal]]
+    name = "insert-pixbuf"
+    # needs mutable TextIters
+    ignore = true
+    doc_trait_name = "TextBufferExtManual"
+    [[object.signal]]
+    name = "insert-text"
+    # needs mutable TextIters
+    ignore = true
+    doc_trait_name = "TextBufferExtManual"
+    [[object.signal]]
+    name = "remove-tag"
+    # needs mutable TextIters
+    ignore = true
+    doc_trait_name = "TextBufferExtManual"
 
 [[object]]
 name = "Gtk.TextIter"
