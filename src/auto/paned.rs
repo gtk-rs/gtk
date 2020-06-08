@@ -742,7 +742,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_accept_position(&self) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("accept-position", &[])
                 .unwrap()
         };
@@ -778,7 +778,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_cancel_position(&self) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cancel-position", &[])
                 .unwrap()
         };
@@ -822,7 +822,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_cycle_child_focus(&self, reversed: bool) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cycle-child-focus", &[&reversed])
                 .unwrap()
         };
@@ -866,7 +866,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_cycle_handle_focus(&self, reversed: bool) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cycle-handle-focus", &[&reversed])
                 .unwrap()
         };
@@ -910,7 +910,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_move_handle(&self, scroll_type: ScrollType) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-handle", &[&scroll_type])
                 .unwrap()
         };
@@ -946,7 +946,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_toggle_handle_focus(&self) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-handle-focus", &[])
                 .unwrap()
         };
