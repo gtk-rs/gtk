@@ -914,7 +914,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_activate_cursor_row(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate-cursor-row", &[])
                 .unwrap()
         };
@@ -954,7 +954,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_move_cursor(&self, object: MovementStep, p0: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-cursor", &[&object, &p0])
                 .unwrap()
         };
@@ -1044,7 +1044,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_select_all(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("select-all", &[])
                 .unwrap()
         };
@@ -1098,7 +1098,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_toggle_cursor_row(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-cursor-row", &[])
                 .unwrap()
         };
@@ -1129,7 +1129,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_unselect_all(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("unselect-all", &[])
                 .unwrap()
         };

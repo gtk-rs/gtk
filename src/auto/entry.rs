@@ -2531,7 +2531,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_activate(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate", &[])
                 .unwrap()
         };
@@ -2562,7 +2562,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_backspace(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("backspace", &[])
                 .unwrap()
         };
@@ -2593,7 +2593,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_copy_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("copy-clipboard", &[])
                 .unwrap()
         };
@@ -2624,7 +2624,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_cut_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cut-clipboard", &[])
                 .unwrap()
         };
@@ -2667,7 +2667,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_delete_from_cursor(&self, type_: DeleteType, count: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("delete-from-cursor", &[&type_, &count])
                 .unwrap()
         };
@@ -2772,7 +2772,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_insert_at_cursor(&self, string: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("insert-at-cursor", &[&string])
                 .unwrap()
         };
@@ -2805,7 +2805,7 @@ impl<O: IsA<Entry>> EntryExt for O {
     #[cfg(any(feature = "v3_22_27", feature = "dox"))]
     fn emit_insert_emoji(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("insert-emoji", &[])
                 .unwrap()
         };
@@ -2850,7 +2850,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-cursor", &[&step, &count, &extend_selection])
                 .unwrap()
         };
@@ -2881,7 +2881,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_paste_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("paste-clipboard", &[])
                 .unwrap()
         };
@@ -2943,7 +2943,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_preedit_changed(&self, preedit: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("preedit-changed", &[&preedit])
                 .unwrap()
         };
@@ -2974,7 +2974,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_toggle_overwrite(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-overwrite", &[])
                 .unwrap()
         };

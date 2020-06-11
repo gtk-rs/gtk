@@ -662,7 +662,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_desktop_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("desktop-folder", &[])
                 .unwrap()
         };
@@ -693,7 +693,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_down_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("down-folder", &[])
                 .unwrap()
         };
@@ -724,7 +724,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_home_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("home-folder", &[])
                 .unwrap()
         };
@@ -759,7 +759,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_location_popup(&self, path: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("location-popup", &[&path])
                 .unwrap()
         };
@@ -790,7 +790,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_location_popup_on_paste(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("location-popup-on-paste", &[])
                 .unwrap()
         };
@@ -821,7 +821,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_location_toggle_popup(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("location-toggle-popup", &[])
                 .unwrap()
         };
@@ -852,7 +852,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_places_shortcut(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("places-shortcut", &[])
                 .unwrap()
         };
@@ -887,7 +887,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_quick_bookmark(&self, bookmark_index: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("quick-bookmark", &[&bookmark_index])
                 .unwrap()
         };
@@ -918,7 +918,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_recent_shortcut(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("recent-shortcut", &[])
                 .unwrap()
         };
@@ -949,7 +949,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_search_shortcut(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("search-shortcut", &[])
                 .unwrap()
         };
@@ -980,7 +980,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_show_hidden(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("show-hidden", &[])
                 .unwrap()
         };
@@ -1011,7 +1011,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_up_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("up-folder", &[])
                 .unwrap()
         };

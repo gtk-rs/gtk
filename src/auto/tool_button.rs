@@ -631,7 +631,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
 
     fn emit_clicked(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("clicked", &[])
                 .unwrap()
         };

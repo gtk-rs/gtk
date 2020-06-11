@@ -254,7 +254,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_activate_current(&self, force_hide: bool) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate-current", &[&force_hide])
                 .unwrap()
         };
@@ -285,7 +285,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_cancel(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cancel", &[])
                 .unwrap()
         };
@@ -320,7 +320,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_cycle_focus(&self, direction: DirectionType) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cycle-focus", &[&direction])
                 .unwrap()
         };
@@ -410,7 +410,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_move_current(&self, direction: MenuDirectionType) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-current", &[&direction])
                 .unwrap()
         };
