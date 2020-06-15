@@ -12,7 +12,7 @@ use std::path::Path;
 use Builder;
 
 impl Builder {
-    pub fn new_from_file<T: AsRef<Path>>(file_path: T) -> Builder {
+    pub fn from_file<T: AsRef<Path>>(file_path: T) -> Builder {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gtk_sys::gtk_builder_new_from_file(
