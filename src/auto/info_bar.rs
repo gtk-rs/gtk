@@ -45,7 +45,7 @@ impl InfoBar {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_info_bar_new()).unsafe_cast() }
     }
 
-    //pub fn new_with_buttons(first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> InfoBar {
+    //pub fn with_buttons(first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> InfoBar {
     //    unsafe { TODO: call gtk_sys:gtk_info_bar_new_with_buttons() }
     //}
 }

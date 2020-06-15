@@ -36,7 +36,7 @@ glib_wrapper! {
 }
 
 impl RadioMenuItem {
-    pub fn new_from_widget<P: IsA<RadioMenuItem>>(group: &P) -> RadioMenuItem {
+    pub fn from_widget<P: IsA<RadioMenuItem>>(group: &P) -> RadioMenuItem {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_radio_menu_item_new_from_widget(
@@ -46,7 +46,7 @@ impl RadioMenuItem {
         }
     }
 
-    pub fn new_with_label_from_widget<P: IsA<RadioMenuItem>>(
+    pub fn with_label_from_widget<P: IsA<RadioMenuItem>>(
         group: &P,
         label: Option<&str>,
     ) -> RadioMenuItem {
@@ -60,7 +60,7 @@ impl RadioMenuItem {
         }
     }
 
-    pub fn new_with_mnemonic_from_widget<P: IsA<RadioMenuItem>>(
+    pub fn with_mnemonic_from_widget<P: IsA<RadioMenuItem>>(
         group: &P,
         label: Option<&str>,
     ) -> RadioMenuItem {

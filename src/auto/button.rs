@@ -44,7 +44,7 @@ impl Button {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_button_new()).unsafe_cast() }
     }
 
-    pub fn new_from_icon_name(icon_name: Option<&str>, size: IconSize) -> Button {
+    pub fn from_icon_name(icon_name: Option<&str>, size: IconSize) -> Button {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_button_new_from_icon_name(
@@ -55,7 +55,7 @@ impl Button {
         }
     }
 
-    pub fn new_with_label(label: &str) -> Button {
+    pub fn with_label(label: &str) -> Button {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_button_new_with_label(label.to_glib_none().0))
@@ -63,7 +63,7 @@ impl Button {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> Button {
+    pub fn with_mnemonic(label: &str) -> Button {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_button_new_with_mnemonic(

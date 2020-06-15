@@ -38,7 +38,7 @@ impl ComboBoxText {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_combo_box_text_new()).unsafe_cast() }
     }
 
-    pub fn new_with_entry() -> ComboBoxText {
+    pub fn with_entry() -> ComboBoxText {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_combo_box_text_new_with_entry()).unsafe_cast()

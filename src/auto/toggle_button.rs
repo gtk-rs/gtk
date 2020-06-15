@@ -43,7 +43,7 @@ impl ToggleButton {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_toggle_button_new()).unsafe_cast() }
     }
 
-    pub fn new_with_label(label: &str) -> ToggleButton {
+    pub fn with_label(label: &str) -> ToggleButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_toggle_button_new_with_label(
@@ -53,7 +53,7 @@ impl ToggleButton {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> ToggleButton {
+    pub fn with_mnemonic(label: &str) -> ToggleButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_toggle_button_new_with_mnemonic(

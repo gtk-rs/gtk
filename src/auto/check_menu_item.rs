@@ -40,7 +40,7 @@ impl CheckMenuItem {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_check_menu_item_new()).unsafe_cast() }
     }
 
-    pub fn new_with_label(label: &str) -> CheckMenuItem {
+    pub fn with_label(label: &str) -> CheckMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_check_menu_item_new_with_label(
@@ -50,7 +50,7 @@ impl CheckMenuItem {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> CheckMenuItem {
+    pub fn with_mnemonic(label: &str) -> CheckMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_check_menu_item_new_with_mnemonic(

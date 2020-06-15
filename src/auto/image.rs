@@ -47,7 +47,7 @@ impl Image {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_image_new()).unsafe_cast() }
     }
 
-    pub fn new_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(animation: &P) -> Image {
+    pub fn from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(animation: &P) -> Image {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_image_new_from_animation(
@@ -57,7 +57,7 @@ impl Image {
         }
     }
 
-    pub fn new_from_file<P: AsRef<std::path::Path>>(filename: P) -> Image {
+    pub fn from_file<P: AsRef<std::path::Path>>(filename: P) -> Image {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_image_new_from_file(
@@ -67,7 +67,7 @@ impl Image {
         }
     }
 
-    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P, size: IconSize) -> Image {
+    pub fn from_gicon<P: IsA<gio::Icon>>(icon: &P, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_image_new_from_gicon(
@@ -78,7 +78,7 @@ impl Image {
         }
     }
 
-    pub fn new_from_icon_name(icon_name: Option<&str>, size: IconSize) -> Image {
+    pub fn from_icon_name(icon_name: Option<&str>, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_image_new_from_icon_name(
@@ -89,7 +89,7 @@ impl Image {
         }
     }
 
-    pub fn new_from_pixbuf(pixbuf: Option<&gdk_pixbuf::Pixbuf>) -> Image {
+    pub fn from_pixbuf(pixbuf: Option<&gdk_pixbuf::Pixbuf>) -> Image {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_image_new_from_pixbuf(pixbuf.to_glib_none().0))
@@ -97,7 +97,7 @@ impl Image {
         }
     }
 
-    pub fn new_from_resource(resource_path: &str) -> Image {
+    pub fn from_resource(resource_path: &str) -> Image {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_image_new_from_resource(
@@ -107,7 +107,7 @@ impl Image {
         }
     }
 
-    pub fn new_from_surface(surface: Option<&cairo::Surface>) -> Image {
+    pub fn from_surface(surface: Option<&cairo::Surface>) -> Image {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_image_new_from_surface(mut_override(

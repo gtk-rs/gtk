@@ -46,7 +46,7 @@ impl MessageDialog {
     //    unsafe { TODO: call gtk_sys:gtk_message_dialog_new() }
     //}
 
-    //pub fn new_with_markup<P: IsA<Window>>(parent: Option<&P>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
+    //pub fn with_markup<P: IsA<Window>>(parent: Option<&P>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
     //    unsafe { TODO: call gtk_sys:gtk_message_dialog_new_with_markup() }
     //}
 }

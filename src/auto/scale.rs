@@ -49,7 +49,7 @@ impl Scale {
         }
     }
 
-    pub fn new_with_range(orientation: Orientation, min: f64, max: f64, step: f64) -> Scale {
+    pub fn with_range(orientation: Orientation, min: f64, max: f64, step: f64) -> Scale {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_scale_new_with_range(

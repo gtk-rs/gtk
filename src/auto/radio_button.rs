@@ -38,7 +38,7 @@ glib_wrapper! {
 }
 
 impl RadioButton {
-    pub fn new_from_widget<P: IsA<RadioButton>>(radio_group_member: &P) -> RadioButton {
+    pub fn from_widget<P: IsA<RadioButton>>(radio_group_member: &P) -> RadioButton {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_radio_button_new_from_widget(
@@ -48,7 +48,7 @@ impl RadioButton {
         }
     }
 
-    pub fn new_with_label_from_widget<P: IsA<RadioButton>>(
+    pub fn with_label_from_widget<P: IsA<RadioButton>>(
         radio_group_member: &P,
         label: &str,
     ) -> RadioButton {
@@ -62,7 +62,7 @@ impl RadioButton {
         }
     }
 
-    pub fn new_with_mnemonic_from_widget<P: IsA<RadioButton>>(
+    pub fn with_mnemonic_from_widget<P: IsA<RadioButton>>(
         radio_group_member: &P,
         label: &str,
     ) -> RadioButton {

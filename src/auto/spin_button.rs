@@ -64,7 +64,7 @@ impl SpinButton {
         }
     }
 
-    pub fn new_with_range(min: f64, max: f64, step: f64) -> SpinButton {
+    pub fn with_range(min: f64, max: f64, step: f64) -> SpinButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_spin_button_new_with_range(min, max, step))

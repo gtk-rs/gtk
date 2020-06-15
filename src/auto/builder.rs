@@ -32,7 +32,7 @@ impl Builder {
         unsafe { from_glib_full(gtk_sys::gtk_builder_new()) }
     }
 
-    pub fn new_from_resource(resource_path: &str) -> Builder {
+    pub fn from_resource(resource_path: &str) -> Builder {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gtk_sys::gtk_builder_new_from_resource(
@@ -41,7 +41,7 @@ impl Builder {
         }
     }
 
-    pub fn new_from_string(string: &str) -> Builder {
+    pub fn from_string(string: &str) -> Builder {
         assert_initialized_main_thread!();
         let length = string.len() as isize;
         unsafe {

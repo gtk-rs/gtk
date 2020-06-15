@@ -45,7 +45,7 @@ impl ColorButton {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_color_button_new()).unsafe_cast() }
     }
 
-    pub fn new_with_rgba(rgba: &gdk::RGBA) -> ColorButton {
+    pub fn with_rgba(rgba: &gdk::RGBA) -> ColorButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_color_button_new_with_rgba(

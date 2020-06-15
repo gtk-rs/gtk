@@ -52,7 +52,7 @@ impl IconView {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_icon_view_new()).unsafe_cast() }
     }
 
-    pub fn new_with_area<P: IsA<CellArea>>(area: &P) -> IconView {
+    pub fn with_area<P: IsA<CellArea>>(area: &P) -> IconView {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_icon_view_new_with_area(
@@ -62,7 +62,7 @@ impl IconView {
         }
     }
 
-    pub fn new_with_model<P: IsA<TreeModel>>(model: &P) -> IconView {
+    pub fn with_model<P: IsA<TreeModel>>(model: &P) -> IconView {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_icon_view_new_with_model(

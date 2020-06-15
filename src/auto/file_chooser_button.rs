@@ -50,7 +50,7 @@ impl FileChooserButton {
         }
     }
 
-    pub fn new_with_dialog<P: IsA<Dialog>>(dialog: &P) -> FileChooserButton {
+    pub fn with_dialog<P: IsA<Dialog>>(dialog: &P) -> FileChooserButton {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_file_chooser_button_new_with_dialog(

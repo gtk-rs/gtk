@@ -43,7 +43,7 @@ impl TreeViewColumn {
         unsafe { from_glib_none(gtk_sys::gtk_tree_view_column_new()) }
     }
 
-    pub fn new_with_area<P: IsA<CellArea>>(area: &P) -> TreeViewColumn {
+    pub fn with_area<P: IsA<CellArea>>(area: &P) -> TreeViewColumn {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(gtk_sys::gtk_tree_view_column_new_with_area(
@@ -52,7 +52,7 @@ impl TreeViewColumn {
         }
     }
 
-    //pub fn new_with_attributes<P: IsA<CellRenderer>>(title: &str, cell: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeViewColumn {
+    //pub fn with_attributes<P: IsA<CellRenderer>>(title: &str, cell: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeViewColumn {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_column_new_with_attributes() }
     //}
 }

@@ -58,7 +58,7 @@ impl TreeView {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_tree_view_new()).unsafe_cast() }
     }
 
-    pub fn new_with_model<P: IsA<TreeModel>>(model: &P) -> TreeView {
+    pub fn with_model<P: IsA<TreeModel>>(model: &P) -> TreeView {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_tree_view_new_with_model(
