@@ -360,6 +360,28 @@ builders = [
 
 ignore = [
     "Gtk.Activatable",
+    # base class
+    "Gtk.WidgetBuilder",
+    # deprecated
+    "Gtk.ArrowBuilder",
+    # base class
+    "Gtk.MiscBuilder",
+    # base class
+    "Gtk.ContainerBuilder",
+    # base class
+    "Gtk.CellAreaBuilder",
+    # base class
+    "Gtk.CellAreaContextBuilder",
+    # base class
+    "Gtk.EventControllerBuilder",
+    # base class
+    "Gtk.GestureBuilder",
+    # base class
+    "Gtk.GestureSingleBuilder",
+    # base class
+    "Gtk.MenuShellBuilder",
+    # base class
+    "Gtk.RangeBuilder",
 ]
 
 manual = [
