@@ -26,6 +26,7 @@ pub use self::actionable::ActionableExt;
 pub use self::actionable::{Actionable, NONE_ACTIONABLE};
 
 mod adjustment;
+pub use self::adjustment::AdjustmentBuilder;
 pub use self::adjustment::AdjustmentExt;
 pub use self::adjustment::{Adjustment, AdjustmentClass, NONE_ADJUSTMENT};
 
@@ -126,6 +127,7 @@ pub use self::cell_layout::CellLayoutExt;
 pub use self::cell_layout::{CellLayout, NONE_CELL_LAYOUT};
 
 mod cell_renderer;
+pub use self::cell_renderer::CellRendererBuilder;
 pub use self::cell_renderer::CellRendererExt;
 pub use self::cell_renderer::{CellRenderer, CellRendererClass, NONE_CELL_RENDERER};
 
@@ -437,6 +439,7 @@ pub use self::icon_theme::IconThemeExt;
 pub use self::icon_theme::{IconTheme, IconThemeClass, NONE_ICON_THEME};
 
 mod icon_view;
+pub use self::icon_view::IconViewBuilder;
 pub use self::icon_view::IconViewExt;
 pub use self::icon_view::{IconView, IconViewClass, NONE_ICON_VIEW};
 
@@ -743,10 +746,14 @@ pub use self::settings::{Settings, SettingsClass, NONE_SETTINGS};
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 mod shortcut_label;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
+pub use self::shortcut_label::ShortcutLabelBuilder;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 pub use self::shortcut_label::{ShortcutLabel, ShortcutLabelClass};
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 mod shortcuts_window;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_window::ShortcutsWindowBuilder;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::shortcuts_window::ShortcutsWindowExt;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
