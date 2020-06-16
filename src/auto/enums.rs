@@ -5870,6 +5870,116 @@ impl SetValue for ShadowType {
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+pub enum ShortcutType {
+    Accelerator,
+    GesturePinch,
+    GestureStretch,
+    GestureRotateClockwise,
+    GestureRotateCounterclockwise,
+    GestureTwoFingerSwipeLeft,
+    GestureTwoFingerSwipeRight,
+    Gesture,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+impl fmt::Display for ShortcutType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "ShortcutType::{}",
+            match *self {
+                ShortcutType::Accelerator => "Accelerator",
+                ShortcutType::GesturePinch => "GesturePinch",
+                ShortcutType::GestureStretch => "GestureStretch",
+                ShortcutType::GestureRotateClockwise => "GestureRotateClockwise",
+                ShortcutType::GestureRotateCounterclockwise => "GestureRotateCounterclockwise",
+                ShortcutType::GestureTwoFingerSwipeLeft => "GestureTwoFingerSwipeLeft",
+                ShortcutType::GestureTwoFingerSwipeRight => "GestureTwoFingerSwipeRight",
+                ShortcutType::Gesture => "Gesture",
+                _ => "Unknown",
+            }
+        )
+    }
+}
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for ShortcutType {
+    type GlibType = gtk_sys::GtkShortcutType;
+
+    fn to_glib(&self) -> gtk_sys::GtkShortcutType {
+        match *self {
+            ShortcutType::Accelerator => gtk_sys::GTK_SHORTCUT_ACCELERATOR,
+            ShortcutType::GesturePinch => gtk_sys::GTK_SHORTCUT_GESTURE_PINCH,
+            ShortcutType::GestureStretch => gtk_sys::GTK_SHORTCUT_GESTURE_STRETCH,
+            ShortcutType::GestureRotateClockwise => gtk_sys::GTK_SHORTCUT_GESTURE_ROTATE_CLOCKWISE,
+            ShortcutType::GestureRotateCounterclockwise => {
+                gtk_sys::GTK_SHORTCUT_GESTURE_ROTATE_COUNTERCLOCKWISE
+            }
+            ShortcutType::GestureTwoFingerSwipeLeft => {
+                gtk_sys::GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_LEFT
+            }
+            ShortcutType::GestureTwoFingerSwipeRight => {
+                gtk_sys::GTK_SHORTCUT_GESTURE_TWO_FINGER_SWIPE_RIGHT
+            }
+            ShortcutType::Gesture => gtk_sys::GTK_SHORTCUT_GESTURE,
+            ShortcutType::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<gtk_sys::GtkShortcutType> for ShortcutType {
+    fn from_glib(value: gtk_sys::GtkShortcutType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => ShortcutType::Accelerator,
+            1 => ShortcutType::GesturePinch,
+            2 => ShortcutType::GestureStretch,
+            3 => ShortcutType::GestureRotateClockwise,
+            4 => ShortcutType::GestureRotateCounterclockwise,
+            5 => ShortcutType::GestureTwoFingerSwipeLeft,
+            6 => ShortcutType::GestureTwoFingerSwipeRight,
+            7 => ShortcutType::Gesture,
+            value => ShortcutType::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+impl StaticType for ShortcutType {
+    fn static_type() -> Type {
+        unsafe { from_glib(gtk_sys::gtk_shortcut_type_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for ShortcutType {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+impl<'a> FromValue<'a> for ShortcutType {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+impl SetValue for ShortcutType {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 pub enum SizeGroupMode {

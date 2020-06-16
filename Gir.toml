@@ -326,6 +326,9 @@ builders = [
     "Gtk.SeparatorMenuItemBuilder",
     "Gtk.SeparatorToolItemBuilder",
     "Gtk.ShortcutLabelBuilder",
+    "Gtk.ShortcutsGroupBuilder",
+    "Gtk.ShortcutsSectionBuilder",
+    "Gtk.ShortcutsShortcutBuilder",
     "Gtk.ShortcutsWindowBuilder",
     "Gtk.SizeGroupBuilder",
     "Gtk.SocketBuilder",
@@ -1772,7 +1775,27 @@ status = "generate"
 version = "3.22"
 
 [[object]]
+name = "Gtk.ShortcutsGroup"
+status = "generate"
+version = "3.20"
+
+[[object]]
+name = "Gtk.ShortcutsSection"
+status = "generate"
+version = "3.20"
+
+[[object]]
+name = "Gtk.ShortcutsShortcut"
+status = "generate"
+version = "3.20"
+
+[[object]]
 name = "Gtk.ShortcutsWindow"
+status = "generate"
+version = "3.20"
+
+[[object]]
+name = "Gtk.ShortcutType"
 status = "generate"
 version = "3.20"
 

@@ -768,6 +768,27 @@ pub use self::shortcut_label::ShortcutLabelBuilder;
 pub use self::shortcut_label::{ShortcutLabel, ShortcutLabelClass};
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
+mod shortcuts_group;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_group::ShortcutsGroupBuilder;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_group::{ShortcutsGroup, ShortcutsGroupClass};
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+mod shortcuts_section;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_section::ShortcutsSectionBuilder;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_section::{ShortcutsSection, ShortcutsSectionClass};
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+mod shortcuts_shortcut;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_shortcut::ShortcutsShortcutBuilder;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_shortcut::{ShortcutsShortcut, ShortcutsShortcutClass};
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 mod shortcuts_window;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::shortcuts_window::ShortcutsWindowBuilder;
@@ -1083,6 +1104,8 @@ pub use self::enums::ScrollablePolicy;
 pub use self::enums::SelectionMode;
 pub use self::enums::SensitivityType;
 pub use self::enums::ShadowType;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::enums::ShortcutType;
 pub use self::enums::SizeGroupMode;
 pub use self::enums::SizeRequestMode;
 pub use self::enums::SortType;
