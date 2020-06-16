@@ -277,6 +277,23 @@ mod event_controller;
 pub use self::event_controller::EventControllerExt;
 pub use self::event_controller::{EventController, EventControllerClass, NONE_EVENT_CONTROLLER};
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod event_controller_key;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::event_controller_key::{EventControllerKey, EventControllerKeyClass};
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod event_controller_motion;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::event_controller_motion::{EventControllerMotion, EventControllerMotionClass};
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod event_controller_scroll;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::event_controller_scroll::EventControllerScrollBuilder;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::event_controller_scroll::{EventControllerScroll, EventControllerScrollClass};
+
 mod expander;
 pub use self::expander::ExpanderBuilder;
 pub use self::expander::ExpanderExt;
@@ -1095,6 +1112,8 @@ pub use self::flags::CalendarDisplayOptions;
 pub use self::flags::CellRendererState;
 pub use self::flags::DestDefaults;
 pub use self::flags::DialogFlags;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::flags::EventControllerScrollFlags;
 pub use self::flags::FileFilterFlags;
 #[cfg(any(feature = "v3_24", feature = "dox"))]
 pub use self::flags::FontChooserLevel;

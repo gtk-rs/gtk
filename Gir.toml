@@ -252,6 +252,7 @@ builders = [
     "Gtk.EntryBuilder",
     "Gtk.EntryCompletionBuilder",
     "Gtk.EventBoxBuilder",
+    "Gtk.EventControllerScrollBuilder",
     "Gtk.ExpanderBuilder",
     "Gtk.FileChooserButtonBuilder",
     "Gtk.FileChooserDialogBuilder",
@@ -998,6 +999,26 @@ status = "generate"
     name = "get_entry"
     ignore = true
     doc_trait_name = "EntryCompletionExtManual"
+
+[[object]]
+name = "Gtk.EventControllerKey"
+status = "generate"
+version = "3.24"
+
+[[object]]
+name = "Gtk.EventControllerMotion"
+status = "generate"
+version = "3.24"
+
+[[object]]
+name = "Gtk.EventControllerScroll"
+status = "generate"
+version = "3.24"
+
+[[object]]
+name = "Gtk.EventControllerScrollFlags"
+status = "generate"
+version = "3.24"
 
 [[object]]
 name = "Gtk.Expander"
