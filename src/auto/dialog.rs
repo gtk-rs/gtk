@@ -48,7 +48,7 @@ impl Dialog {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_dialog_new()).unsafe_cast() }
     }
 
-    //pub fn new_with_buttons<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, flags: DialogFlags, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Dialog {
+    //pub fn with_buttons<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, flags: DialogFlags, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Dialog {
     //    unsafe { TODO: call gtk_sys:gtk_dialog_new_with_buttons() }
     //}
 }

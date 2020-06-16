@@ -59,7 +59,7 @@ impl Entry {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_entry_new()).unsafe_cast() }
     }
 
-    pub fn new_with_buffer<P: IsA<EntryBuffer>>(buffer: &P) -> Entry {
+    pub fn with_buffer<P: IsA<EntryBuffer>>(buffer: &P) -> Entry {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_entry_new_with_buffer(

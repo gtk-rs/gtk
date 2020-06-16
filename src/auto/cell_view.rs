@@ -44,7 +44,7 @@ impl CellView {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_cell_view_new()).unsafe_cast() }
     }
 
-    pub fn new_with_context<P: IsA<CellArea>, Q: IsA<CellAreaContext>>(
+    pub fn with_context<P: IsA<CellArea>, Q: IsA<CellAreaContext>>(
         area: &P,
         context: &Q,
     ) -> CellView {
@@ -58,7 +58,7 @@ impl CellView {
         }
     }
 
-    pub fn new_with_markup(markup: &str) -> CellView {
+    pub fn with_markup(markup: &str) -> CellView {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_cell_view_new_with_markup(
@@ -68,7 +68,7 @@ impl CellView {
         }
     }
 
-    pub fn new_with_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> CellView {
+    pub fn with_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> CellView {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_cell_view_new_with_pixbuf(
@@ -78,7 +78,7 @@ impl CellView {
         }
     }
 
-    pub fn new_with_text(text: &str) -> CellView {
+    pub fn with_text(text: &str) -> CellView {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_cell_view_new_with_text(text.to_glib_none().0))

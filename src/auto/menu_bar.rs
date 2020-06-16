@@ -38,7 +38,7 @@ impl MenuBar {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_menu_bar_new()).unsafe_cast() }
     }
 
-    pub fn new_from_model<P: IsA<gio::MenuModel>>(model: &P) -> MenuBar {
+    pub fn from_model<P: IsA<gio::MenuModel>>(model: &P) -> MenuBar {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_menu_bar_new_from_model(

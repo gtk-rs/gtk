@@ -50,7 +50,7 @@ impl ComboBox {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_combo_box_new()).unsafe_cast() }
     }
 
-    pub fn new_with_area<P: IsA<CellArea>>(area: &P) -> ComboBox {
+    pub fn with_area<P: IsA<CellArea>>(area: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_area(
@@ -60,7 +60,7 @@ impl ComboBox {
         }
     }
 
-    pub fn new_with_area_and_entry<P: IsA<CellArea>>(area: &P) -> ComboBox {
+    pub fn with_area_and_entry<P: IsA<CellArea>>(area: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_area_and_entry(
@@ -70,12 +70,12 @@ impl ComboBox {
         }
     }
 
-    pub fn new_with_entry() -> ComboBox {
+    pub fn with_entry() -> ComboBox {
         assert_initialized_main_thread!();
         unsafe { Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_entry()).unsafe_cast() }
     }
 
-    pub fn new_with_model<P: IsA<TreeModel>>(model: &P) -> ComboBox {
+    pub fn with_model<P: IsA<TreeModel>>(model: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_model(
@@ -85,7 +85,7 @@ impl ComboBox {
         }
     }
 
-    pub fn new_with_model_and_entry<P: IsA<TreeModel>>(model: &P) -> ComboBox {
+    pub fn with_model_and_entry<P: IsA<TreeModel>>(model: &P) -> ComboBox {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_combo_box_new_with_model_and_entry(

@@ -32,7 +32,7 @@ glib_wrapper! {
 }
 
 impl RadioToolButton {
-    pub fn new_from_widget<P: IsA<RadioToolButton>>(group: &P) -> RadioToolButton {
+    pub fn from_widget<P: IsA<RadioToolButton>>(group: &P) -> RadioToolButton {
         skip_assert_initialized!();
         unsafe {
             ToolItem::from_glib_none(gtk_sys::gtk_radio_tool_button_new_from_widget(

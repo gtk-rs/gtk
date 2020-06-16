@@ -46,7 +46,7 @@ impl FontButton {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_font_button_new()).unsafe_cast() }
     }
 
-    pub fn new_with_font(fontname: &str) -> FontButton {
+    pub fn with_font(fontname: &str) -> FontButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_font_button_new_with_font(

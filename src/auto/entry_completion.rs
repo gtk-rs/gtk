@@ -38,7 +38,7 @@ impl EntryCompletion {
         unsafe { from_glib_full(gtk_sys::gtk_entry_completion_new()) }
     }
 
-    pub fn new_with_area<P: IsA<CellArea>>(area: &P) -> EntryCompletion {
+    pub fn with_area<P: IsA<CellArea>>(area: &P) -> EntryCompletion {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(gtk_sys::gtk_entry_completion_new_with_area(

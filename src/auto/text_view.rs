@@ -61,7 +61,7 @@ impl TextView {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_text_view_new()).unsafe_cast() }
     }
 
-    pub fn new_with_buffer<P: IsA<TextBuffer>>(buffer: &P) -> TextView {
+    pub fn with_buffer<P: IsA<TextBuffer>>(buffer: &P) -> TextView {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_text_view_new_with_buffer(

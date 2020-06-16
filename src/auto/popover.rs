@@ -45,7 +45,7 @@ impl Popover {
         }
     }
 
-    pub fn new_from_model<P: IsA<Widget>, Q: IsA<gio::MenuModel>>(
+    pub fn from_model<P: IsA<Widget>, Q: IsA<gio::MenuModel>>(
         relative_to: Option<&P>,
         model: &Q,
     ) -> Popover {

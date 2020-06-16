@@ -44,7 +44,7 @@ impl MenuItem {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_menu_item_new()).unsafe_cast() }
     }
 
-    pub fn new_with_label(label: &str) -> MenuItem {
+    pub fn with_label(label: &str) -> MenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_menu_item_new_with_label(
@@ -54,7 +54,7 @@ impl MenuItem {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> MenuItem {
+    pub fn with_mnemonic(label: &str) -> MenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_menu_item_new_with_mnemonic(

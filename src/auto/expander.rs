@@ -42,7 +42,7 @@ impl Expander {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> Expander {
+    pub fn with_mnemonic(label: &str) -> Expander {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_expander_new_with_mnemonic(
