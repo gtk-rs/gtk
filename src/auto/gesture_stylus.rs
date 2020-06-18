@@ -46,11 +46,6 @@ impl GestureStylus {
         }
     }
 
-    //#[cfg(any(feature = "v3_24", feature = "dox"))]
-    //pub fn get_axes(&self, axes: /*Unimplemented*/&CArray TypeId { ns_id: 10, id: 7 }, values: Vec<f64>) -> bool {
-    //    unsafe { TODO: call gtk_sys:gtk_gesture_stylus_get_axes() }
-    //}
-
     #[cfg(any(feature = "v3_24", feature = "dox"))]
     pub fn get_axis(&self, axis: gdk::AxisUse) -> Option<f64> {
         unsafe {

@@ -79,7 +79,6 @@ generate = [
     "Gtk.GesturePan",
     "Gtk.GestureRotate",
     "Gtk.GestureSingle",
-    "Gtk.GestureStylus",
     "Gtk.GestureSwipe",
     "Gtk.GestureZoom",
     "Gtk.IconInfo",
@@ -1090,6 +1089,16 @@ version = "3.14"
         [[object.function.parameter]]
         name = "sequence"
         const = true
+
+[[object]]
+name = "Gtk.GestureStylus"
+status = "generate"
+version = "3.24"
+manual_traits = ["GestureStylusExtManual"]
+    [[object.function]]
+    name = "get_axes"
+    # generated manually
+    ignore = true
 
 [[object]]
 name = "Gtk.GLArea"
