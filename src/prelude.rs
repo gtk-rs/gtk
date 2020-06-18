@@ -23,6 +23,8 @@ pub use entry_completion::EntryCompletionExtManual;
 pub use fixed::FixedExtManual;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 pub use flow_box::FlowBoxExtManual;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use gesture_stylus::GestureStylusExtManual;
 pub use im_context_simple::IMContextSimpleExtManual;
 pub use invisible::InvisibleExtManual;
 #[cfg(any(feature = "v3_16", feature = "dox"))]

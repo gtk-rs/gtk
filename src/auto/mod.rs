@@ -417,6 +417,11 @@ mod gesture_single;
 pub use self::gesture_single::GestureSingleExt;
 pub use self::gesture_single::{GestureSingle, GestureSingleClass, NONE_GESTURE_SINGLE};
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod gesture_stylus;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::gesture_stylus::{GestureStylus, GestureStylusClass};
+
 mod gesture_swipe;
 pub use self::gesture_swipe::GestureSwipeBuilder;
 pub use self::gesture_swipe::{GestureSwipe, GestureSwipeClass};

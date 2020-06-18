@@ -224,6 +224,8 @@ mod file_chooser_dialog;
 mod fixed;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 mod flow_box;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod gesture_stylus;
 mod im_context_simple;
 mod invisible;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
