@@ -902,6 +902,11 @@ manual_traits = ["EntryCompletionExtManual"]
     doc_trait_name = "EntryCompletionExtManual"
 
 [[object]]
+name = "Gtk.EventBox"
+status = "generate"
+generate_builder = true
+
+[[object]]
 name = "Gtk.EventControllerKey"
 status = "generate"
 version = "3.24"
@@ -920,11 +925,6 @@ version = "3.24"
 name = "Gtk.EventControllerScrollFlags"
 status = "generate"
 version = "3.24"
-
-[[object]]
-name = "Gtk.EventBox"
-status = "generate"
-generate_builder = true
 
 [[object]]
 name = "Gtk.Expander"
@@ -1015,14 +1015,14 @@ status = "generate"
 generate_builder = true
 
 [[object]]
-name = "Gtk.FontChooserWidget"
-status = "generate"
-generate_builder = true
-
-[[object]]
 name = "Gtk.FontChooserLevel"
 status = "generate"
 version = "3.24"
+
+[[object]]
+name = "Gtk.FontChooserWidget"
+status = "generate"
+generate_builder = true
 
 [[object]]
 name = "Gtk.Frame"
