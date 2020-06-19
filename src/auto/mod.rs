@@ -127,7 +127,6 @@ pub use self::cell_layout::CellLayoutExt;
 pub use self::cell_layout::{CellLayout, NONE_CELL_LAYOUT};
 
 mod cell_renderer;
-pub use self::cell_renderer::CellRendererBuilder;
 pub use self::cell_renderer::CellRendererExt;
 pub use self::cell_renderer::{CellRenderer, CellRendererClass, NONE_CELL_RENDERER};
 
@@ -289,8 +288,6 @@ pub use self::event_controller_motion::{EventControllerMotion, EventControllerMo
 
 #[cfg(any(feature = "v3_24", feature = "dox"))]
 mod event_controller_scroll;
-#[cfg(any(feature = "v3_24", feature = "dox"))]
-pub use self::event_controller_scroll::EventControllerScrollBuilder;
 #[cfg(any(feature = "v3_24", feature = "dox"))]
 pub use self::event_controller_scroll::{EventControllerScroll, EventControllerScrollClass};
 
