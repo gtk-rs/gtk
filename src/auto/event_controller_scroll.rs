@@ -2,14 +2,14 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 use glib::object::Cast;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 use glib::object::IsA;
 use glib::object::ObjectType as ObjectType_;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
-use glib::ToValue;
 use glib_sys;
 use gtk_sys;
 use libc;
@@ -19,7 +19,7 @@ use std::mem::transmute;
 use EventController;
 #[cfg(any(feature = "v3_24", feature = "dox"))]
 use EventControllerScrollFlags;
-use PropagationPhase;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
 use Widget;
 
 glib_wrapper! {
@@ -190,57 +190,6 @@ impl EventControllerScroll {
                 Box_::into_raw(f),
             )
         }
-    }
-}
-
-#[derive(Clone, Default)]
-pub struct EventControllerScrollBuilder {
-    #[cfg(any(feature = "v3_24", feature = "dox"))]
-    flags: Option<EventControllerScrollFlags>,
-    propagation_phase: Option<PropagationPhase>,
-    widget: Option<Widget>,
-}
-
-impl EventControllerScrollBuilder {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
-    pub fn build(self) -> EventControllerScroll {
-        let mut properties: Vec<(&str, &dyn ToValue)> = vec![];
-        #[cfg(any(feature = "v3_24", feature = "dox"))]
-        {
-            if let Some(ref flags) = self.flags {
-                properties.push(("flags", flags));
-            }
-        }
-        if let Some(ref propagation_phase) = self.propagation_phase {
-            properties.push(("propagation-phase", propagation_phase));
-        }
-        if let Some(ref widget) = self.widget {
-            properties.push(("widget", widget));
-        }
-        let ret = glib::Object::new(EventControllerScroll::static_type(), &properties)
-            .expect("object new")
-            .downcast::<EventControllerScroll>()
-            .expect("downcast");
-        ret
-    }
-
-    #[cfg(any(feature = "v3_24", feature = "dox"))]
-    pub fn flags(mut self, flags: EventControllerScrollFlags) -> Self {
-        self.flags = Some(flags);
-        self
-    }
-
-    pub fn propagation_phase(mut self, propagation_phase: PropagationPhase) -> Self {
-        self.propagation_phase = Some(propagation_phase);
-        self
-    }
-
-    pub fn widget<P: IsA<Widget>>(mut self, widget: &P) -> Self {
-        self.widget = Some(widget.clone().upcast());
-        self
     }
 }
 
