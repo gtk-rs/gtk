@@ -49,7 +49,7 @@ pkg-config = "0.3.7"
 cc = "^1.0"
 
 [build-dependencies.gtk-rs-lgpl-docs]
-version = "0.1.3"
+version = "0.1"
 optional = true
 git = "https://github.com/gtk-rs/lgpl-docs"
 
