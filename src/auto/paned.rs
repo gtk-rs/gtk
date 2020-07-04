@@ -220,10 +220,11 @@ impl PanedBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Paned::static_type(), &properties)
+        let ret = glib::Object::new(Paned::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Paned>()
+            .expect("downcast");
+        ret
     }
 
     pub fn position(mut self, position: i32) -> Self {
@@ -724,14 +725,16 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accept-position\0".as_ptr() as *const _,
-                Some(transmute(accept_position_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    accept_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -739,7 +742,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_accept_position(&self) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("accept-position", &[])
                 .unwrap()
         };
@@ -758,14 +761,16 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel-position\0".as_ptr() as *const _,
-                Some(transmute(cancel_position_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cancel_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -773,7 +778,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_cancel_position(&self) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cancel-position", &[])
                 .unwrap()
         };
@@ -797,7 +802,7 @@ impl<O: IsA<Paned>> PanedExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Paned::from_glib_borrow(this).unsafe_cast(),
+                &Paned::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(reversed),
             )
             .to_glib()
@@ -807,7 +812,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cycle-child-focus\0".as_ptr() as *const _,
-                Some(transmute(cycle_child_focus_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cycle_child_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -815,7 +822,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_cycle_child_focus(&self, reversed: bool) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cycle-child-focus", &[&reversed])
                 .unwrap()
         };
@@ -839,7 +846,7 @@ impl<O: IsA<Paned>> PanedExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Paned::from_glib_borrow(this).unsafe_cast(),
+                &Paned::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(reversed),
             )
             .to_glib()
@@ -849,7 +856,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cycle-handle-focus\0".as_ptr() as *const _,
-                Some(transmute(cycle_handle_focus_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cycle_handle_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -857,7 +866,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_cycle_handle_focus(&self, reversed: bool) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cycle-handle-focus", &[&reversed])
                 .unwrap()
         };
@@ -881,7 +890,7 @@ impl<O: IsA<Paned>> PanedExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Paned::from_glib_borrow(this).unsafe_cast(),
+                &Paned::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(scroll_type),
             )
             .to_glib()
@@ -891,7 +900,9 @@ impl<O: IsA<Paned>> PanedExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-handle\0".as_ptr() as *const _,
-                Some(transmute(move_handle_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_handle_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -899,7 +910,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_move_handle(&self, scroll_type: ScrollType) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-handle", &[&scroll_type])
                 .unwrap()
         };
@@ -918,15 +929,15 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-handle-focus\0".as_ptr() as *const _,
-                Some(transmute(
-                    toggle_handle_focus_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_handle_focus_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -935,7 +946,7 @@ impl<O: IsA<Paned>> PanedExt for O {
 
     fn emit_toggle_handle_focus(&self) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-handle-focus", &[])
                 .unwrap()
         };
@@ -957,15 +968,15 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast())
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_position_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_position_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -984,15 +995,15 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast())
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_min_position_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_position_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1008,14 +1019,16 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast())
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position\0".as_ptr() as *const _,
-                Some(transmute(notify_position_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1033,15 +1046,15 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast())
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_position_set_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_position_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1058,14 +1071,16 @@ impl<O: IsA<Paned>> PanedExt for O {
             P: IsA<Paned>,
         {
             let f: &F = &*(f as *const F);
-            f(&Paned::from_glib_borrow(this).unsafe_cast())
+            f(&Paned::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wide-handle\0".as_ptr() as *const _,
-                Some(transmute(notify_wide_handle_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wide_handle_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

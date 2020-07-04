@@ -215,10 +215,11 @@ impl ListBoxBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(ListBox::static_type(), &properties)
+        let ret = glib::Object::new(ListBox::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ListBox>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activate_on_single_click(mut self, activate_on_single_click: bool) -> Self {
@@ -779,11 +780,11 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             user_data: glib_sys::gpointer,
         ) {
             let row = from_glib_borrow(row);
-            let before: Option<ListBoxRow> = from_glib_borrow(before);
+            let before: Borrowed<Option<ListBoxRow>> = from_glib_borrow(before);
             let callback: &Option<Box_<dyn Fn(&ListBoxRow, Option<&ListBoxRow>) + 'static>> =
                 &*(user_data as *mut _);
             if let Some(ref callback) = *callback {
-                callback(&row, before.as_ref())
+                callback(&row, before.as_ref().as_ref())
             } else {
                 panic!("cannot get closure...")
             };
@@ -896,15 +897,15 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-cursor-row\0".as_ptr() as *const _,
-                Some(transmute(
-                    activate_cursor_row_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_cursor_row_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -913,7 +914,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_activate_cursor_row(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate-cursor-row", &[])
                 .unwrap()
         };
@@ -933,7 +934,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &ListBox::from_glib_borrow(this).unsafe_cast(),
+                &ListBox::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
                 p0,
             )
@@ -943,7 +944,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -951,7 +954,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_move_cursor(&self, object: MovementStep, p0: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-cursor", &[&object, &p0])
                 .unwrap()
         };
@@ -967,7 +970,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &ListBox::from_glib_borrow(this).unsafe_cast(),
+                &ListBox::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(row),
             )
         }
@@ -976,7 +979,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-activated\0".as_ptr() as *const _,
-                Some(transmute(row_activated_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    row_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -995,8 +1000,10 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &ListBox::from_glib_borrow(this).unsafe_cast(),
-                Option::<ListBoxRow>::from_glib_borrow(row).as_ref(),
+                &ListBox::from_glib_borrow(this).unsafe_cast_ref(),
+                Option::<ListBoxRow>::from_glib_borrow(row)
+                    .as_ref()
+                    .as_ref(),
             )
         }
         unsafe {
@@ -1004,7 +1011,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"row-selected\0".as_ptr() as *const _,
-                Some(transmute(row_selected_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    row_selected_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1018,14 +1027,16 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(transmute(select_all_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1033,7 +1044,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_select_all(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("select-all", &[])
                 .unwrap()
         };
@@ -1047,15 +1058,15 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selected-rows-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    selected_rows_changed_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    selected_rows_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1070,14 +1081,16 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-row\0".as_ptr() as *const _,
-                Some(transmute(toggle_cursor_row_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_cursor_row_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1085,7 +1098,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_toggle_cursor_row(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-cursor-row", &[])
                 .unwrap()
         };
@@ -1099,14 +1112,16 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unselect-all\0".as_ptr() as *const _,
-                Some(transmute(unselect_all_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    unselect_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1114,7 +1129,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn emit_unselect_all(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("unselect-all", &[])
                 .unwrap()
         };
@@ -1132,15 +1147,15 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_activate_on_single_click_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_activate_on_single_click_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1159,15 +1174,15 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             P: IsA<ListBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ListBox::from_glib_borrow(this).unsafe_cast())
+            f(&ListBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_selection_mode_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selection_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

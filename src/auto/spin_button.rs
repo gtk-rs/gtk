@@ -64,7 +64,7 @@ impl SpinButton {
         }
     }
 
-    pub fn new_with_range(min: f64, max: f64, step: f64) -> SpinButton {
+    pub fn with_range(min: f64, max: f64, step: f64) -> SpinButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_spin_button_new_with_range(min, max, step))
@@ -427,10 +427,11 @@ impl SpinButtonBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(SpinButton::static_type(), &properties)
+        let ret = glib::Object::new(SpinButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<SpinButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn adjustment<P: IsA<Adjustment>>(mut self, adjustment: &P) -> Self {
@@ -1136,14 +1137,16 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::adjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_adjustment_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_adjustment_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1158,14 +1161,16 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::climb-rate\0".as_ptr() as *const _,
-                Some(transmute(notify_climb_rate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_climb_rate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1180,14 +1185,16 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::digits\0".as_ptr() as *const _,
-                Some(transmute(notify_digits_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_digits_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1202,14 +1209,16 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::numeric\0".as_ptr() as *const _,
-                Some(transmute(notify_numeric_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_numeric_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1227,15 +1236,15 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::snap-to-ticks\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_snap_to_ticks_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_snap_to_ticks_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1254,15 +1263,15 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::update-policy\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_update_policy_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_update_policy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1278,14 +1287,16 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1300,14 +1311,16 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
             P: IsA<SpinButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+            f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wrap_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

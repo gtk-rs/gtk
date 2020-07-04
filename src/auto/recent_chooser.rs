@@ -426,14 +426,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"item-activated\0".as_ptr() as *const _,
-                Some(transmute(item_activated_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    item_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -447,14 +449,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-changed\0".as_ptr() as *const _,
-                Some(transmute(selection_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    selection_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -469,14 +473,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::filter\0".as_ptr() as *const _,
-                Some(transmute(notify_filter_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_filter_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -491,14 +497,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::limit\0".as_ptr() as *const _,
-                Some(transmute(notify_limit_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_limit_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -513,14 +521,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::local-only\0".as_ptr() as *const _,
-                Some(transmute(notify_local_only_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_local_only_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -538,15 +548,15 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::select-multiple\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_select_multiple_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_select_multiple_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -562,14 +572,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-icons\0".as_ptr() as *const _,
-                Some(transmute(notify_show_icons_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_icons_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -587,15 +599,15 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-not-found\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_not_found_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_not_found_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -614,15 +626,15 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-private\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_private_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_private_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -638,14 +650,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-tips\0".as_ptr() as *const _,
-                Some(transmute(notify_show_tips_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_tips_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -660,14 +674,16 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
             P: IsA<RecentChooser>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooser::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-type\0".as_ptr() as *const _,
-                Some(transmute(notify_sort_type_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_sort_type_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

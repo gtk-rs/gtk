@@ -92,10 +92,11 @@ impl MountOperationBuilder {
         if let Some(ref username) = self.username {
             properties.push(("username", username));
         }
-        glib::Object::new(MountOperation::static_type(), &properties)
+        let ret = glib::Object::new(MountOperation::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MountOperation>()
+            .expect("downcast");
+        ret
     }
 
     pub fn parent<P: IsA<Window>>(mut self, parent: &P) -> Self {
@@ -238,14 +239,16 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
             P: IsA<MountOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&MountOperation::from_glib_borrow(this).unsafe_cast())
+            f(&MountOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-showing\0".as_ptr() as *const _,
-                Some(transmute(notify_is_showing_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_is_showing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -260,14 +263,16 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
             P: IsA<MountOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&MountOperation::from_glib_borrow(this).unsafe_cast())
+            f(&MountOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(transmute(notify_parent_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_parent_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -282,14 +287,16 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
             P: IsA<MountOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&MountOperation::from_glib_borrow(this).unsafe_cast())
+            f(&MountOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::screen\0".as_ptr() as *const _,
-                Some(transmute(notify_screen_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_screen_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

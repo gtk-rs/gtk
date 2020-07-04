@@ -77,7 +77,9 @@ impl GestureSwipe {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"swipe\0".as_ptr() as *const _,
-                Some(transmute(swipe_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    swipe_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -123,10 +125,11 @@ impl GestureSwipeBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GestureSwipe::static_type(), &properties)
+        let ret = glib::Object::new(GestureSwipe::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GestureSwipe>()
+            .expect("downcast");
+        ret
     }
 
     pub fn button(mut self, button: u32) -> Self {

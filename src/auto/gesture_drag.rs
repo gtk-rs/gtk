@@ -82,10 +82,11 @@ impl GestureDragBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GestureDrag::static_type(), &properties)
+        let ret = glib::Object::new(GestureDrag::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GestureDrag>()
+            .expect("downcast");
+        ret
     }
 
     pub fn button(mut self, button: u32) -> Self {
@@ -188,7 +189,7 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                &GestureDrag::from_glib_borrow(this).unsafe_cast_ref(),
                 start_x,
                 start_y,
             )
@@ -198,7 +199,9 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-begin\0".as_ptr() as *const _,
-                Some(transmute(drag_begin_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    drag_begin_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -215,7 +218,7 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                &GestureDrag::from_glib_borrow(this).unsafe_cast_ref(),
                 offset_x,
                 offset_y,
             )
@@ -225,7 +228,9 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-end\0".as_ptr() as *const _,
-                Some(transmute(drag_end_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    drag_end_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -242,7 +247,7 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GestureDrag::from_glib_borrow(this).unsafe_cast(),
+                &GestureDrag::from_glib_borrow(this).unsafe_cast_ref(),
                 offset_x,
                 offset_y,
             )
@@ -252,7 +257,9 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-update\0".as_ptr() as *const _,
-                Some(transmute(drag_update_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    drag_update_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

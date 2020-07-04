@@ -219,10 +219,11 @@ impl StatusbarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Statusbar::static_type(), &properties)
+        let ret = glib::Object::new(Statusbar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Statusbar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn baseline_position(mut self, baseline_position: BaselinePosition) -> Self {
@@ -499,7 +500,7 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Statusbar::from_glib_borrow(this).unsafe_cast(),
+                &Statusbar::from_glib_borrow(this).unsafe_cast_ref(),
                 context_id,
                 &GString::from_glib_borrow(text),
             )
@@ -509,7 +510,9 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"text-popped\0".as_ptr() as *const _,
-                Some(transmute(text_popped_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    text_popped_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -526,7 +529,7 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Statusbar::from_glib_borrow(this).unsafe_cast(),
+                &Statusbar::from_glib_borrow(this).unsafe_cast_ref(),
                 context_id,
                 &GString::from_glib_borrow(text),
             )
@@ -536,7 +539,9 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"text-pushed\0".as_ptr() as *const _,
-                Some(transmute(text_pushed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    text_pushed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

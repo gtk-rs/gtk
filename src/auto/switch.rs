@@ -204,10 +204,11 @@ impl SwitchBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(Switch::static_type(), &properties)
+        let ret = glib::Object::new(Switch::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Switch>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {
@@ -454,14 +455,16 @@ impl<O: IsA<Switch>> SwitchExt for O {
             P: IsA<Switch>,
         {
             let f: &F = &*(f as *const F);
-            f(&Switch::from_glib_borrow(this).unsafe_cast())
+            f(&Switch::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(transmute(activate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -469,7 +472,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
 
     fn emit_activate(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate", &[])
                 .unwrap()
         };
@@ -492,7 +495,7 @@ impl<O: IsA<Switch>> SwitchExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Switch::from_glib_borrow(this).unsafe_cast(),
+                &Switch::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(state),
             )
             .to_glib()
@@ -502,7 +505,9 @@ impl<O: IsA<Switch>> SwitchExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"state-set\0".as_ptr() as *const _,
-                Some(transmute(state_set_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    state_set_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -517,14 +522,16 @@ impl<O: IsA<Switch>> SwitchExt for O {
             P: IsA<Switch>,
         {
             let f: &F = &*(f as *const F);
-            f(&Switch::from_glib_borrow(this).unsafe_cast())
+            f(&Switch::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -539,14 +546,16 @@ impl<O: IsA<Switch>> SwitchExt for O {
             P: IsA<Switch>,
         {
             let f: &F = &*(f as *const F);
-            f(&Switch::from_glib_borrow(this).unsafe_cast())
+            f(&Switch::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::state\0".as_ptr() as *const _,
-                Some(transmute(notify_state_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_state_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

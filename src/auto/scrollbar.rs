@@ -220,10 +220,11 @@ impl ScrollbarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Scrollbar::static_type(), &properties)
+        let ret = glib::Object::new(Scrollbar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Scrollbar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn adjustment<P: IsA<Adjustment>>(mut self, adjustment: &P) -> Self {

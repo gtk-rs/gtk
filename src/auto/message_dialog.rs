@@ -46,7 +46,7 @@ impl MessageDialog {
     //    unsafe { TODO: call gtk_sys:gtk_message_dialog_new() }
     //}
 
-    //pub fn new_with_markup<P: IsA<Window>>(parent: Option<&P>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
+    //pub fn with_markup<P: IsA<Window>>(parent: Option<&P>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> MessageDialog {
     //    unsafe { TODO: call gtk_sys:gtk_message_dialog_new_with_markup() }
     //}
 }
@@ -346,10 +346,11 @@ impl MessageDialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(MessageDialog::static_type(), &properties)
+        let ret = glib::Object::new(MessageDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MessageDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn buttons(mut self, buttons: ButtonsType) -> Self {
@@ -917,15 +918,15 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             P: IsA<MessageDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
+            f(&MessageDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::message-area\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_message_area_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_message_area_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -944,15 +945,15 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             P: IsA<MessageDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
+            f(&MessageDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::message-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_message_type_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_message_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -971,15 +972,15 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             P: IsA<MessageDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
+            f(&MessageDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-text\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_text_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -998,15 +999,15 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             P: IsA<MessageDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
+            f(&MessageDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-use-markup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_use_markup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_use_markup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1022,14 +1023,16 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             P: IsA<MessageDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
+            f(&MessageDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1044,14 +1047,16 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
             P: IsA<MessageDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
+            f(&MessageDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_markup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

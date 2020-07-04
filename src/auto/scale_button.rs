@@ -267,10 +267,11 @@ impl ScaleButtonBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(ScaleButton::static_type(), &properties)
+        let ret = glib::Object::new(ScaleButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ScaleButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn adjustment<P: IsA<Adjustment>>(mut self, adjustment: &P) -> Self {
@@ -668,14 +669,16 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
             P: IsA<ScaleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ScaleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ScaleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"popdown\0".as_ptr() as *const _,
-                Some(transmute(popdown_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    popdown_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -683,7 +686,7 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
 
     fn emit_popdown(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("popdown", &[])
                 .unwrap()
         };
@@ -697,14 +700,16 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
             P: IsA<ScaleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ScaleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ScaleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"popup\0".as_ptr() as *const _,
-                Some(transmute(popup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    popup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -712,7 +717,7 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
 
     fn emit_popup(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("popup", &[])
                 .unwrap()
         };
@@ -727,14 +732,19 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
             P: IsA<ScaleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ScaleButton::from_glib_borrow(this).unsafe_cast(), value)
+            f(
+                &ScaleButton::from_glib_borrow(this).unsafe_cast_ref(),
+                value,
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"value-changed\0".as_ptr() as *const _,
-                Some(transmute(value_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    value_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -749,14 +759,16 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
             P: IsA<ScaleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ScaleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ScaleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::adjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_adjustment_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_adjustment_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -771,14 +783,16 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
             P: IsA<ScaleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ScaleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ScaleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icons\0".as_ptr() as *const _,
-                Some(transmute(notify_icons_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icons_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -793,14 +807,16 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
             P: IsA<ScaleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ScaleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ScaleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::size\0".as_ptr() as *const _,
-                Some(transmute(notify_size_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -815,14 +831,16 @@ impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
             P: IsA<ScaleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ScaleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ScaleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

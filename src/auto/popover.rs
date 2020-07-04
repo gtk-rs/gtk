@@ -45,7 +45,7 @@ impl Popover {
         }
     }
 
-    pub fn new_from_model<P: IsA<Widget>, Q: IsA<gio::MenuModel>>(
+    pub fn from_model<P: IsA<Widget>, Q: IsA<gio::MenuModel>>(
         relative_to: Option<&P>,
         model: &Q,
     ) -> Popover {
@@ -247,10 +247,11 @@ impl PopoverBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Popover::static_type(), &properties)
+        let ret = glib::Object::new(Popover::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Popover>()
+            .expect("downcast");
+        ret
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
@@ -694,14 +695,16 @@ impl<O: IsA<Popover>> PopoverExt for O {
             P: IsA<Popover>,
         {
             let f: &F = &*(f as *const F);
-            f(&Popover::from_glib_borrow(this).unsafe_cast())
+            f(&Popover::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"closed\0".as_ptr() as *const _,
-                Some(transmute(closed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    closed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -720,15 +723,15 @@ impl<O: IsA<Popover>> PopoverExt for O {
             P: IsA<Popover>,
         {
             let f: &F = &*(f as *const F);
-            f(&Popover::from_glib_borrow(this).unsafe_cast())
+            f(&Popover::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::constrain-to\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_constrain_to_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_constrain_to_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -744,14 +747,16 @@ impl<O: IsA<Popover>> PopoverExt for O {
             P: IsA<Popover>,
         {
             let f: &F = &*(f as *const F);
-            f(&Popover::from_glib_borrow(this).unsafe_cast())
+            f(&Popover::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::modal\0".as_ptr() as *const _,
-                Some(transmute(notify_modal_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_modal_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -766,14 +771,16 @@ impl<O: IsA<Popover>> PopoverExt for O {
             P: IsA<Popover>,
         {
             let f: &F = &*(f as *const F);
-            f(&Popover::from_glib_borrow(this).unsafe_cast())
+            f(&Popover::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pointing-to\0".as_ptr() as *const _,
-                Some(transmute(notify_pointing_to_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pointing_to_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -788,14 +795,16 @@ impl<O: IsA<Popover>> PopoverExt for O {
             P: IsA<Popover>,
         {
             let f: &F = &*(f as *const F);
-            f(&Popover::from_glib_borrow(this).unsafe_cast())
+            f(&Popover::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position\0".as_ptr() as *const _,
-                Some(transmute(notify_position_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_position_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -810,14 +819,16 @@ impl<O: IsA<Popover>> PopoverExt for O {
             P: IsA<Popover>,
         {
             let f: &F = &*(f as *const F);
-            f(&Popover::from_glib_borrow(this).unsafe_cast())
+            f(&Popover::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::relative-to\0".as_ptr() as *const _,
-                Some(transmute(notify_relative_to_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_relative_to_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -836,15 +847,15 @@ impl<O: IsA<Popover>> PopoverExt for O {
             P: IsA<Popover>,
         {
             let f: &F = &*(f as *const F);
-            f(&Popover::from_glib_borrow(this).unsafe_cast())
+            f(&Popover::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transitions-enabled\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transitions_enabled_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_transitions_enabled_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

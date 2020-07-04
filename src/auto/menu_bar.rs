@@ -38,7 +38,7 @@ impl MenuBar {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_menu_bar_new()).unsafe_cast() }
     }
 
-    pub fn new_from_model<P: IsA<gio::MenuModel>>(model: &P) -> MenuBar {
+    pub fn from_model<P: IsA<gio::MenuModel>>(model: &P) -> MenuBar {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_menu_bar_new_from_model(
@@ -222,10 +222,11 @@ impl MenuBarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(MenuBar::static_type(), &properties)
+        let ret = glib::Object::new(MenuBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MenuBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn child_pack_direction(mut self, child_pack_direction: PackDirection) -> Self {
@@ -489,15 +490,15 @@ impl<O: IsA<MenuBar>> MenuBarExt for O {
             P: IsA<MenuBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuBar::from_glib_borrow(this).unsafe_cast())
+            f(&MenuBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child-pack-direction\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_child_pack_direction_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_child_pack_direction_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -516,15 +517,15 @@ impl<O: IsA<MenuBar>> MenuBarExt for O {
             P: IsA<MenuBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuBar::from_glib_borrow(this).unsafe_cast())
+            f(&MenuBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pack-direction\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pack_direction_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pack_direction_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

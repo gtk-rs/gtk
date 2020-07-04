@@ -226,10 +226,11 @@ impl GridBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Grid::static_type(), &properties)
+        let ret = glib::Object::new(Grid::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Grid>()
+            .expect("downcast");
+        ret
     }
 
     pub fn baseline_row(mut self, baseline_row: i32) -> Self {
@@ -807,15 +808,15 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::baseline-row\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_baseline_row_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_baseline_row_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -834,15 +835,15 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::column-homogeneous\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_column_homogeneous_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_column_homogeneous_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -861,15 +862,15 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::column-spacing\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_column_spacing_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_column_spacing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -888,15 +889,15 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::row-homogeneous\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_row_homogeneous_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_row_homogeneous_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -912,14 +913,16 @@ impl<O: IsA<Grid>> GridExt for O {
             P: IsA<Grid>,
         {
             let f: &F = &*(f as *const F);
-            f(&Grid::from_glib_borrow(this).unsafe_cast())
+            f(&Grid::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::row-spacing\0".as_ptr() as *const _,
-                Some(transmute(notify_row_spacing_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_row_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

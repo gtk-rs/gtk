@@ -239,10 +239,11 @@ impl GLAreaBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(GLArea::static_type(), &properties)
+        let ret = glib::Object::new(GLArea::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GLArea>()
+            .expect("downcast");
+        ret
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -709,14 +710,16 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast()).to_glib_full()
+            f(&GLArea::from_glib_borrow(this).unsafe_cast_ref()).to_glib_full()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-context\0".as_ptr() as *const _,
-                Some(transmute(create_context_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    create_context_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -740,7 +743,7 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &GLArea::from_glib_borrow(this).unsafe_cast(),
+                &GLArea::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(context),
             )
             .to_glib()
@@ -750,7 +753,9 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"render\0".as_ptr() as *const _,
-                Some(transmute(render_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    render_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -767,14 +772,20 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast(), width, height)
+            f(
+                &GLArea::from_glib_borrow(this).unsafe_cast_ref(),
+                width,
+                height,
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"resize\0".as_ptr() as *const _,
-                Some(transmute(resize_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    resize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -790,14 +801,16 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast())
+            f(&GLArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-render\0".as_ptr() as *const _,
-                Some(transmute(notify_auto_render_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_auto_render_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -813,14 +826,16 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast())
+            f(&GLArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::context\0".as_ptr() as *const _,
-                Some(transmute(notify_context_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_context_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -836,14 +851,16 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast())
+            f(&GLArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-alpha\0".as_ptr() as *const _,
-                Some(transmute(notify_has_alpha_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_alpha_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -862,15 +879,15 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast())
+            f(&GLArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-depth-buffer\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_depth_buffer_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_depth_buffer_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -890,15 +907,15 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast())
+            f(&GLArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-stencil-buffer\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_stencil_buffer_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_stencil_buffer_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -915,14 +932,16 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
             P: IsA<GLArea>,
         {
             let f: &F = &*(f as *const F);
-            f(&GLArea::from_glib_borrow(this).unsafe_cast())
+            f(&GLArea::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-es\0".as_ptr() as *const _,
-                Some(transmute(notify_use_es_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_es_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

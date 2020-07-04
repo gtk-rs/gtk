@@ -198,10 +198,11 @@ impl InvisibleBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Invisible::static_type(), &properties)
+        let ret = glib::Object::new(Invisible::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Invisible>()
+            .expect("downcast");
+        ret
     }
 
     pub fn screen(mut self, screen: &gdk::Screen) -> Self {
@@ -398,14 +399,16 @@ impl<O: IsA<Invisible>> InvisibleExt for O {
             P: IsA<Invisible>,
         {
             let f: &F = &*(f as *const F);
-            f(&Invisible::from_glib_borrow(this).unsafe_cast())
+            f(&Invisible::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::screen\0".as_ptr() as *const _,
-                Some(transmute(notify_screen_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_screen_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

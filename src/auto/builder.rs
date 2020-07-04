@@ -32,7 +32,7 @@ impl Builder {
         unsafe { from_glib_full(gtk_sys::gtk_builder_new()) }
     }
 
-    pub fn new_from_resource(resource_path: &str) -> Builder {
+    pub fn from_resource(resource_path: &str) -> Builder {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gtk_sys::gtk_builder_new_from_resource(
@@ -41,7 +41,7 @@ impl Builder {
         }
     }
 
-    pub fn new_from_string(string: &str) -> Builder {
+    pub fn from_string(string: &str) -> Builder {
         assert_initialized_main_thread!();
         let length = string.len() as isize;
         unsafe {
@@ -104,7 +104,11 @@ pub trait BuilderExt: 'static {
 
     fn set_translation_domain(&self, domain: Option<&str>);
 
-    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, glib::Error>;
+    fn value_from_string(
+        &self,
+        pspec: &glib::ParamSpec,
+        string: &str,
+    ) -> Result<glib::Value, glib::Error>;
 
     fn value_from_string_type(
         &self,
@@ -299,9 +303,28 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, glib::Error> {
-    //    unsafe { TODO: call gtk_sys:gtk_builder_value_from_string() }
-    //}
+    fn value_from_string(
+        &self,
+        pspec: &glib::ParamSpec,
+        string: &str,
+    ) -> Result<glib::Value, glib::Error> {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            let mut error = ptr::null_mut();
+            let _ = gtk_sys::gtk_builder_value_from_string(
+                self.as_ref().to_glib_none().0,
+                pspec.to_glib_none().0,
+                string.to_glib_none().0,
+                value.to_glib_none_mut().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(value)
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
 
     fn value_from_string_type(
         &self,
@@ -338,15 +361,15 @@ impl<O: IsA<Builder>> BuilderExt for O {
             P: IsA<Builder>,
         {
             let f: &F = &*(f as *const F);
-            f(&Builder::from_glib_borrow(this).unsafe_cast())
+            f(&Builder::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::translation-domain\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_translation_domain_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_translation_domain_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

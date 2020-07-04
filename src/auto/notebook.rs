@@ -235,10 +235,11 @@ impl NotebookBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Notebook::static_type(), &properties)
+        let ret = glib::Object::new(Notebook::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Notebook>()
+            .expect("downcast");
+        ret
     }
 
     pub fn enable_popup(mut self, enable_popup: bool) -> Self {
@@ -1141,15 +1142,15 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast(), object).to_glib()
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref(), object).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"change-current-page\0".as_ptr() as *const _,
-                Some(transmute(
-                    change_current_page_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    change_current_page_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1158,7 +1159,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn emit_change_current_page(&self, object: i32) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("change-current-page", &[&object])
                 .unwrap()
         };
@@ -1187,7 +1188,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(page),
                 x,
                 y,
@@ -1200,7 +1201,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-window\0".as_ptr() as *const _,
-                Some(transmute(create_window_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    create_window_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1220,7 +1223,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
             )
             .to_glib()
@@ -1230,7 +1233,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-tab\0".as_ptr() as *const _,
-                Some(transmute(focus_tab_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    focus_tab_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1238,7 +1243,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn emit_focus_tab(&self, object: NotebookTab) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("focus-tab", &[&object])
                 .unwrap()
         };
@@ -1261,7 +1266,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
             )
         }
@@ -1270,7 +1275,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-focus-out\0".as_ptr() as *const _,
-                Some(transmute(move_focus_out_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_focus_out_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1278,7 +1285,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn emit_move_focus_out(&self, object: DirectionType) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-focus-out", &[&object])
                 .unwrap()
         };
@@ -1295,7 +1302,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
                 page_num,
             )
@@ -1305,7 +1312,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-added\0".as_ptr() as *const _,
-                Some(transmute(page_added_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    page_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1322,7 +1331,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
                 page_num,
             )
@@ -1332,7 +1341,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-removed\0".as_ptr() as *const _,
-                Some(transmute(page_removed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    page_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1352,7 +1363,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
                 page_num,
             )
@@ -1362,7 +1373,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"page-reordered\0".as_ptr() as *const _,
-                Some(transmute(page_reordered_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    page_reordered_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1386,7 +1399,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
                 from_glib(p0),
             )
@@ -1397,7 +1410,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"reorder-tab\0".as_ptr() as *const _,
-                Some(transmute(reorder_tab_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    reorder_tab_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1405,7 +1420,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn emit_reorder_tab(&self, object: DirectionType, p0: bool) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("reorder-tab", &[&object, &p0])
                 .unwrap()
         };
@@ -1426,7 +1441,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(object),
             )
             .to_glib()
@@ -1436,7 +1451,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-page\0".as_ptr() as *const _,
-                Some(transmute(select_page_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_page_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1444,7 +1461,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn emit_select_page(&self, object: bool) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("select-page", &[&object])
                 .unwrap()
         };
@@ -1465,7 +1482,7 @@ impl<O: IsA<Notebook>> NotebookExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Notebook::from_glib_borrow(this).unsafe_cast(),
+                &Notebook::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(page),
                 page_num,
             )
@@ -1475,7 +1492,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"switch-page\0".as_ptr() as *const _,
-                Some(transmute(switch_page_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    switch_page_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1493,15 +1512,15 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-popup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_popup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_popup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1517,14 +1536,16 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::group-name\0".as_ptr() as *const _,
-                Some(transmute(notify_group_name_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_group_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1539,14 +1560,16 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::page\0".as_ptr() as *const _,
-                Some(transmute(notify_page_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_page_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1561,14 +1584,16 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scrollable\0".as_ptr() as *const _,
-                Some(transmute(notify_scrollable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_scrollable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1583,14 +1608,16 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-border\0".as_ptr() as *const _,
-                Some(transmute(notify_show_border_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_border_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1605,14 +1632,16 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-tabs\0".as_ptr() as *const _,
-                Some(transmute(notify_show_tabs_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_tabs_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1627,14 +1656,16 @@ impl<O: IsA<Notebook>> NotebookExt for O {
             P: IsA<Notebook>,
         {
             let f: &F = &*(f as *const F);
-            f(&Notebook::from_glib_borrow(this).unsafe_cast())
+            f(&Notebook::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tab-pos\0".as_ptr() as *const _,
-                Some(transmute(notify_tab_pos_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_tab_pos_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

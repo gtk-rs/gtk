@@ -232,10 +232,11 @@ impl ColorChooserWidgetBuilder {
         if let Some(ref use_alpha) = self.use_alpha {
             properties.push(("use-alpha", use_alpha));
         }
-        glib::Object::new(ColorChooserWidget::static_type(), &properties)
+        let ret = glib::Object::new(ColorChooserWidget::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ColorChooserWidget>()
+            .expect("downcast");
+        ret
     }
 
     pub fn show_editor(mut self, show_editor: bool) -> Self {
@@ -495,14 +496,16 @@ impl<O: IsA<ColorChooserWidget>> ColorChooserWidgetExt for O {
             P: IsA<ColorChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&ColorChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-editor\0".as_ptr() as *const _,
-                Some(transmute(notify_show_editor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_editor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

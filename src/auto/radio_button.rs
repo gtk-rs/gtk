@@ -38,7 +38,7 @@ glib_wrapper! {
 }
 
 impl RadioButton {
-    pub fn new_from_widget<P: IsA<RadioButton>>(radio_group_member: &P) -> RadioButton {
+    pub fn from_widget<P: IsA<RadioButton>>(radio_group_member: &P) -> RadioButton {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_radio_button_new_from_widget(
@@ -48,7 +48,7 @@ impl RadioButton {
         }
     }
 
-    pub fn new_with_label_from_widget<P: IsA<RadioButton>>(
+    pub fn with_label_from_widget<P: IsA<RadioButton>>(
         radio_group_member: &P,
         label: &str,
     ) -> RadioButton {
@@ -62,7 +62,7 @@ impl RadioButton {
         }
     }
 
-    pub fn new_with_mnemonic_from_widget<P: IsA<RadioButton>>(
+    pub fn with_mnemonic_from_widget<P: IsA<RadioButton>>(
         radio_group_member: &P,
         label: &str,
     ) -> RadioButton {
@@ -276,10 +276,11 @@ impl RadioButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(RadioButton::static_type(), &properties)
+        let ret = glib::Object::new(RadioButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<RadioButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {
@@ -550,14 +551,16 @@ impl<O: IsA<RadioButton>> RadioButtonExt for O {
             P: IsA<RadioButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&RadioButton::from_glib_borrow(this).unsafe_cast())
+            f(&RadioButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"group-changed\0".as_ptr() as *const _,
-                Some(transmute(group_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    group_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

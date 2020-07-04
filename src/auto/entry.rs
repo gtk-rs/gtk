@@ -59,7 +59,7 @@ impl Entry {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_entry_new()).unsafe_cast() }
     }
 
-    pub fn new_with_buffer<P: IsA<EntryBuffer>>(buffer: &P) -> Entry {
+    pub fn with_buffer<P: IsA<EntryBuffer>>(buffer: &P) -> Entry {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_entry_new_with_buffer(
@@ -394,10 +394,11 @@ impl EntryBuilder {
         if let Some(ref editing_canceled) = self.editing_canceled {
             properties.push(("editing-canceled", editing_canceled));
         }
-        glib::Object::new(Entry::static_type(), &properties)
+        let ret = glib::Object::new(Entry::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Entry>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activates_default(mut self, activates_default: bool) -> Self {
@@ -840,7 +841,7 @@ pub trait EntryExt: 'static {
 
     fn get_tabs(&self) -> Option<pango::TabArray>;
 
-    fn get_text(&self) -> Option<GString>;
+    fn get_text(&self) -> GString;
 
     fn get_text_area(&self) -> gdk::Rectangle;
 
@@ -1533,7 +1534,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         unsafe { from_glib_none(gtk_sys::gtk_entry_get_tabs(self.as_ref().to_glib_none().0)) }
     }
 
-    fn get_text(&self) -> Option<GString> {
+    fn get_text(&self) -> GString {
         unsafe { from_glib_none(gtk_sys::gtk_entry_get_text(self.as_ref().to_glib_none().0)) }
     }
 
@@ -2513,14 +2514,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(transmute(activate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2528,7 +2531,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_activate(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate", &[])
                 .unwrap()
         };
@@ -2542,14 +2545,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"backspace\0".as_ptr() as *const _,
-                Some(transmute(backspace_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    backspace_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2557,7 +2562,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_backspace(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("backspace", &[])
                 .unwrap()
         };
@@ -2571,14 +2576,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"copy-clipboard\0".as_ptr() as *const _,
-                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    copy_clipboard_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2586,7 +2593,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_copy_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("copy-clipboard", &[])
                 .unwrap()
         };
@@ -2600,14 +2607,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cut-clipboard\0".as_ptr() as *const _,
-                Some(transmute(cut_clipboard_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cut_clipboard_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2615,7 +2624,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_cut_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cut-clipboard", &[])
                 .unwrap()
         };
@@ -2638,7 +2647,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(type_),
                 count,
             )
@@ -2648,7 +2657,9 @@ impl<O: IsA<Entry>> EntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"delete-from-cursor\0".as_ptr() as *const _,
-                Some(transmute(delete_from_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    delete_from_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2656,7 +2667,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_delete_from_cursor(&self, type_: DeleteType, count: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("delete-from-cursor", &[&type_, &count])
                 .unwrap()
         };
@@ -2679,7 +2690,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(icon_pos),
                 &from_glib_borrow(event),
             )
@@ -2689,7 +2700,9 @@ impl<O: IsA<Entry>> EntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"icon-press\0".as_ptr() as *const _,
-                Some(transmute(icon_press_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    icon_press_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2712,7 +2725,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(icon_pos),
                 &from_glib_borrow(event),
             )
@@ -2722,7 +2735,9 @@ impl<O: IsA<Entry>> EntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"icon-release\0".as_ptr() as *const _,
-                Some(transmute(icon_release_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    icon_release_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2738,7 +2753,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(string),
             )
         }
@@ -2747,7 +2762,9 @@ impl<O: IsA<Entry>> EntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-at-cursor\0".as_ptr() as *const _,
-                Some(transmute(insert_at_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_at_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2755,7 +2772,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_insert_at_cursor(&self, string: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("insert-at-cursor", &[&string])
                 .unwrap()
         };
@@ -2770,14 +2787,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-emoji\0".as_ptr() as *const _,
-                Some(transmute(insert_emoji_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_emoji_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2786,7 +2805,7 @@ impl<O: IsA<Entry>> EntryExt for O {
     #[cfg(any(feature = "v3_22_27", feature = "dox"))]
     fn emit_insert_emoji(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("insert-emoji", &[])
                 .unwrap()
         };
@@ -2810,7 +2829,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
                 from_glib(extend_selection),
@@ -2821,7 +2840,9 @@ impl<O: IsA<Entry>> EntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2829,7 +2850,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-cursor", &[&step, &count, &extend_selection])
                 .unwrap()
         };
@@ -2843,14 +2864,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paste-clipboard\0".as_ptr() as *const _,
-                Some(transmute(paste_clipboard_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    paste_clipboard_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2858,7 +2881,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_paste_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("paste-clipboard", &[])
                 .unwrap()
         };
@@ -2874,7 +2897,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(widget),
             )
         }
@@ -2883,7 +2906,9 @@ impl<O: IsA<Entry>> EntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"populate-popup\0".as_ptr() as *const _,
-                Some(transmute(populate_popup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    populate_popup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2899,7 +2924,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Entry::from_glib_borrow(this).unsafe_cast(),
+                &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(preedit),
             )
         }
@@ -2908,7 +2933,9 @@ impl<O: IsA<Entry>> EntryExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preedit-changed\0".as_ptr() as *const _,
-                Some(transmute(preedit_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    preedit_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2916,7 +2943,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_preedit_changed(&self, preedit: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("preedit-changed", &[&preedit])
                 .unwrap()
         };
@@ -2930,14 +2957,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-overwrite\0".as_ptr() as *const _,
-                Some(transmute(toggle_overwrite_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_overwrite_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2945,7 +2974,7 @@ impl<O: IsA<Entry>> EntryExt for O {
 
     fn emit_toggle_overwrite(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-overwrite", &[])
                 .unwrap()
         };
@@ -2963,15 +2992,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activates-default\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_activates_default_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_activates_default_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2987,14 +3016,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::attributes\0".as_ptr() as *const _,
-                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_attributes_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3009,14 +3040,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_buffer_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3034,15 +3067,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::caps-lock-warning\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_caps_lock_warning_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_caps_lock_warning_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3058,14 +3091,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::completion\0".as_ptr() as *const _,
-                Some(transmute(notify_completion_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_completion_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3083,15 +3118,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cursor_position_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_cursor_position_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3107,14 +3142,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::editable\0".as_ptr() as *const _,
-                Some(transmute(notify_editable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_editable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3132,15 +3169,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-emoji-completion\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_enable_emoji_completion_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_enable_emoji_completion_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3156,14 +3193,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-frame\0".as_ptr() as *const _,
-                Some(transmute(notify_has_frame_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_frame_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3178,14 +3217,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::im-module\0".as_ptr() as *const _,
-                Some(transmute(notify_im_module_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_im_module_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3200,14 +3241,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-hints\0".as_ptr() as *const _,
-                Some(transmute(notify_input_hints_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_input_hints_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3225,15 +3268,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-purpose\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_input_purpose_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_input_purpose_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3252,15 +3295,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::invisible-char\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_invisible_char_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_invisible_char_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3279,15 +3322,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::invisible-char-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_invisible_char_set_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_invisible_char_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3303,14 +3346,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-length\0".as_ptr() as *const _,
-                Some(transmute(notify_max_length_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_length_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -3328,15 +3373,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-width-chars\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_width_chars_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_width_chars_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3355,15 +3400,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::overwrite-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_overwrite_mode_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_overwrite_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3382,15 +3427,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::placeholder-text\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_placeholder_text_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_placeholder_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3409,15 +3454,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::populate-all\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_populate_all_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_populate_all_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3436,15 +3481,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-activatable\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_activatable_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_activatable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3463,15 +3508,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-gicon\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_gicon_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_gicon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3490,15 +3535,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_name_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3517,15 +3562,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-pixbuf\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_pixbuf_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_pixbuf_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3544,15 +3589,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-sensitive\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_sensitive_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_sensitive_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3571,15 +3616,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-storage-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_storage_type_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_storage_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3598,15 +3643,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-tooltip-markup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_tooltip_markup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_tooltip_markup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3625,15 +3670,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::primary-icon-tooltip-text\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_primary_icon_tooltip_text_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_primary_icon_tooltip_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3652,15 +3697,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::progress-fraction\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_progress_fraction_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_progress_fraction_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3679,15 +3724,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::progress-pulse-step\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_progress_pulse_step_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_progress_pulse_step_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3706,15 +3751,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::scroll-offset\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_scroll_offset_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_scroll_offset_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3733,15 +3778,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-activatable\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_activatable_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_activatable_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3760,15 +3805,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-gicon\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_gicon_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_gicon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3787,15 +3832,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_name_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3814,15 +3859,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-pixbuf\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_pixbuf_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_pixbuf_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3841,15 +3886,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-sensitive\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_sensitive_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_sensitive_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3868,15 +3913,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-storage-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_storage_type_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_storage_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3898,15 +3943,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-tooltip-markup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_tooltip_markup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_tooltip_markup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3925,15 +3970,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::secondary-icon-tooltip-text\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_secondary_icon_tooltip_text_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_secondary_icon_tooltip_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3952,15 +3997,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-bound\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_selection_bound_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selection_bound_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -3976,14 +4021,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::shadow-type\0".as_ptr() as *const _,
-                Some(transmute(notify_shadow_type_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_shadow_type_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -4001,15 +4048,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-emoji-icon\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_emoji_icon_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_emoji_icon_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -4025,14 +4072,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tabs\0".as_ptr() as *const _,
-                Some(transmute(notify_tabs_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_tabs_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -4047,14 +4096,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -4069,14 +4120,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-length\0".as_ptr() as *const _,
-                Some(transmute(notify_text_length_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_length_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -4094,15 +4147,15 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::truncate-multiline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_truncate_multiline_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_truncate_multiline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -4118,14 +4171,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visibility\0".as_ptr() as *const _,
-                Some(transmute(notify_visibility_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visibility_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -4140,14 +4195,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_width_chars_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -4162,14 +4219,16 @@ impl<O: IsA<Entry>> EntryExt for O {
             P: IsA<Entry>,
         {
             let f: &F = &*(f as *const F);
-            f(&Entry::from_glib_borrow(this).unsafe_cast())
+            f(&Entry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_xalign_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

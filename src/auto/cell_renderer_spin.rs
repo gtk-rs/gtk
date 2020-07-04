@@ -308,10 +308,11 @@ impl CellRendererSpinBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererSpin::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererSpin::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererSpin>()
+            .expect("downcast");
+        ret
     }
 
     pub fn adjustment<P: IsA<Adjustment>>(mut self, adjustment: &P) -> Self {
@@ -742,14 +743,16 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
             P: IsA<CellRendererSpin>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::adjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_adjustment_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_adjustment_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -764,14 +767,16 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
             P: IsA<CellRendererSpin>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::climb-rate\0".as_ptr() as *const _,
-                Some(transmute(notify_climb_rate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_climb_rate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -786,14 +791,16 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
             P: IsA<CellRendererSpin>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::digits\0".as_ptr() as *const _,
-                Some(transmute(notify_digits_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_digits_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

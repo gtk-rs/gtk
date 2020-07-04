@@ -13,7 +13,7 @@ impl RadioMenuItem {
         }
     }
 
-    pub fn new_with_label(label: &str) -> RadioMenuItem {
+    pub fn with_label(label: &str) -> RadioMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_radio_menu_item_new_with_label(
@@ -24,7 +24,7 @@ impl RadioMenuItem {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> RadioMenuItem {
+    pub fn with_mnemonic(label: &str) -> RadioMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_radio_menu_item_new_with_mnemonic(

@@ -224,10 +224,11 @@ impl LevelBarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(LevelBar::static_type(), &properties)
+        let ret = glib::Object::new(LevelBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<LevelBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn inverted(mut self, inverted: bool) -> Self {
@@ -569,7 +570,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &LevelBar::from_glib_borrow(this).unsafe_cast(),
+                &LevelBar::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(name),
             )
         }
@@ -578,7 +579,9 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"offset-changed\0".as_ptr() as *const _,
-                Some(transmute(offset_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    offset_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -593,14 +596,16 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             P: IsA<LevelBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inverted_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -615,14 +620,16 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             P: IsA<LevelBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-value\0".as_ptr() as *const _,
-                Some(transmute(notify_max_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -637,14 +644,16 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             P: IsA<LevelBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-value\0".as_ptr() as *const _,
-                Some(transmute(notify_min_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -659,14 +668,16 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             P: IsA<LevelBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mode\0".as_ptr() as *const _,
-                Some(transmute(notify_mode_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -681,14 +692,16 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
             P: IsA<LevelBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&LevelBar::from_glib_borrow(this).unsafe_cast())
+            f(&LevelBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -247,10 +247,11 @@ impl MenuToolButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(MenuToolButton::static_type(), &properties)
+        let ret = glib::Object::new(MenuToolButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MenuToolButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn menu<P: IsA<Menu>>(mut self, menu: &P) -> Self {
@@ -545,14 +546,16 @@ impl<O: IsA<MenuToolButton>> MenuToolButtonExt for O {
             P: IsA<MenuToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-menu\0".as_ptr() as *const _,
-                Some(transmute(show_menu_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_menu_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -567,14 +570,16 @@ impl<O: IsA<MenuToolButton>> MenuToolButtonExt for O {
             P: IsA<MenuToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu\0".as_ptr() as *const _,
-                Some(transmute(notify_menu_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_menu_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

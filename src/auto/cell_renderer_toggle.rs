@@ -132,10 +132,11 @@ impl CellRendererToggleBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererToggle::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererToggle::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererToggle>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activatable(mut self, activatable: bool) -> Self {
@@ -387,7 +388,7 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path));
             f(
-                &CellRendererToggle::from_glib_borrow(this).unsafe_cast(),
+                &CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref(),
                 path,
             )
         }
@@ -396,7 +397,9 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggled\0".as_ptr() as *const _,
-                Some(transmute(toggled_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggled_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -411,14 +414,16 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activatable\0".as_ptr() as *const _,
-                Some(transmute(notify_activatable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_activatable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -433,14 +438,16 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -458,15 +465,15 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inconsistent\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_inconsistent_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inconsistent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -485,15 +492,15 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::indicator-size\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_indicator_size_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_indicator_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -509,14 +516,16 @@ impl<O: IsA<CellRendererToggle>> CellRendererToggleExt for O {
             P: IsA<CellRendererToggle>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererToggle::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::radio\0".as_ptr() as *const _,
-                Some(transmute(notify_radio_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_radio_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

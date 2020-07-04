@@ -49,7 +49,7 @@ impl Scale {
         }
     }
 
-    pub fn new_with_range(orientation: Orientation, min: f64, max: f64, step: f64) -> Scale {
+    pub fn with_range(orientation: Orientation, min: f64, max: f64, step: f64) -> Scale {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_scale_new_with_range(
@@ -258,10 +258,11 @@ impl ScaleBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Scale::static_type(), &properties)
+        let ret = glib::Object::new(Scale::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Scale>()
+            .expect("downcast");
+        ret
     }
 
     pub fn digits(mut self, digits: i32) -> Self {
@@ -632,14 +633,16 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast(), value).to_glib_full()
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref(), value).to_glib_full()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"format-value\0".as_ptr() as *const _,
-                Some(transmute(format_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    format_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -654,14 +657,16 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::digits\0".as_ptr() as *const _,
-                Some(transmute(notify_digits_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_digits_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -676,14 +681,16 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::draw-value\0".as_ptr() as *const _,
-                Some(transmute(notify_draw_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_draw_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -698,14 +705,16 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-origin\0".as_ptr() as *const _,
-                Some(transmute(notify_has_origin_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_origin_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -720,14 +729,16 @@ impl<O: IsA<Scale>> ScaleExt for O {
             P: IsA<Scale>,
         {
             let f: &F = &*(f as *const F);
-            f(&Scale::from_glib_borrow(this).unsafe_cast())
+            f(&Scale::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value-pos\0".as_ptr() as *const _,
-                Some(transmute(notify_value_pos_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_value_pos_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

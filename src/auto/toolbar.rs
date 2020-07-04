@@ -228,10 +228,11 @@ impl ToolbarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(Toolbar::static_type(), &properties)
+        let ret = glib::Object::new(Toolbar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Toolbar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn icon_size(mut self, icon_size: IconSize) -> Self {
@@ -719,7 +720,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Toolbar::from_glib_borrow(this).unsafe_cast(),
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(focus_home),
             )
             .to_glib()
@@ -729,7 +730,9 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"focus-home-or-end\0".as_ptr() as *const _,
-                Some(transmute(focus_home_or_end_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    focus_home_or_end_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -737,7 +740,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
 
     fn emit_focus_home_or_end(&self, focus_home: bool) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("focus-home-or-end", &[&focus_home])
                 .unwrap()
         };
@@ -760,7 +763,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Toolbar::from_glib_borrow(this).unsafe_cast(),
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(orientation),
             )
         }
@@ -769,8 +772,8 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"orientation-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    orientation_changed_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    orientation_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -797,14 +800,22 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast(), x, y, button).to_glib()
+            f(
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
+                x,
+                y,
+                button,
+            )
+            .to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"popup-context-menu\0".as_ptr() as *const _,
-                Some(transmute(popup_context_menu_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    popup_context_menu_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -820,7 +831,7 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Toolbar::from_glib_borrow(this).unsafe_cast(),
+                &Toolbar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(style),
             )
         }
@@ -829,7 +840,9 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"style-changed\0".as_ptr() as *const _,
-                Some(transmute(style_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    style_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -844,14 +857,16 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-size\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_size_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -869,15 +884,15 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-size-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_icon_size_set_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_size_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -893,14 +908,16 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-arrow\0".as_ptr() as *const _,
-                Some(transmute(notify_show_arrow_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_arrow_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -918,15 +935,15 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
             P: IsA<Toolbar>,
         {
             let f: &F = &*(f as *const F);
-            f(&Toolbar::from_glib_borrow(this).unsafe_cast())
+            f(&Toolbar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::toolbar-style\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_toolbar_style_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_toolbar_style_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

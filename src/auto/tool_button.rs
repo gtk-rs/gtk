@@ -244,10 +244,11 @@ impl ToolButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(ToolButton::static_type(), &properties)
+        let ret = glib::Object::new(ToolButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ToolButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn icon_name(mut self, icon_name: &str) -> Self {
@@ -613,14 +614,16 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             P: IsA<ToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clicked\0".as_ptr() as *const _,
-                Some(transmute(clicked_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    clicked_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -628,7 +631,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
 
     fn emit_clicked(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("clicked", &[])
                 .unwrap()
         };
@@ -643,14 +646,16 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             P: IsA<ToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-name\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_name_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -665,14 +670,16 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             P: IsA<ToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-widget\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_widget_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -687,14 +694,16 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             P: IsA<ToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -712,15 +721,15 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             P: IsA<ToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_label_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -739,15 +748,15 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
             P: IsA<ToolButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToolButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_underline_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_underline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

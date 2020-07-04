@@ -48,7 +48,7 @@ impl Label {
         }
     }
 
-    pub fn new_with_mnemonic(str: Option<&str>) -> Label {
+    pub fn with_mnemonic(str: Option<&str>) -> Label {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_label_new_with_mnemonic(str.to_glib_none().0))
@@ -284,10 +284,11 @@ impl LabelBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Label::static_type(), &properties)
+        let ret = glib::Object::new(Label::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Label>()
+            .expect("downcast");
+        ret
     }
 
     pub fn angle(mut self, angle: f64) -> Self {
@@ -562,7 +563,7 @@ pub trait LabelExt: 'static {
 
     fn get_justify(&self) -> Justification;
 
-    fn get_label(&self) -> Option<GString>;
+    fn get_label(&self) -> GString;
 
     fn get_layout(&self) -> Option<pango::Layout>;
 
@@ -586,7 +587,7 @@ pub trait LabelExt: 'static {
 
     fn get_single_line_mode(&self) -> bool;
 
-    fn get_text(&self) -> Option<GString>;
+    fn get_text(&self) -> GString;
 
     fn get_track_visited_links(&self) -> bool;
 
@@ -794,7 +795,7 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    fn get_label(&self) -> Option<GString> {
+    fn get_label(&self) -> GString {
         unsafe { from_glib_none(gtk_sys::gtk_label_get_label(self.as_ref().to_glib_none().0)) }
     }
 
@@ -892,7 +893,7 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    fn get_text(&self) -> Option<GString> {
+    fn get_text(&self) -> GString {
         unsafe { from_glib_none(gtk_sys::gtk_label_get_text(self.as_ref().to_glib_none().0)) }
     }
 
@@ -1196,15 +1197,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-current-link\0".as_ptr() as *const _,
-                Some(transmute(
-                    activate_current_link_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_current_link_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1213,7 +1214,7 @@ impl<O: IsA<Label>> LabelExt for O {
 
     fn emit_activate_current_link(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate-current-link", &[])
                 .unwrap()
         };
@@ -1236,7 +1237,7 @@ impl<O: IsA<Label>> LabelExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Label::from_glib_borrow(this).unsafe_cast(),
+                &Label::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(uri),
             )
             .to_glib()
@@ -1246,7 +1247,9 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-link\0".as_ptr() as *const _,
-                Some(transmute(activate_link_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_link_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1260,14 +1263,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"copy-clipboard\0".as_ptr() as *const _,
-                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    copy_clipboard_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1275,7 +1280,7 @@ impl<O: IsA<Label>> LabelExt for O {
 
     fn emit_copy_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("copy-clipboard", &[])
                 .unwrap()
         };
@@ -1299,7 +1304,7 @@ impl<O: IsA<Label>> LabelExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Label::from_glib_borrow(this).unsafe_cast(),
+                &Label::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
                 from_glib(extend_selection),
@@ -1310,7 +1315,9 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1318,7 +1325,7 @@ impl<O: IsA<Label>> LabelExt for O {
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-cursor", &[&step, &count, &extend_selection])
                 .unwrap()
         };
@@ -1334,7 +1341,7 @@ impl<O: IsA<Label>> LabelExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Label::from_glib_borrow(this).unsafe_cast(),
+                &Label::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(menu),
             )
         }
@@ -1343,7 +1350,9 @@ impl<O: IsA<Label>> LabelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"populate-popup\0".as_ptr() as *const _,
-                Some(transmute(populate_popup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    populate_popup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1358,14 +1367,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::angle\0".as_ptr() as *const _,
-                Some(transmute(notify_angle_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_angle_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1380,14 +1391,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::attributes\0".as_ptr() as *const _,
-                Some(transmute(notify_attributes_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_attributes_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1405,15 +1418,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cursor_position_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_cursor_position_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1429,14 +1442,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ellipsize\0".as_ptr() as *const _,
-                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_ellipsize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1451,14 +1466,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::justify\0".as_ptr() as *const _,
-                Some(transmute(notify_justify_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_justify_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1473,14 +1490,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1495,14 +1514,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lines\0".as_ptr() as *const _,
-                Some(transmute(notify_lines_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_lines_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1520,15 +1541,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-width-chars\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_width_chars_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_width_chars_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1547,15 +1568,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mnemonic-keyval\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_mnemonic_keyval_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mnemonic_keyval_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1574,15 +1595,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mnemonic-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_mnemonic_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_mnemonic_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1598,14 +1619,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pattern\0".as_ptr() as *const _,
-                Some(transmute(notify_pattern_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pattern_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1620,14 +1643,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selectable\0".as_ptr() as *const _,
-                Some(transmute(notify_selectable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selectable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1645,15 +1670,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-bound\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_selection_bound_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selection_bound_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1672,15 +1697,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::single-line-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_single_line_mode_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_single_line_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1699,15 +1724,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-visited-links\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_track_visited_links_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_track_visited_links_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1723,14 +1748,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_markup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1748,15 +1775,15 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_underline_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_underline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1772,14 +1799,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_width_chars_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1794,14 +1823,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wrap_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1816,14 +1847,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wrap_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1839,14 +1872,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_xalign_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1862,14 +1897,16 @@ impl<O: IsA<Label>> LabelExt for O {
             P: IsA<Label>,
         {
             let f: &F = &*(f as *const F);
-            f(&Label::from_glib_borrow(this).unsafe_cast())
+            f(&Label::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::yalign\0".as_ptr() as *const _,
-                Some(transmute(notify_yalign_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_yalign_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

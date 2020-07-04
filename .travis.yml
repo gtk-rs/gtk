@@ -1,49 +1,20 @@
 dist: xenial
 language: rust
-matrix:
-  include:
-    - os: linux
-      rust: nightly
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: nightly
-      env: GTK=3.24 FEATURES=v3_16
-    - os: linux
-      rust: beta
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: beta
-      env: GTK=3.24 FEATURES=v3_16
-    - os: linux
-      rust: stable
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: stable
-      env: GTK=3.24 FEATURES=v3_16
-    - os: linux
-      rust: 1.39.0
-      env: GTK=3.14 FEATURES=
-    - os: linux
-      rust: 1.39.0
-      env: GTK=3.24 FEATURES=v3_16
+os:
+  - linux
+  - osx
+rust:
+  - nightly
+  - beta
+  - stable
+  - 1.40.0
+env:
+  - GTK=3.14 FEATURES=
+  - GTK=3.24 FEATURES=v3_16
+jobs:
+  exclude:
     - os: osx
-      rust: nightly
-      env: GTK=3.14 FEATURES=
-    # - os: osx
-    #   rust: nightly
-    #   env: GTK=3.24 FEATURES=v3_16
-    - os: osx
-      rust: beta
-      env: GTK=3.14 FEATURES=
-    # - os: osx
-    #   rust: beta
-    #   env: GTK=3.24 FEATURES=v3_16
-    - os: osx
-      rust: stable
-      env: GTK=3.14 FEATURES=
-    # - os: osx
-    #   rust: stable
-    #   env: GTK=3.24 FEATURES=v3_16
+      env: GTK=3.24 FEATURES=v3_16
 addons:
   apt:
     packages:
@@ -51,14 +22,14 @@ addons:
     - libmount-dev
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew unlink python@2; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi gtk+3 cairo atk; fi
 script:
   - rustc --version
   - if [ "$TRAVIS_RUST_VERSION" == "stable" ] && [ "$GTK" == "3.14" ]; then
-    rustup component add rustfmt;
-    make regen_check;
+      rustup component add rustfmt;
+      make regen_check;
     fi
-  - ./check_init_asserts
   - cargo doc --features "dox,embed-lgpl-docs"
   - cargo test --features "$FEATURES,embed-lgpl-docs"
   # catch any sneaked in lgpl docs
@@ -70,3 +41,14 @@ script:
   - git clone -q --depth 50 -b master https://github.com/gtk-rs/examples _examples
   - cd _examples
   - ./build_travis.sh
+  - if [ "$TRAVIS_RUST_VERSION" == "stable" ] && [ "$GTK" == "3.14" ]; then
+      cd ..;
+      git clone https://github.com/gtk-rs/checker;
+      cd checker && cargo build --release;
+      cd .. && ./checker/target/release/checker .;
+      ./checker/check_init_asserts;
+    fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$TRAVIS_RUST_VERSION" == "stable"] && [ "$GTK" == "3.24" ]; then
+      rustup component add clippy;
+      cargo clippy --features "$FEATURES,embed-lgpl-docs" -- -D warnings;
+    fi

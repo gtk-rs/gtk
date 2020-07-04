@@ -316,10 +316,11 @@ impl CellRendererAccelBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererAccel::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererAccel::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererAccel>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accel_key(mut self, accel_key: u32) -> Self {
@@ -790,7 +791,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path_string));
             f(
-                &CellRendererAccel::from_glib_borrow(this).unsafe_cast(),
+                &CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref(),
                 path,
             )
         }
@@ -799,7 +800,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accel-cleared\0".as_ptr() as *const _,
-                Some(transmute(accel_cleared_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    accel_cleared_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -825,7 +828,7 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path_string));
             f(
-                &CellRendererAccel::from_glib_borrow(this).unsafe_cast(),
+                &CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref(),
                 path,
                 accel_key,
                 from_glib(accel_mods),
@@ -837,7 +840,9 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"accel-edited\0".as_ptr() as *const _,
-                Some(transmute(accel_edited_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    accel_edited_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -852,14 +857,16 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-key\0".as_ptr() as *const _,
-                Some(transmute(notify_accel_key_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_key_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -874,14 +881,16 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_accel_mode_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -896,14 +905,16 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-mods\0".as_ptr() as *const _,
-                Some(transmute(notify_accel_mods_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_mods_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -918,14 +929,16 @@ impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
             P: IsA<CellRendererAccel>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererAccel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::keycode\0".as_ptr() as *const _,
-                Some(transmute(notify_keycode_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_keycode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

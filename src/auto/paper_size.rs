@@ -46,7 +46,7 @@ impl PaperSize {
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    pub fn new_from_gvariant(variant: &glib::Variant) -> PaperSize {
+    pub fn from_gvariant(variant: &glib::Variant) -> PaperSize {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gtk_sys::gtk_paper_size_new_from_gvariant(
@@ -56,7 +56,7 @@ impl PaperSize {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn new_from_ipp(ipp_name: &str, width: f64, height: f64) -> PaperSize {
+    pub fn from_ipp(ipp_name: &str, width: f64, height: f64) -> PaperSize {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gtk_sys::gtk_paper_size_new_from_ipp(
@@ -67,7 +67,7 @@ impl PaperSize {
         }
     }
 
-    pub fn new_from_key_file(
+    pub fn from_key_file(
         key_file: &glib::KeyFile,
         group_name: Option<&str>,
     ) -> Result<PaperSize, glib::Error> {
@@ -87,12 +87,7 @@ impl PaperSize {
         }
     }
 
-    pub fn new_from_ppd(
-        ppd_name: &str,
-        ppd_display_name: &str,
-        width: f64,
-        height: f64,
-    ) -> PaperSize {
+    pub fn from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> PaperSize {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gtk_sys::gtk_paper_size_new_from_ppd(

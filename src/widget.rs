@@ -60,6 +60,18 @@ pub trait WidgetExtManual: 'static {
     fn add_events(&self, events: gdk::EventMask);
     fn get_events(&self) -> gdk::EventMask;
     fn set_events(&self, events: gdk::EventMask);
+
+    // rustdoc-stripper-ignore-next
+    /// Calls `gtk_widget_destroy()` on this widget.
+    ///
+    /// # Safety
+    ///
+    /// This will not necessarily entirely remove the widget from existence but
+    /// you must *NOT* query the widget's state subsequently.  Do not call this
+    /// yourself unless you really mean to.
+    unsafe fn destroy(&self);
+
+    fn hide_on_delete(&self) -> Inhibit;
 }
 
 impl<O: IsA<Widget>> WidgetExtManual for O {
@@ -129,7 +141,7 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             T: IsA<Widget>,
         {
             f(
-                &Widget::from_glib_borrow(this).unsafe_cast(),
+                &Widget::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(event),
             )
             .to_glib()
@@ -139,7 +151,9 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             connect_raw(
                 self.to_glib_none().0 as *mut _,
                 b"map-event\0".as_ptr() as *mut _,
-                Some(transmute(event_any_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    event_any_trampoline::<Self, F> as *const (),
+                )),
                 Box::into_raw(f),
             )
         }
@@ -158,7 +172,7 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             T: IsA<Widget>,
         {
             f(
-                &Widget::from_glib_borrow(this).unsafe_cast(),
+                &Widget::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(event),
             )
             .to_glib()
@@ -168,7 +182,9 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             connect_raw(
                 self.to_glib_none().0 as *mut _,
                 b"unmap-event\0".as_ptr() as *mut _,
-                Some(transmute(event_any_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    event_any_trampoline::<Self, F> as *const (),
+                )),
                 Box::into_raw(f),
             )
         }
@@ -188,11 +204,10 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             frame_clock: *mut gdk_sys::GdkFrameClock,
             user_data: glib_sys::gpointer,
         ) -> glib_sys::gboolean {
-            let widget: Widget = from_glib_borrow(widget);
-            let widget = widget.downcast().unwrap();
+            let widget: Borrowed<Widget> = from_glib_borrow(widget);
             let frame_clock = from_glib_borrow(frame_clock);
             let callback: &P = &*(user_data as *mut _);
-            let res = (*callback)(&widget, &frame_clock);
+            let res = (*callback)(&widget.unsafe_cast_ref(), &frame_clock);
             res.to_glib()
         }
         let callback = Some(callback_func::<Self, P> as _);
@@ -234,6 +249,18 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     fn set_events(&self, events: gdk::EventMask) {
         unsafe {
             gtk_sys::gtk_widget_set_events(self.as_ref().to_glib_none().0, events.to_glib() as i32);
+        }
+    }
+
+    unsafe fn destroy(&self) {
+        gtk_sys::gtk_widget_destroy(self.as_ref().to_glib_none().0);
+    }
+
+    fn hide_on_delete(&self) -> Inhibit {
+        unsafe {
+            Inhibit(from_glib(gtk_sys::gtk_widget_hide_on_delete(
+                self.as_ref().to_glib_none().0,
+            )))
         }
     }
 }

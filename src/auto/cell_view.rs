@@ -44,7 +44,7 @@ impl CellView {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_cell_view_new()).unsafe_cast() }
     }
 
-    pub fn new_with_context<P: IsA<CellArea>, Q: IsA<CellAreaContext>>(
+    pub fn with_context<P: IsA<CellArea>, Q: IsA<CellAreaContext>>(
         area: &P,
         context: &Q,
     ) -> CellView {
@@ -58,7 +58,7 @@ impl CellView {
         }
     }
 
-    pub fn new_with_markup(markup: &str) -> CellView {
+    pub fn with_markup(markup: &str) -> CellView {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_cell_view_new_with_markup(
@@ -68,7 +68,7 @@ impl CellView {
         }
     }
 
-    pub fn new_with_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> CellView {
+    pub fn with_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> CellView {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_cell_view_new_with_pixbuf(
@@ -78,7 +78,7 @@ impl CellView {
         }
     }
 
-    pub fn new_with_text(text: &str) -> CellView {
+    pub fn with_text(text: &str) -> CellView {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_cell_view_new_with_text(text.to_glib_none().0))
@@ -272,10 +272,11 @@ impl CellViewBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(CellView::static_type(), &properties)
+        let ret = glib::Object::new(CellView::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellView>()
+            .expect("downcast");
+        ret
     }
 
     pub fn background(mut self, background: &str) -> Self {
@@ -704,14 +705,16 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::background\0".as_ptr() as *const _,
-                Some(transmute(notify_background_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_background_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -729,15 +732,15 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::background-rgba\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_background_rgba_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_background_rgba_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -756,15 +759,15 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::background-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_background_set_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_background_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -783,15 +786,15 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::draw-sensitive\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_draw_sensitive_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_draw_sensitive_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -807,14 +810,16 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fit-model\0".as_ptr() as *const _,
-                Some(transmute(notify_fit_model_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_fit_model_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -829,14 +834,16 @@ impl<O: IsA<CellView>> CellViewExt for O {
             P: IsA<CellView>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellView::from_glib_borrow(this).unsafe_cast())
+            f(&CellView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_model_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -26,7 +26,7 @@ impl FileFilter {
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    pub fn new_from_gvariant(variant: &glib::Variant) -> FileFilter {
+    pub fn from_gvariant(variant: &glib::Variant) -> FileFilter {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_full(gtk_sys::gtk_file_filter_new_from_gvariant(

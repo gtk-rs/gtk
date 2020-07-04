@@ -47,8 +47,8 @@ pub trait ContainerExt: 'static {
 
     fn child_notify<P: IsA<Widget>>(&self, child: &P, child_property: &str);
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: /*Ignored*/&glib::ParamSpec);
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: &glib::ParamSpec);
 
     //fn child_set<P: IsA<Widget>>(&self, child: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -153,10 +153,16 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: /*Ignored*/&glib::ParamSpec) {
-    //    unsafe { TODO: call gtk_sys:gtk_container_child_notify_by_pspec() }
-    //}
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: &glib::ParamSpec) {
+        unsafe {
+            gtk_sys::gtk_container_child_notify_by_pspec(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                pspec.to_glib_none().0,
+            );
+        }
+    }
 
     //fn child_set<P: IsA<Widget>>(&self, child: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call gtk_sys:gtk_container_child_set() }
@@ -377,7 +383,7 @@ impl<O: IsA<Container>> ContainerExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Container::from_glib_borrow(this).unsafe_cast(),
+                &Container::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -386,7 +392,9 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"add\0".as_ptr() as *const _,
-                Some(transmute(add_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    add_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -400,14 +408,16 @@ impl<O: IsA<Container>> ContainerExt for O {
             P: IsA<Container>,
         {
             let f: &F = &*(f as *const F);
-            f(&Container::from_glib_borrow(this).unsafe_cast())
+            f(&Container::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"check-resize\0".as_ptr() as *const _,
-                Some(transmute(check_resize_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    check_resize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -423,7 +433,7 @@ impl<O: IsA<Container>> ContainerExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Container::from_glib_borrow(this).unsafe_cast(),
+                &Container::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -432,7 +442,9 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"remove\0".as_ptr() as *const _,
-                Some(transmute(remove_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    remove_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -448,7 +460,7 @@ impl<O: IsA<Container>> ContainerExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Container::from_glib_borrow(this).unsafe_cast(),
+                &Container::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(object),
             )
         }
@@ -457,7 +469,9 @@ impl<O: IsA<Container>> ContainerExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"set-focus-child\0".as_ptr() as *const _,
-                Some(transmute(set_focus_child_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    set_focus_child_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -475,15 +489,15 @@ impl<O: IsA<Container>> ContainerExt for O {
             P: IsA<Container>,
         {
             let f: &F = &*(f as *const F);
-            f(&Container::from_glib_borrow(this).unsafe_cast())
+            f(&Container::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::border-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_border_width_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_border_width_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -499,14 +513,16 @@ impl<O: IsA<Container>> ContainerExt for O {
             P: IsA<Container>,
         {
             let f: &F = &*(f as *const F);
-            f(&Container::from_glib_borrow(this).unsafe_cast())
+            f(&Container::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::child\0".as_ptr() as *const _,
-                Some(transmute(notify_child_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_child_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -521,14 +537,16 @@ impl<O: IsA<Container>> ContainerExt for O {
             P: IsA<Container>,
         {
             let f: &F = &*(f as *const F);
-            f(&Container::from_glib_borrow(this).unsafe_cast())
+            f(&Container::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resize-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_resize_mode_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_resize_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

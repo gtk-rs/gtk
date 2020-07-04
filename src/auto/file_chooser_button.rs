@@ -50,7 +50,7 @@ impl FileChooserButton {
         }
     }
 
-    pub fn new_with_dialog<P: IsA<Dialog>>(dialog: &P) -> FileChooserButton {
+    pub fn with_dialog<P: IsA<Dialog>>(dialog: &P) -> FileChooserButton {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_file_chooser_button_new_with_dialog(
@@ -288,10 +288,11 @@ impl FileChooserButtonBuilder {
         if let Some(ref use_preview_label) = self.use_preview_label {
             properties.push(("use-preview-label", use_preview_label));
         }
-        glib::Object::new(FileChooserButton::static_type(), &properties)
+        let ret = glib::Object::new(FileChooserButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FileChooserButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn dialog<P: IsA<FileChooser>>(mut self, dialog: &P) -> Self {
@@ -645,14 +646,16 @@ impl<O: IsA<FileChooserButton>> FileChooserButtonExt for O {
             P: IsA<FileChooserButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserButton::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"file-set\0".as_ptr() as *const _,
-                Some(transmute(file_set_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    file_set_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -667,14 +670,16 @@ impl<O: IsA<FileChooserButton>> FileChooserButtonExt for O {
             P: IsA<FileChooserButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserButton::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_title_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -689,14 +694,16 @@ impl<O: IsA<FileChooserButton>> FileChooserButtonExt for O {
             P: IsA<FileChooserButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserButton::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width-chars\0".as_ptr() as *const _,
-                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_width_chars_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

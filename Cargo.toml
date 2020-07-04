@@ -7,7 +7,7 @@ name = "gtk"
 homepage = "http://gtk-rs.org/"
 authors = ["The Gtk-rs Project Developers"]
 readme = "README.md"
-version = "0.8.0"
+version = "0.8.1"
 keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
 repository = "https://github.com/gtk-rs/gtk"
 build = "build.rs"
@@ -34,6 +34,7 @@ v3_22_29 = ["v3_22_27", "gtk-sys/v3_22_29"]
 v3_22_30 = ["v3_22_29", "gtk-sys/v3_22_30"]
 v3_24 = ["v3_22_30", "gtk-sys/v3_24"]
 v3_24_8 = ["v3_24", "gtk-sys/v3_24_8"]
+v3_24_9 = ["v3_24_8", "gtk-sys/v3_24_9"]
 purge-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/purge-lgpl-docs"]
 embed-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/embed-lgpl-docs"]
 dox = ["gdk/dox", "gtk-sys/dox"]
@@ -41,11 +42,14 @@ dox = ["gdk/dox", "gtk-sys/dox"]
 [package.metadata.docs.rs]
 features = ["dox", "embed-lgpl-docs"]
 
+[build-dependencies]
+pkg-config = "0.3.7"
+
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cc = "^1.0"
 
 [build-dependencies.gtk-rs-lgpl-docs]
-version = "0.1.3"
+version = "0.1"
 optional = true
 
 [dependencies]
@@ -66,7 +70,7 @@ pango-sys = "0.9.1"
 gtk-sys = "0.9.1"
 libc = "0.2"
 bitflags = "1.0"
-lazy_static = "1.0"
+once_cell = "1.0"
 
 [dev-dependencies]
 gir-format-check = "^0.1"

@@ -124,10 +124,11 @@ impl PrintOperationBuilder {
         if let Some(ref use_full_page) = self.use_full_page {
             properties.push(("use-full-page", use_full_page));
         }
-        glib::Object::new(PrintOperation::static_type(), &properties)
+        let ret = glib::Object::new(PrintOperation::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<PrintOperation>()
+            .expect("downcast");
+        ret
     }
 
     pub fn allow_async(mut self, allow_async: bool) -> Self {
@@ -815,7 +816,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(context),
             )
         }
@@ -824,7 +825,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"begin-print\0".as_ptr() as *const _,
-                Some(transmute(begin_print_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    begin_print_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -845,7 +848,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast()) /*Not checked*/
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref()) /*Not checked*/
                 .to_glib_none()
                 .0
         }
@@ -854,8 +857,8 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-custom-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    create_custom_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    create_custom_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -875,7 +878,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(widget),
             )
         }
@@ -884,8 +887,8 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"custom-widget-apply\0".as_ptr() as *const _,
-                Some(transmute(
-                    custom_widget_apply_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    custom_widget_apply_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -902,7 +905,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(result),
             )
         }
@@ -911,7 +914,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"done\0".as_ptr() as *const _,
-                Some(transmute(done_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    done_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -931,7 +936,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(context),
                 page_nr,
             )
@@ -941,7 +946,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"draw-page\0".as_ptr() as *const _,
-                Some(transmute(draw_page_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    draw_page_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -957,7 +964,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(context),
             )
         }
@@ -966,7 +973,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end-print\0".as_ptr() as *const _,
-                Some(transmute(end_print_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    end_print_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -986,7 +995,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(context),
             )
             .to_glib()
@@ -996,7 +1005,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paginate\0".as_ptr() as *const _,
-                Some(transmute(paginate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    paginate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1023,10 +1034,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(preview),
                 &from_glib_borrow(context),
-                Option::<Window>::from_glib_borrow(parent).as_ref(),
+                Option::<Window>::from_glib_borrow(parent).as_ref().as_ref(),
             )
             .to_glib()
         }
@@ -1035,7 +1046,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preview\0".as_ptr() as *const _,
-                Some(transmute(preview_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    preview_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1059,7 +1072,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(context),
                 page_nr,
                 &from_glib_borrow(setup),
@@ -1070,7 +1083,9 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"request-page-setup\0".as_ptr() as *const _,
-                Some(transmute(request_page_setup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    request_page_setup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1084,14 +1099,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"status-changed\0".as_ptr() as *const _,
-                Some(transmute(status_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    status_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1115,7 +1132,7 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &PrintOperation::from_glib_borrow(this).unsafe_cast(),
+                &PrintOperation::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(widget),
                 &from_glib_borrow(setup),
                 &from_glib_borrow(settings),
@@ -1126,8 +1143,8 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"update-custom-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    update_custom_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    update_custom_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1143,14 +1160,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::allow-async\0".as_ptr() as *const _,
-                Some(transmute(notify_allow_async_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_allow_async_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1168,15 +1187,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-page\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_current_page_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_current_page_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1195,15 +1214,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::custom-tab-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_custom_tab_label_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_custom_tab_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1222,15 +1241,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::default-page-setup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_default_page_setup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_default_page_setup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1249,15 +1268,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::embed-page-setup\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_embed_page_setup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_embed_page_setup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1276,15 +1295,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::export-filename\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_export_filename_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_export_filename_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1303,15 +1322,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_selection_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_selection_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1327,14 +1346,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::job-name\0".as_ptr() as *const _,
-                Some(transmute(notify_job_name_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_job_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1349,14 +1370,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-pages\0".as_ptr() as *const _,
-                Some(transmute(notify_n_pages_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_n_pages_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1374,15 +1397,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::n-pages-to-print\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_n_pages_to_print_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_n_pages_to_print_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1401,15 +1424,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::print-settings\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_print_settings_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_print_settings_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1428,15 +1451,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-progress\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_progress_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_progress_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1452,14 +1475,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::status\0".as_ptr() as *const _,
-                Some(transmute(notify_status_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_status_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1477,15 +1502,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::status-string\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_status_string_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_status_string_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1504,15 +1529,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::support-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_support_selection_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_support_selection_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1531,15 +1556,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-print-status\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_track_print_status_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_track_print_status_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1555,14 +1580,16 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::unit\0".as_ptr() as *const _,
-                Some(transmute(notify_unit_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_unit_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1580,15 +1607,15 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
             P: IsA<PrintOperation>,
         {
             let f: &F = &*(f as *const F);
-            f(&PrintOperation::from_glib_borrow(this).unsafe_cast())
+            f(&PrintOperation::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-full-page\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_full_page_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_full_page_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -116,10 +116,10 @@ unsafe extern "C" fn window_set_focus<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Window = from_glib_borrow(ptr);
-    let widget: Option<Widget> = from_glib_borrow(widgetptr);
+    let wrap: Borrowed<Window> = from_glib_borrow(ptr);
+    let widget: Borrowed<Option<Widget>> = from_glib_borrow(widgetptr);
 
-    imp.set_focus(&wrap, widget.as_ref())
+    imp.set_focus(&wrap, widget.as_ref().as_ref())
 }
 
 unsafe extern "C" fn window_activate_focus<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkWindow)
@@ -128,7 +128,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Window = from_glib_borrow(ptr);
+    let wrap: Borrowed<Window> = from_glib_borrow(ptr);
 
     imp.activate_focus(&wrap)
 }
@@ -139,7 +139,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Window = from_glib_borrow(ptr);
+    let wrap: Borrowed<Window> = from_glib_borrow(ptr);
 
     imp.activate_default(&wrap)
 }
@@ -150,7 +150,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Window = from_glib_borrow(ptr);
+    let wrap: Borrowed<Window> = from_glib_borrow(ptr);
 
     imp.keys_changed(&wrap)
 }
@@ -164,7 +164,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Window = from_glib_borrow(ptr);
+    let wrap: Borrowed<Window> = from_glib_borrow(ptr);
     let toggle: bool = from_glib(toggleptr);
 
     imp.enable_debugging(&wrap, toggle).to_glib()

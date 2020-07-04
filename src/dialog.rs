@@ -15,7 +15,7 @@ use Widget;
 use Window;
 
 impl Dialog {
-    pub fn new_with_buttons<T: IsA<Window>>(
+    pub fn with_buttons<T: IsA<Window>>(
         title: Option<&str>,
         parent: Option<&T>,
         flags: DialogFlags,

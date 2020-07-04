@@ -216,10 +216,11 @@ impl ToolItemBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(ToolItem::static_type(), &properties)
+        let ret = glib::Object::new(ToolItem::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ToolItem>()
+            .expect("downcast");
+        ret
     }
 
     pub fn is_important(mut self, is_important: bool) -> Self {
@@ -702,14 +703,16 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-menu-proxy\0".as_ptr() as *const _,
-                Some(transmute(create_menu_proxy_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    create_menu_proxy_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -723,15 +726,15 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toolbar-reconfigured\0".as_ptr() as *const _,
-                Some(transmute(
-                    toolbar_reconfigured_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toolbar_reconfigured_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -750,15 +753,15 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-important\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_is_important_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_is_important_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -777,15 +780,15 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-horizontal\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_horizontal_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visible_horizontal_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -804,15 +807,15 @@ impl<O: IsA<ToolItem>> ToolItemExt for O {
             P: IsA<ToolItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-vertical\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_vertical_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visible_vertical_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -279,10 +279,11 @@ impl AppChooserButtonBuilder {
         if let Some(ref content_type) = self.content_type {
             properties.push(("content-type", content_type));
         }
-        glib::Object::new(AppChooserButton::static_type(), &properties)
+        let ret = glib::Object::new(AppChooserButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AppChooserButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn heading(mut self, heading: &str) -> Self {
@@ -676,7 +677,7 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &AppChooserButton::from_glib_borrow(this).unsafe_cast(),
+                &AppChooserButton::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(item_name),
             )
         }
@@ -685,8 +686,8 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"custom-item-activated\0".as_ptr() as *const _,
-                Some(transmute(
-                    custom_item_activated_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    custom_item_activated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -702,14 +703,16 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             P: IsA<AppChooserButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
+            f(&AppChooserButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::heading\0".as_ptr() as *const _,
-                Some(transmute(notify_heading_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_heading_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -727,15 +730,15 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             P: IsA<AppChooserButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
+            f(&AppChooserButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-default-item\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_default_item_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_default_item_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -754,15 +757,15 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
             P: IsA<AppChooserButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
+            f(&AppChooserButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-dialog-item\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_dialog_item_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_dialog_item_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

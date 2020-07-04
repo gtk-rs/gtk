@@ -271,10 +271,11 @@ impl FileChooserWidgetBuilder {
         if let Some(ref use_preview_label) = self.use_preview_label {
             properties.push(("use-preview-label", use_preview_label));
         }
-        glib::Object::new(FileChooserWidget::static_type(), &properties)
+        let ret = glib::Object::new(FileChooserWidget::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FileChooserWidget>()
+            .expect("downcast");
+        ret
     }
 
     pub fn search_mode(mut self, search_mode: bool) -> Self {
@@ -644,14 +645,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"desktop-folder\0".as_ptr() as *const _,
-                Some(transmute(desktop_folder_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    desktop_folder_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -659,7 +662,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_desktop_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("desktop-folder", &[])
                 .unwrap()
         };
@@ -673,14 +676,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"down-folder\0".as_ptr() as *const _,
-                Some(transmute(down_folder_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    down_folder_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -688,7 +693,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_down_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("down-folder", &[])
                 .unwrap()
         };
@@ -702,14 +707,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"home-folder\0".as_ptr() as *const _,
-                Some(transmute(home_folder_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    home_folder_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -717,7 +724,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_home_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("home-folder", &[])
                 .unwrap()
         };
@@ -733,7 +740,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &FileChooserWidget::from_glib_borrow(this).unsafe_cast(),
+                &FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(path),
             )
         }
@@ -742,7 +749,9 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"location-popup\0".as_ptr() as *const _,
-                Some(transmute(location_popup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    location_popup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -750,7 +759,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_location_popup(&self, path: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("location-popup", &[&path])
                 .unwrap()
         };
@@ -764,15 +773,15 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"location-popup-on-paste\0".as_ptr() as *const _,
-                Some(transmute(
-                    location_popup_on_paste_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    location_popup_on_paste_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -781,7 +790,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_location_popup_on_paste(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("location-popup-on-paste", &[])
                 .unwrap()
         };
@@ -795,15 +804,15 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"location-toggle-popup\0".as_ptr() as *const _,
-                Some(transmute(
-                    location_toggle_popup_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    location_toggle_popup_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -812,7 +821,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_location_toggle_popup(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("location-toggle-popup", &[])
                 .unwrap()
         };
@@ -826,14 +835,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"places-shortcut\0".as_ptr() as *const _,
-                Some(transmute(places_shortcut_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    places_shortcut_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -841,7 +852,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_places_shortcut(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("places-shortcut", &[])
                 .unwrap()
         };
@@ -857,7 +868,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &FileChooserWidget::from_glib_borrow(this).unsafe_cast(),
+                &FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref(),
                 bookmark_index,
             )
         }
@@ -866,7 +877,9 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"quick-bookmark\0".as_ptr() as *const _,
-                Some(transmute(quick_bookmark_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    quick_bookmark_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -874,7 +887,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_quick_bookmark(&self, bookmark_index: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("quick-bookmark", &[&bookmark_index])
                 .unwrap()
         };
@@ -888,14 +901,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"recent-shortcut\0".as_ptr() as *const _,
-                Some(transmute(recent_shortcut_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    recent_shortcut_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -903,7 +918,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_recent_shortcut(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("recent-shortcut", &[])
                 .unwrap()
         };
@@ -917,14 +932,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search-shortcut\0".as_ptr() as *const _,
-                Some(transmute(search_shortcut_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    search_shortcut_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -932,7 +949,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_search_shortcut(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("search-shortcut", &[])
                 .unwrap()
         };
@@ -946,14 +963,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-hidden\0".as_ptr() as *const _,
-                Some(transmute(show_hidden_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_hidden_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -961,7 +980,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_show_hidden(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("show-hidden", &[])
                 .unwrap()
         };
@@ -975,14 +994,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"up-folder\0".as_ptr() as *const _,
-                Some(transmute(up_folder_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    up_folder_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -990,7 +1011,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 
     fn emit_up_folder(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("up-folder", &[])
                 .unwrap()
         };
@@ -1005,14 +1026,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::search-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_search_mode_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_search_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1027,14 +1050,16 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
             P: IsA<FileChooserWidget>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute(notify_subtitle_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_subtitle_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

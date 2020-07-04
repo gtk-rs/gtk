@@ -254,10 +254,11 @@ impl ToolPaletteBuilder {
         if let Some(ref vscroll_policy) = self.vscroll_policy {
             properties.push(("vscroll-policy", vscroll_policy));
         }
-        glib::Object::new(ToolPalette::static_type(), &properties)
+        let ret = glib::Object::new(ToolPalette::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ToolPalette>()
+            .expect("downcast");
+        ret
     }
 
     pub fn icon_size(mut self, icon_size: IconSize) -> Self {
@@ -757,14 +758,16 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
             P: IsA<ToolPalette>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
+            f(&ToolPalette::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-size\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_size_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -782,15 +785,15 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
             P: IsA<ToolPalette>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
+            f(&ToolPalette::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon-size-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_icon_size_set_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_size_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -809,15 +812,15 @@ impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
             P: IsA<ToolPalette>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolPalette::from_glib_borrow(this).unsafe_cast())
+            f(&ToolPalette::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::toolbar-style\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_toolbar_style_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_toolbar_style_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

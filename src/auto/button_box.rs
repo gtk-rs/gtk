@@ -220,10 +220,11 @@ impl ButtonBoxBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(ButtonBox::static_type(), &properties)
+        let ret = glib::Object::new(ButtonBox::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ButtonBox>()
+            .expect("downcast");
+        ret
     }
 
     pub fn layout_style(mut self, layout_style: ButtonBoxStyle) -> Self {
@@ -544,15 +545,15 @@ impl<O: IsA<ButtonBox>> ButtonBoxExt for O {
             P: IsA<ButtonBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&ButtonBox::from_glib_borrow(this).unsafe_cast())
+            f(&ButtonBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::layout-style\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_layout_style_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_layout_style_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

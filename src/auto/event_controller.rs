@@ -96,15 +96,15 @@ impl<O: IsA<EventController>> EventControllerExt for O {
             P: IsA<EventController>,
         {
             let f: &F = &*(f as *const F);
-            f(&EventController::from_glib_borrow(this).unsafe_cast())
+            f(&EventController::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::propagation-phase\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_propagation_phase_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_propagation_phase_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

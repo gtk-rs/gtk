@@ -198,10 +198,11 @@ impl SocketBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Socket::static_type(), &properties)
+        let ret = glib::Object::new(Socket::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Socket>()
+            .expect("downcast");
+        ret
     }
 
     pub fn border_width(mut self, border_width: u32) -> Self {
@@ -422,14 +423,16 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
             P: IsA<Socket>,
         {
             let f: &F = &*(f as *const F);
-            f(&Socket::from_glib_borrow(this).unsafe_cast())
+            f(&Socket::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"plug-added\0".as_ptr() as *const _,
-                Some(transmute(plug_added_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    plug_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -444,14 +447,16 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
             P: IsA<Socket>,
         {
             let f: &F = &*(f as *const F);
-            f(&Socket::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&Socket::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"plug-removed\0".as_ptr() as *const _,
-                Some(transmute(plug_removed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    plug_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

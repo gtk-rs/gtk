@@ -266,10 +266,11 @@ impl VolumeButtonBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(VolumeButton::static_type(), &properties)
+        let ret = glib::Object::new(VolumeButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<VolumeButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn use_symbolic(mut self, use_symbolic: bool) -> Self {
@@ -568,15 +569,15 @@ impl<O: IsA<VolumeButton>> VolumeButtonExt for O {
             P: IsA<VolumeButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&VolumeButton::from_glib_borrow(this).unsafe_cast())
+            f(&VolumeButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-symbolic\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_symbolic_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_symbolic_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

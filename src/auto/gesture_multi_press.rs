@@ -84,7 +84,9 @@ impl GestureMultiPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pressed\0".as_ptr() as *const _,
-                Some(transmute(pressed_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    pressed_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -111,7 +113,9 @@ impl GestureMultiPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"released\0".as_ptr() as *const _,
-                Some(transmute(released_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    released_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -130,7 +134,9 @@ impl GestureMultiPress {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stopped\0".as_ptr() as *const _,
-                Some(transmute(stopped_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    stopped_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -176,10 +182,11 @@ impl GestureMultiPressBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GestureMultiPress::static_type(), &properties)
+        let ret = glib::Object::new(GestureMultiPress::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GestureMultiPress>()
+            .expect("downcast");
+        ret
     }
 
     pub fn button(mut self, button: u32) -> Self {

@@ -150,10 +150,11 @@ impl FileChooserNativeBuilder {
         if let Some(ref use_preview_label) = self.use_preview_label {
             properties.push(("use-preview-label", use_preview_label));
         }
-        glib::Object::new(FileChooserNative::static_type(), &properties)
+        let ret = glib::Object::new(FileChooserNative::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FileChooserNative>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accept_label(mut self, accept_label: &str) -> Self {
@@ -375,15 +376,15 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
             P: IsA<FileChooserNative>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accept-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_accept_label_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accept_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -402,15 +403,15 @@ impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
             P: IsA<FileChooserNative>,
         {
             let f: &F = &*(f as *const F);
-            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast())
+            f(&FileChooserNative::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cancel-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cancel_label_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_cancel_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

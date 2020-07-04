@@ -40,7 +40,7 @@ impl CheckMenuItem {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_check_menu_item_new()).unsafe_cast() }
     }
 
-    pub fn new_with_label(label: &str) -> CheckMenuItem {
+    pub fn with_label(label: &str) -> CheckMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_check_menu_item_new_with_label(
@@ -50,7 +50,7 @@ impl CheckMenuItem {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> CheckMenuItem {
+    pub fn with_mnemonic(label: &str) -> CheckMenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_check_menu_item_new_with_mnemonic(
@@ -262,10 +262,11 @@ impl CheckMenuItemBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(CheckMenuItem::static_type(), &properties)
+        let ret = glib::Object::new(CheckMenuItem::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CheckMenuItem>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {
@@ -591,14 +592,16 @@ impl<O: IsA<CheckMenuItem>> CheckMenuItemExt for O {
             P: IsA<CheckMenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggled\0".as_ptr() as *const _,
-                Some(transmute(toggled_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggled_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -613,14 +616,16 @@ impl<O: IsA<CheckMenuItem>> CheckMenuItemExt for O {
             P: IsA<CheckMenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -638,15 +643,15 @@ impl<O: IsA<CheckMenuItem>> CheckMenuItemExt for O {
             P: IsA<CheckMenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::draw-as-radio\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_draw_as_radio_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_draw_as_radio_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -665,15 +670,15 @@ impl<O: IsA<CheckMenuItem>> CheckMenuItemExt for O {
             P: IsA<CheckMenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&CheckMenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inconsistent\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_inconsistent_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inconsistent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

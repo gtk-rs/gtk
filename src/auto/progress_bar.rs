@@ -216,10 +216,11 @@ impl ProgressBarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(ProgressBar::static_type(), &properties)
+        let ret = glib::Object::new(ProgressBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ProgressBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn ellipsize(mut self, ellipsize: pango::EllipsizeMode) -> Self {
@@ -562,14 +563,16 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
             P: IsA<ProgressBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
+            f(&ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ellipsize\0".as_ptr() as *const _,
-                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_ellipsize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -584,14 +587,16 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
             P: IsA<ProgressBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
+            f(&ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fraction\0".as_ptr() as *const _,
-                Some(transmute(notify_fraction_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_fraction_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -606,14 +611,16 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
             P: IsA<ProgressBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
+            f(&ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inverted_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -628,14 +635,16 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
             P: IsA<ProgressBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
+            f(&ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pulse-step\0".as_ptr() as *const _,
-                Some(transmute(notify_pulse_step_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pulse_step_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -650,14 +659,16 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
             P: IsA<ProgressBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
+            f(&ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-text\0".as_ptr() as *const _,
-                Some(transmute(notify_show_text_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_text_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -672,14 +683,16 @@ impl<O: IsA<ProgressBar>> ProgressBarExt for O {
             P: IsA<ProgressBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&ProgressBar::from_glib_borrow(this).unsafe_cast())
+            f(&ProgressBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

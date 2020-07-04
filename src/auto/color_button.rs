@@ -45,7 +45,7 @@ impl ColorButton {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_color_button_new()).unsafe_cast() }
     }
 
-    pub fn new_with_rgba(rgba: &gdk::RGBA) -> ColorButton {
+    pub fn with_rgba(rgba: &gdk::RGBA) -> ColorButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_color_button_new_with_rgba(
@@ -273,10 +273,11 @@ impl ColorButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(ColorButton::static_type(), &properties)
+        let ret = glib::Object::new(ColorButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ColorButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn alpha(mut self, alpha: u32) -> Self {
@@ -631,14 +632,16 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
             P: IsA<ColorButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorButton::from_glib_borrow(this).unsafe_cast())
+            f(&ColorButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"color-set\0".as_ptr() as *const _,
-                Some(transmute(color_set_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    color_set_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -653,14 +656,16 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
             P: IsA<ColorButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorButton::from_glib_borrow(this).unsafe_cast())
+            f(&ColorButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::alpha\0".as_ptr() as *const _,
-                Some(transmute(notify_alpha_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_alpha_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -675,14 +680,16 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
             P: IsA<ColorButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorButton::from_glib_borrow(this).unsafe_cast())
+            f(&ColorButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::rgba\0".as_ptr() as *const _,
-                Some(transmute(notify_rgba_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_rgba_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -698,14 +705,16 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
             P: IsA<ColorButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorButton::from_glib_borrow(this).unsafe_cast())
+            f(&ColorButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-editor\0".as_ptr() as *const _,
-                Some(transmute(notify_show_editor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_editor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -720,14 +729,16 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
             P: IsA<ColorButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorButton::from_glib_borrow(this).unsafe_cast())
+            f(&ColorButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_title_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -742,14 +753,16 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
             P: IsA<ColorButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorButton::from_glib_borrow(this).unsafe_cast())
+            f(&ColorButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-alpha\0".as_ptr() as *const _,
-                Some(transmute(notify_use_alpha_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_alpha_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

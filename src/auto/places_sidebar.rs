@@ -387,7 +387,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"drag-action-ask\0".as_ptr() as *const _,
-                Some(transmute(drag_action_ask_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    drag_action_ask_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -413,7 +415,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mount\0".as_ptr() as *const _,
-                Some(transmute(mount_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    mount_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -443,7 +447,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"open-location\0".as_ptr() as *const _,
-                Some(transmute(open_location_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    open_location_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -470,7 +476,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-connect-to-server\0".as_ptr() as *const _,
-                Some(transmute(show_connect_to_server_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_connect_to_server_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -492,7 +500,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-enter-location\0".as_ptr() as *const _,
-                Some(transmute(show_enter_location_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_enter_location_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -522,7 +532,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-error-message\0".as_ptr() as *const _,
-                Some(transmute(show_error_message_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_error_message_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -546,7 +558,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-other-locations\0".as_ptr() as *const _,
-                Some(transmute(show_other_locations_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_other_locations_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -574,8 +588,8 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-other-locations-with-flags\0".as_ptr() as *const _,
-                Some(transmute(
-                    show_other_locations_with_flags_trampoline::<F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_other_locations_with_flags_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -602,7 +616,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"show-starred-location\0".as_ptr() as *const _,
-                Some(transmute(show_starred_location_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    show_starred_location_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -628,7 +644,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unmount\0".as_ptr() as *const _,
-                Some(transmute(unmount_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    unmount_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -651,7 +669,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::local-only\0".as_ptr() as *const _,
-                Some(transmute(notify_local_only_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_local_only_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -674,7 +694,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::location\0".as_ptr() as *const _,
-                Some(transmute(notify_location_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_location_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -697,7 +719,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::open-flags\0".as_ptr() as *const _,
-                Some(transmute(notify_open_flags_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_open_flags_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -721,7 +745,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::populate-all\0".as_ptr() as *const _,
-                Some(transmute(notify_populate_all_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_populate_all_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -746,8 +772,8 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-connect-to-server\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_connect_to_server_trampoline::<F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_connect_to_server_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -771,7 +797,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-desktop\0".as_ptr() as *const _,
-                Some(transmute(notify_show_desktop_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_desktop_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -796,8 +824,8 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-enter-location\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_enter_location_trampoline::<F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_enter_location_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -823,8 +851,8 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-other-locations\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_other_locations_trampoline::<F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_other_locations_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -848,7 +876,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-recent\0".as_ptr() as *const _,
-                Some(transmute(notify_show_recent_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_recent_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -874,8 +904,8 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-starred-location\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_starred_location_trampoline::<F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_starred_location_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -899,7 +929,9 @@ impl PlacesSidebar {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-trash\0".as_ptr() as *const _,
-                Some(transmute(notify_show_trash_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_trash_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1195,10 +1227,11 @@ impl PlacesSidebarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(PlacesSidebar::static_type(), &properties)
+        let ret = glib::Object::new(PlacesSidebar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<PlacesSidebar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn local_only(mut self, local_only: bool) -> Self {

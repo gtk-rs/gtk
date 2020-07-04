@@ -351,10 +351,11 @@ impl FontChooserDialogBuilder {
         if let Some(ref show_preview_entry) = self.show_preview_entry {
             properties.push(("show-preview-entry", show_preview_entry));
         }
-        glib::Object::new(FontChooserDialog::static_type(), &properties)
+        let ret = glib::Object::new(FontChooserDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FontChooserDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn use_header_bar(mut self, use_header_bar: i32) -> Self {

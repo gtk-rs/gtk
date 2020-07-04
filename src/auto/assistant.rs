@@ -325,10 +325,11 @@ impl AssistantBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Assistant::static_type(), &properties)
+        let ret = glib::Object::new(Assistant::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Assistant>()
+            .expect("downcast");
+        ret
     }
 
     pub fn use_header_bar(mut self, use_header_bar: i32) -> Self {
@@ -1078,14 +1079,16 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"apply\0".as_ptr() as *const _,
-                Some(transmute(apply_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    apply_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1099,14 +1102,16 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel\0".as_ptr() as *const _,
-                Some(transmute(cancel_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cancel_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1120,14 +1125,16 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(transmute(close_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    close_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1141,14 +1148,16 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             P: IsA<Assistant>,
         {
             let f: &F = &*(f as *const F);
-            f(&Assistant::from_glib_borrow(this).unsafe_cast())
+            f(&Assistant::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"escape\0".as_ptr() as *const _,
-                Some(transmute(escape_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    escape_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1156,7 +1165,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
 
     fn emit_escape(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("escape", &[])
                 .unwrap()
         };
@@ -1172,7 +1181,7 @@ impl<O: IsA<Assistant>> AssistantExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Assistant::from_glib_borrow(this).unsafe_cast(),
+                &Assistant::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(page),
             )
         }
@@ -1181,7 +1190,9 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"prepare\0".as_ptr() as *const _,
-                Some(transmute(prepare_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    prepare_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

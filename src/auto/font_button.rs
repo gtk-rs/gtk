@@ -46,7 +46,7 @@ impl FontButton {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_font_button_new()).unsafe_cast() }
     }
 
-    pub fn new_with_font(fontname: &str) -> FontButton {
+    pub fn with_font(fontname: &str) -> FontButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_font_button_new_with_font(
@@ -306,10 +306,11 @@ impl FontButtonBuilder {
         if let Some(ref show_preview_entry) = self.show_preview_entry {
             properties.push(("show-preview-entry", show_preview_entry));
         }
-        glib::Object::new(FontButton::static_type(), &properties)
+        let ret = glib::Object::new(FontButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FontButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn font_name(mut self, font_name: &str) -> Self {
@@ -747,14 +748,16 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             P: IsA<FontButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FontButton::from_glib_borrow(this).unsafe_cast())
+            f(&FontButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"font-set\0".as_ptr() as *const _,
-                Some(transmute(font_set_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    font_set_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -769,14 +772,16 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             P: IsA<FontButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FontButton::from_glib_borrow(this).unsafe_cast())
+            f(&FontButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::font-name\0".as_ptr() as *const _,
-                Some(transmute(notify_font_name_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_font_name_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -791,14 +796,16 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             P: IsA<FontButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FontButton::from_glib_borrow(this).unsafe_cast())
+            f(&FontButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-size\0".as_ptr() as *const _,
-                Some(transmute(notify_show_size_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -813,14 +820,16 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             P: IsA<FontButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FontButton::from_glib_borrow(this).unsafe_cast())
+            f(&FontButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-style\0".as_ptr() as *const _,
-                Some(transmute(notify_show_style_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_style_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -835,14 +844,16 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             P: IsA<FontButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FontButton::from_glib_borrow(this).unsafe_cast())
+            f(&FontButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_title_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -857,14 +868,16 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             P: IsA<FontButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FontButton::from_glib_borrow(this).unsafe_cast())
+            f(&FontButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-font\0".as_ptr() as *const _,
-                Some(transmute(notify_use_font_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_font_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -879,14 +892,16 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
             P: IsA<FontButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&FontButton::from_glib_borrow(this).unsafe_cast())
+            f(&FontButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-size\0".as_ptr() as *const _,
-                Some(transmute(notify_use_size_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_size_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

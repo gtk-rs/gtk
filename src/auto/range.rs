@@ -355,14 +355,16 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast(), value)
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref(), value)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"adjust-bounds\0".as_ptr() as *const _,
-                Some(transmute(adjust_bounds_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    adjust_bounds_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -386,7 +388,7 @@ impl<O: IsA<Range>> RangeExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Range::from_glib_borrow(this).unsafe_cast(),
+                &Range::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(scroll),
                 value,
             )
@@ -397,7 +399,9 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"change-value\0".as_ptr() as *const _,
-                Some(transmute(change_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    change_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -413,7 +417,7 @@ impl<O: IsA<Range>> RangeExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Range::from_glib_borrow(this).unsafe_cast(),
+                &Range::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
             )
         }
@@ -422,7 +426,9 @@ impl<O: IsA<Range>> RangeExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-slider\0".as_ptr() as *const _,
-                Some(transmute(move_slider_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_slider_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -430,7 +436,7 @@ impl<O: IsA<Range>> RangeExt for O {
 
     fn emit_move_slider(&self, step: ScrollType) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-slider", &[&step])
                 .unwrap()
         };
@@ -444,14 +450,16 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"value-changed\0".as_ptr() as *const _,
-                Some(transmute(value_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    value_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -466,14 +474,16 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::adjustment\0".as_ptr() as *const _,
-                Some(transmute(notify_adjustment_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_adjustment_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -488,14 +498,16 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fill-level\0".as_ptr() as *const _,
-                Some(transmute(notify_fill_level_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_fill_level_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -510,14 +522,16 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inverted_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -535,15 +549,15 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::lower-stepper-sensitivity\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_lower_stepper_sensitivity_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_lower_stepper_sensitivity_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -562,15 +576,15 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::restrict-to-fill-level\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_restrict_to_fill_level_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_restrict_to_fill_level_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -589,15 +603,15 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::round-digits\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_round_digits_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_round_digits_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -616,15 +630,15 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-fill-level\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_fill_level_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_fill_level_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -643,15 +657,15 @@ impl<O: IsA<Range>> RangeExt for O {
             P: IsA<Range>,
         {
             let f: &F = &*(f as *const F);
-            f(&Range::from_glib_borrow(this).unsafe_cast())
+            f(&Range::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::upper-stepper-sensitivity\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_upper_stepper_sensitivity_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_upper_stepper_sensitivity_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -43,7 +43,7 @@ impl TreeViewColumn {
         unsafe { from_glib_none(gtk_sys::gtk_tree_view_column_new()) }
     }
 
-    pub fn new_with_area<P: IsA<CellArea>>(area: &P) -> TreeViewColumn {
+    pub fn with_area<P: IsA<CellArea>>(area: &P) -> TreeViewColumn {
         skip_assert_initialized!();
         unsafe {
             from_glib_none(gtk_sys::gtk_tree_view_column_new_with_area(
@@ -52,7 +52,7 @@ impl TreeViewColumn {
         }
     }
 
-    //pub fn new_with_attributes<P: IsA<CellRenderer>>(title: &str, cell: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeViewColumn {
+    //pub fn with_attributes<P: IsA<CellRenderer>>(title: &str, cell: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> TreeViewColumn {
     //    unsafe { TODO: call gtk_sys:gtk_tree_view_column_new_with_attributes() }
     //}
 }
@@ -142,10 +142,11 @@ impl TreeViewColumnBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(TreeViewColumn::static_type(), &properties)
+        let ret = glib::Object::new(TreeViewColumn::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<TreeViewColumn>()
+            .expect("downcast");
+        ret
     }
 
     pub fn alignment(mut self, alignment: f32) -> Self {
@@ -809,14 +810,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clicked\0".as_ptr() as *const _,
-                Some(transmute(clicked_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    clicked_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -831,14 +834,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::alignment\0".as_ptr() as *const _,
-                Some(transmute(notify_alignment_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_alignment_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -853,14 +858,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::clickable\0".as_ptr() as *const _,
-                Some(transmute(notify_clickable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_clickable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -875,14 +882,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::expand\0".as_ptr() as *const _,
-                Some(transmute(notify_expand_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_expand_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -897,14 +906,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::fixed-width\0".as_ptr() as *const _,
-                Some(transmute(notify_fixed_width_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_fixed_width_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -919,14 +930,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-width\0".as_ptr() as *const _,
-                Some(transmute(notify_max_width_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_width_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -941,14 +954,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-width\0".as_ptr() as *const _,
-                Some(transmute(notify_min_width_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_width_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -963,14 +978,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::reorderable\0".as_ptr() as *const _,
-                Some(transmute(notify_reorderable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_reorderable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -985,14 +1002,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::resizable\0".as_ptr() as *const _,
-                Some(transmute(notify_resizable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_resizable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1007,14 +1026,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sizing\0".as_ptr() as *const _,
-                Some(transmute(notify_sizing_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_sizing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1032,15 +1053,15 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-column-id\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_sort_column_id_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_sort_column_id_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1059,15 +1080,15 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-indicator\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_sort_indicator_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_sort_indicator_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1083,14 +1104,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sort-order\0".as_ptr() as *const _,
-                Some(transmute(notify_sort_order_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_sort_order_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1105,14 +1128,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(transmute(notify_spacing_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1127,14 +1152,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_title_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1149,14 +1176,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible\0".as_ptr() as *const _,
-                Some(transmute(notify_visible_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visible_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1171,14 +1200,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::widget\0".as_ptr() as *const _,
-                Some(transmute(notify_widget_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_widget_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1193,14 +1224,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::width\0".as_ptr() as *const _,
-                Some(transmute(notify_width_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_width_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1215,14 +1248,16 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
             P: IsA<TreeViewColumn>,
         {
             let f: &F = &*(f as *const F);
-            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast())
+            f(&TreeViewColumn::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::x-offset\0".as_ptr() as *const _,
-                Some(transmute(notify_x_offset_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_x_offset_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

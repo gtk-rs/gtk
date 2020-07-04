@@ -43,7 +43,7 @@ impl ToggleButton {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_toggle_button_new()).unsafe_cast() }
     }
 
-    pub fn new_with_label(label: &str) -> ToggleButton {
+    pub fn with_label(label: &str) -> ToggleButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_toggle_button_new_with_label(
@@ -53,7 +53,7 @@ impl ToggleButton {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> ToggleButton {
+    pub fn with_mnemonic(label: &str) -> ToggleButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_toggle_button_new_with_mnemonic(
@@ -269,10 +269,11 @@ impl ToggleButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(ToggleButton::static_type(), &properties)
+        let ret = glib::Object::new(ToggleButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ToggleButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {
@@ -632,14 +633,16 @@ impl<O: IsA<ToggleButton>> ToggleButtonExt for O {
             P: IsA<ToggleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToggleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToggleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggled\0".as_ptr() as *const _,
-                Some(transmute(toggled_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggled_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -654,14 +657,16 @@ impl<O: IsA<ToggleButton>> ToggleButtonExt for O {
             P: IsA<ToggleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToggleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToggleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -679,15 +684,15 @@ impl<O: IsA<ToggleButton>> ToggleButtonExt for O {
             P: IsA<ToggleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToggleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToggleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::draw-indicator\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_draw_indicator_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_draw_indicator_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -706,15 +711,15 @@ impl<O: IsA<ToggleButton>> ToggleButtonExt for O {
             P: IsA<ToggleButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToggleButton::from_glib_borrow(this).unsafe_cast())
+            f(&ToggleButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inconsistent\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_inconsistent_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inconsistent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

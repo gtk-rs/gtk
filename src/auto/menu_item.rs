@@ -44,7 +44,7 @@ impl MenuItem {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_menu_item_new()).unsafe_cast() }
     }
 
-    pub fn new_with_label(label: &str) -> MenuItem {
+    pub fn with_label(label: &str) -> MenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_menu_item_new_with_label(
@@ -54,7 +54,7 @@ impl MenuItem {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> MenuItem {
+    pub fn with_mnemonic(label: &str) -> MenuItem {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_menu_item_new_with_mnemonic(
@@ -254,10 +254,11 @@ impl MenuItemBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(MenuItem::static_type(), &properties)
+        let ret = glib::Object::new(MenuItem::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MenuItem>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accel_path(mut self, accel_path: &str) -> Self {
@@ -681,14 +682,16 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(transmute(activate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -696,7 +699,7 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
 
     fn emit_activate(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate", &[])
                 .unwrap()
         };
@@ -710,14 +713,16 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-item\0".as_ptr() as *const _,
-                Some(transmute(activate_item_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_item_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -731,14 +736,16 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"deselect\0".as_ptr() as *const _,
-                Some(transmute(deselect_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    deselect_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -752,14 +759,16 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select\0".as_ptr() as *const _,
-                Some(transmute(select_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -774,15 +783,15 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast(), object)
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref(), object)
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-size-allocate\0".as_ptr() as *const _,
-                Some(transmute(
-                    toggle_size_allocate_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_size_allocate_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -802,14 +811,16 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-path\0".as_ptr() as *const _,
-                Some(transmute(notify_accel_path_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_path_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -824,14 +835,16 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -849,15 +862,15 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::right-justified\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_right_justified_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_right_justified_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -873,14 +886,16 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::submenu\0".as_ptr() as *const _,
-                Some(transmute(notify_submenu_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_submenu_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -898,15 +913,15 @@ impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
             P: IsA<MenuItem>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+            f(&MenuItem::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_underline_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_underline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
