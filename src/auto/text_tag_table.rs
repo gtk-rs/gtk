@@ -119,7 +119,7 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextTagTable::from_glib_borrow(this).unsafe_cast(),
+                &TextTagTable::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(tag),
             )
         }
@@ -128,7 +128,9 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-added\0".as_ptr() as *const _,
-                Some(transmute(tag_added_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    tag_added_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -145,7 +147,7 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextTagTable::from_glib_borrow(this).unsafe_cast(),
+                &TextTagTable::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(tag),
                 from_glib(size_changed),
             )
@@ -155,7 +157,9 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-changed\0".as_ptr() as *const _,
-                Some(transmute(tag_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    tag_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -171,7 +175,7 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextTagTable::from_glib_borrow(this).unsafe_cast(),
+                &TextTagTable::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(tag),
             )
         }
@@ -180,7 +184,9 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"tag-removed\0".as_ptr() as *const _,
-                Some(transmute(tag_removed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    tag_removed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

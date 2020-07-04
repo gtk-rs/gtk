@@ -243,10 +243,11 @@ impl PopoverMenuBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(PopoverMenu::static_type(), &properties)
+        let ret = glib::Object::new(PopoverMenu::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<PopoverMenu>()
+            .expect("downcast");
+        ret
     }
 
     pub fn visible_submenu(mut self, visible_submenu: &str) -> Self {
@@ -587,15 +588,15 @@ impl<O: IsA<PopoverMenu>> PopoverMenuExt for O {
             P: IsA<PopoverMenu>,
         {
             let f: &F = &*(f as *const F);
-            f(&PopoverMenu::from_glib_borrow(this).unsafe_cast())
+            f(&PopoverMenu::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-submenu\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_submenu_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visible_submenu_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -61,7 +61,7 @@ impl TextView {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_text_view_new()).unsafe_cast() }
     }
 
-    pub fn new_with_buffer<P: IsA<TextBuffer>>(buffer: &P) -> TextView {
+    pub fn with_buffer<P: IsA<TextBuffer>>(buffer: &P) -> TextView {
         skip_assert_initialized!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_text_view_new_with_buffer(
@@ -341,10 +341,11 @@ impl TextViewBuilder {
         if let Some(ref vscroll_policy) = self.vscroll_policy {
             properties.push(("vscroll-policy", vscroll_policy));
         }
-        glib::Object::new(TextView::static_type(), &properties)
+        let ret = glib::Object::new(TextView::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<TextView>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accepts_tab(mut self, accepts_tab: bool) -> Self {
@@ -1724,14 +1725,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"backspace\0".as_ptr() as *const _,
-                Some(transmute(backspace_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    backspace_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1739,7 +1742,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_backspace(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("backspace", &[])
                 .unwrap()
         };
@@ -1753,14 +1756,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"copy-clipboard\0".as_ptr() as *const _,
-                Some(transmute(copy_clipboard_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    copy_clipboard_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1768,7 +1773,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_copy_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("copy-clipboard", &[])
                 .unwrap()
         };
@@ -1782,14 +1787,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cut-clipboard\0".as_ptr() as *const _,
-                Some(transmute(cut_clipboard_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cut_clipboard_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1797,7 +1804,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_cut_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cut-clipboard", &[])
                 .unwrap()
         };
@@ -1820,7 +1827,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(type_),
                 count,
             )
@@ -1830,7 +1837,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"delete-from-cursor\0".as_ptr() as *const _,
-                Some(transmute(delete_from_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    delete_from_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1838,7 +1847,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_delete_from_cursor(&self, type_: DeleteType, count: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("delete-from-cursor", &[&type_, &count])
                 .unwrap()
         };
@@ -1875,7 +1884,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(granularity),
                 &from_glib_borrow(location),
                 &from_glib_borrow(start),
@@ -1888,7 +1897,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"extend-selection\0".as_ptr() as *const _,
-                Some(transmute(extend_selection_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    extend_selection_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1904,7 +1915,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(string),
             )
         }
@@ -1913,7 +1924,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-at-cursor\0".as_ptr() as *const _,
-                Some(transmute(insert_at_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_at_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1921,7 +1934,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_insert_at_cursor(&self, string: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("insert-at-cursor", &[&string])
                 .unwrap()
         };
@@ -1936,14 +1949,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-emoji\0".as_ptr() as *const _,
-                Some(transmute(insert_emoji_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_emoji_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1952,7 +1967,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
     #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn emit_insert_emoji(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("insert-emoji", &[])
                 .unwrap()
         };
@@ -1976,7 +1991,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
                 from_glib(extend_selection),
@@ -1987,7 +2002,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1995,7 +2012,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-cursor", &[&step, &count, &extend_selection])
                 .unwrap()
         };
@@ -2015,7 +2032,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
             )
@@ -2025,7 +2042,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-viewport\0".as_ptr() as *const _,
-                Some(transmute(move_viewport_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_viewport_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2033,7 +2052,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_move_viewport(&self, step: ScrollStep, count: i32) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-viewport", &[&step, &count])
                 .unwrap()
         };
@@ -2047,14 +2066,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"paste-clipboard\0".as_ptr() as *const _,
-                Some(transmute(paste_clipboard_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    paste_clipboard_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2062,7 +2083,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_paste_clipboard(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("paste-clipboard", &[])
                 .unwrap()
         };
@@ -2078,7 +2099,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(popup),
             )
         }
@@ -2087,7 +2108,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"populate-popup\0".as_ptr() as *const _,
-                Some(transmute(populate_popup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    populate_popup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2103,7 +2126,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(preedit),
             )
         }
@@ -2112,7 +2135,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"preedit-changed\0".as_ptr() as *const _,
-                Some(transmute(preedit_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    preedit_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2120,7 +2145,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_preedit_changed(&self, preedit: &str) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("preedit-changed", &[&preedit])
                 .unwrap()
         };
@@ -2136,7 +2161,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &TextView::from_glib_borrow(this).unsafe_cast(),
+                &TextView::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(select),
             )
         }
@@ -2145,7 +2170,9 @@ impl<O: IsA<TextView>> TextViewExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(transmute(select_all_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2153,7 +2180,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_select_all(&self, select: bool) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("select-all", &[&select])
                 .unwrap()
         };
@@ -2167,14 +2194,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"set-anchor\0".as_ptr() as *const _,
-                Some(transmute(set_anchor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    set_anchor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2182,7 +2211,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_set_anchor(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("set-anchor", &[])
                 .unwrap()
         };
@@ -2196,15 +2225,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-visible\0".as_ptr() as *const _,
-                Some(transmute(
-                    toggle_cursor_visible_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_cursor_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2213,7 +2242,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_toggle_cursor_visible(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-cursor-visible", &[])
                 .unwrap()
         };
@@ -2227,14 +2256,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-overwrite\0".as_ptr() as *const _,
-                Some(transmute(toggle_overwrite_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_overwrite_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2242,7 +2273,7 @@ impl<O: IsA<TextView>> TextViewExt for O {
 
     fn emit_toggle_overwrite(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-overwrite", &[])
                 .unwrap()
         };
@@ -2257,14 +2288,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accepts-tab\0".as_ptr() as *const _,
-                Some(transmute(notify_accepts_tab_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accepts_tab_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2283,15 +2316,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bottom-margin\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_bottom_margin_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_bottom_margin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2307,14 +2340,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer\0".as_ptr() as *const _,
-                Some(transmute(notify_buffer_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_buffer_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2332,15 +2367,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::cursor-visible\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_cursor_visible_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_cursor_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2356,14 +2391,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::editable\0".as_ptr() as *const _,
-                Some(transmute(notify_editable_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_editable_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2378,14 +2415,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::im-module\0".as_ptr() as *const _,
-                Some(transmute(notify_im_module_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_im_module_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2400,14 +2439,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::indent\0".as_ptr() as *const _,
-                Some(transmute(notify_indent_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_indent_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2422,14 +2463,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-hints\0".as_ptr() as *const _,
-                Some(transmute(notify_input_hints_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_input_hints_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2447,15 +2490,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::input-purpose\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_input_purpose_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_input_purpose_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2474,15 +2517,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::justification\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_justification_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_justification_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2498,14 +2541,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::left-margin\0".as_ptr() as *const _,
-                Some(transmute(notify_left_margin_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_left_margin_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2520,14 +2565,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::monospace\0".as_ptr() as *const _,
-                Some(transmute(notify_monospace_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_monospace_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2542,14 +2589,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::overwrite\0".as_ptr() as *const _,
-                Some(transmute(notify_overwrite_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_overwrite_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2567,15 +2616,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-above-lines\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixels_above_lines_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pixels_above_lines_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2594,15 +2643,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-below-lines\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixels_below_lines_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pixels_below_lines_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2621,15 +2670,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pixels-inside-wrap\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_pixels_inside_wrap_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pixels_inside_wrap_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2648,15 +2697,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::populate-all\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_populate_all_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_populate_all_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2675,15 +2724,15 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::right-margin\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_right_margin_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_right_margin_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -2699,14 +2748,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tabs\0".as_ptr() as *const _,
-                Some(transmute(notify_tabs_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_tabs_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2722,14 +2773,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::top-margin\0".as_ptr() as *const _,
-                Some(transmute(notify_top_margin_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_top_margin_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -2744,14 +2797,16 @@ impl<O: IsA<TextView>> TextViewExt for O {
             P: IsA<TextView>,
         {
             let f: &F = &*(f as *const F);
-            f(&TextView::from_glib_borrow(this).unsafe_cast())
+            f(&TextView::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-mode\0".as_ptr() as *const _,
-                Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wrap_mode_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

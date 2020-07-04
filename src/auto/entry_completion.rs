@@ -38,7 +38,7 @@ impl EntryCompletion {
         unsafe { from_glib_full(gtk_sys::gtk_entry_completion_new()) }
     }
 
-    pub fn new_with_area<P: IsA<CellArea>>(area: &P) -> EntryCompletion {
+    pub fn with_area<P: IsA<CellArea>>(area: &P) -> EntryCompletion {
         skip_assert_initialized!();
         unsafe {
             from_glib_full(gtk_sys::gtk_entry_completion_new_with_area(
@@ -101,10 +101,11 @@ impl EntryCompletionBuilder {
         if let Some(ref text_column) = self.text_column {
             properties.push(("text-column", text_column));
         }
-        glib::Object::new(EntryCompletion::static_type(), &properties)
+        let ret = glib::Object::new(EntryCompletion::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<EntryCompletion>()
+            .expect("downcast");
+        ret
     }
 
     pub fn cell_area<P: IsA<CellArea>>(mut self, cell_area: &P) -> Self {
@@ -407,7 +408,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             user_data: glib_sys::gpointer,
         ) -> glib_sys::gboolean {
             let completion = from_glib_borrow(completion);
-            let key: GString = from_glib_borrow(key);
+            let key: Borrowed<GString> = from_glib_borrow(key);
             let iter = from_glib_borrow(iter);
             let callback: &P = &*(user_data as *mut _);
             let res = (*callback)(&completion, key.as_str(), &iter);
@@ -508,7 +509,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &EntryCompletion::from_glib_borrow(this).unsafe_cast(),
+                &EntryCompletion::from_glib_borrow(this).unsafe_cast_ref(),
                 index,
             )
         }
@@ -517,7 +518,9 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"action-activated\0".as_ptr() as *const _,
-                Some(transmute(action_activated_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    action_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -543,7 +546,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &EntryCompletion::from_glib_borrow(this).unsafe_cast(),
+                &EntryCompletion::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(model),
                 &from_glib_borrow(iter),
             )
@@ -554,7 +557,9 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cursor-on-match\0".as_ptr() as *const _,
-                Some(transmute(cursor_on_match_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cursor_on_match_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -577,7 +582,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &EntryCompletion::from_glib_borrow(this).unsafe_cast(),
+                &EntryCompletion::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(prefix),
             )
             .to_glib()
@@ -587,7 +592,9 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert-prefix\0".as_ptr() as *const _,
-                Some(transmute(insert_prefix_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_prefix_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -613,7 +620,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &EntryCompletion::from_glib_borrow(this).unsafe_cast(),
+                &EntryCompletion::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(model),
                 &from_glib_borrow(iter),
             )
@@ -624,7 +631,9 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"match-selected\0".as_ptr() as *const _,
-                Some(transmute(match_selected_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    match_selected_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -638,14 +647,16 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"no-matches\0".as_ptr() as *const _,
-                Some(transmute(no_matches_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    no_matches_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -663,15 +674,15 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inline-completion\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_inline_completion_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inline_completion_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -690,15 +701,15 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inline-selection\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_inline_selection_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inline_selection_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -717,15 +728,15 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::minimum-key-length\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_minimum_key_length_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_minimum_key_length_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -741,14 +752,16 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_model_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -766,15 +779,15 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-completion\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_popup_completion_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_popup_completion_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -793,15 +806,15 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-set-width\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_popup_set_width_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_popup_set_width_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -820,15 +833,15 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup-single-match\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_popup_single_match_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_popup_single_match_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -844,14 +857,16 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
             P: IsA<EntryCompletion>,
         {
             let f: &F = &*(f as *const F);
-            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
+            f(&EntryCompletion::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-column\0".as_ptr() as *const _,
-                Some(transmute(notify_text_column_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_column_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -376,10 +376,11 @@ impl SearchEntryBuilder {
         if let Some(ref editing_canceled) = self.editing_canceled {
             properties.push(("editing-canceled", editing_canceled));
         }
-        glib::Object::new(SearchEntry::static_type(), &properties)
+        let ret = glib::Object::new(SearchEntry::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<SearchEntry>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activates_default(mut self, activates_default: bool) -> Self {
@@ -806,14 +807,16 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             P: IsA<SearchEntry>,
         {
             let f: &F = &*(f as *const F);
-            f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
+            f(&SearchEntry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"next-match\0".as_ptr() as *const _,
-                Some(transmute(next_match_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    next_match_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -822,7 +825,7 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn emit_next_match(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("next-match", &[])
                 .unwrap()
         };
@@ -837,14 +840,16 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             P: IsA<SearchEntry>,
         {
             let f: &F = &*(f as *const F);
-            f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
+            f(&SearchEntry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"previous-match\0".as_ptr() as *const _,
-                Some(transmute(previous_match_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    previous_match_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -853,7 +858,7 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn emit_previous_match(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("previous-match", &[])
                 .unwrap()
         };
@@ -867,14 +872,16 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             P: IsA<SearchEntry>,
         {
             let f: &F = &*(f as *const F);
-            f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
+            f(&SearchEntry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"search-changed\0".as_ptr() as *const _,
-                Some(transmute(search_changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    search_changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -889,14 +896,16 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
             P: IsA<SearchEntry>,
         {
             let f: &F = &*(f as *const F);
-            f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
+            f(&SearchEntry::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stop-search\0".as_ptr() as *const _,
-                Some(transmute(stop_search_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    stop_search_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -905,7 +914,7 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn emit_stop_search(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("stop-search", &[])
                 .unwrap()
         };

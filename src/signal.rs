@@ -95,7 +95,9 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"changed\0".as_ptr() as *mut _,
-                    Some(transmute(trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -110,7 +112,9 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"delete-text\0".as_ptr() as *mut _,
-                    Some(transmute(delete_trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        delete_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -125,7 +129,9 @@ mod editable {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"insert-text\0".as_ptr() as *mut _,
-                    Some(transmute(insert_trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        insert_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -136,7 +142,7 @@ mod editable {
     where
         T: IsA<Editable>,
     {
-        f(&Editable::from_glib_borrow(this).unsafe_cast());
+        f(&Editable::from_glib_borrow(this).unsafe_cast_ref());
     }
 
     unsafe extern "C" fn delete_trampoline<T, F: Fn(&T, i32, i32) + 'static>(
@@ -148,7 +154,7 @@ mod editable {
         T: IsA<Editable>,
     {
         f(
-            &Editable::from_glib_borrow(this).unsafe_cast(),
+            &Editable::from_glib_borrow(this).unsafe_cast_ref(),
             start_pos,
             end_pos,
         );
@@ -170,9 +176,10 @@ mod editable {
         };
         let string = str::from_utf8(buf).unwrap();
         f(
-            &Editable::from_glib_borrow(this).unsafe_cast(),
+            &Editable::from_glib_borrow(this).unsafe_cast_ref(),
             string,
-            transmute(position),
+            // To cast a mutable pointer into a mutable reference.
+            &mut *position,
         );
     }
 }
@@ -220,7 +227,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"change_value\0".as_ptr() as *mut _,
-                    Some(transmute(change_trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        change_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -235,7 +244,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"input\0".as_ptr() as *mut _,
-                    Some(transmute(input_trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        input_trampoline::<Self, F> as *const (),
+                    )),
                     Box_::into_raw(f),
                 )
             }
@@ -250,7 +261,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"output\0".as_ptr() as *mut _,
-                    Some(transmute(output_trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        output_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -265,7 +278,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"value-changed\0".as_ptr() as *mut _,
-                    Some(transmute(trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -280,7 +295,9 @@ mod spin_button {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"wrapped\0".as_ptr() as *mut _,
-                    Some(transmute(trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -294,7 +311,10 @@ mod spin_button {
     ) where
         T: IsA<SpinButton>,
     {
-        f(&SpinButton::from_glib_borrow(this).unsafe_cast(), scroll)
+        f(
+            &SpinButton::from_glib_borrow(this).unsafe_cast_ref(),
+            scroll,
+        )
     }
 
     unsafe extern "C" fn input_trampoline<T, F: Fn(&T) -> Option<Result<f64, ()>> + 'static>(
@@ -305,7 +325,7 @@ mod spin_button {
     where
         T: IsA<SpinButton>,
     {
-        match f(&SpinButton::from_glib_borrow(this).unsafe_cast()) {
+        match f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref()) {
             Some(Ok(v)) => {
                 *new_value = v;
                 GTRUE
@@ -322,14 +342,14 @@ mod spin_button {
     where
         T: IsA<SpinButton>,
     {
-        f(&SpinButton::from_glib_borrow(this).unsafe_cast()).to_glib()
+        f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
     }
 
     unsafe extern "C" fn trampoline<T, F: Fn(&T) + 'static>(this: *mut GtkSpinButton, f: &F)
     where
         T: IsA<SpinButton>,
     {
-        f(&SpinButton::from_glib_borrow(this).unsafe_cast())
+        f(&SpinButton::from_glib_borrow(this).unsafe_cast_ref())
     }
 }
 
@@ -363,7 +383,9 @@ mod overlay {
                 connect_raw(
                     self.to_glib_none().0 as *mut _,
                     b"get-child-position\0".as_ptr() as *mut _,
-                    Some(transmute(get_child_position_trampoline::<Self, F> as usize)),
+                    Some(transmute::<_, unsafe extern "C" fn()>(
+                        get_child_position_trampoline::<Self, F> as *const (),
+                    )),
                     Box::into_raw(f),
                 )
             }
@@ -384,7 +406,7 @@ mod overlay {
     {
         let f: &F = &*(f as *const F);
         match f(
-            &Overlay::from_glib_borrow(this).unsafe_cast(),
+            &Overlay::from_glib_borrow(this).unsafe_cast_ref(),
             &from_glib_borrow(widget),
         ) {
             Some(rect) => {

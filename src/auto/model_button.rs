@@ -319,7 +319,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -343,7 +345,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::centered\0".as_ptr() as *const _,
-                Some(transmute(notify_centered_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_centered_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -367,7 +371,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::icon\0".as_ptr() as *const _,
-                Some(transmute(notify_icon_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_icon_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -391,7 +397,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::iconic\0".as_ptr() as *const _,
-                Some(transmute(notify_iconic_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_iconic_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -415,7 +423,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inverted_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -439,7 +449,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu-name\0".as_ptr() as *const _,
-                Some(transmute(notify_menu_name_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_menu_name_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -463,7 +475,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::role\0".as_ptr() as *const _,
-                Some(transmute(notify_role_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_role_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -487,7 +501,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -511,7 +527,9 @@ impl ModelButton {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-markup\0".as_ptr() as *const _,
-                Some(transmute(notify_use_markup_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_markup_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -784,10 +802,11 @@ impl ModelButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(ModelButton::static_type(), &properties)
+        let ret = glib::Object::new(ModelButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ModelButton>()
+            .expect("downcast");
+        ret
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]

@@ -266,10 +266,11 @@ impl RecentChooserWidgetBuilder {
         if let Some(ref sort_type) = self.sort_type {
             properties.push(("sort-type", sort_type));
         }
-        glib::Object::new(RecentChooserWidget::static_type(), &properties)
+        let ret = glib::Object::new(RecentChooserWidget::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<RecentChooserWidget>()
+            .expect("downcast");
+        ret
     }
 
     pub fn baseline_position(mut self, baseline_position: BaselinePosition) -> Self {

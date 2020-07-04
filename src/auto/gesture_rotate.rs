@@ -63,7 +63,9 @@ impl GestureRotate {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"angle-changed\0".as_ptr() as *const _,
-                Some(transmute(angle_changed_trampoline::<F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    angle_changed_trampoline::<F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -97,10 +99,11 @@ impl GestureRotateBuilder {
         if let Some(ref widget) = self.widget {
             properties.push(("widget", widget));
         }
-        glib::Object::new(GestureRotate::static_type(), &properties)
+        let ret = glib::Object::new(GestureRotate::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<GestureRotate>()
+            .expect("downcast");
+        ret
     }
 
     pub fn n_points(mut self, n_points: u32) -> Self {

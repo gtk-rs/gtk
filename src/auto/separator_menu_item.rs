@@ -225,10 +225,11 @@ impl SeparatorMenuItemBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(SeparatorMenuItem::static_type(), &properties)
+        let ret = glib::Object::new(SeparatorMenuItem::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<SeparatorMenuItem>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accel_path(mut self, accel_path: &str) -> Self {

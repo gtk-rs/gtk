@@ -241,10 +241,11 @@ impl FlowBoxBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(FlowBox::static_type(), &properties)
+        let ret = glib::Object::new(FlowBox::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<FlowBox>()
+            .expect("downcast");
+        ret
     }
 
     pub fn activate_on_single_click(mut self, activate_on_single_click: bool) -> Self {
@@ -950,15 +951,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-cursor-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    activate_cursor_child_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_cursor_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -967,7 +968,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn emit_activate_cursor_child(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate-cursor-child", &[])
                 .unwrap()
         };
@@ -986,7 +987,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &FlowBox::from_glib_borrow(this).unsafe_cast(),
+                &FlowBox::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
             )
         }
@@ -995,7 +996,9 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-activated\0".as_ptr() as *const _,
-                Some(transmute(child_activated_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    child_activated_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1019,7 +1022,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &FlowBox::from_glib_borrow(this).unsafe_cast(),
+                &FlowBox::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(step),
                 count,
             )
@@ -1030,7 +1033,9 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-cursor\0".as_ptr() as *const _,
-                Some(transmute(move_cursor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_cursor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1038,7 +1043,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32) -> bool {
         let res = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-cursor", &[&step, &count])
                 .unwrap()
         };
@@ -1056,14 +1061,16 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-all\0".as_ptr() as *const _,
-                Some(transmute(select_all_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    select_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1071,7 +1078,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn emit_select_all(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("select-all", &[])
                 .unwrap()
         };
@@ -1085,15 +1092,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selected-children-changed\0".as_ptr() as *const _,
-                Some(transmute(
-                    selected_children_changed_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    selected_children_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1108,15 +1115,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"toggle-cursor-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    toggle_cursor_child_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    toggle_cursor_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1125,7 +1132,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn emit_toggle_cursor_child(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("toggle-cursor-child", &[])
                 .unwrap()
         };
@@ -1139,14 +1146,16 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unselect-all\0".as_ptr() as *const _,
-                Some(transmute(unselect_all_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    unselect_all_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1154,7 +1163,7 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn emit_unselect_all(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("unselect-all", &[])
                 .unwrap()
         };
@@ -1172,15 +1181,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_activate_on_single_click_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_activate_on_single_click_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1199,15 +1208,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::column-spacing\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_column_spacing_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_column_spacing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1223,14 +1232,16 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::homogeneous\0".as_ptr() as *const _,
-                Some(transmute(notify_homogeneous_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_homogeneous_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1248,15 +1259,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-children-per-line\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_max_children_per_line_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_children_per_line_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1275,15 +1286,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-children-per-line\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_min_children_per_line_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_min_children_per_line_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1299,14 +1310,16 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::row-spacing\0".as_ptr() as *const _,
-                Some(transmute(notify_row_spacing_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_row_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1324,15 +1337,15 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             P: IsA<FlowBox>,
         {
             let f: &F = &*(f as *const F);
-            f(&FlowBox::from_glib_borrow(this).unsafe_cast())
+            f(&FlowBox::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::selection-mode\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_selection_mode_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_selection_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

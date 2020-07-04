@@ -235,7 +235,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &MenuShell::from_glib_borrow(this).unsafe_cast(),
+                &MenuShell::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(force_hide),
             )
         }
@@ -244,7 +244,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-current\0".as_ptr() as *const _,
-                Some(transmute(activate_current_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_current_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -252,7 +254,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_activate_current(&self, force_hide: bool) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate-current", &[&force_hide])
                 .unwrap()
         };
@@ -266,14 +268,16 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             P: IsA<MenuShell>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuShell::from_glib_borrow(this).unsafe_cast())
+            f(&MenuShell::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cancel\0".as_ptr() as *const _,
-                Some(transmute(cancel_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cancel_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -281,7 +285,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_cancel(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cancel", &[])
                 .unwrap()
         };
@@ -297,7 +301,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &MenuShell::from_glib_borrow(this).unsafe_cast(),
+                &MenuShell::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(direction),
             )
         }
@@ -306,7 +310,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"cycle-focus\0".as_ptr() as *const _,
-                Some(transmute(cycle_focus_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    cycle_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -314,7 +320,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_cycle_focus(&self, direction: DirectionType) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("cycle-focus", &[&direction])
                 .unwrap()
         };
@@ -328,14 +334,16 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             P: IsA<MenuShell>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuShell::from_glib_borrow(this).unsafe_cast())
+            f(&MenuShell::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"deactivate\0".as_ptr() as *const _,
-                Some(transmute(deactivate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    deactivate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -352,7 +360,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &MenuShell::from_glib_borrow(this).unsafe_cast(),
+                &MenuShell::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(child),
                 position,
             )
@@ -362,7 +370,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"insert\0".as_ptr() as *const _,
-                Some(transmute(insert_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    insert_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -381,7 +391,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &MenuShell::from_glib_borrow(this).unsafe_cast(),
+                &MenuShell::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(direction),
             )
         }
@@ -390,7 +400,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-current\0".as_ptr() as *const _,
-                Some(transmute(move_current_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_current_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -398,7 +410,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn emit_move_current(&self, direction: MenuDirectionType) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("move-current", &[&direction])
                 .unwrap()
         };
@@ -420,14 +432,20 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             P: IsA<MenuShell>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuShell::from_glib_borrow(this).unsafe_cast(), distance).to_glib()
+            f(
+                &MenuShell::from_glib_borrow(this).unsafe_cast_ref(),
+                distance,
+            )
+            .to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"move-selected\0".as_ptr() as *const _,
-                Some(transmute(move_selected_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    move_selected_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -441,14 +459,16 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             P: IsA<MenuShell>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuShell::from_glib_borrow(this).unsafe_cast())
+            f(&MenuShell::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"selection-done\0".as_ptr() as *const _,
-                Some(transmute(selection_done_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    selection_done_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -463,14 +483,16 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
             P: IsA<MenuShell>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuShell::from_glib_borrow(this).unsafe_cast())
+            f(&MenuShell::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::take-focus\0".as_ptr() as *const _,
-                Some(transmute(notify_take_focus_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_take_focus_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -318,10 +318,11 @@ impl RecentChooserMenuBuilder {
         if let Some(ref sort_type) = self.sort_type {
             properties.push(("sort-type", sort_type));
         }
-        glib::Object::new(RecentChooserMenu::static_type(), &properties)
+        let ret = glib::Object::new(RecentChooserMenu::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<RecentChooserMenu>()
+            .expect("downcast");
+        ret
     }
 
     pub fn show_numbers(mut self, show_numbers: bool) -> Self {
@@ -656,15 +657,15 @@ impl<O: IsA<RecentChooserMenu>> RecentChooserMenuExt for O {
             P: IsA<RecentChooserMenu>,
         {
             let f: &F = &*(f as *const F);
-            f(&RecentChooserMenu::from_glib_borrow(this).unsafe_cast())
+            f(&RecentChooserMenu::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-numbers\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_numbers_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_numbers_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

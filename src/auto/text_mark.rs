@@ -51,10 +51,11 @@ impl TextMarkBuilder {
         if let Some(ref name) = self.name {
             properties.push(("name", name));
         }
-        glib::Object::new(TextMark::static_type(), &properties)
+        let ret = glib::Object::new(TextMark::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<TextMark>()
+            .expect("downcast");
+        ret
     }
 
     pub fn left_gravity(mut self, left_gravity: bool) -> Self {

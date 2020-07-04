@@ -44,7 +44,7 @@ impl LinkButton {
         }
     }
 
-    pub fn new_with_label(uri: &str, label: Option<&str>) -> LinkButton {
+    pub fn with_label(uri: &str, label: Option<&str>) -> LinkButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_link_button_new_with_label(
@@ -251,10 +251,11 @@ impl LinkButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(LinkButton::static_type(), &properties)
+        let ret = glib::Object::new(LinkButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<LinkButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn uri(mut self, uri: &str) -> Self {
@@ -549,14 +550,16 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
             P: IsA<LinkButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&LinkButton::from_glib_borrow(this).unsafe_cast()).to_glib()
+            f(&LinkButton::from_glib_borrow(this).unsafe_cast_ref()).to_glib()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-link\0".as_ptr() as *const _,
-                Some(transmute(activate_link_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_link_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -571,14 +574,16 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
             P: IsA<LinkButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&LinkButton::from_glib_borrow(this).unsafe_cast())
+            f(&LinkButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(transmute(notify_uri_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_uri_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -593,14 +598,16 @@ impl<O: IsA<LinkButton>> LinkButtonExt for O {
             P: IsA<LinkButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&LinkButton::from_glib_borrow(this).unsafe_cast())
+            f(&LinkButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visited\0".as_ptr() as *const _,
-                Some(transmute(notify_visited_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visited_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

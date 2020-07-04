@@ -220,10 +220,11 @@ impl ToolItemGroupBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(ToolItemGroup::static_type(), &properties)
+        let ret = glib::Object::new(ToolItemGroup::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ToolItemGroup>()
+            .expect("downcast");
+        ret
     }
 
     pub fn collapsed(mut self, collapsed: bool) -> Self {
@@ -749,14 +750,16 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             P: IsA<ToolItemGroup>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::collapsed\0".as_ptr() as *const _,
-                Some(transmute(notify_collapsed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_collapsed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -771,14 +774,16 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             P: IsA<ToolItemGroup>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ellipsize\0".as_ptr() as *const _,
-                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_ellipsize_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -796,15 +801,15 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             P: IsA<ToolItemGroup>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::header-relief\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_header_relief_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_header_relief_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -820,14 +825,16 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             P: IsA<ToolItemGroup>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -845,15 +852,15 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
             P: IsA<ToolItemGroup>,
         {
             let f: &F = &*(f as *const F);
-            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
+            f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_label_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -162,7 +162,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &CssProvider::from_glib_borrow(this).unsafe_cast(),
+                &CssProvider::from_glib_borrow(this).unsafe_cast_ref(),
                 &from_glib_borrow(section),
                 &from_glib_borrow(error),
             )
@@ -172,7 +172,9 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"parsing-error\0".as_ptr() as *const _,
-                Some(transmute(parsing_error_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    parsing_error_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

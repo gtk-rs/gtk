@@ -313,10 +313,11 @@ impl CellRendererComboBuilder {
         if let Some(ref ypad) = self.ypad {
             properties.push(("ypad", ypad));
         }
-        glib::Object::new(CellRendererCombo::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererCombo::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererCombo>()
+            .expect("downcast");
+        ret
     }
 
     pub fn has_entry(mut self, has_entry: bool) -> Self {
@@ -750,7 +751,7 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
             let f: &F = &*(f as *const F);
             let path = from_glib_full(gtk_sys::gtk_tree_path_new_from_string(path_string));
             f(
-                &CellRendererCombo::from_glib_borrow(this).unsafe_cast(),
+                &CellRendererCombo::from_glib_borrow(this).unsafe_cast_ref(),
                 path,
                 &from_glib_borrow(new_iter),
             )
@@ -760,7 +761,9 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(transmute(changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -775,14 +778,16 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
             P: IsA<CellRendererCombo>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-entry\0".as_ptr() as *const _,
-                Some(transmute(notify_has_entry_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_entry_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -797,14 +802,16 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
             P: IsA<CellRendererCombo>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::model\0".as_ptr() as *const _,
-                Some(transmute(notify_model_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_model_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -819,14 +826,16 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
             P: IsA<CellRendererCombo>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-column\0".as_ptr() as *const _,
-                Some(transmute(notify_text_column_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_column_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

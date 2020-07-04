@@ -26,6 +26,7 @@ pub use self::actionable::ActionableExt;
 pub use self::actionable::{Actionable, NONE_ACTIONABLE};
 
 mod adjustment;
+pub use self::adjustment::AdjustmentBuilder;
 pub use self::adjustment::AdjustmentExt;
 pub use self::adjustment::{Adjustment, AdjustmentClass, NONE_ADJUSTMENT};
 
@@ -275,6 +276,21 @@ mod event_controller;
 pub use self::event_controller::EventControllerExt;
 pub use self::event_controller::{EventController, EventControllerClass, NONE_EVENT_CONTROLLER};
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod event_controller_key;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::event_controller_key::{EventControllerKey, EventControllerKeyClass};
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod event_controller_motion;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::event_controller_motion::{EventControllerMotion, EventControllerMotionClass};
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod event_controller_scroll;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::event_controller_scroll::{EventControllerScroll, EventControllerScrollClass};
+
 mod expander;
 pub use self::expander::ExpanderBuilder;
 pub use self::expander::ExpanderExt;
@@ -398,6 +414,11 @@ mod gesture_single;
 pub use self::gesture_single::GestureSingleExt;
 pub use self::gesture_single::{GestureSingle, GestureSingleClass, NONE_GESTURE_SINGLE};
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod gesture_stylus;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::gesture_stylus::{GestureStylus, GestureStylusClass};
+
 mod gesture_swipe;
 pub use self::gesture_swipe::GestureSwipeBuilder;
 pub use self::gesture_swipe::{GestureSwipe, GestureSwipeClass};
@@ -437,6 +458,7 @@ pub use self::icon_theme::IconThemeExt;
 pub use self::icon_theme::{IconTheme, IconThemeClass, NONE_ICON_THEME};
 
 mod icon_view;
+pub use self::icon_view::IconViewBuilder;
 pub use self::icon_view::IconViewExt;
 pub use self::icon_view::{IconView, IconViewClass, NONE_ICON_VIEW};
 
@@ -588,13 +610,13 @@ mod places_sidebar;
 pub use self::places_sidebar::PlacesSidebarBuilder;
 pub use self::places_sidebar::{PlacesSidebar, PlacesSidebarClass};
 
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 mod plug;
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::plug::PlugBuilder;
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::plug::PlugExt;
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::plug::{Plug, PlugClass, NONE_PLUG};
 
 mod popover;
@@ -743,10 +765,35 @@ pub use self::settings::{Settings, SettingsClass, NONE_SETTINGS};
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 mod shortcut_label;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
+pub use self::shortcut_label::ShortcutLabelBuilder;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 pub use self::shortcut_label::{ShortcutLabel, ShortcutLabelClass};
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
+mod shortcuts_group;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_group::ShortcutsGroupBuilder;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_group::{ShortcutsGroup, ShortcutsGroupClass};
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+mod shortcuts_section;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_section::ShortcutsSectionBuilder;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_section::{ShortcutsSection, ShortcutsSectionClass};
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+mod shortcuts_shortcut;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_shortcut::ShortcutsShortcutBuilder;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_shortcut::{ShortcutsShortcut, ShortcutsShortcutClass};
+
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 mod shortcuts_window;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::shortcuts_window::ShortcutsWindowBuilder;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::shortcuts_window::ShortcutsWindowExt;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
@@ -757,13 +804,13 @@ pub use self::size_group::SizeGroupBuilder;
 pub use self::size_group::SizeGroupExt;
 pub use self::size_group::{SizeGroup, SizeGroupClass, NONE_SIZE_GROUP};
 
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 mod socket;
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::socket::GtkSocketExt;
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::socket::SocketBuilder;
-#[cfg(any(not(windows), feature = "dox"))]
+#[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub use self::socket::{Socket, SocketClass, NONE_SOCKET};
 
 mod spin_button;
@@ -1059,6 +1106,8 @@ pub use self::enums::ScrollablePolicy;
 pub use self::enums::SelectionMode;
 pub use self::enums::SensitivityType;
 pub use self::enums::ShadowType;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::enums::ShortcutType;
 pub use self::enums::SizeGroupMode;
 pub use self::enums::SizeRequestMode;
 pub use self::enums::SortType;
@@ -1088,6 +1137,8 @@ pub use self::flags::CalendarDisplayOptions;
 pub use self::flags::CellRendererState;
 pub use self::flags::DestDefaults;
 pub use self::flags::DialogFlags;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+pub use self::flags::EventControllerScrollFlags;
 pub use self::flags::FileFilterFlags;
 #[cfg(any(feature = "v3_24", feature = "dox"))]
 pub use self::flags::FontChooserLevel;
@@ -1331,7 +1382,7 @@ pub mod traits {
     pub use super::GtkListStoreExt;
     pub use super::GtkMenuExt;
     pub use super::GtkMenuItemExt;
-    #[cfg(any(not(windows), feature = "dox"))]
+    #[cfg(any(gdk_backend = "x11", feature = "dox"))]
     pub use super::GtkSocketExt;
     pub use super::GtkWindowExt;
     pub use super::HeaderBarExt;
@@ -1362,7 +1413,7 @@ pub mod traits {
     pub use super::OrientableExt;
     pub use super::OverlayExt;
     pub use super::PanedExt;
-    #[cfg(any(not(windows), feature = "dox"))]
+    #[cfg(any(gdk_backend = "x11", feature = "dox"))]
     pub use super::PlugExt;
     pub use super::PopoverExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]

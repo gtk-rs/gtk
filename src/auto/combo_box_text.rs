@@ -38,7 +38,7 @@ impl ComboBoxText {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_combo_box_text_new()).unsafe_cast() }
     }
 
-    pub fn new_with_entry() -> ComboBoxText {
+    pub fn with_entry() -> ComboBoxText {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_combo_box_text_new_with_entry()).unsafe_cast()
@@ -263,10 +263,11 @@ impl ComboBoxTextBuilder {
         if let Some(ref editing_canceled) = self.editing_canceled {
             properties.push(("editing-canceled", editing_canceled));
         }
-        glib::Object::new(ComboBoxText::static_type(), &properties)
+        let ret = glib::Object::new(ComboBoxText::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ComboBoxText>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: i32) -> Self {

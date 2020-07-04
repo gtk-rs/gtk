@@ -383,10 +383,11 @@ impl AboutDialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(AboutDialog::static_type(), &properties)
+        let ret = glib::Object::new(AboutDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AboutDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn artists(mut self, artists: Vec<String>) -> Self {
@@ -1182,7 +1183,7 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &AboutDialog::from_glib_borrow(this).unsafe_cast(),
+                &AboutDialog::from_glib_borrow(this).unsafe_cast_ref(),
                 &GString::from_glib_borrow(uri),
             )
             .to_glib()
@@ -1192,7 +1193,9 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate-link\0".as_ptr() as *const _,
-                Some(transmute(activate_link_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_link_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1207,14 +1210,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::artists\0".as_ptr() as *const _,
-                Some(transmute(notify_artists_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_artists_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1229,14 +1234,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::authors\0".as_ptr() as *const _,
-                Some(transmute(notify_authors_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_authors_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1251,14 +1258,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::comments\0".as_ptr() as *const _,
-                Some(transmute(notify_comments_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_comments_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1273,14 +1282,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::copyright\0".as_ptr() as *const _,
-                Some(transmute(notify_copyright_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_copyright_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1295,14 +1306,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::documenters\0".as_ptr() as *const _,
-                Some(transmute(notify_documenters_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_documenters_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1317,14 +1330,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::license\0".as_ptr() as *const _,
-                Some(transmute(notify_license_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_license_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1342,15 +1357,15 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::license-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_license_type_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_license_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1366,14 +1381,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::logo\0".as_ptr() as *const _,
-                Some(transmute(notify_logo_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_logo_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1391,15 +1408,15 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::logo-icon-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_logo_icon_name_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_logo_icon_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1418,15 +1435,15 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::program-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_program_name_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_program_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1445,15 +1462,15 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::translator-credits\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_translator_credits_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_translator_credits_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1469,14 +1486,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::version\0".as_ptr() as *const _,
-                Some(transmute(notify_version_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_version_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1491,14 +1510,16 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::website\0".as_ptr() as *const _,
-                Some(transmute(notify_website_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_website_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -1516,15 +1537,15 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::website-label\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_website_label_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_website_label_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1543,15 +1564,15 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
             P: IsA<AboutDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AboutDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wrap-license\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_wrap_license_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_wrap_license_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -241,10 +241,11 @@ impl StackBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Stack::static_type(), &properties)
+        let ret = glib::Object::new(Stack::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Stack>()
+            .expect("downcast");
+        ret
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -936,15 +937,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hhomogeneous\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_hhomogeneous_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_hhomogeneous_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -960,14 +961,16 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::homogeneous\0".as_ptr() as *const _,
-                Some(transmute(notify_homogeneous_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_homogeneous_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -985,15 +988,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::interpolate-size\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_interpolate_size_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_interpolate_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1012,15 +1015,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-duration\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_duration_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_transition_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1039,15 +1042,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-running\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_running_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_transition_running_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1066,15 +1069,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transition-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_transition_type_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_transition_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1094,15 +1097,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::vhomogeneous\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_vhomogeneous_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_vhomogeneous_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1121,15 +1124,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-child\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_child_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visible_child_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -1148,15 +1151,15 @@ impl<O: IsA<Stack>> StackExt for O {
             P: IsA<Stack>,
         {
             let f: &F = &*(f as *const F);
-            f(&Stack::from_glib_borrow(this).unsafe_cast())
+            f(&Stack::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::visible-child-name\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_visible_child_name_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_visible_child_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

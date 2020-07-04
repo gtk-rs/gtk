@@ -15,7 +15,7 @@
 //!
 //! See also:
 //!
-//! - [Gtk-rs documentation overview](http://gtk-rs.org/docs/)
+//! - [Gtk-rs documentation overview](https://gtk-rs.org/docs-src/)
 //!
 //! - [General `GLib` family types and object system overview](../glib/index.html)
 //!
@@ -148,19 +148,19 @@
 //! them once. **Omitting them in the following cargo invocations will not undo
 //! their effects!**
 
-#![cfg_attr(feature = "cargo-clippy", allow(let_unit_value))]
-#![cfg_attr(feature = "cargo-clippy", allow(new_without_default))]
-#![cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
-#![cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
-#![cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref))]
-#![cfg_attr(feature = "cargo-clippy", allow(derive_hash_xor_eq))]
+#![allow(clippy::let_unit_value)]
+#![allow(clippy::new_without_default)]
+#![allow(clippy::type_complexity)]
+#![allow(clippy::trivially_copy_pass_by_ref)]
+#![allow(clippy::derive_hash_xor_eq)]
+#![allow(clippy::needless_doctest_main)]
+#![allow(clippy::too_many_arguments)]
 #![allow(deprecated)]
 
 extern crate libc;
 #[macro_use]
 extern crate bitflags;
-#[macro_use]
-extern crate lazy_static;
+extern crate once_cell;
 
 extern crate cairo_sys;
 extern crate gdk_pixbuf_sys;
@@ -193,11 +193,14 @@ pub const STYLE_PROVIDER_PRIORITY_USER: u32 = gtk_sys::GTK_STYLE_PROVIDER_PRIORI
 #[macro_use]
 mod rt;
 
-#[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
-#[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
-#[cfg_attr(feature = "cargo-clippy", allow(let_and_return))]
-#[cfg_attr(feature = "cargo-clippy", allow(many_single_char_names))]
-#[cfg_attr(feature = "cargo-clippy", allow(wrong_self_convention))]
+#[allow(clippy::match_same_arms)]
+#[allow(clippy::let_and_return)]
+#[allow(clippy::many_single_char_names)]
+#[allow(clippy::wrong_self_convention)]
+#[allow(clippy::cognitive_complexity)]
+#[allow(clippy::clone_on_copy)]
+#[allow(clippy::many_single_char_names)]
+#[allow(clippy::cast_ptr_alignment)]
 mod auto;
 
 mod accel_group;
@@ -221,6 +224,8 @@ mod file_chooser_dialog;
 mod fixed;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 mod flow_box;
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+mod gesture_stylus;
 mod im_context_simple;
 mod invisible;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -244,13 +249,13 @@ mod requisition;
 mod response_type;
 mod selection_data;
 mod signal;
+mod style_context;
 mod switch;
 mod target_entry;
 mod target_list;
 mod text_buffer;
 mod text_iter;
 mod tree_model_filter;
-mod tree_model_sort;
 mod tree_path;
 mod tree_row_reference;
 mod tree_sortable;

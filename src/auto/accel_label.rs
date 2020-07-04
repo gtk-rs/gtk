@@ -281,10 +281,11 @@ impl AccelLabelBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(AccelLabel::static_type(), &properties)
+        let ret = glib::Object::new(AccelLabel::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AccelLabel>()
+            .expect("downcast");
+        ret
     }
 
     pub fn accel_closure(mut self, accel_closure: &glib::Closure) -> Self {
@@ -674,15 +675,15 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
             P: IsA<AccelLabel>,
         {
             let f: &F = &*(f as *const F);
-            f(&AccelLabel::from_glib_borrow(this).unsafe_cast())
+            f(&AccelLabel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-closure\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_accel_closure_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_closure_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -701,15 +702,15 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
             P: IsA<AccelLabel>,
         {
             let f: &F = &*(f as *const F);
-            f(&AccelLabel::from_glib_borrow(this).unsafe_cast())
+            f(&AccelLabel::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::accel-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_accel_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_accel_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

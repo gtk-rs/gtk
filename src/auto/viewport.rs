@@ -225,10 +225,11 @@ impl ViewportBuilder {
         if let Some(ref vscroll_policy) = self.vscroll_policy {
             properties.push(("vscroll-policy", vscroll_policy));
         }
-        glib::Object::new(Viewport::static_type(), &properties)
+        let ret = glib::Object::new(Viewport::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Viewport>()
+            .expect("downcast");
+        ret
     }
 
     pub fn shadow_type(mut self, shadow_type: ShadowType) -> Self {
@@ -487,14 +488,16 @@ impl<O: IsA<Viewport>> ViewportExt for O {
             P: IsA<Viewport>,
         {
             let f: &F = &*(f as *const F);
-            f(&Viewport::from_glib_borrow(this).unsafe_cast())
+            f(&Viewport::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::shadow-type\0".as_ptr() as *const _,
-                Some(transmute(notify_shadow_type_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_shadow_type_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

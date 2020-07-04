@@ -37,7 +37,7 @@ impl CheckButton {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_check_button_new()).unsafe_cast() }
     }
 
-    pub fn new_with_label(label: &str) -> CheckButton {
+    pub fn with_label(label: &str) -> CheckButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_check_button_new_with_label(
@@ -47,7 +47,7 @@ impl CheckButton {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> CheckButton {
+    pub fn with_mnemonic(label: &str) -> CheckButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_check_button_new_with_mnemonic(
@@ -263,10 +263,11 @@ impl CheckButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(CheckButton::static_type(), &properties)
+        let ret = glib::Object::new(CheckButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CheckButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {

@@ -12,7 +12,7 @@ use ColorButton;
 use Widget;
 
 pub trait ColorButtonExtManual: 'static {
-    fn new_with_color(color: &gdk::Color) -> ColorButton;
+    fn with_color(color: &gdk::Color) -> ColorButton;
 
     fn get_color(&self) -> gdk::Color;
 
@@ -20,7 +20,7 @@ pub trait ColorButtonExtManual: 'static {
 }
 
 impl<O: IsA<ColorButton>> ColorButtonExtManual for O {
-    fn new_with_color(color: &gdk::Color) -> ColorButton {
+    fn with_color(color: &gdk::Color) -> ColorButton {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_color_button_new_with_color(color)).unsafe_cast()

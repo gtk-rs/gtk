@@ -314,6 +314,65 @@ impl SetValue for DialogFlags {
     }
 }
 
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+bitflags! {
+    pub struct EventControllerScrollFlags: u32 {
+        const NONE = 0;
+        const VERTICAL = 1;
+        const HORIZONTAL = 2;
+        const DISCRETE = 4;
+        const KINETIC = 8;
+        const BOTH_AXES = 3;
+    }
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+#[doc(hidden)]
+impl ToGlib for EventControllerScrollFlags {
+    type GlibType = gtk_sys::GtkEventControllerScrollFlags;
+
+    fn to_glib(&self) -> gtk_sys::GtkEventControllerScrollFlags {
+        self.bits()
+    }
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+#[doc(hidden)]
+impl FromGlib<gtk_sys::GtkEventControllerScrollFlags> for EventControllerScrollFlags {
+    fn from_glib(value: gtk_sys::GtkEventControllerScrollFlags) -> EventControllerScrollFlags {
+        skip_assert_initialized!();
+        EventControllerScrollFlags::from_bits_truncate(value)
+    }
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+impl StaticType for EventControllerScrollFlags {
+    fn static_type() -> Type {
+        unsafe { from_glib(gtk_sys::gtk_event_controller_scroll_flags_get_type()) }
+    }
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+impl<'a> FromValueOptional<'a> for EventControllerScrollFlags {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+impl<'a> FromValue<'a> for EventControllerScrollFlags {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_sys::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+impl SetValue for EventControllerScrollFlags {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_sys::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
 bitflags! {
     pub struct FileFilterFlags: u32 {
         const FILENAME = 1;

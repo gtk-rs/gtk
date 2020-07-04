@@ -32,7 +32,7 @@ glib_wrapper! {
 }
 
 impl RadioToolButton {
-    pub fn new_from_widget<P: IsA<RadioToolButton>>(group: &P) -> RadioToolButton {
+    pub fn from_widget<P: IsA<RadioToolButton>>(group: &P) -> RadioToolButton {
         skip_assert_initialized!();
         unsafe {
             ToolItem::from_glib_none(gtk_sys::gtk_radio_tool_button_new_from_widget(
@@ -242,10 +242,11 @@ impl RadioToolButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(RadioToolButton::static_type(), &properties)
+        let ret = glib::Object::new(RadioToolButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<RadioToolButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {

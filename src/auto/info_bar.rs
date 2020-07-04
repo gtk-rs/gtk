@@ -45,7 +45,7 @@ impl InfoBar {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_info_bar_new()).unsafe_cast() }
     }
 
-    //pub fn new_with_buttons(first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> InfoBar {
+    //pub fn with_buttons(first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> InfoBar {
     //    unsafe { TODO: call gtk_sys:gtk_info_bar_new_with_buttons() }
     //}
 }
@@ -243,10 +243,11 @@ impl InfoBarBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(InfoBar::static_type(), &properties)
+        let ret = glib::Object::new(InfoBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<InfoBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn message_type(mut self, message_type: MessageType) -> Self {
@@ -471,9 +472,9 @@ pub trait InfoBarExt: 'static {
 
     //fn add_buttons(&self, first_button_text: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    fn get_action_area(&self) -> Option<Widget>;
+    fn get_action_area(&self) -> Option<Box>;
 
-    fn get_content_area(&self) -> Option<Widget>;
+    fn get_content_area(&self) -> Box;
 
     fn get_message_type(&self) -> MessageType;
 
@@ -538,7 +539,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
     //    unsafe { TODO: call gtk_sys:gtk_info_bar_add_buttons() }
     //}
 
-    fn get_action_area(&self) -> Option<Widget> {
+    fn get_action_area(&self) -> Option<Box> {
         unsafe {
             from_glib_none(gtk_sys::gtk_info_bar_get_action_area(
                 self.as_ref().to_glib_none().0,
@@ -546,7 +547,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
         }
     }
 
-    fn get_content_area(&self) -> Option<Widget> {
+    fn get_content_area(&self) -> Box {
         unsafe {
             from_glib_none(gtk_sys::gtk_info_bar_get_content_area(
                 self.as_ref().to_glib_none().0,
@@ -637,14 +638,16 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(transmute(close_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    close_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -652,7 +655,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
 
     fn emit_close(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("close", &[])
                 .unwrap()
         };
@@ -668,7 +671,7 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &InfoBar::from_glib_borrow(this).unsafe_cast(),
+                &InfoBar::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(response_id),
             )
         }
@@ -677,7 +680,9 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"response\0".as_ptr() as *const _,
-                Some(transmute(response_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    response_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -695,15 +700,15 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::message-type\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_message_type_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_message_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -720,14 +725,16 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::revealed\0".as_ptr() as *const _,
-                Some(transmute(notify_revealed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_revealed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -745,15 +752,15 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
             P: IsA<InfoBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+            f(&InfoBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-close-button\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_close_button_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_close_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

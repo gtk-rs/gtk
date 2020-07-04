@@ -359,10 +359,11 @@ impl AppChooserDialogBuilder {
         if let Some(ref content_type) = self.content_type {
             properties.push(("content-type", content_type));
         }
-        glib::Object::new(AppChooserDialog::static_type(), &properties)
+        let ret = glib::Object::new(AppChooserDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<AppChooserDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn gfile<P: IsA<gio::File>>(mut self, gfile: &P) -> Self {
@@ -765,14 +766,16 @@ impl<O: IsA<AppChooserDialog>> AppChooserDialogExt for O {
             P: IsA<AppChooserDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&AppChooserDialog::from_glib_borrow(this).unsafe_cast())
+            f(&AppChooserDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::heading\0".as_ptr() as *const _,
-                Some(transmute(notify_heading_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_heading_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

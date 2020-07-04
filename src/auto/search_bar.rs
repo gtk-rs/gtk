@@ -209,10 +209,11 @@ impl SearchBarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(SearchBar::static_type(), &properties)
+        let ret = glib::Object::new(SearchBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<SearchBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn search_mode_enabled(mut self, search_mode_enabled: bool) -> Self {
@@ -522,15 +523,15 @@ impl<O: IsA<SearchBar>> SearchBarExt for O {
             P: IsA<SearchBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&SearchBar::from_glib_borrow(this).unsafe_cast())
+            f(&SearchBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::search-mode-enabled\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_search_mode_enabled_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_search_mode_enabled_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -549,15 +550,15 @@ impl<O: IsA<SearchBar>> SearchBarExt for O {
             P: IsA<SearchBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&SearchBar::from_glib_borrow(this).unsafe_cast())
+            f(&SearchBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-close-button\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_close_button_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_close_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

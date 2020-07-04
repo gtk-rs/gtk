@@ -25,7 +25,7 @@ macro_rules! to_u16 {
     )
 }
 
-#[cfg_attr(feature = "cargo-clippy", allow(cast_lossless))]
+#[allow(clippy::cast_lossless)]
 impl EntryBuffer {
     pub fn new(initial_chars: Option<&str>) -> EntryBuffer {
         assert_initialized_main_thread!();

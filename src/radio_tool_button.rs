@@ -16,7 +16,7 @@ impl RadioToolButton {
         }
     }
 
-    pub fn new_from_stock(stock_id: &str) -> RadioToolButton {
+    pub fn from_stock(stock_id: &str) -> RadioToolButton {
         assert_initialized_main_thread!();
         unsafe {
             ToolItem::from_glib_none(gtk_sys::gtk_radio_tool_button_new_from_stock(

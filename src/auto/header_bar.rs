@@ -233,10 +233,11 @@ impl HeaderBarBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(HeaderBar::static_type(), &properties)
+        let ret = glib::Object::new(HeaderBar::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<HeaderBar>()
+            .expect("downcast");
+        ret
     }
 
     pub fn custom_title<P: IsA<Widget>>(mut self, custom_title: &P) -> Self {
@@ -768,15 +769,15 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::custom-title\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_custom_title_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_custom_title_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -795,15 +796,15 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::decoration-layout\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_decoration_layout_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_decoration_layout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -822,15 +823,15 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::decoration-layout-set\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_decoration_layout_set_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_decoration_layout_set_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -849,15 +850,15 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-subtitle\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_has_subtitle_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_has_subtitle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -876,15 +877,15 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-close-button\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_show_close_button_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_close_button_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -900,14 +901,16 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::spacing\0".as_ptr() as *const _,
-                Some(transmute(notify_spacing_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_spacing_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -922,14 +925,16 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle\0".as_ptr() as *const _,
-                Some(transmute(notify_subtitle_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_subtitle_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -944,14 +949,16 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
             P: IsA<HeaderBar>,
         {
             let f: &F = &*(f as *const F);
-            f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
+            f(&HeaderBar::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::title\0".as_ptr() as *const _,
-                Some(transmute(notify_title_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_title_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

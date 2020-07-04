@@ -44,7 +44,7 @@ impl Button {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_button_new()).unsafe_cast() }
     }
 
-    pub fn new_from_icon_name(icon_name: Option<&str>, size: IconSize) -> Button {
+    pub fn from_icon_name(icon_name: Option<&str>, size: IconSize) -> Button {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_button_new_from_icon_name(
@@ -55,7 +55,7 @@ impl Button {
         }
     }
 
-    pub fn new_with_label(label: &str) -> Button {
+    pub fn with_label(label: &str) -> Button {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_button_new_with_label(label.to_glib_none().0))
@@ -63,7 +63,7 @@ impl Button {
         }
     }
 
-    pub fn new_with_mnemonic(label: &str) -> Button {
+    pub fn with_mnemonic(label: &str) -> Button {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(gtk_sys::gtk_button_new_with_mnemonic(
@@ -267,10 +267,11 @@ impl ButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(Button::static_type(), &properties)
+        let ret = glib::Object::new(Button::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Button>()
+            .expect("downcast");
+        ret
     }
 
     pub fn always_show_image(mut self, always_show_image: bool) -> Self {
@@ -697,14 +698,16 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"activate\0".as_ptr() as *const _,
-                Some(transmute(activate_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    activate_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -712,7 +715,7 @@ impl<O: IsA<Button>> ButtonExt for O {
 
     fn emit_activate(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("activate", &[])
                 .unwrap()
         };
@@ -726,14 +729,16 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clicked\0".as_ptr() as *const _,
-                Some(transmute(clicked_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    clicked_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -741,7 +746,7 @@ impl<O: IsA<Button>> ButtonExt for O {
 
     fn emit_clicked(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("clicked", &[])
                 .unwrap()
         };
@@ -759,15 +764,15 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::always-show-image\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_always_show_image_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_always_show_image_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -783,14 +788,16 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::image\0".as_ptr() as *const _,
-                Some(transmute(notify_image_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_image_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -808,15 +815,15 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::image-position\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_image_position_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_image_position_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -832,14 +839,16 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::label\0".as_ptr() as *const _,
-                Some(transmute(notify_label_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_label_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -854,14 +863,16 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::relief\0".as_ptr() as *const _,
-                Some(transmute(notify_relief_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_relief_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -879,15 +890,15 @@ impl<O: IsA<Button>> ButtonExt for O {
             P: IsA<Button>,
         {
             let f: &F = &*(f as *const F);
-            f(&Button::from_glib_borrow(this).unsafe_cast())
+            f(&Button::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-underline\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_use_underline_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_underline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

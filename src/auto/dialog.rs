@@ -26,6 +26,7 @@ use Bin;
 use Box;
 use Buildable;
 use Container;
+use HeaderBar;
 use ResizeMode;
 use ResponseType;
 use Widget;
@@ -47,7 +48,7 @@ impl Dialog {
         unsafe { Widget::from_glib_none(gtk_sys::gtk_dialog_new()).unsafe_cast() }
     }
 
-    //pub fn new_with_buttons<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, flags: DialogFlags, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Dialog {
+    //pub fn with_buttons<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, flags: DialogFlags, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Dialog {
     //    unsafe { TODO: call gtk_sys:gtk_dialog_new_with_buttons() }
     //}
 }
@@ -329,10 +330,11 @@ impl DialogBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Dialog::static_type(), &properties)
+        let ret = glib::Object::new(Dialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Dialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn use_header_bar(mut self, use_header_bar: i32) -> Self {
@@ -668,7 +670,7 @@ pub trait DialogExt: 'static {
 
     fn get_content_area(&self) -> Box;
 
-    fn get_header_bar(&self) -> Option<Widget>;
+    fn get_header_bar(&self) -> Option<HeaderBar>;
 
     fn get_response_for_widget<P: IsA<Widget>>(&self, widget: &P) -> ResponseType;
 
@@ -724,7 +726,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
-    fn get_header_bar(&self) -> Option<Widget> {
+    fn get_header_bar(&self) -> Option<HeaderBar> {
         unsafe {
             from_glib_none(gtk_sys::gtk_dialog_get_header_bar(
                 self.as_ref().to_glib_none().0,
@@ -802,14 +804,16 @@ impl<O: IsA<Dialog>> DialogExt for O {
             P: IsA<Dialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&Dialog::from_glib_borrow(this).unsafe_cast())
+            f(&Dialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(transmute(close_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    close_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -817,7 +821,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
 
     fn emit_close(&self) {
         let _ = unsafe {
-            glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_sys::GObject)
+            glib::Object::from_glib_borrow(self.as_ptr() as *mut gobject_sys::GObject)
                 .emit("close", &[])
                 .unwrap()
         };
@@ -833,7 +837,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         {
             let f: &F = &*(f as *const F);
             f(
-                &Dialog::from_glib_borrow(this).unsafe_cast(),
+                &Dialog::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(response_id),
             )
         }
@@ -842,7 +846,9 @@ impl<O: IsA<Dialog>> DialogExt for O {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"response\0".as_ptr() as *const _,
-                Some(transmute(response_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    response_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

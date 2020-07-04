@@ -276,10 +276,11 @@ impl MenuButtonBuilder {
         if let Some(ref action_target) = self.action_target {
             properties.push(("action-target", action_target));
         }
-        glib::Object::new(MenuButton::static_type(), &properties)
+        let ret = glib::Object::new(MenuButton::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<MenuButton>()
+            .expect("downcast");
+        ret
     }
 
     pub fn align_widget<P: IsA<Container>>(mut self, align_widget: &P) -> Self {
@@ -700,15 +701,15 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             P: IsA<MenuButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::align-widget\0".as_ptr() as *const _,
-                Some(transmute(
-                    notify_align_widget_trampoline::<Self, F> as usize,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_align_widget_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -724,14 +725,16 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             P: IsA<MenuButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::direction\0".as_ptr() as *const _,
-                Some(transmute(notify_direction_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_direction_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -746,14 +749,16 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             P: IsA<MenuButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::menu-model\0".as_ptr() as *const _,
-                Some(transmute(notify_menu_model_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_menu_model_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -768,14 +773,16 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             P: IsA<MenuButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popover\0".as_ptr() as *const _,
-                Some(transmute(notify_popover_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_popover_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -790,14 +797,16 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             P: IsA<MenuButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::popup\0".as_ptr() as *const _,
-                Some(transmute(notify_popup_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_popup_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -812,14 +821,16 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
             P: IsA<MenuButton>,
         {
             let f: &F = &*(f as *const F);
-            f(&MenuButton::from_glib_borrow(this).unsafe_cast())
+            f(&MenuButton::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-popover\0".as_ptr() as *const _,
-                Some(transmute(notify_use_popover_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_use_popover_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

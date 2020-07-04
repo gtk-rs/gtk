@@ -141,10 +141,11 @@ impl CellRendererProgressBuilder {
         if let Some(ref orientation) = self.orientation {
             properties.push(("orientation", orientation));
         }
-        glib::Object::new(CellRendererProgress::static_type(), &properties)
+        let ret = glib::Object::new(CellRendererProgress::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<CellRendererProgress>()
+            .expect("downcast");
+        ret
     }
 
     pub fn inverted(mut self, inverted: bool) -> Self {
@@ -452,14 +453,16 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             P: IsA<CellRendererProgress>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::inverted\0".as_ptr() as *const _,
-                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_inverted_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -474,14 +477,16 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             P: IsA<CellRendererProgress>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pulse\0".as_ptr() as *const _,
-                Some(transmute(notify_pulse_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_pulse_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -496,14 +501,16 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             P: IsA<CellRendererProgress>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute(notify_text_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -518,14 +525,16 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             P: IsA<CellRendererProgress>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_text_xalign_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_xalign_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -540,14 +549,16 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             P: IsA<CellRendererProgress>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text-yalign\0".as_ptr() as *const _,
-                Some(transmute(notify_text_yalign_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_text_yalign_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -562,14 +573,16 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
             P: IsA<CellRendererProgress>,
         {
             let f: &F = &*(f as *const F);
-            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
+            f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::value\0".as_ptr() as *const _,
-                Some(transmute(notify_value_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_value_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -190,10 +190,11 @@ impl SpinnerBuilder {
         if let Some(ref width_request) = self.width_request {
             properties.push(("width-request", width_request));
         }
-        glib::Object::new(Spinner::static_type(), &properties)
+        let ret = glib::Object::new(Spinner::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<Spinner>()
+            .expect("downcast");
+        ret
     }
 
     pub fn active(mut self, active: bool) -> Self {
@@ -424,14 +425,16 @@ impl<O: IsA<Spinner>> SpinnerExt for O {
             P: IsA<Spinner>,
         {
             let f: &F = &*(f as *const F);
-            f(&Spinner::from_glib_borrow(this).unsafe_cast())
+            f(&Spinner::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute(notify_active_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_active_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

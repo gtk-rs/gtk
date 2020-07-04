@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use gdk;
+use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
@@ -108,10 +109,11 @@ impl StyleContextBuilder {
         if let Some(ref screen) = self.screen {
             properties.push(("screen", screen));
         }
-        glib::Object::new(StyleContext::static_type(), &properties)
+        let ret = glib::Object::new(StyleContext::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<StyleContext>()
+            .expect("downcast");
+        ret
     }
 
     pub fn direction(mut self, direction: TextDirection) -> Self {
@@ -166,6 +168,8 @@ pub trait StyleContextExt: 'static {
 
     fn get_path(&self) -> Option<WidgetPath>;
 
+    fn get_property(&self, property: &str, state: StateFlags) -> glib::Value;
+
     fn get_scale(&self) -> i32;
 
     fn get_screen(&self) -> Option<gdk::Screen>;
@@ -175,6 +179,8 @@ pub trait StyleContextExt: 'static {
     fn get_state(&self) -> StateFlags;
 
     //fn get_style(&self, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+
+    fn get_style_property(&self, property_name: &str) -> glib::Value;
 
     //fn get_style_valist(&self, args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -361,6 +367,19 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
+    fn get_property(&self, property: &str, state: StateFlags) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            gtk_sys::gtk_style_context_get_property(
+                self.as_ref().to_glib_none().0,
+                property.to_glib_none().0,
+                state.to_glib(),
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
+
     fn get_scale(&self) -> i32 {
         unsafe { gtk_sys::gtk_style_context_get_scale(self.as_ref().to_glib_none().0) }
     }
@@ -393,6 +412,18 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
     //fn get_style(&self, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call gtk_sys:gtk_style_context_get_style() }
     //}
+
+    fn get_style_property(&self, property_name: &str) -> glib::Value {
+        unsafe {
+            let mut value = glib::Value::uninitialized();
+            gtk_sys::gtk_style_context_get_style_property(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+                value.to_glib_none_mut().0,
+            );
+            value
+        }
+    }
 
     //fn get_style_valist(&self, args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call gtk_sys:gtk_style_context_get_style_valist() }
@@ -598,14 +629,16 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"changed\0".as_ptr() as *const _,
-                Some(transmute(changed_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    changed_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -620,14 +653,16 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::direction\0".as_ptr() as *const _,
-                Some(transmute(notify_direction_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_direction_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -642,14 +677,16 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::paint-clock\0".as_ptr() as *const _,
-                Some(transmute(notify_paint_clock_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_paint_clock_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -664,14 +701,16 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(transmute(notify_parent_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_parent_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }
@@ -686,14 +725,16 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             P: IsA<StyleContext>,
         {
             let f: &F = &*(f as *const F);
-            f(&StyleContext::from_glib_borrow(this).unsafe_cast())
+            f(&StyleContext::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::screen\0".as_ptr() as *const _,
-                Some(transmute(notify_screen_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_screen_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

@@ -66,7 +66,7 @@ unsafe extern "C" fn dialog_response<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Dialog = from_glib_borrow(ptr);
+    let wrap: Borrowed<Dialog> = from_glib_borrow(ptr);
     let res: ResponseType = from_glib(responseptr);
 
     imp.response(&wrap, res)
@@ -78,7 +78,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Dialog = from_glib_borrow(ptr);
+    let wrap: Borrowed<Dialog> = from_glib_borrow(ptr);
 
     imp.close(&wrap)
 }

@@ -335,10 +335,11 @@ impl ColorChooserDialogBuilder {
         if let Some(ref use_alpha) = self.use_alpha {
             properties.push(("use-alpha", use_alpha));
         }
-        glib::Object::new(ColorChooserDialog::static_type(), &properties)
+        let ret = glib::Object::new(ColorChooserDialog::static_type(), &properties)
             .expect("object new")
-            .downcast()
-            .expect("downcast")
+            .downcast::<ColorChooserDialog>()
+            .expect("downcast");
+        ret
     }
 
     pub fn show_editor(mut self, show_editor: bool) -> Self {
@@ -723,14 +724,16 @@ impl<O: IsA<ColorChooserDialog>> ColorChooserDialogExt for O {
             P: IsA<ColorChooserDialog>,
         {
             let f: &F = &*(f as *const F);
-            f(&ColorChooserDialog::from_glib_borrow(this).unsafe_cast())
+            f(&ColorChooserDialog::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::show-editor\0".as_ptr() as *const _,
-                Some(transmute(notify_show_editor_trampoline::<Self, F> as usize)),
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_show_editor_trampoline::<Self, F> as *const (),
+                )),
                 Box_::into_raw(f),
             )
         }

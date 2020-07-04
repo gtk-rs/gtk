@@ -106,7 +106,7 @@ impl<T: ContainerImpl + ObjectImpl> ContainerImplExt for T {
             let f = (*parent_class)
                 .get_path_for_child
                 .expect("No parent class impl for \"get_path_for_child\"");
-            from_glib_borrow(f(container.to_glib_none().0, widget.to_glib_none().0))
+            from_glib_none(f(container.to_glib_none().0, widget.to_glib_none().0))
         }
     }
 }
@@ -134,8 +134,8 @@ unsafe extern "C" fn container_add<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Container = from_glib_borrow(ptr);
-    let widget: Widget = from_glib_borrow(wdgtptr);
+    let wrap: Borrowed<Container> = from_glib_borrow(ptr);
+    let widget: Borrowed<Widget> = from_glib_borrow(wdgtptr);
 
     imp.add(&wrap, &widget)
 }
@@ -148,8 +148,8 @@ unsafe extern "C" fn container_remove<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Container = from_glib_borrow(ptr);
-    let widget: Widget = from_glib_borrow(wdgtptr);
+    let wrap: Borrowed<Container> = from_glib_borrow(ptr);
+    let widget: Borrowed<Widget> = from_glib_borrow(wdgtptr);
 
     imp.remove(&wrap, &widget)
 }
@@ -160,7 +160,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Container = from_glib_borrow(ptr);
+    let wrap: Borrowed<Container> = from_glib_borrow(ptr);
 
     imp.check_resize(&wrap)
 }
@@ -173,10 +173,10 @@ unsafe extern "C" fn container_set_focus_child<T: ObjectSubclass>(
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Container = from_glib_borrow(ptr);
-    let widget: Option<Widget> = from_glib_borrow(wdgtptr);
+    let wrap: Borrowed<Container> = from_glib_borrow(ptr);
+    let widget: Borrowed<Option<Widget>> = from_glib_borrow(wdgtptr);
 
-    imp.set_focus_child(&wrap, widget.as_ref())
+    imp.set_focus_child(&wrap, widget.as_ref().as_ref())
 }
 
 unsafe extern "C" fn container_child_type<T: ObjectSubclass>(
@@ -187,7 +187,7 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Container = from_glib_borrow(ptr);
+    let wrap: Borrowed<Container> = from_glib_borrow(ptr);
 
     imp.child_type(&wrap).to_glib()
 }
@@ -201,8 +201,8 @@ where
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
-    let wrap: Container = from_glib_borrow(ptr);
-    let widget: Widget = from_glib_borrow(wdgtptr);
+    let wrap: Borrowed<Container> = from_glib_borrow(ptr);
+    let widget: Borrowed<Widget> = from_glib_borrow(wdgtptr);
 
     imp.get_path_for_child(&wrap, &widget).to_glib_none().0
 }
