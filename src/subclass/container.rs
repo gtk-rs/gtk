@@ -35,6 +35,10 @@ pub trait ContainerImpl: ContainerImplExt + WidgetImpl {
     fn get_path_for_child(&self, container: &Container, widget: &Widget) -> WidgetPath {
         self.parent_get_path_for_child(container, widget)
     }
+
+    fn forall<P: FnMut(&Widget)>(&self, container: &Container, callback: P) {
+        self.parent_forall(container, callback);
+    }
 }
 
 pub trait ContainerImplExt {
@@ -44,6 +48,7 @@ pub trait ContainerImplExt {
     fn parent_set_focus_child(&self, container: &Container, widget: Option<&Widget>);
     fn parent_child_type(&self, container: &Container) -> glib::Type;
     fn parent_get_path_for_child(&self, container: &Container, widget: &Widget) -> WidgetPath;
+    fn parent_forall<P: FnMut(&Widget)>(&self, container: &Container, callback: P);
 }
 
 impl<T: ContainerImpl> ContainerImplExt for T {
@@ -107,6 +112,16 @@ impl<T: ContainerImpl> ContainerImplExt for T {
                 .get_path_for_child
                 .expect("No parent class impl for \"get_path_for_child\"");
             from_glib_none(f(container.to_glib_none().0, widget.to_glib_none().0))
+        }
+    }
+
+    fn parent_forall<P: FnMut(&Widget)>(&self, container: &Container, callback: P) {
+        unsafe {
+            let data = self.get_type_data();
+            let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
+            if let Some(f) = (*parent_class).forall {
+                f(container.to_glib_none().0, false, callback.to_glib_none().0)
+            }
         }
     }
 }
@@ -190,4 +205,18 @@ unsafe extern "C" fn container_get_path_for_child<T: ContainerImpl>(
     let widget: Borrowed<Widget> = from_glib_borrow(wdgtptr);
 
     imp.get_path_for_child(&wrap, &widget).to_glib_none().0
+}
+
+unsafe extern "C" fn container_forall<T: ObjectSubclass, P: FnMut(&Widget)>(
+    ptr: *mut gtk_sys::GtkContainer,
+    callback: P
+)
+where
+    T: ContainerImpl,
+{
+    let instance = &*(ptr as *mut T::Instance);
+    let imp = instance.get_impl();
+    let wrap: Borrowed<Container> = from_glib_borrow(ptr);
+
+    imp.forall(&wrap, callback)
 }
