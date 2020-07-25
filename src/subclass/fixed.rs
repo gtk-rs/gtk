@@ -8,9 +8,9 @@ use super::container::ContainerImpl;
 use ContainerClass;
 use FixedClass;
 
-pub trait FixedImpl: ContainerImpl + 'static {}
+pub trait FixedImpl: ContainerImpl {}
 
-unsafe impl<T: ObjectSubclass + FixedImpl> IsSubclassable<T> for FixedClass {
+unsafe impl<T: FixedImpl> IsSubclassable<T> for FixedClass {
     fn override_vfuncs(&mut self) {
         <ContainerClass as IsSubclassable<T>>::override_vfuncs(self);
     }

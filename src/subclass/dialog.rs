@@ -10,7 +10,7 @@ use DialogClass;
 use ResponseType;
 use WindowClass;
 
-pub trait DialogImpl: DialogImplExt + WindowImpl + 'static {
+pub trait DialogImpl: DialogImplExt + WindowImpl {
     fn response(&self, dialog: &Dialog, response: ResponseType) {
         self.parent_response(dialog, response)
     }
@@ -25,10 +25,10 @@ pub trait DialogImplExt {
     fn parent_close(&self, dialog: &Dialog);
 }
 
-impl<T: DialogImpl + ObjectImpl> DialogImplExt for T {
+impl<T: DialogImpl> DialogImplExt for T {
     fn parent_response(&self, dialog: &Dialog, response: ResponseType) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkDialogClass;
             if let Some(f) = (*parent_class).response {
                 f(dialog.to_glib_none().0, response.to_glib())
@@ -38,7 +38,7 @@ impl<T: DialogImpl + ObjectImpl> DialogImplExt for T {
 
     fn parent_close(&self, dialog: &Dialog) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkDialogClass;
             if let Some(f) = (*parent_class).close {
                 f(dialog.to_glib_none().0)
@@ -47,7 +47,7 @@ impl<T: DialogImpl + ObjectImpl> DialogImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + DialogImpl> IsSubclassable<T> for DialogClass {
+unsafe impl<T: DialogImpl> IsSubclassable<T> for DialogClass {
     fn override_vfuncs(&mut self) {
         <WindowClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -58,12 +58,10 @@ unsafe impl<T: ObjectSubclass + DialogImpl> IsSubclassable<T> for DialogClass {
     }
 }
 
-unsafe extern "C" fn dialog_response<T: ObjectSubclass>(
+unsafe extern "C" fn dialog_response<T: DialogImpl>(
     ptr: *mut gtk_sys::GtkDialog,
     responseptr: i32,
-) where
-    T: DialogImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Dialog> = from_glib_borrow(ptr);
@@ -72,10 +70,7 @@ unsafe extern "C" fn dialog_response<T: ObjectSubclass>(
     imp.response(&wrap, res)
 }
 
-unsafe extern "C" fn dialog_close<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkDialog)
-where
-    T: DialogImpl,
-{
+unsafe extern "C" fn dialog_close<T: DialogImpl>(ptr: *mut gtk_sys::GtkDialog) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Dialog> = from_glib_borrow(ptr);

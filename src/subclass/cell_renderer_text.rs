@@ -11,7 +11,7 @@ use CellRendererClass;
 use CellRendererText;
 use CellRendererTextClass;
 
-pub trait CellRendererTextImpl: CellRendererTextImplExt + CellRendererImpl + 'static {
+pub trait CellRendererTextImpl: CellRendererTextImplExt + CellRendererImpl {
     fn edited(&self, renderer: &CellRendererText, path: &str, new_text: &str) {
         self.parent_edited(renderer, path, new_text);
     }
@@ -21,10 +21,10 @@ pub trait CellRendererTextImplExt {
     fn parent_edited(&self, renderer: &CellRendererText, path: &str, new_text: &str);
 }
 
-impl<T: CellRendererTextImpl + ObjectImpl> CellRendererTextImplExt for T {
+impl<T: CellRendererTextImpl> CellRendererTextImplExt for T {
     fn parent_edited(&self, renderer: &CellRendererText, path: &str, new_text: &str) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererTextClass;
             if let Some(f) = (*parent_class).edited {
@@ -38,7 +38,7 @@ impl<T: CellRendererTextImpl + ObjectImpl> CellRendererTextImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + CellRendererTextImpl> IsSubclassable<T> for CellRendererTextClass {
+unsafe impl<T: CellRendererTextImpl> IsSubclassable<T> for CellRendererTextClass {
     fn override_vfuncs(&mut self) {
         <CellRendererClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -48,13 +48,11 @@ unsafe impl<T: ObjectSubclass + CellRendererTextImpl> IsSubclassable<T> for Cell
     }
 }
 
-unsafe extern "C" fn cell_renderer_text_edited<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_text_edited<T: CellRendererTextImpl>(
     ptr: *mut gtk_sys::GtkCellRendererText,
     path: *const c_char,
     new_text: *const c_char,
-) where
-    T: CellRendererTextImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap = from_glib_borrow(ptr);

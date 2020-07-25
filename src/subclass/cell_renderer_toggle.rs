@@ -11,7 +11,7 @@ use CellRendererClass;
 use CellRendererToggle;
 use CellRendererToggleClass;
 
-pub trait CellRendererToggleImpl: CellRendererToggleImplExt + CellRendererImpl + 'static {
+pub trait CellRendererToggleImpl: CellRendererToggleImplExt + CellRendererImpl {
     fn toggled(&self, renderer: &CellRendererToggle, path: &str) {
         self.parent_toggled(renderer, path);
     }
@@ -21,10 +21,10 @@ pub trait CellRendererToggleImplExt {
     fn parent_toggled(&self, renderer: &CellRendererToggle, path: &str);
 }
 
-impl<T: CellRendererToggleImpl + ObjectImpl> CellRendererToggleImplExt for T {
+impl<T: CellRendererToggleImpl> CellRendererToggleImplExt for T {
     fn parent_toggled(&self, renderer: &CellRendererToggle, path: &str) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererToggleClass;
             if let Some(f) = (*parent_class).toggled {
@@ -34,9 +34,7 @@ impl<T: CellRendererToggleImpl + ObjectImpl> CellRendererToggleImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + CellRendererToggleImpl> IsSubclassable<T>
-    for CellRendererToggleClass
-{
+unsafe impl<T: CellRendererToggleImpl> IsSubclassable<T> for CellRendererToggleClass {
     fn override_vfuncs(&mut self) {
         <CellRendererClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -46,12 +44,10 @@ unsafe impl<T: ObjectSubclass + CellRendererToggleImpl> IsSubclassable<T>
     }
 }
 
-unsafe extern "C" fn cell_renderer_toggle_toggled<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_toggle_toggled<T: CellRendererToggleImpl>(
     ptr: *mut gtk_sys::GtkCellRendererToggle,
     path: *const c_char,
-) where
-    T: CellRendererToggleImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap = from_glib_borrow(ptr);
