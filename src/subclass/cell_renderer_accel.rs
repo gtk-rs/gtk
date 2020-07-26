@@ -12,7 +12,7 @@ use CellRendererAccel;
 use CellRendererAccelClass;
 use CellRendererTextClass;
 
-pub trait CellRendererAccelImpl: CellRendererAccelImplExt + CellRendererTextImpl + 'static {
+pub trait CellRendererAccelImpl: CellRendererAccelImplExt + CellRendererTextImpl {
     fn accel_edited(
         &self,
         renderer: &CellRendererAccel,
@@ -41,7 +41,7 @@ pub trait CellRendererAccelImplExt {
     fn parent_accel_cleared(&self, renderer: &CellRendererAccel, path: &str);
 }
 
-impl<T: CellRendererAccelImpl + ObjectImpl> CellRendererAccelImplExt for T {
+impl<T: CellRendererAccelImpl> CellRendererAccelImplExt for T {
     fn parent_accel_edited(
         &self,
         renderer: &CellRendererAccel,
@@ -51,7 +51,7 @@ impl<T: CellRendererAccelImpl + ObjectImpl> CellRendererAccelImplExt for T {
         hardware_keycode: u32,
     ) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererAccelClass;
             if let Some(f) = (*parent_class).accel_edited {
@@ -68,7 +68,7 @@ impl<T: CellRendererAccelImpl + ObjectImpl> CellRendererAccelImplExt for T {
 
     fn parent_accel_cleared(&self, renderer: &CellRendererAccel, path: &str) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererAccelClass;
             if let Some(f) = (*parent_class).accel_cleared {
@@ -78,9 +78,7 @@ impl<T: CellRendererAccelImpl + ObjectImpl> CellRendererAccelImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + CellRendererAccelImpl> IsSubclassable<T>
-    for CellRendererAccelClass
-{
+unsafe impl<T: CellRendererAccelImpl> IsSubclassable<T> for CellRendererAccelClass {
     fn override_vfuncs(&mut self) {
         <CellRendererTextClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -91,15 +89,13 @@ unsafe impl<T: ObjectSubclass + CellRendererAccelImpl> IsSubclassable<T>
     }
 }
 
-unsafe extern "C" fn cell_renderer_accel_edited<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_accel_edited<T: CellRendererAccelImpl>(
     ptr: *mut gtk_sys::GtkCellRendererAccel,
     path: *const c_char,
     accel_key: c_uint,
     accel_mods: gdk_sys::GdkModifierType,
     hardware_keycode: c_uint,
-) where
-    T: CellRendererAccelImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap = from_glib_borrow(ptr);
@@ -113,12 +109,10 @@ unsafe extern "C" fn cell_renderer_accel_edited<T: ObjectSubclass>(
     )
 }
 
-unsafe extern "C" fn cell_renderer_accel_cleared<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_accel_cleared<T: CellRendererAccelImpl>(
     ptr: *mut gtk_sys::GtkCellRendererAccel,
     path: *const c_char,
-) where
-    T: CellRendererAccelImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap = from_glib_borrow(ptr);

@@ -9,7 +9,7 @@ use ApplicationClass;
 use Window;
 
 pub trait GtkApplicationImpl:
-    GtkApplicationImplExt + gio::subclass::prelude::ApplicationImpl + 'static
+    GtkApplicationImplExt + gio::subclass::prelude::ApplicationImpl
 {
     fn window_added(&self, application: &Application, window: &Window) {
         self.parent_window_added(application, window)
@@ -25,10 +25,10 @@ pub trait GtkApplicationImplExt {
     fn parent_window_removed(&self, application: &Application, window: &Window);
 }
 
-impl<T: GtkApplicationImpl + ObjectImpl> GtkApplicationImplExt for T {
+impl<T: GtkApplicationImpl> GtkApplicationImplExt for T {
     fn parent_window_added(&self, application: &Application, window: &Window) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkApplicationClass;
             if let Some(f) = (*parent_class).window_added {
@@ -39,7 +39,7 @@ impl<T: GtkApplicationImpl + ObjectImpl> GtkApplicationImplExt for T {
 
     fn parent_window_removed(&self, application: &Application, window: &Window) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkApplicationClass;
             if let Some(f) = (*parent_class).window_removed {
@@ -49,26 +49,22 @@ impl<T: GtkApplicationImpl + ObjectImpl> GtkApplicationImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + GtkApplicationImpl> IsSubclassable<T> for ApplicationClass {
+unsafe impl<T: GtkApplicationImpl> IsSubclassable<T> for ApplicationClass {
     fn override_vfuncs(&mut self) {
-        unsafe extern "C" fn application_window_added<T: ObjectSubclass>(
+        unsafe extern "C" fn application_window_added<T: GtkApplicationImpl>(
             ptr: *mut gtk_sys::GtkApplication,
             wptr: *mut gtk_sys::GtkWindow,
-        ) where
-            T: GtkApplicationImpl,
-        {
+        ) {
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
             let wrap: Borrowed<Application> = from_glib_borrow(ptr);
 
             imp.window_added(&wrap, &from_glib_borrow(wptr))
         }
-        unsafe extern "C" fn application_window_removed<T: ObjectSubclass>(
+        unsafe extern "C" fn application_window_removed<T: GtkApplicationImpl>(
             ptr: *mut gtk_sys::GtkApplication,
             wptr: *mut gtk_sys::GtkWindow,
-        ) where
-            T: GtkApplicationImpl,
-        {
+        ) {
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
             let wrap: Borrowed<Application> = from_glib_borrow(ptr);
@@ -76,10 +72,9 @@ unsafe impl<T: ObjectSubclass + GtkApplicationImpl> IsSubclassable<T> for Applic
             imp.window_removed(&wrap, &from_glib_borrow(wptr))
         }
 
-        unsafe extern "C" fn application_startup<T: ObjectSubclass>(ptr: *mut gio_sys::GApplication)
-        where
-            T: GtkApplicationImpl,
-        {
+        unsafe extern "C" fn application_startup<T: GtkApplicationImpl>(
+            ptr: *mut gio_sys::GApplication,
+        ) {
             let instance = &*(ptr as *mut T::Instance);
             let imp = instance.get_impl();
             let wrap: Borrowed<gio::Application> = from_glib_borrow(ptr);

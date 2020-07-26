@@ -12,7 +12,7 @@ use ContainerClass;
 use Socket;
 use SocketClass;
 
-pub trait SocketImpl: SocketImplExt + ContainerImpl + 'static {
+pub trait SocketImpl: SocketImplExt + ContainerImpl {
     fn plug_added(&self, socket: &Socket) {
         self.parent_plug_added(socket)
     }
@@ -27,10 +27,10 @@ pub trait SocketImplExt {
     fn parent_plug_removed(&self, socket: &Socket) -> Inhibit;
 }
 
-impl<T: SocketImpl + ObjectImpl> SocketImplExt for T {
+impl<T: SocketImpl> SocketImplExt for T {
     fn parent_plug_added(&self, socket: &Socket) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkSocketClass;
             if let Some(f) = (*parent_class).plug_added {
                 f(socket.to_glib_none().0)
@@ -40,7 +40,7 @@ impl<T: SocketImpl + ObjectImpl> SocketImplExt for T {
 
     fn parent_plug_removed(&self, socket: &Socket) -> Inhibit {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkSocketClass;
             if let Some(f) = (*parent_class).plug_removed {
                 Inhibit(from_glib(f(socket.to_glib_none().0)))
@@ -51,7 +51,7 @@ impl<T: SocketImpl + ObjectImpl> SocketImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + SocketImpl> IsSubclassable<T> for SocketClass {
+unsafe impl<T: SocketImpl> IsSubclassable<T> for SocketClass {
     fn override_vfuncs(&mut self) {
         <ContainerClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -62,10 +62,7 @@ unsafe impl<T: ObjectSubclass + SocketImpl> IsSubclassable<T> for SocketClass {
     }
 }
 
-unsafe extern "C" fn socket_plug_added<T: ObjectSubclass>(ptr: *mut gtk_sys::GtkSocket)
-where
-    T: SocketImpl,
-{
+unsafe extern "C" fn socket_plug_added<T: SocketImpl>(ptr: *mut gtk_sys::GtkSocket) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Socket> = from_glib_borrow(ptr);
@@ -73,12 +70,9 @@ where
     imp.plug_added(&wrap)
 }
 
-unsafe extern "C" fn socket_plug_removed<T: ObjectSubclass>(
+unsafe extern "C" fn socket_plug_removed<T: SocketImpl>(
     ptr: *mut gtk_sys::GtkSocket,
-) -> glib_sys::gboolean
-where
-    T: SocketImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Socket> = from_glib_borrow(ptr);

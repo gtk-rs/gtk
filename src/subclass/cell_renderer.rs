@@ -20,7 +20,7 @@ use CellRendererState;
 use SizeRequestMode;
 use Widget;
 
-pub trait CellRendererImpl: CellRendererImplExt + ObjectImpl + 'static {
+pub trait CellRendererImpl: CellRendererImplExt + ObjectImpl {
     fn get_request_mode(&self, renderer: &CellRenderer) -> SizeRequestMode {
         self.parent_get_request_mode(renderer)
     }
@@ -196,10 +196,10 @@ pub trait CellRendererImplExt {
     fn parent_editing_started(&self, renderer: &CellRenderer, editable: &CellEditable, path: &str);
 }
 
-impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
+impl<T: CellRendererImpl> CellRendererImplExt for T {
     fn parent_get_request_mode(&self, renderer: &CellRenderer) -> SizeRequestMode {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             let f = (*parent_class).get_request_mode.unwrap();
@@ -213,7 +213,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         widget: &P,
     ) -> (i32, i32) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             let f = (*parent_class).get_preferred_width.unwrap();
@@ -237,7 +237,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         height: i32,
     ) -> (i32, i32) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             let f = (*parent_class).get_preferred_width_for_height.unwrap();
@@ -260,7 +260,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         widget: &P,
     ) -> (i32, i32) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             let f = (*parent_class).get_preferred_height.unwrap();
@@ -282,7 +282,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         width: i32,
     ) -> (i32, i32) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             let f = (*parent_class).get_preferred_height_for_width.unwrap();
@@ -307,7 +307,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         cell_area: &gdk::Rectangle,
     ) -> gdk::Rectangle {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             let mut aligned_area = gdk::Rectangle::uninitialized();
@@ -333,7 +333,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         flags: CellRendererState,
     ) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             if let Some(f) = (*parent_class).render {
@@ -360,7 +360,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         flags: CellRendererState,
     ) -> bool {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             if let Some(f) = (*parent_class).activate {
@@ -390,7 +390,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
         flags: CellRendererState,
     ) -> Option<CellEditable> {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             if let Some(f) = (*parent_class).start_editing {
@@ -411,7 +411,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
 
     fn parent_editing_canceled(&self, renderer: &CellRenderer) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             if let Some(f) = (*parent_class).editing_canceled {
@@ -422,7 +422,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
 
     fn parent_editing_started(&self, renderer: &CellRenderer, editable: &CellEditable, path: &str) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class =
                 data.as_ref().get_parent_class() as *mut gtk_sys::GtkCellRendererClass;
             if let Some(f) = (*parent_class).editing_started {
@@ -436,7 +436,7 @@ impl<T: CellRendererImpl + ObjectImpl> CellRendererImplExt for T {
     }
 }
 
-unsafe impl<T: ObjectSubclass + CellRendererImpl> IsSubclassable<T> for CellRendererClass {
+unsafe impl<T: CellRendererImpl> IsSubclassable<T> for CellRendererClass {
     fn override_vfuncs(&mut self) {
         <ObjectClass as IsSubclassable<T>>::override_vfuncs(self);
         unsafe {
@@ -458,12 +458,9 @@ unsafe impl<T: ObjectSubclass + CellRendererImpl> IsSubclassable<T> for CellRend
     }
 }
 
-unsafe extern "C" fn cell_renderer_get_request_mode<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_get_request_mode<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
-) -> gtk_sys::GtkSizeRequestMode
-where
-    T: CellRendererImpl,
-{
+) -> gtk_sys::GtkSizeRequestMode {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -471,14 +468,12 @@ where
     imp.get_request_mode(&wrap).to_glib()
 }
 
-unsafe extern "C" fn cell_renderer_get_preferred_width<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_get_preferred_width<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     wdgtptr: *mut gtk_sys::GtkWidget,
     minptr: *mut c_int,
     natptr: *mut c_int,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -493,15 +488,13 @@ unsafe extern "C" fn cell_renderer_get_preferred_width<T: ObjectSubclass>(
     }
 }
 
-unsafe extern "C" fn cell_renderer_get_preferred_height_for_width<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_get_preferred_height_for_width<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     wdgtptr: *mut gtk_sys::GtkWidget,
     width: c_int,
     min_height_ptr: *mut c_int,
     nat_height_ptr: *mut c_int,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -516,14 +509,12 @@ unsafe extern "C" fn cell_renderer_get_preferred_height_for_width<T: ObjectSubcl
     }
 }
 
-unsafe extern "C" fn cell_renderer_get_preferred_height<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_get_preferred_height<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     wdgtptr: *mut gtk_sys::GtkWidget,
     minptr: *mut c_int,
     natptr: *mut c_int,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -538,15 +529,13 @@ unsafe extern "C" fn cell_renderer_get_preferred_height<T: ObjectSubclass>(
     }
 }
 
-unsafe extern "C" fn cell_renderer_get_preferred_width_for_height<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_get_preferred_width_for_height<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     wdgtptr: *mut gtk_sys::GtkWidget,
     height: c_int,
     min_width_ptr: *mut c_int,
     nat_width_ptr: *mut c_int,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -561,15 +550,13 @@ unsafe extern "C" fn cell_renderer_get_preferred_width_for_height<T: ObjectSubcl
     }
 }
 
-unsafe extern "C" fn cell_renderer_get_aligned_area<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_get_aligned_area<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     wdgtptr: *mut gtk_sys::GtkWidget,
     flags: gtk_sys::GtkCellRendererState,
     cellarea: *const gdk_sys::GdkRectangle,
     alignedptr: *mut gdk_sys::GdkRectangle,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -584,16 +571,14 @@ unsafe extern "C" fn cell_renderer_get_aligned_area<T: ObjectSubclass>(
     *alignedptr = *rectangle.to_glib_none().0;
 }
 
-unsafe extern "C" fn cell_renderer_render<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_render<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     crptr: *mut cairo_sys::cairo_t,
     wdgtptr: *mut gtk_sys::GtkWidget,
     bgptr: *const gdk_sys::GdkRectangle,
     cellptr: *const gdk_sys::GdkRectangle,
     flags: gtk_sys::GtkCellRendererState,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -610,7 +595,7 @@ unsafe extern "C" fn cell_renderer_render<T: ObjectSubclass>(
     );
 }
 
-unsafe extern "C" fn cell_renderer_activate<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_activate<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     evtptr: *mut gdk_sys::GdkEvent,
     wdgtptr: *mut gtk_sys::GtkWidget,
@@ -618,10 +603,7 @@ unsafe extern "C" fn cell_renderer_activate<T: ObjectSubclass>(
     bgptr: *const gdk_sys::GdkRectangle,
     cellptr: *const gdk_sys::GdkRectangle,
     flags: gtk_sys::GtkCellRendererState,
-) -> glib_sys::gboolean
-where
-    T: CellRendererImpl,
-{
+) -> glib_sys::gboolean {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -640,7 +622,7 @@ where
     .to_glib()
 }
 
-unsafe extern "C" fn cell_renderer_start_editing<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_start_editing<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     evtptr: *mut gdk_sys::GdkEvent,
     wdgtptr: *mut gtk_sys::GtkWidget,
@@ -648,10 +630,7 @@ unsafe extern "C" fn cell_renderer_start_editing<T: ObjectSubclass>(
     bgptr: *const gdk_sys::GdkRectangle,
     cellptr: *const gdk_sys::GdkRectangle,
     flags: gtk_sys::GtkCellRendererState,
-) -> *mut gtk_sys::GtkCellEditable
-where
-    T: CellRendererImpl,
-{
+) -> *mut gtk_sys::GtkCellEditable {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -671,11 +650,9 @@ where
     .0
 }
 
-unsafe extern "C" fn cell_renderer_editing_canceled<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_editing_canceled<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
@@ -683,13 +660,11 @@ unsafe extern "C" fn cell_renderer_editing_canceled<T: ObjectSubclass>(
     imp.editing_canceled(&wrap);
 }
 
-unsafe extern "C" fn cell_renderer_editing_started<T: ObjectSubclass>(
+unsafe extern "C" fn cell_renderer_editing_started<T: CellRendererImpl>(
     ptr: *mut gtk_sys::GtkCellRenderer,
     editableptr: *mut gtk_sys::GtkCellEditable,
     pathptr: *const c_char,
-) where
-    T: CellRendererImpl,
-{
+) {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<CellRenderer> = from_glib_borrow(ptr);
