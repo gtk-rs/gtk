@@ -209,7 +209,7 @@ mod spin_button {
     use glib::IsA;
     use glib_sys::gboolean;
     use glib_sys::{GFALSE, GTRUE};
-    use gtk_sys::{GtkSpinButton, GTK_INPUT_ERROR};
+    use gtk_sys::{GtkScrollType, GtkSpinButton, GTK_INPUT_ERROR};
     use libc::{c_double, c_int};
     use std::boxed::Box as Box_;
     use std::mem::transmute;
@@ -306,14 +306,14 @@ mod spin_button {
 
     unsafe extern "C" fn change_trampoline<T, F: Fn(&T, ScrollType) + 'static>(
         this: *mut GtkSpinButton,
-        scroll: ScrollType,
+        scroll: GtkScrollType,
         f: &F,
     ) where
         T: IsA<SpinButton>,
     {
         f(
             &SpinButton::from_glib_borrow(this).unsafe_cast_ref(),
-            scroll,
+            from_glib(scroll),
         )
     }
 
