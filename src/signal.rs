@@ -3,62 +3,10 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use gdk::Rectangle;
-use glib;
 pub use glib::signal::Inhibit;
 use glib::signal::SignalHandlerId;
-use glib::SourceId;
 
-use glib::Continue;
 use {ScrollType, Widget};
-
-/// Adds a closure to be called by the default main loop when it's idle.
-///
-/// `func` will be called repeatedly until it returns `Continue(false)`.
-///
-/// Similar to `glib::idle_add` but only callable from the main thread and
-/// doesn't require `Send`. It is the same as `glib::idle_add_local`.
-pub fn idle_add<F>(func: F) -> SourceId
-where
-    F: FnMut() -> Continue + 'static,
-{
-    assert_initialized_main_thread!();
-    glib::idle_add_local(func)
-}
-
-/// Adds a closure to be called by the default main loop at regular intervals
-/// with millisecond granularity.
-///
-/// `func` will be called repeatedly every `interval` milliseconds until it
-/// returns `Continue(false)`. Precise timing is not guaranteed, the timeout may
-/// be delayed by other events. Prefer `timeout_add_seconds` when millisecond
-/// precision is not necessary.
-///
-/// Similar to `glib::timeout_add` but only callable from the main thread and
-/// doesn't require `Send`. It is the same as `glib::timeout_add_local`.
-pub fn timeout_add<F>(interval: u32, func: F) -> SourceId
-where
-    F: FnMut() -> Continue + 'static,
-{
-    assert_initialized_main_thread!();
-    glib::timeout_add_local(interval, func)
-}
-
-/// Adds a closure to be called by the default main loop at regular intervals
-/// with second granularity.
-///
-/// `func` will be called repeatedly every `interval` seconds until it
-/// returns `Continue(false)`. Precise timing is not guaranteed, the timeout may
-/// be delayed by other events.
-///
-/// Similar to `glib::timeout_add_seconds` but only callable from the main thread and
-/// doesn't require `Send`. It is the same as `glib::timeout_add_seconds_local`.
-pub fn timeout_add_seconds<F>(interval: u32, func: F) -> SourceId
-where
-    F: FnMut() -> Continue + 'static,
-{
-    assert_initialized_main_thread!();
-    glib::timeout_add_seconds_local(interval, func)
-}
 
 pub trait EditableSignals: 'static {
     fn connect_changed<F>(&self, changed_func: F) -> SignalHandlerId
