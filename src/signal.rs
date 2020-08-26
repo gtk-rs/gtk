@@ -17,6 +17,10 @@ use {ScrollType, Widget};
 ///
 /// Similar to `glib::idle_add` but only callable from the main thread and
 /// doesn't require `Send`. It is the same as `glib::idle_add_local`.
+#[deprecated(
+    since = "0.9.2",
+    note = "Please use the glib::idle_add_local function instead"
+)]
 pub fn idle_add<F>(func: F) -> SourceId
 where
     F: FnMut() -> Continue + 'static,
@@ -35,6 +39,10 @@ where
 ///
 /// Similar to `glib::timeout_add` but only callable from the main thread and
 /// doesn't require `Send`. It is the same as `glib::timeout_add_local`.
+#[deprecated(
+    since = "0.9.2",
+    note = "Please use the glib::timeout_add_local function instead"
+)]
 pub fn timeout_add<F>(interval: u32, func: F) -> SourceId
 where
     F: FnMut() -> Continue + 'static,
@@ -52,6 +60,10 @@ where
 ///
 /// Similar to `glib::timeout_add_seconds` but only callable from the main thread and
 /// doesn't require `Send`. It is the same as `glib::timeout_add_seconds_local`.
+#[deprecated(
+    since = "0.9.2",
+    note = "Please use the glib::timeout_add_seconds_local function instead"
+)]
 pub fn timeout_add_seconds<F>(interval: u32, func: F) -> SourceId
 where
     F: FnMut() -> Continue + 'static,
