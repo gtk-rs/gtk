@@ -1070,12 +1070,12 @@ pub trait EntryExt: 'static {
 
     fn emit_delete_from_cursor(&self, type_: DeleteType, count: i32);
 
-    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::Event) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
 
-    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::Event) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -2673,17 +2673,17 @@ impl<O: IsA<Entry>> EntryExt for O {
         };
     }
 
-    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+    fn connect_icon_press<F: Fn(&Self, EntryIconPosition, &gdk::Event) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn icon_press_trampoline<
             P,
-            F: Fn(&P, EntryIconPosition, &gdk::EventButton) + 'static,
+            F: Fn(&P, EntryIconPosition, &gdk::Event) + 'static,
         >(
             this: *mut gtk_sys::GtkEntry,
             icon_pos: gtk_sys::GtkEntryIconPosition,
-            event: *mut gdk_sys::GdkEventButton,
+            event: *mut gdk_sys::GdkEvent,
             f: glib_sys::gpointer,
         ) where
             P: IsA<Entry>,
@@ -2692,7 +2692,7 @@ impl<O: IsA<Entry>> EntryExt for O {
             f(
                 &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(icon_pos),
-                &from_glib_borrow(event),
+                &from_glib_none(event),
             )
         }
         unsafe {
@@ -2708,17 +2708,17 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::EventButton) + 'static>(
+    fn connect_icon_release<F: Fn(&Self, EntryIconPosition, &gdk::Event) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn icon_release_trampoline<
             P,
-            F: Fn(&P, EntryIconPosition, &gdk::EventButton) + 'static,
+            F: Fn(&P, EntryIconPosition, &gdk::Event) + 'static,
         >(
             this: *mut gtk_sys::GtkEntry,
             icon_pos: gtk_sys::GtkEntryIconPosition,
-            event: *mut gdk_sys::GdkEventButton,
+            event: *mut gdk_sys::GdkEvent,
             f: glib_sys::gpointer,
         ) where
             P: IsA<Entry>,
@@ -2727,7 +2727,7 @@ impl<O: IsA<Entry>> EntryExt for O {
             f(
                 &Entry::from_glib_borrow(this).unsafe_cast_ref(),
                 from_glib(icon_pos),
-                &from_glib_borrow(event),
+                &from_glib_none(event),
             )
         }
         unsafe {
