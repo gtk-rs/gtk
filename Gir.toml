@@ -1039,6 +1039,32 @@ version = "3.14"
         name = "sequence"
         const = true
 
+    [[object.signal]]
+    name = "begin"
+        [[object.signal.parameter]]
+        name = "sequence"
+        nullable = true
+    [[object.signal]]
+    name = "end"
+        [[object.signal.parameter]]
+        name = "sequence"
+        nullable = true
+    [[object.signal]]
+    name = "update"
+        [[object.signal.parameter]]
+        name = "sequence"
+        nullable = true
+    [[object.signal]]
+    name = "cancel"
+        [[object.signal.parameter]]
+        name = "sequence"
+        nullable = true
+    [[object.signal]]
+    name = "sequence-state-changed"
+        [[object.signal.parameter]]
+        name = "sequence"
+        nullable = true
+
 [[object]]
 name = "Gtk.GestureDrag"
 status = "generate"
