@@ -2,6 +2,7 @@ use gtk_sys;
 
 use glib::translate::*;
 use glib_sys::gboolean;
+use glib_sys::gpointer;
 
 use glib::subclass::prelude::*;
 
@@ -239,4 +240,17 @@ unsafe extern "C" fn container_forall<T: ObjectSubclass, P: FnMut(&Widget)>(
     let wrap: Borrowed<Container> = from_glib_borrow(ptr);
 
     imp.forall(&wrap, include_internals, callback)
+}
+
+pub struct Callback {
+    cb: gtk_sys::GtkCallback,
+    user_data: gpointer,
+}
+
+impl Callback {
+    pub fn call(&self, widget: &Widget) {
+        unsafe {
+            self.cb(widget.to_glib_none().0, self.user_data);
+        }
+    }
 }
