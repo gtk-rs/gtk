@@ -1,8 +1,6 @@
 use gtk_sys;
 
 use glib::translate::*;
-use glib_sys::gboolean;
-use glib_sys::gpointer;
 
 use glib::subclass::prelude::*;
 
@@ -38,12 +36,7 @@ pub trait ContainerImpl: ContainerImplExt + WidgetImpl {
         self.parent_get_path_for_child(container, widget)
     }
 
-    fn forall<P: FnMut(&Widget)>(
-        &self,
-        container: &Container,
-        include_internals: gboolean,
-        callback: P,
-    ) {
+    fn forall(&self, container: &Container, include_internals: bool, callback: &Callback) {
         self.parent_forall(container, include_internals, callback);
     }
 }
@@ -55,12 +48,7 @@ pub trait ContainerImplExt {
     fn parent_set_focus_child(&self, container: &Container, widget: Option<&Widget>);
     fn parent_child_type(&self, container: &Container) -> glib::Type;
     fn parent_get_path_for_child(&self, container: &Container, widget: &Widget) -> WidgetPath;
-    fn parent_forall<P: FnMut(&Widget)>(
-        &self,
-        container: &Container,
-        include_internals: gboolean,
-        callback: P,
-    );
+    fn parent_forall(&self, container: &Container, include_internals: bool, callback: &Callback);
 }
 
 impl<T: ContainerImpl> ContainerImplExt for T {
@@ -127,20 +115,16 @@ impl<T: ContainerImpl> ContainerImplExt for T {
         }
     }
 
-    fn parent_forall<P: FnMut(&Widget)>(
-        &self,
-        container: &Container,
-        include_internals: gboolean,
-        callback: P,
-    ) {
+    fn parent_forall(&self, container: &Container, include_internals: bool, callback: &Callback) {
         unsafe {
-            let data = self.get_type_data();
+            let data = T::type_data();
             let parent_class = data.as_ref().get_parent_class() as *mut gtk_sys::GtkContainerClass;
             if let Some(f) = (*parent_class).forall {
                 f(
                     container.to_glib_none().0,
-                    include_internals,
-                    callback.to_glib_none().0,
+                    include_internals.to_glib(),
+                    callback.callback,
+                    callback.user_data,
                 )
             }
         }
@@ -158,6 +142,7 @@ unsafe impl<T: ContainerImpl> IsSubclassable<T> for ContainerClass {
             klass.set_focus_child = Some(container_set_focus_child::<T>);
             klass.child_type = Some(container_child_type::<T>);
             klass.get_path_for_child = Some(container_get_path_for_child::<T>);
+            klass.forall = Some(container_forall::<T>);
         }
     }
 }
@@ -228,29 +213,37 @@ unsafe extern "C" fn container_get_path_for_child<T: ContainerImpl>(
     imp.get_path_for_child(&wrap, &widget).to_glib_none().0
 }
 
-unsafe extern "C" fn container_forall<T: ObjectSubclass, P: FnMut(&Widget)>(
+unsafe extern "C" fn container_forall<T: ObjectSubclass>(
     ptr: *mut gtk_sys::GtkContainer,
-    include_internals: gboolean,
-    callback: P,
+    include_internals: glib_sys::gboolean,
+    callback: gtk_sys::GtkCallback,
+    user_data: glib_sys::gpointer,
 ) where
     T: ContainerImpl,
 {
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.get_impl();
     let wrap: Borrowed<Container> = from_glib_borrow(ptr);
+    let callback = Callback {
+        callback,
+        user_data,
+    };
 
-    imp.forall(&wrap, include_internals, callback)
+    imp.forall(&wrap, from_glib(include_internals), &callback)
 }
 
+#[derive(Debug)]
 pub struct Callback {
-    cb: gtk_sys::GtkCallback,
-    user_data: gpointer,
+    callback: gtk_sys::GtkCallback,
+    user_data: glib_sys::gpointer,
 }
 
 impl Callback {
     pub fn call(&self, widget: &Widget) {
         unsafe {
-            self.cb(widget.to_glib_none().0, self.user_data);
+            if let Some(callback) = self.callback {
+                callback(widget.to_glib_none().0, self.user_data);
+            }
         }
     }
 }
