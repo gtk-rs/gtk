@@ -8,7 +8,6 @@ use glib::translate::*;
 use gtk_sys;
 use libc::c_uint;
 use std::cell::Cell;
-use std::ptr;
 use std::sync::atomic::{AtomicBool, Ordering, ATOMIC_BOOL_INIT};
 
 #[cfg(target_os = "macos")]
@@ -118,7 +117,11 @@ pub fn init() -> Result<(), glib::BoolError> {
         panic!("Attempted to initialize GTK from two different threads.");
     }
     unsafe {
-        if from_glib(gtk_sys::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
+        // We just want to keep the program's name since more arguments could lead to unwanted
+        // behaviors...
+        let argv = ::std::env::args().take(1).collect::<Vec<_>>();
+
+        if from_glib(gtk_sys::gtk_init_check(&mut 1, &mut argv.to_glib_none().0)) {
             if !glib::MainContext::default().acquire() {
                 return Err(glib_bool_error!("Failed to acquire default main context"));
             }
