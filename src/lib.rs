@@ -19,7 +19,7 @@
 //!
 //! - [General `GLib` family types and object system overview](../glib/index.html)
 //!
-//! - [GTK+ documentation](http://www.gtk.org/documentation.php)
+//! - [GTK+ documentation](https://www.gtk.org/docs/)
 //!
 //! # Hello World
 //!
