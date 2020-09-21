@@ -22,6 +22,8 @@ pub mod event_box;
 pub mod fixed;
 pub mod header_bar;
 pub mod icon_view;
+pub mod list_box;
+pub mod list_box_row;
 #[cfg(any(gdk_backend = "x11", feature = "dox"))]
 pub mod plug;
 #[cfg(any(gdk_backend = "x11", feature = "dox"))]
@@ -52,6 +54,8 @@ pub mod prelude {
     pub use super::fixed::FixedImpl;
     pub use super::header_bar::HeaderBarImpl;
     pub use super::icon_view::{IconViewImpl, IconViewImplExt};
+    pub use super::list_box::{ListBoxImpl, ListBoxImplExt};
+    pub use super::list_box_row::{ListBoxRowImpl, ListBoxRowImplExt};
     #[cfg(any(gdk_backend = "x11", feature = "dox"))]
     pub use super::plug::{PlugImpl, PlugImplExt};
     #[cfg(any(gdk_backend = "x11", feature = "dox"))]
