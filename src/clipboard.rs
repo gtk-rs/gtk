@@ -5,7 +5,7 @@
 use glib::translate::*;
 use glib_sys::gpointer;
 use gtk_sys;
-use libc::c_uint;
+use libc::{c_char, c_uint};
 use std::boxed::Box as Box_;
 use Clipboard;
 use SelectionData;
@@ -67,5 +67,28 @@ impl Clipboard {
             }
         }
         success
+    }
+
+    pub fn request_uris<P: FnOnce(&Clipboard, &[glib::GString]) + 'static>(&self, callback: P) {
+        let callback_data: Box_<P> = Box_::new(callback);
+        unsafe extern "C" fn callback_func<P: FnOnce(&Clipboard, &[glib::GString]) + 'static>(
+            clipboard: *mut gtk_sys::GtkClipboard,
+            uris: *mut *mut c_char,
+            data: glib_sys::gpointer,
+        ) {
+            let clipboard = from_glib_borrow(clipboard);
+            let uris: Vec<glib::GString> = FromGlibPtrContainer::from_glib_none(uris);
+            let callback: Box_<P> = Box_::from_raw(data as *mut _);
+            (*callback)(&clipboard, &uris);
+        }
+        let callback = Some(callback_func::<P> as _);
+        let super_callback0: Box_<P> = callback_data;
+        unsafe {
+            gtk_sys::gtk_clipboard_request_uris(
+                self.to_glib_none().0,
+                callback,
+                Box_::into_raw(super_callback0) as *mut _,
+            );
+        }
     }
 }
