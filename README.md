@@ -7,7 +7,7 @@ __Rust__ bindings and wrappers for __GLib__, __GDK 3__, __GTK+ 3__  and __Cairo_
 ## Building
 
 __gtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be installed on your system.
-See the [requirements page](http://gtk-rs.org/docs/requirements.html).
+See the [GTK installation page](https://www.gtk.org/docs/installations/).
 
 ## Using
 
