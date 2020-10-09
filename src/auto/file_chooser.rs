@@ -129,7 +129,7 @@ pub trait FileChooserExt: 'static {
 
     fn set_current_folder_uri(&self, uri: &str) -> bool;
 
-    fn set_current_name<P: AsRef<std::path::Path>>(&self, name: P);
+    fn set_current_name(&self, name: &str);
 
     fn set_do_overwrite_confirmation(&self, do_overwrite_confirmation: bool);
 
@@ -640,11 +640,11 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn set_current_name<P: AsRef<std::path::Path>>(&self, name: P) {
+    fn set_current_name(&self, name: &str) {
         unsafe {
             gtk_sys::gtk_file_chooser_set_current_name(
                 self.as_ref().to_glib_none().0,
-                name.as_ref().to_glib_none().0,
+                name.to_glib_none().0,
             );
         }
     }

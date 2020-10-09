@@ -1939,6 +1939,9 @@ status = "generate"
     pattern = "install_property.*"
     #deprecated in 3.16
     ignore = true
+    [[object.property]]
+    name = "gtk-cursor-aspect-ratio"
+    version = "3.24"
 
 [[object]]
 name = "Gtk.ShortcutLabel"
