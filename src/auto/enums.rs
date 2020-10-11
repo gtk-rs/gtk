@@ -2807,6 +2807,9 @@ pub enum License {
     Lgpl30Only,
     Agpl30,
     Agpl30Only,
+    Bsd3,
+    Apache20,
+    Mpl20,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2832,6 +2835,9 @@ impl fmt::Display for License {
                 License::Lgpl30Only => "Lgpl30Only",
                 License::Agpl30 => "Agpl30",
                 License::Agpl30Only => "Agpl30Only",
+                License::Bsd3 => "Bsd3",
+                License::Apache20 => "Apache20",
+                License::Mpl20 => "Mpl20",
                 _ => "Unknown",
             }
         )
@@ -2859,6 +2865,9 @@ impl ToGlib for License {
             License::Lgpl30Only => gtk_sys::GTK_LICENSE_LGPL_3_0_ONLY,
             License::Agpl30 => gtk_sys::GTK_LICENSE_AGPL_3_0,
             License::Agpl30Only => gtk_sys::GTK_LICENSE_AGPL_3_0_ONLY,
+            License::Bsd3 => gtk_sys::GTK_LICENSE_BSD_3,
+            License::Apache20 => gtk_sys::GTK_LICENSE_APACHE_2_0,
+            License::Mpl20 => gtk_sys::GTK_LICENSE_MPL_2_0,
             License::__Unknown(value) => value,
         }
     }
@@ -2884,6 +2893,9 @@ impl FromGlib<gtk_sys::GtkLicense> for License {
             12 => License::Lgpl30Only,
             13 => License::Agpl30,
             14 => License::Agpl30Only,
+            15 => License::Bsd3,
+            16 => License::Apache20,
+            17 => License::Mpl20,
             value => License::__Unknown(value),
         }
     }

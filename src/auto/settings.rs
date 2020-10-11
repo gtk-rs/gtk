@@ -77,6 +77,12 @@ pub trait SettingsExt: 'static {
         gtk_application_prefer_dark_theme: bool,
     );
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_property_gtk_cursor_aspect_ratio(&self) -> f32;
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn set_property_gtk_cursor_aspect_ratio(&self, gtk_cursor_aspect_ratio: f32);
+
     fn get_property_gtk_cursor_blink(&self) -> bool;
 
     fn set_property_gtk_cursor_blink(&self, gtk_cursor_blink: bool);
@@ -280,6 +286,12 @@ pub trait SettingsExt: 'static {
     ) -> SignalHandlerId;
 
     fn connect_property_gtk_application_prefer_dark_theme_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn connect_property_gtk_cursor_aspect_ratio_notify<F: Fn(&Self) + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId;
@@ -638,6 +650,33 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 Value::from(&gtk_application_prefer_dark_theme)
                     .to_glib_none()
                     .0,
+            );
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_property_gtk_cursor_aspect_ratio(&self) -> f32 {
+        unsafe {
+            let mut value = Value::from_type(<f32 as StaticType>::static_type());
+            gobject_sys::g_object_get_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"gtk-cursor-aspect-ratio\0".as_ptr() as *const _,
+                value.to_glib_none_mut().0,
+            );
+            value
+                .get()
+                .expect("Return Value for property `gtk-cursor-aspect-ratio` getter")
+                .unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn set_property_gtk_cursor_aspect_ratio(&self, gtk_cursor_aspect_ratio: f32) {
+        unsafe {
+            gobject_sys::g_object_set_property(
+                self.to_glib_none().0 as *mut gobject_sys::GObject,
+                b"gtk-cursor-aspect-ratio\0".as_ptr() as *const _,
+                Value::from(&gtk_cursor_aspect_ratio).to_glib_none().0,
             );
         }
     }
@@ -1895,6 +1934,34 @@ impl<O: IsA<Settings>> SettingsExt for O {
                 b"notify::gtk-application-prefer-dark-theme\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_gtk_application_prefer_dark_theme_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn connect_property_gtk_cursor_aspect_ratio_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_gtk_cursor_aspect_ratio_trampoline<P, F: Fn(&P) + 'static>(
+            this: *mut gtk_sys::GtkSettings,
+            _param_spec: glib_sys::gpointer,
+            f: glib_sys::gpointer,
+        ) where
+            P: IsA<Settings>,
+        {
+            let f: &F = &*(f as *const F);
+            f(&Settings::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::gtk-cursor-aspect-ratio\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_gtk_cursor_aspect_ratio_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
