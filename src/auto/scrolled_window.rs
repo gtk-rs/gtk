@@ -554,7 +554,7 @@ pub const NONE_SCROLLED_WINDOW: Option<&ScrolledWindow> = None;
 pub trait ScrolledWindowExt: 'static {
     fn get_capture_button_press(&self) -> bool;
 
-    fn get_hadjustment(&self) -> Option<Adjustment>;
+    fn get_hadjustment(&self) -> Adjustment;
 
     fn get_hscrollbar(&self) -> Option<Widget>;
 
@@ -585,7 +585,7 @@ pub trait ScrolledWindowExt: 'static {
 
     fn get_shadow_type(&self) -> ShadowType;
 
-    fn get_vadjustment(&self) -> Option<Adjustment>;
+    fn get_vadjustment(&self) -> Adjustment;
 
     fn get_vscrollbar(&self) -> Option<Widget>;
 
@@ -732,7 +732,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
         }
     }
 
-    fn get_hadjustment(&self) -> Option<Adjustment> {
+    fn get_hadjustment(&self) -> Adjustment {
         unsafe {
             from_glib_none(gtk_sys::gtk_scrolled_window_get_hadjustment(
                 self.as_ref().to_glib_none().0,
@@ -840,7 +840,7 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
         }
     }
 
-    fn get_vadjustment(&self) -> Option<Adjustment> {
+    fn get_vadjustment(&self) -> Adjustment {
         unsafe {
             from_glib_none(gtk_sys::gtk_scrolled_window_get_vadjustment(
                 self.as_ref().to_glib_none().0,
