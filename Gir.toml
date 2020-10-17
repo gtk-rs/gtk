@@ -1464,6 +1464,10 @@ generate_builder = true
 name = "Gtk.MessageDialog"
 status = "generate"
 generate_builder = true
+    [[object.function]]
+    name = "get_message_area"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gtk.ModelButton"
@@ -1853,6 +1857,14 @@ generate_builder = true
 name = "Gtk.ScrolledWindow"
 status = "generate"
 generate_builder = true
+    [[object.function]]
+    name = "get_hadjustment"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_vadjustment"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gtk.SearchBar"

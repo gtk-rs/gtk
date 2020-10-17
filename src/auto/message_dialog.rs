@@ -712,7 +712,7 @@ pub trait MessageDialogExt: 'static {
 
     //fn format_secondary_text(&self, message_format: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    fn get_message_area(&self) -> Option<Widget>;
+    fn get_message_area(&self) -> Widget;
 
     fn set_markup(&self, str: &str);
 
@@ -766,7 +766,7 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
     //    unsafe { TODO: call gtk_sys:gtk_message_dialog_format_secondary_text() }
     //}
 
-    fn get_message_area(&self) -> Option<Widget> {
+    fn get_message_area(&self) -> Widget {
         unsafe {
             from_glib_none(gtk_sys::gtk_message_dialog_get_message_area(
                 self.as_ref().to_glib_none().0,
